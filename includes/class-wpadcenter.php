@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The file that defines the core plugin class
  *
@@ -156,6 +155,8 @@ class Wpadcenter {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_cpt' );
+		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_reg_taxonomy' );
 
 	}
 
