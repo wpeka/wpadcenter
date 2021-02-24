@@ -30,6 +30,10 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+if ( ! defined( 'WPADCENTER_PLUGIN_URL' ) ) {
+	define( 'WPADCENTER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+}
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
