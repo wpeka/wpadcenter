@@ -200,4 +200,100 @@ class Wpadcenter_Admin {
 		register_taxonomy( 'wpadcenter-adgroups', array( 'wpadcenter-ads' ), $args );
 	}
 
+	/**
+	 * Register the menu for the plugin.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_admin_menu() {
+		// Reports - submenu.
+		add_submenu_page(
+			'edit.php?post_type=wpadcenter-ads',
+			'Reports',
+			__( 'Reports', 'wpadcenter' ),
+			'manage_options',
+			'wpadcenter-reports'
+		);
+		// Settings - submenu.
+		add_submenu_page(
+			'edit.php?post_type=wpadcenter-ads',
+			'Settings',
+			__( 'Settings', 'wpadcenter' ),
+			'manage_options',
+			'wpadcenter-settings'
+		);
+		// Getting Started - submenu.
+		add_submenu_page(
+			'edit.php?post_type=wpadcenter-ads',
+			'Getting Started',
+			__( 'Getting Started', 'wpadcenter' ),
+			'manage_options',
+			'wpadcenter-getting-started'
+		);
+		do_action( 'wpadcenter_admin_menu', 'edit.php?post_type=wpadcenter-ads', 'manage_options' ); // action to add submenu pages for pro versions
+		// Getting Started - submenu.
+		if ( ! get_option( 'wpadcenter_pro_active' ) ) {
+			add_submenu_page(
+				'edit.php?post_type=wpadcenter-ads',
+				'Go Pro',
+				__( 'Go Pro', 'wpadcenter' ),
+				'manage_options',
+				'wpadcenter-go-pro'
+			);
+		}
+	}
+
+	/**
+	 * Manage Ads table columns.
+	 *
+	 * @since 1.0.0
+	 * @return array|void
+	 */
+	public function wpadcenter_manage_edit_ads_columns() {
+		global $current_screen;
+		if ( 'wpadcenter-ads' !== $current_screen->post_type ) {
+			return;
+		}
+		$columns = array(
+			'cb'              => '<input type="checkbox" />',
+			'ad-title'        => __( 'Ad Title', 'wpadcenter' ),
+			'ad-type'         => __( 'Ad Type', 'wpadcenter' ),
+			'ad-dimensions'   => __( 'Ad Dimensions', 'wpadcenter' ),
+			'ad-group'        => __( 'Ad Group', 'wpadcenter' ),
+			'shortcode'       => __( 'Shortcode', 'wpadcenter' ),
+			'template-tag'    => __( 'Template Tag', 'wpadcenter' ),
+			'stats-for-today' => __( 'Stats for today', 'wpadcenter' ),
+			'start-date'      => __( 'Start Date', 'wpadcenter' ),
+			'end-date'        => __( 'End Date', 'wpadcenter' ),
+		);
+		if ( get_option( 'wpadcenter_pro_active' ) ) {
+			$columns['advertiser'] = __( 'Advertiser', 'wpadcenter' );
+		}
+		return $columns;
+	}
+
+	/**
+	 * Manage groupads columns.
+	 *
+	 * @since 1.0.0
+	 * @return array|void
+	 */
+	public function wpadcenter_manage_edit_adgroups_columns() {
+		global $current_screen;
+		if ( 'wpadcenter-ads' !== $current_screen->post_type ) {
+			return;
+		}
+		$columns = array(
+			'cb'                   => '<input type="checkbox" />',
+			'name'                 => __( 'Name', 'wpadcenter' ),
+			'shortcode'            => __( 'Shortcode', 'wpadcenter' ),
+			'template-tag'         => __( 'Template tag', 'wpadcenter' ),
+			'number-of-ads'        => __( 'Number of ads', 'wpadcenter' ),
+			'number-of-active-ads' => __( 'Number of active ads', 'wpadcenter' ),
+		);
+		if ( get_option( 'wpadcenter_pro_active' ) ) {
+			$columns['advertiser'] = __( 'Advertiser', 'wpadcenter' );
+		}
+		return $columns;
+	}
 }

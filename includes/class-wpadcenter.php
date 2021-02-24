@@ -158,6 +158,9 @@ class Wpadcenter {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_cpt' );
 		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_taxonomy' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'wpadcenter_admin_menu' );
+		$this->loader->add_action( 'manage_edit-wpadcenter-ads_columns', $plugin_admin, 'wpadcenter_manage_edit_ads_columns' );
+		$this->loader->add_action( 'manage_edit-wpadcenter-adgroups_columns', $plugin_admin, 'wpadcenter_manage_edit_adgroups_columns' );
 
 	}
 
