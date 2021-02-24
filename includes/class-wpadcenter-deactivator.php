@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * Fired during plugin deactivation
+ *
+ * @link       https://wpadcenter.com/
+ * @since      1.0.0
+ *
+ * @package    Wpadcenter
+ * @subpackage Wpadcenter/includes
+ */
+
+/**
+ * Fired during plugin deactivation.
+ *
+ * This class defines all code necessary to run during the plugin's deactivation.
+ *
+ * @since      1.0.0
+ * @package    Wpadcenter
+ * @subpackage Wpadcenter/includes
+ * @author     WPEka <hello@wpeka.com>
+ */
+class Wpadcenter_Deactivator {
+
+	/**
+	 * Short Description. (use period)
+	 *
+	 * Long Description.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function deactivate() {
+
+	}
+
+}
