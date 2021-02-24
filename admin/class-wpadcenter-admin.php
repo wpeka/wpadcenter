@@ -100,4 +100,104 @@ class Wpadcenter_Admin {
 
 	}
 
+		/**
+	 * Define arguments for custom post type.
+	 *
+	 * @since 1.0.0
+	 * @return mixed|void
+	 */
+	public function wpadcenter_get_cpt_args() {
+
+		$cpt_args        = array();
+		$cpt_args['ads'] = apply_filters(
+			'wpadcenter_cpt_args_ads',
+			array(
+				'labels'              => apply_filters(
+					'wpadcenter_cpt_args_labels_ads',
+					array(
+						'name'               => __( 'WPAdCenter: Ads', 'wpadcenter' ),
+						'singular_name'      => __( 'Ad', 'wpadcenter' ),
+						'menu_name'          => __( 'WPAdCenter', 'wpadcenter' ),
+						'all_items'          => __( 'Manage Ads', 'wpadcenter' ),
+						'add_new_item'       => __( 'Create New Ad', 'wpadcenter' ),
+						'add_new'            => __( 'Create New', 'wpadcenter' ),
+						'new_item'           => __( 'New Ad', 'wpadcenter' ),
+						'edit_item'          => __( 'Edit Ad', 'wpadcenter' ),
+						'update_item'        => __( 'Update Ad', 'wpadcenter' ),
+						'view_item'          => __( 'View Ad', 'wpadcenter' ),
+						'view_items'         => __( 'View Ad', 'wpadcenter' ),
+						'search_items'       => __( 'Search Ad', 'wpadcenter' ),
+						'not_found'          => __( 'No Ads found', 'wpadcenter' ),
+						'not_found_in_trash' => __( 'No Ads found in Trash', 'wpadcenter' ),
+					)
+				),
+				'supports'            => array( 'title' ),
+				'public'              => true,
+				'show_ui'             => true,
+				'show_in_menu'        => true,
+				'show_in_admin_bar'   => true,
+				'show_in_nav_menus'   => true,
+				'can_export'          => true,
+				'has_archive'         => false,
+				'hierarchical'        => false,
+				'exclude_from_search' => true,
+				'show_in_rest'        => false,
+				'publicly_queryable'  => false,
+				'menu_icon'           => WPADCENTER_PLUGIN_URL . 'images/menu-icon.png',
+				'rewrite'             => array( 'slug' => 'wpadcenter-ads' ),
+				'capability_type'     => 'post',
+			)
+		);
+
+		return apply_filters( 'wpadcenter_cpt_args', $cpt_args );
+
+	}
+
+	/**
+	 * Register custom post type.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_cpt() {
+		$wpadcenter_cpt_args = $this->wpadcenter_get_cpt_args();
+		foreach ( $wpadcenter_cpt_args as $key => $cpt_args ) {
+			if ( ! post_type_exists( 'wpadcenter-' . $key ) ) {
+				register_post_type( 'wpadcenter-' . $key, $cpt_args );
+			}
+		}
+	}
+
+	/**
+	 * Registers taxonomy.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_taxonomy() {
+		$labels = array(
+			'name'              => _x( 'Manage Ad Groups', 'taxonomy general name', 'wpadcenter' ),
+			'singular_name'     => _x( 'Manage Ad Group', 'taxonomy singular name', 'wpadcenter' ),
+			'search_items'      => __( 'Search Ad Groups', 'wpadcenter' ),
+			'all_items'         => __( 'All Groups', 'wpadcenter' ),
+			'parent_item'       => __( 'Parent Group', 'wpadcenter' ),
+			'parent_item_colon' => __( 'Parent Group:', 'wpadcenter' ),
+			'edit_item'         => __( 'Edit Group', 'wpadcenter' ),
+			'update_item'       => __( 'Update Group', 'wpadcenter' ),
+			'add_new_item'      => __( 'Add New Group', 'wpadcenter' ),
+			'new_item_name'     => __( 'New Group Name', 'wpadcenter' ),
+			'menu_name'         => __( 'Manage Ad Groups', 'wpadcenter' ),
+			'not_found'         => __( 'No Ad Groups Found', 'wpadcenter' ),
+			'view_item'         => __( 'View Ad Group', 'wpadcenter' ),
+			'no_terms'          => __( 'No Ad Groups', 'wpadcenter' ),
+		);
+		$args   = array(
+			'labels'       => $labels,
+			'hierarchical' => true,
+			'show_ui'      => true,
+			'show_in_rest' => false,
+			'rewrite'      => array( 'slug' => 'wpadcenter-adgroups' ),
+		);
+
+		register_taxonomy( 'wpadcenter-adgroups', array( 'wpadcenter-ads' ), $args );
+	}
+
 }
