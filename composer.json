@@ -8,8 +8,7 @@
   "minimum-stability": "dev",
   "repositories": [
     {
-      "type": "path",
-      "url": "lib"
+      "type": "path"
     }
   ],
   "require": {
