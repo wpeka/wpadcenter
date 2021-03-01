@@ -46,4 +46,4 @@ jobs:
         run: ./tests/bin/install.sh wpadcenter_test root root 127.0.0.1 latest
 
       - name: Run code sniff
-        run: RUN_PHPCS=1 bash ./tests/bin/phpcs.sh
+        run: vendor/bin/phpcs
