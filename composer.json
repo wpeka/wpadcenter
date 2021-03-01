@@ -25,15 +25,6 @@
     },
     "sort-packages": true
   },
-  "autoload": {
-    "exclude-from-classmap": [
-      "includes/legacy",
-      "includes/libraries"
-    ],
-    "classmap": [
-      "includes/rest-api"
-    ]
-  },
   "scripts": {
     "test": [
       "phpunit"
