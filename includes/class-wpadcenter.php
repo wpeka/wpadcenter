@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The file that defines the core plugin class
  *
@@ -161,6 +160,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'wpadcenter_admin_menu' );
 		$this->loader->add_action( 'manage_edit-wpadcenter-ads_columns', $plugin_admin, 'wpadcenter_manage_edit_ads_columns' );
 		$this->loader->add_action( 'manage_edit-wpadcenter-adgroups_columns', $plugin_admin, 'wpadcenter_manage_edit_adgroups_columns' );
+		$this->loader->add_filter( 'plugin_action_links_' . WPADCENTER_PLUGIN_BASENAME, $plugin_admin, 'wpadcenter_plugin_action_links' );
 
 	}
 
