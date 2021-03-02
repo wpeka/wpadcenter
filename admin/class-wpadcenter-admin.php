@@ -3,8 +3,8 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://wpadcenter.com/
- * @since      1.0.0
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
  *
  * @package    Wpadcenter
  * @subpackage Wpadcenter/admin
@@ -25,27 +25,28 @@ class Wpadcenter_Admin {
 	/**
 	 * The ID of this plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
+	 * @since  1.0.0
+	 * @access private
+	 * @var    string    $plugin_name    The ID of this plugin.
 	 */
 	private $plugin_name;
 
 	/**
 	 * The version of this plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
+	 * @since  1.0.0
+	 * @access private
+	 * @var    string    $version    The current version of this plugin.
 	 */
 	private $version;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @param string    $plugin_name       The name of this plugin.
+	 * @param string    $version    The version of this plugin.
+	 * 
+	 * @since 1.0.0
 	 */
 	public function __construct( $plugin_name, $version ) {
 
@@ -57,7 +58,7 @@ class Wpadcenter_Admin {
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public function enqueue_styles() {
 
@@ -80,7 +81,7 @@ class Wpadcenter_Admin {
 	/**
 	 * Register the JavaScript for the admin area.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public function enqueue_scripts() {
 
@@ -100,10 +101,33 @@ class Wpadcenter_Admin {
 
 	}
 
-		/**
+	/**
+	 * Adds action links to the plugin list table.
+	 *
+	 * Fired by `plugin_action_links` filter.
+	 *
+	 * @param array $links An array of plugin action links.
+	 * 
+	 * @since 1.0.0
+	 * 
+	 * @return array An array of plugin action links.
+	 */
+	public function wpadcenter_plugin_action_links( $links ) {
+		if ( ! get_option( 'wpadcenter_pro_installed' ) ) {
+			$links = array_merge(
+				array(
+					'<a href="' . esc_url( 'https://club.wpeka.com/product/wpadcenter/?utm_source=wpadcenter&utm_medium=plugins&utm_campaign=link&utm_content=upgrade-to-pro' ) . '" target="_blank" rel="noopener noreferrer"><strong style="color: #11967A; display: inline;">' . __( 'Upgrade to Pro', 'wpadcenter' ) . '</strong></a>',
+				),
+				$links
+			);
+		}
+		return $links;
+	}
+
+	/**
 	 * Define arguments for custom post type.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 * @return mixed|void
 	 */
 	public function wpadcenter_get_cpt_args() {
@@ -246,7 +270,7 @@ class Wpadcenter_Admin {
 	/**
 	 * Manage Ads table columns.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 * @return array|void
 	 */
 	public function wpadcenter_manage_edit_ads_columns() {
@@ -275,7 +299,7 @@ class Wpadcenter_Admin {
 	/**
 	 * Manage groupads columns.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 * @return array|void
 	 */
 	public function wpadcenter_manage_edit_adgroups_columns() {
