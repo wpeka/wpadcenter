@@ -1,3 +1,11 @@
+/**
+ * Config file for webpack.
+ *
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
+ *
+ * @package Wpadcenter
+ */
 const path = require('path');
 
 module.exports = {
