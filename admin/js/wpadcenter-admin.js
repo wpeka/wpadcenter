@@ -1,3 +1,11 @@
+/**
+ * Javascript file for admin section.
+ *
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
+ *
+ * @package Wpadcenter
+ */
 (function( $ ) {
 	'use strict';
 

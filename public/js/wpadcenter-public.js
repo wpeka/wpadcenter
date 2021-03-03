@@ -1,3 +1,11 @@
+/**
+ * Javascript file for public section.
+ *
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
+ *
+ * @package Wpadcenter
+ */
 (function( $ ) {
 	'use strict';
 
