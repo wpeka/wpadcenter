@@ -84,6 +84,10 @@ if ( ! defined( 'WPADCENTER_PLUGIN_BASENAME' ) ) {
 	define( 'WPADCENTER_PLUGIN_BASENAME', plugin_basename( WPADCENTER_PLUGIN_FILENAME ) );
 }
 
+if ( ! defined( 'WPADCENTER_SCRIPT_SUFFIX' ) ) {
+	define( 'WPADCENTER_SCRIPT_SUFFIX', ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min' );
+}
+
 
 /**
  * The code that runs during plugin activation.
