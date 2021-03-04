@@ -75,7 +75,15 @@ class Wpadcenter_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css', array(), $this->version, 'all' );
-
+		wp_register_style(
+			$this->plugin_name . '-settings',
+			plugin_dir_url(
+				__FILE__
+			) . 'css/wpadcenter-admin-settings' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
 	}
 
 	/**
@@ -98,7 +106,13 @@ class Wpadcenter_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), $this->version, false );
-
+		wp_register_script(
+			$this->plugin_name . '-settings',
+			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-settings' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
 	}
 
 	/**
@@ -244,7 +258,8 @@ class Wpadcenter_Admin {
 			'Settings',
 			__( 'Settings', 'wpadcenter' ),
 			'manage_options',
-			'wpadcenter-settings'
+			'wpadcenter-settings',
+			array( $this, 'wpadcenter_settings' )
 		);
 		// Getting Started - submenu.
 		add_submenu_page(
@@ -319,5 +334,85 @@ class Wpadcenter_Admin {
 			$columns['advertiser'] = __( 'Advertiser', 'wpadcenter' );
 		}
 		return $columns;
+	}
+
+	/**
+	 * Callback function for Settings menu.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_settings() {
+		// Lock out non-admins.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+		wp_enqueue_style( $this->plugin_name . '-settings' );
+		wp_enqueue_script( $this->plugin_name . '-settings' );
+		$the_options = Wpadcenter::wpadcenter_get_settings();
+		// Check if form has been set.
+		if ( isset( $_POST['update_admin_settings_form'] ) || ( isset( $_POST['wpadcenter_settings_ajax_update'] ) ) ) {
+			// Check nonce.
+			check_admin_referer( 'wpadcenter-update-' . WPADCENTER_SETTINGS_FIELD );
+			if ( 'update_admin_settings_form' === $_POST['wpadcenter_settings_ajax_update'] ) {
+				foreach ( $the_options as $key => $value ) {
+					if ( 'ads_txt_content' === $key ) {
+						continue;
+					}
+					if ( isset( $_POST[ $key . '_field' ] ) ) {
+						// Store sanitised values only.
+						$the_options[ $key ] = Wpadcenter::wpadcenter_sanitise_settings(
+							$key,
+							wp_unslash(
+								$_POST[ $key . '_field' ]
+							)
+						); // phpcs:ignore input var ok, CSRF ok, sanitization ok.
+					}
+				}
+				$the_options = apply_filters( 'wpadcenter_after_save_settings', $the_options );
+				update_option( WPADCENTER_SETTINGS_FIELD, $the_options );
+				echo '<div class="updated"><p><strong>' . esc_attr__(
+					'Settings Updated.',
+					'wpadcenter'
+				) . '</strong></p></div>';
+			}
+		}
+
+		require_once plugin_dir_path( __FILE__ ) . 'partials/wpadcenter-admin-display.php';
+	}
+
+	/**
+	 * Prints a combobox based on options and selected=match value.
+	 *
+	 * @param array  $options Array of options.
+	 * @param string $selected Which of those options should be selected (allows just one; is case sensitive).
+	 */
+	public function print_combobox_options( $options, $selected ) {
+		foreach ( $options as $key => $value ) {
+			echo '<option value="' . esc_html( $value ) . '"';
+			if ( $value === $selected ) {
+				echo ' selected="selected"';
+			}
+			echo '>' . esc_html( $key ) . '</option>';
+		}
+	}
+
+	/**
+	 * Return transition effect options.
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_transition_effect_options() {
+		return apply_filters(
+			'wpadcenter_transition_effect_options',
+			array(
+				__( 'None', 'wpadcenter' )                 => 'none',
+				__( 'Fade', 'wpadcenter' )                 => 'fade',
+				__( 'Fade Out', 'wpadcenter' )             => 'fadeout',
+				__( 'Scroll Right to Left', 'wpadcenter' ) => 'scrollHorz',
+				__( 'Scroll Left to Right', 'wpadcenter' ) => 'scrollHorzReverse',
+				__( 'Scroll Top to Bottom', 'wpadcenter' ) => 'scrollVert',
+				__( 'Scroll Bottom to Top', 'wpadcenter' ) => 'scrollVertReverse',
+			)
+		);
 	}
 }

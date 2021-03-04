@@ -58,6 +58,15 @@ class Wpadcenter {
 	protected $version;
 
 	/**
+	 * The currently stored option settings of the plugin.
+	 *
+	 * @since  1.0.0
+	 * @access private
+	 * @var    array $stored_options The stored option settings of the plugin.
+	 */
+	private static $stored_options = array();
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -219,6 +228,152 @@ class Wpadcenter {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	/**
+	 * Returns default settings.
+	 * If you override the settings here, be ultra careful to use escape characters.
+	 *
+	 * @param string $key Return default settings for particular key.
+	 * 
+	 * @since 1.0.0
+	 * 
+	 * @return mixed|void
+	 */
+	public static function wpadcenter_get_default_settings( $key = '' ) {
+		$settings = array(
+			// General settings.
+			'notification'             => false,
+
+			'auto_refresh'             => false,
+			'transition_effect'        => 'none',
+			'transition_speed'         => '500',
+			'transition_delay'         => '1000',
+
+			'adblock_detector'         => false,
+			'adblock_detected_message' => 'We have noticed that you have an adblocker enabled which restricts ads served on the site.',
+
+			'enable_ads_txt'           => false,
+			'ads_txt_content'          => '',
+			'enable_scripts'           => false,
+			'header_scripts'           => '',
+			'body_scripts'             => '',
+			'footer_scripts'           => '',
+
+			'enable_advertisers'       => false,
+
+			'geo_location'             => 'none',
+			'trim_stats'               => '0',
+			'hide_ads_logged'          => false,
+		);
+		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
+		return '' !== $key ? $settings[ $key ] : $settings;
+	}
+
+	/**
+	 * Returns sanitised content based on field-specific rules defined here
+	 * used for both read AND write operations.
+	 * 
+	 * @param string $key Key for the setting.
+	 * @param string $value Value for the setting.
+	 *
+	 * @return bool|null|string
+	 */
+	public static function wpadcenter_sanitise_settings( $key, $value ) {
+		$ret = null;
+		switch ( $key ) {
+			// Convert all boolean values from text to bool.
+			case 'notification':
+			case 'auto_refresh':
+			case 'adblock_detector':
+			case 'enable_scripts':
+			case 'enable_advertisers':
+			case 'enable_ads_txt':
+			case 'hide_ads_logged':
+				if ( 'true' === $value || true === $value ) {
+					$ret = true;
+				} elseif ( 'false' === $value || false === $value ) {
+					$ret = false;
+				} else {
+					// Unexpected value returned from radio button, go fix the HTML.
+					// Failover = assign null.
+					$ret = 'fffffff';
+				}
+				break;
+			case 'header_scripts':
+			case 'body_scripts':
+			case 'footer_scripts':
+				$ret = trim( stripslashes( $value ) );
+				break;
+			case 'ads_txt_content':
+				$ret = esc_textarea( $value );
+				break;
+			default:
+				$ret = sanitize_text_field( $value );
+				break;
+		}
+		if ( 'fffffff' === $ret ) {
+			$ret = false;
+		}
+		return $ret;
+	}
+
+	/**
+	 * Get current settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array|mixed
+	 */
+	public static function wpadcenter_get_settings() {
+		$settings             = self::wpadcenter_get_default_settings();
+		self::$stored_options = get_option( WPADCENTER_SETTINGS_FIELD );
+		if ( ! empty( self::$stored_options ) ) {
+			foreach ( self::$stored_options as $key => $option ) {
+				$settings[ $key ] = self::wpadcenter_sanitise_settings( $key, $option );
+			}
+		}
+		update_option( WPADCENTER_SETTINGS_FIELD, $settings );
+		return $settings;
+	}
+
+	/**
+	 * Generate tab head for settings page,
+	 * method will translate the string to current language.
+	 *
+	 * @param array $title_arr Tab labels.
+	 */
+	public static function wpadcenter_generate_settings_tabhead( $title_arr ) {
+		foreach ( $title_arr as $k => $v ) {
+			if ( is_array( $v ) ) {
+				$v = ( isset( $v[2] ) ? $v[2] : '' ) . esc_attr( $v[0] ) . ' ' . ( isset( $v[1] ) ? $v[1] : '' );
+			} else {
+				$v = esc_attr( $v );
+			}
+			?>
+			<a class="nav-tab" href="#<?php echo esc_html( $k ); ?>"><?php echo esc_html( $v ); ?></a>
+			<?php
+		}
+	}
+
+	/**
+	 * Envelope settings tab content with tab div.
+	 *
+	 * @param string $view_file View file.
+	 * @param string $target_id Target tab id.
+	 */
+	public static function wpadcenter_envelope_settings_tab( $view_file = '', $target_id ) {
+		$the_options = self::wpadcenter_get_settings();
+		?>
+		<div class="wpadcenter-tab-content" data-id="<?php echo esc_attr( $target_id ); ?>">
+			<?php
+			if ( '' !== $view_file && file_exists( $view_file ) ) {
+				include_once $view_file;
+			}
+			include plugin_dir_path( WPADCENTER_PLUGIN_FILENAME ) . 'admin/views/admin-display-save-button.php';
+			?>
+		</div>
+		<?php
 	}
 
 }
