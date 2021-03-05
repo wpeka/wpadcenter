@@ -97,8 +97,8 @@ class Wpadcenter_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), $this->version, false );
-
+		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), $this->version, false );
+		
 	}
 
 	/**
@@ -320,4 +320,254 @@ class Wpadcenter_Admin {
 		}
 		return $columns;
 	}
+
+
+	/**
+	 * Add meta boxes to create ads page.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_add_meta_boxes( $post ) {
+
+
+		add_meta_box(
+			'ad-type',
+			__( 'Ad Type', 'wpadcenter' ),
+			array( $this, 'wpadcenter_ad_type' ),
+			'wpadcenter-ads',
+			'normal',
+			'high'
+		);
+
+		
+		add_meta_box(
+			'ad-size',
+			__( 'Ad Size', 'wpadcenter' ),
+			array( $this, 'wpadcenter_ad_size_metabox' ),
+			'wpadcenter-ads',
+			'normal',
+			'high'
+		);
+		add_meta_box(
+			'postimagediv',
+			__( 'Ad Image', 'wpadcenter' ),
+			'post_thumbnail_meta_box',
+			null,
+			'normal',
+			'high'
+		);
+		add_meta_box(
+			'ad-details',
+			__( 'Ad details', 'wpadcenter' ),
+			array( $this, 'wpadcenter_ad_detail_metabox' ),
+			'wpadcenter-ads',
+			'normal',
+			'high'
+		);
+		add_meta_box(
+			'ad-code',
+			__( 'Ad Code', 'wpadcenter' ),
+			array( $this, 'wpadcenter_ad_code_metabox' ),
+			'wpadcenter-ads',
+			'normal',
+			'high'
+		);
+		add_meta_box(
+			'external-image-link',
+			__( 'External Image Link', 'wpadcenter' ),
+			array( $this, 'wpadcenter_external_image_link_metabox' ),
+			'wpadcenter-ads',
+			'normal',
+			'high'
+		);
+
+
+
+	}
+
+	/**
+	 * Ad-size meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_size_metabox( $post ) {
+
+		$sizes_list = Wpadcenter_Admin_Helper::get_default_ad_sizes();
+
+		$default_size = apply_filters( 'wpadcenter_ad_size_default', '300x250' );
+
+		$size = get_post_meta( $post->ID, 'wpadcenter_ad_size', true );
+		echo '<select name="ad-size" id="size" size="1">';
+		foreach ( $sizes_list as $val => $name ) {
+
+			echo sprintf(
+				'<option value="%s" %s>%s</option>',
+				esc_attr( $val ),
+				( empty( $size ) && $val === $default_size ? 'selected="selected"' : selected( $size, $val ) ),
+				esc_html( $name )
+			);
+
+		}
+		echo '</select>';
+	}
+
+	/**
+	 * Ad-detail meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_detail_metabox( $post ) {
+		$open_in_new_tab  = get_post_meta( $post->ID, 'wpadcenter_open_in_new_tab', true );
+		$nofollow_on_link = get_post_meta( $post->ID, 'wpadcenter_nofollow_on_link', true );
+		echo '
+		<div>
+		<label for="open-in-new-tab"><input name="open-in-new-tab" type="checkbox" value="1" id="open-in-new-tab" ' . checked( '1', $open_in_new_tab, false ) . '> ' . esc_html__( 'Open Link In a New Tab', 'wpadcenter' ) . '</label>
+		<label for="nofollow-on-link" style="margin-left:20px"><input name="nofollow-on-link" type="checkbox" value="1" id="nofollow-on-link" ' . checked( '1', $nofollow_on_link, false ) . '>' . esc_html__( 'Use nofollow on Link', 'wpadcenter' ) . '</label>
+		</div>
+		';
+	}
+
+
+	/**
+	 * Ad-code meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_code_metabox( $post ) {
+		$ad_code = get_post_meta( $post->ID, 'wpadcenter_ad_code', true );
+		echo '<textarea name="ad-code" style="width:100%;height:200px" >' . esc_textarea( $ad_code ) . '</textarea>';
+	}
+
+	/**
+	 * External Image Link meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_external_image_link_metabox( $post ) {
+		$image_link          = get_post_meta( $post->ID, 'wpadcenter_external_image_link', true );
+		$external_image_link = ! empty( $image_link ) ? $image_link : '';
+		echo '<input name="external-image-link" type="text" value="' . esc_url( $external_image_link ) . '" style="width:100%">';
+	}
+
+	/**
+	 * Ad type meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_type( $post ) {
+
+		wp_nonce_field( 'wpadcenter_save_ad', 'wpadcenter_save_ad_nonce' );
+
+		$ad_types_list = Wpadcenter_Admin_Helper::get_default_ad_types();
+
+		$ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
+
+		$default_ad_type = apply_filters( 'wpadcenter_ad_type_default', 'banner_image' );
+
+		echo '<select name="ad-type" id="ad-type">';
+		foreach ( $ad_types_list as $val => $name ) {
+
+			echo sprintf(
+				'<option value="%s" %s>%s</option>',
+				esc_attr( $val ),
+				( empty( $ad_type ) && $val === $default_ad_type ? 'selected="selected"' : selected( $ad_type, $val ) ),
+				esc_html( $name )
+			);
+
+		}
+
+		echo '</select>';
+
+	}
+
+	/**
+	 * Save ad meta data.
+	 *
+	 * @param integer $post_id post id of post being saved.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_save_ad_meta( $post_id ) {
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		$nonce_field = 'wpadcenter_save_ad_nonce';
+		if (
+			! isset( $_POST[ $nonce_field ] ) ||
+			! wp_verify_nonce( sanitize_key( $_POST[ $nonce_field ] ), 'wpadcenter_save_ad' )
+		) {
+			return;
+		}
+
+		$raw_data = $_POST;
+
+		$metafields = Wpadcenter_Admin_Helper::get_default_metafields();
+
+		foreach ( $metafields as $meta_name => $meta_data ) {
+
+			$sanitized_data = false;
+
+			switch ( $meta_data[1] ) {
+
+				case 'string':
+					$sanitized_data = sanitize_text_field( $raw_data[ $meta_name ] );
+					break;
+				case 'bool':
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) ? (bool) $raw_data[ $meta_name ] : 0;
+					break;
+				case 'raw':
+					$sanitized_data = $raw_data[ $meta_name ];
+					break;
+				case 'url':
+					$sanitized_data = esc_url_raw( $raw_data[ $meta_name ] );
+					break;
+			}
+
+			if ( true === (bool) $sanitized_data ) {
+
+				update_post_meta( $post_id, $meta_data[0], $sanitized_data );
+
+			} elseif ( ! isset( $raw_data[ $meta_name ] ) && 'bool' === $meta_data[1] ) {
+
+				delete_post_meta( $post_id, $meta_data[0] );
+
+			}
+		}
+
+	}
+
+	/**
+	 * Renders meta boxes as per ad-type.
+	 *
+	 * @param WP_POST $post post being edited.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_edit_form_after_title( $post ) {
+
+		$ad_meta_relation = Wpadcenter_Admin_Helper::get_ad_meta_relation();
+
+		$current_ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
+
+		wp_localize_script( $this->plugin_name, 'wpadcenter_render_metaboxes', array( $ad_meta_relation, $current_ad_type ) );
+		wp_enqueue_script( $this->plugin_name );
+
+	}
+
+
+
 }

@@ -6,7 +6,7 @@
  *
  * @package Wpadcenter
  */
-(function( $ ) {
+(function ($) {
 	'use strict';
 
 	/**
@@ -36,5 +36,63 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
+	
 
-})( jQuery );
+	
+	$(document).ready(function(){
+		if( undefined !== wpadcenter_render_metaboxes ){
+
+			let metaboxes = [];
+			let ad_types = {};
+
+			let ad_meta_relation= wpadcenter_render_metaboxes[0];
+
+			let current_ad_type=wpadcenter_render_metaboxes[1];
+
+			for (let [key, val] of Object.entries(ad_meta_relation)) {
+
+				ad_types[key] = val.active_meta_box;
+				metaboxes.push(...val.active_meta_box);
+
+			}
+
+
+			metaboxes = _.uniq(metaboxes);
+
+			change_active_metaboxes( current_ad_type );
+
+
+			$('#ad-type').change(function () {
+					const selected_ad = $("#ad-type :selected").val();
+					change_active_metaboxes(selected_ad);		
+		
+				}
+			);
+
+			
+			function change_active_metaboxes(selected_ad){
+
+				const active_metaboxes = ad_types[selected_ad];
+				metaboxes.forEach((metabox) => {
+					if (active_metaboxes.includes(metabox)) {
+	
+						// Show this metabox and return
+						$(`#${metabox}`).show();
+	
+					}
+					else {
+						// Hide this metabox
+						$(`#${metabox}`).hide();
+	
+					}
+				});
+
+			}
+			
+		}
+		
+	});
+
+
+
+})(jQuery);
