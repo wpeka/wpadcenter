@@ -2,21 +2,56 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+ #wpadcenter_settings_form {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+#wpbody-content {
+	height: 100vh;
+	background: #F3F6FF;
+}
+
+.card {
+	padding: 0;
+	max-width: 100%;
+}
+
+label {
+	margin: 0;
+	margin-right: 10px;
+}
+
+.auto_refresh_enabled {
+	margin-top: 15px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 30px;
+}
+
+.auto_refresh_enabled label {
+	margin-bottom: 5px;
+}
+
+.form-label {
+	margin: 10px 0px 7px 0px;
+}
  #wpcontent {
-	background: #fff;
+	background: #F3F6FF;
 }
 .wpadcenter-tab-head {
 	margin-right: 0px;
 }
 .wpadcenter-tab-head .nav-tab-active {
-	background: #fff;
+	background: #F3F6FF;
 	border-bottom: solid 1px #fff;
 }
 .wpadcenter-tab-head .nav-tab:focus {
 	box-shadow: none;
 }
 .wpadcenter_settings_left {
-	width: 75%;
+	width: 100%;
 	margin-bottom: 25px;
 	float: left;
 }
@@ -34,7 +69,7 @@
 	}
 }
 .wpadcenter-tab-container {
-	background: #fff;
+	background: #F3F6FF;
 	box-sizing: border-box;
 	width: 100%;
 	height: auto;

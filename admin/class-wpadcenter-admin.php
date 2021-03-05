@@ -113,6 +113,13 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
+		wp_register_script(
+			$this->plugin_name . '-main',
+			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-main' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
 	}
 
 	/**
