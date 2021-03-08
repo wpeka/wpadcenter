@@ -66,6 +66,8 @@ class Wpadcenter {
 	 */
 	private static $stored_options = array();
 
+	const TOP = '# WPAdCenter ads.txt';
+
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -171,7 +173,9 @@ class Wpadcenter {
 		$this->loader->add_action( 'manage_edit-wpadcenter-ads_columns', $plugin_admin, 'wpadcenter_manage_edit_ads_columns' );
 		$this->loader->add_action( 'manage_edit-wpadcenter-adgroups_columns', $plugin_admin, 'wpadcenter_manage_edit_adgroups_columns' );
 		$this->loader->add_filter( 'plugin_action_links_' . WPADCENTER_PLUGIN_BASENAME, $plugin_admin, 'wpadcenter_plugin_action_links' );
-
+		$this->loader->add_action( 'wp_ajax_check_ads_txt_problems', $plugin_admin, 'wpadcenter_check_ads_txt_problems' );
+		$this->loader->add_action( 'wp_ajax_check_ads_txt_replace', $plugin_admin, 'wpadcenter_check_ads_txt_replace' );
+		$this->loader->add_filter( 'wpadcenter_after_save_settings', $plugin_admin, 'wpadcenter_after_save_settings' );
 	}
 
 	/**
@@ -187,6 +191,7 @@ class Wpadcenter {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
 
 	}
 
@@ -376,4 +381,74 @@ class Wpadcenter {
 		<?php
 	}
 
+	/**
+	 * Connect to the filesystem.
+	 *
+	 * @param array $directories                  A list of directories. If any of these do
+	 *                                            not exist, a WP_Error object will be returned.
+	 * 
+	 * @return bool|WP_Error True if able to connect, false or a WP_Error otherwise.
+	 */
+	public static function fs_connect( $directories = array() ) {
+		global $wp_filesystem;
+		$directories = ( is_array( $directories ) && count( $directories ) ) ? $directories : array( WP_CONTENT_DIR );
+
+		// This will output a credentials form in event of failure, We don't want that, so just hide with a buffer.
+		ob_start();
+		$credentials = request_filesystem_credentials( '', '', false, $directories[0] );
+		ob_end_clean();
+
+		if ( false === $credentials ) {
+			return false;
+		}
+
+		if ( ! WP_Filesystem( $credentials ) ) {
+			$error = true;
+			if ( is_object( $wp_filesystem ) && $wp_filesystem->errors->get_error_code() ) {
+				$error = $wp_filesystem->errors;
+			}
+			// Failed to connect, Error and request again.
+			ob_start();
+			request_filesystem_credentials( '', '', $error, $directories[0] );
+			ob_end_clean();
+			return false;
+		}
+
+		if ( ! is_object( $wp_filesystem ) ) {
+			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'wpadcenter' ) );
+		}
+
+		if ( is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+			return new WP_Error( 'fs_error', __( 'Filesystem error.', 'wpadcenter' ), $wp_filesystem->errors );
+		}
+
+		foreach ( (array) $directories as $dir ) {
+			switch ( $dir ) {
+				case ABSPATH:
+					if ( ! $wp_filesystem->abspath() ) {
+						return new WP_Error( 'fs_no_root_dir', __( 'Unable to locate WordPress root directory.', 'wpadcenter' ) );
+					}
+					break;
+				case WP_CONTENT_DIR:
+					if ( ! $wp_filesystem->wp_content_dir() ) {
+						return new WP_Error( 'fs_no_content_dir', __( 'Unable to locate WordPress content directory (wp-content).', 'wpadcenter' ) );
+					}
+					break;
+				default:
+					if ( ! $wp_filesystem->find_folder( $dir ) ) {
+						return new WP_Error(
+							'fs_no_folder',
+							sprintf(
+								/* translators: %s folder name */
+								__( 'Unable to locate needed folder (%s).', 'wpadcenter' ),
+								esc_html( basename( $dir ) )
+							)
+						);
+					}
+					break;
+			}
+		}
+
+		return true;
+	}
 }

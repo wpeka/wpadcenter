@@ -91,14 +91,21 @@ $the_options = get_option( WPADCENTER_SETTINGS_FIELD );
 
 				<c-card-header>Ads.txt Settings</c-card-header>
 				<c-card-body>
-					<div class="ad-toggle">
-						<c-switch ref="enable_ads_txt" v-model="enable_ads_txt" id="inline-form-enable_ads_txt" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_ads_txt'] ); ?> v-on:update:checked="enable_ads_txt = !enable_ads_txt"></c-switch>
-						<label for="inline-form-enable_scripts">Enable Ads.txt</label>
-						<input type="hidden" name="enable_ads_txt_field" v-model="enable_ads_txt">
-					</div>
-					<div class="enable_ads_txt_enabled" v-show="enable_ads_txt">
-						<textarea name="ads_txt_content_field" id="ads_txt_content_field" style="width: 100%;" rows="6"></textarea>
-					</div>
+				<div class="ad-toggle">
+					<input type="hidden" name="ads_txt_tab" v-model="value" />
+					<input type="hidden" name="ads_txt_security" value="<?php echo esc_attr( wp_create_nonce( 'check_ads_txt_problems' ) ); ?>">
+					<input type="hidden" name="ads_txt_replace_security" value="<?php echo esc_attr( wp_create_nonce( 'check_ads_txt_replace' ) ); ?>">
+					<input type="hidden" name="ads_txt_ajaxurl" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+					<c-switch ref="enable_ads_txt" v-model="enable_ads_txt" id="inline-form-enable_ads_txt" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_ads_txt'] ); ?> v-on:update:checked="enable_ads_txt = !enable_ads_txt; this.value = enable_ads_txt ? '1' : '0';"></c-switch>
+					<label for="inline-form-enable_ads_txt"><?php esc_html_e( 'Enable Ads.txt', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Enable ads.txt functionality', 'wpadcenter' ); ?>'" color="primary" name="cil-settings"></c-icon>
+					<input type="hidden" name="enable_ads_txt_field" v-model="enable_ads_txt">
+				</div>
+				<div class="enable_ads_txt_enabled" v-show="enable_ads_txt">
+					<br>
+					<textarea name="ads_txt_content_field" class="form-control" style="width: 100%;" rows="6" v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the footer section on all pages and/or posts.', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['ads_txt_content'] ) ); ?></textarea>
+					<c-spinner class="ads_txt_spinner" style="display:block; margin: 10px 0px;" color="dark" grow></c-spinner><span class="ads_txt_problems"></span></td>
+					<input type="button" class="button" name="check_ads_txt_problems" value="Check for Problems" />
+				</div>
 				</c-card-body>
 			</c-card>
 		</c-tab>

@@ -422,4 +422,405 @@ class Wpadcenter_Admin {
 			)
 		);
 	}
+
+	/**
+	 * Process ads.txt content.
+	 *
+	 * @param Array $the_options setting options.
+	 * 
+	 * @return mixed
+	 */
+	public function wpadcenter_after_save_settings( $the_options ) {
+		if ( isset( $_POST['ads_txt_tab'] ) ) {
+			check_admin_referer( 'wpadcenter-update-' . WPADCENTER_SETTINGS_FIELD );
+			$ads_txt_tab = isset( $_POST['ads_txt_tab'] ) ? sanitize_text_field( wp_unslash( $_POST['ads_txt_tab'] ) ) : '0';
+			if ( '1' === $ads_txt_tab && isset( $the_options['enable_ads_txt'] ) ) {
+				// process ads.txt content.
+				$ads_txt_content = isset( $_POST['ads_txt_content_field'] ) ? esc_textarea(
+					$_POST['ads_txt_content_field']
+				) : ''; // phpcs:ignore input var ok, CSRF ok, sanitization ok.
+				if ( isset( $ads_txt_content ) ) {
+					$ads_txt_content                = explode( "\n", $ads_txt_content );
+					$ads_txt_content                = array_filter( array_map( 'trim', $ads_txt_content ) );
+					$ads_txt_content                = implode( "\n", $ads_txt_content );
+					$the_options['ads_txt_content'] = $ads_txt_content;
+				}
+			}
+		}
+		return $the_options;
+	}
+
+	/**
+	 * Check for ads.txt problems.
+	 */
+	public function wpadcenter_check_ads_txt_problems() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'check_ads_txt_problems', 'security' );
+		}
+		$notices = $this->wpadcenter_get_notices();
+		echo wp_json_encode( $notices );
+		exit();
+	}
+
+	/**
+	 * Check for existing ads.txt file replace.
+	 */
+	public function wpadcenter_check_ads_txt_replace() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'check_ads_txt_replace', 'security' );
+		}
+		$action_notices = array();
+		$remove         = $this->wpadcenter_ads_txt_replace();
+		if ( is_wp_error( $remove ) ) {
+			$action_notices['response']              = false;
+			$action_notices['replace_error_message'] = $remove->get_error_message();
+		} else {
+			$the_options                     = Wpadcenter::wpadcenter_get_settings();
+			$action_notices['response']      = true;
+			$action_notices['file_imported'] = __( 'The ads.txt is now managed with WPAdCenter.', 'wpadcenter' );
+			$action_notices['file_content']  = $the_options['ads_txt_content'];
+		}
+
+		$notices = $this->wpadcenter_get_notices();
+		$notices = array_merge( $notices, $action_notices );
+		echo wp_json_encode( $notices );
+		exit();
+	}
+
+	/**
+	 * Replace existing ads.txt file.
+	 *
+	 * @return bool|string|WP_Error
+	 */
+	public function wpadcenter_ads_txt_replace() {
+		if ( ! is_super_admin() ) {
+			new WP_Error( 'not_main_site', __( 'Not the main blog', 'wpadcenter' ) );
+		}
+		$fs_connect = '';
+		if ( is_wp_error( $this->wpadcenter_fs_connect() ) ) {
+			return $fs_connect;
+		}
+		global $wp_filesystem;
+		$abspath = trailingslashit( $wp_filesystem->abspath() );
+		$file    = $abspath . 'ads.txt';
+		if ( $wp_filesystem->exists( $file ) && $wp_filesystem->is_file( $file ) ) {
+			$the_options    = Wpadcenter::wpadcenter_get_settings();
+			$data           = $wp_filesystem->get_contents( $file );
+			$file_records   = $this->wpadcenter_parse_file( $data );
+			$plugin_records = $this->wpadcenter_parse_file( $the_options['ads_txt_content'] );
+			foreach ( $file_records as $k => $record ) {
+				foreach ( $plugin_records as $r ) {
+					if ( $record[0] === $r[0] ) {
+						unset( $file_records[ $k ] );
+					}
+				}
+			}
+			$file_records = array_merge( $file_records, $plugin_records );
+			$r            = '';
+			foreach ( $file_records as $rec ) {
+				if ( ! empty( $rec[1] ) ) {
+					foreach ( $rec[1] as $rec1 ) {
+						$r .= $rec1 . "\n";
+					}
+				}
+				$r .= $rec[0] . "\n";
+			}
+			$the_options['ads_txt_content'] = $r;
+			update_option( WPADCENTER_SETTINGS_FIELD, $the_options );
+			if ( $wp_filesystem->delete( $file ) ) {
+				return true;
+			} else {
+				return new WP_Error( 'could_not_delete', __( 'Could not delete the existing ads.txt file', 'wpadcenter' ) );
+			}
+		} else {
+			return new WP_Error( 'not_found', __( 'Could not find the existing ads.txt file', 'wpadcenter' ) );
+		}
+	}
+
+	/**
+	 * Parse file data.
+	 *
+	 * @param Object $file File.
+	 * 
+	 * @return array
+	 */
+	public function wpadcenter_parse_file( $file ) {
+		$lines    = preg_split( '/\r\n|\r|\n/', $file );
+		$comments = array();
+		$records  = array();
+		foreach ( $lines as $line ) {
+			$line    = explode( '#', $line );
+			$comment = trim( $line[1] );
+			if ( ! empty( $line[1] ) && $comment ) {
+				$comments[] = '# ' . $comment;
+			}
+
+			if ( ! trim( $line[0] ) ) {
+				continue;
+			}
+
+			$rec  = explode( ',', $line[0] );
+			$data = array();
+
+			foreach ( $rec as $k => $r ) {
+				$r = trim( $r, " \n\r\t," );
+				if ( $r ) {
+					$data[] = $r;
+				}
+			}
+
+			if ( $data ) {
+				// Add the record and comments that were placed above or to the right of it.
+				$records[] = array( implode( ', ', $data ), $comments );
+			}
+
+			$comments = array();
+		}
+		return $records;
+	}
+
+	/**
+	 * File connect function.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function wpadcenter_fs_connect() {
+		global $wp_filesystem;
+		$fs_connect = Wpadcenter::fs_connect( array( ABSPATH ) );
+
+		if ( false === $fs_connect || is_wp_error( $fs_connect ) ) {
+			$message = __( 'Unable to connect to the filesystem. Please confirm your credentials.', 'wpadcenter' );
+
+			if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error(
+				$wp_filesystem->errors
+			) && $wp_filesystem->errors->get_error_code() ) {
+				$message = esc_html( $wp_filesystem->errors->get_error_message() );
+			}
+			if ( is_wp_error( $fs_connect ) && $fs_connect->get_error_code() ) {
+				$message = esc_html( $fs_connect->get_error_message() );
+			}
+			return new WP_Error( 'can_not_connect', $message );
+		}
+		return true;
+	}
+
+	/**
+	 * Get ads.txt notices.
+	 *
+	 * @return array
+	 */
+	public function wpadcenter_get_notices() {
+		$notices     = array(
+			'response'      => false,
+			'error_message' => esc_html__( 'Something went wrong.', 'wpadcenter' ),
+		);
+		$the_options = Wpadcenter::wpadcenter_get_settings();
+		$url         = home_url( '/' );
+		$parsed_url  = wp_parse_url( $url );
+		if ( ! isset( $parsed_url['scheme'] ) || ! isset( $parsed_url['host'] ) ) {
+			return $notices;
+		}
+		$link = sprintf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $url . 'ads.txt' ) );
+		if ( $this->wpadcenter_is_subdir() ) {
+			$notices['error_message'] = sprintf(
+				/* translators: %s main site file path */
+				esc_html__(
+					'The ads.txt file cannot be placed because the URL contains a subdirectory. You need to make the file available at %s',
+					'wpadcenter'
+				),
+				sprintf(
+					'<a href="%1$s" target="_blank">%1$s</a>',
+					esc_url( $parsed_url['scheme'] . '://' . $parsed_url['host'] )
+				)
+			);
+		} else {
+			$notices['error_message'] = '';
+			$file                     = $this->wpadcenter_get_file_info( $url );
+			if ( ! is_wp_error( $file ) ) {
+				$notices['response'] = true;
+				if ( $file['exists'] ) {
+					$notices['file_available'] = '<p>' . sprintf(
+						/* translators: %s file path */
+						esc_html__( 'The file is available on %s.', 'wpadcenter' ),
+						$link
+					) . '</p>';
+				} else {
+					$notices['file_available'] = '<p>' . esc_html__( 'The file was not created.', 'wpadcenter' ) . '</p>';
+				}
+
+				if ( $file['is_third_party'] ) {
+					$message = sprintf(
+						/* translators: %s third party file path */
+						esc_html__( 'A third-party file exists: %s', 'wpadcenter' ),
+						$link
+					);
+
+					if ( is_super_admin() ) {
+						$button   = ' <input type="button" class="button" style="vertical-align: middle;" name="replace_ads_txt_file" value="%s" />';
+						$message .= sprintf( $button, __( 'Import & Replace', 'wpadcenter' ) );
+						$message .= '<p class="wpadcenter_form_help">'
+							. __(
+								'Move the content of the existing ads.txt file into WPAdCenter and remove it.',
+								'wpadcenter'
+							)
+							. '</p>';
+					}
+					$notices['is_third_party'] = $message;
+				}
+			} else {
+				$notices['error_message'] = sprintf(
+					/* translators: %s default file errors */
+					esc_html__( 'An error occured: %s.', 'wpadcenter' ),
+					esc_html( $file->get_error_message() )
+				);
+			}
+			if ( $this->wpadcenter_get_root_domain_info() ) {
+				$notices['domain_error_message'] = '<p>' . sprintf(
+					/* translators: %s the line that may need to be added manually */
+					esc_html__(
+						'If your site is located on a subdomain, you need to add the following line to the ads.txt file of the root domain: %s',
+						'wpadcenter'
+					),
+					// Without http://.
+						'<code>subdomain=' . esc_html( $parsed_url['host'] ) . '</code>'
+				) . '</p>';
+			}
+		}
+		return $notices;
+	}
+
+	/**
+	 * Get root domain info.
+	 *
+	 * @param null $url URL.
+	 * 
+	 * @return bool
+	 */
+	public function wpadcenter_get_root_domain_info( $url = null ) {
+		$url        = $url ? $url : home_url( '/' );
+		$parsed_url = wp_parse_url( $url );
+		if ( ! isset( $parsed_url['host'] ) ) {
+			return false;
+		}
+		$host = $parsed_url['host'];
+		if ( WP_Http::is_ip_address( $host ) ) {
+			return false;
+		}
+		$host_parts = explode( '.', $host );
+		$count      = count( $host_parts );
+		if ( $count < 3 ) {
+			return false;
+		}
+		if ( 3 === $count ) {
+			// Example: `http://one.{net/org/gov/edu/co}.two`.
+			$suffixes = array( 'net', 'org', 'gov', 'edu', 'co' );
+			if ( in_array( $host_parts[ $count - 2 ], $suffixes, true ) ) {
+				return false;
+			}
+			// Example: `one.com.au'.
+			$suffix_and_tld = implode( '.', array_slice( $host_parts, 1 ) );
+			if ( in_array( $suffix_and_tld, array( 'com.au', 'com.br', 'com.pl' ), true ) ) {
+				return false;
+			}
+			// `http://www.one.two` will only be crawled if `http://one.two` redirects to it.
+			// Check if such redirect exists.
+			if ( 'www' === $host_parts[0] ) {
+				/*
+				 * Do not append `/ads.txt` because otherwise the redirect will not happen.
+				 */
+				$no_www_url = $parsed_url['scheme'] . '://' . trailingslashit( $host_parts[1] . '.' . $host_parts[2] );
+
+				add_action( 'requests-requests.before_redirect', array( $this, 'collect_locations' ) );
+				wp_remote_get(
+					$no_www_url,
+					array(
+						'timeout'     => 5,
+						'redirection' => 3,
+					)
+				);
+				remove_action( 'requests-requests.before_redirect', array( $this, 'collect_locations' ) );
+
+				$no_www_url_parsed = wp_parse_url( $this->location );
+				if ( isset( $no_www_url_parsed['host'] ) && $no_www_url_parsed['host'] === $host ) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Set location.
+	 *
+	 * @param string $location Location.
+	 */
+	public function wpadcenter_collect_locations( $location ) {
+		$this->location = $location;
+	}
+
+	/**
+	 * Get File info.
+	 *
+	 * @param null $url URL.
+	 * 
+	 * @return array|WP_Error
+	 */
+	public function wpadcenter_get_file_info( $url = null ) {
+		$url = $url ? $url : home_url( '/' );
+
+		// Disable ssl verification to prevent errors on servers that are not properly configured with its https certificates.
+		/**
+ * This filter is documented in wp-includes/class-wp-http-streams.php 
+*/
+		$sslverify    = apply_filters( 'https_local_ssl_verify', false );
+		$response     = wp_remote_get(
+			trailingslashit( $url ) . 'ads.txt',
+			array(
+				'timeout'   => 3,
+				'sslverify' => $sslverify,
+				'headers'   => array(
+					'Cache-Control' => 'no-cache',
+				),
+			)
+		);
+		$code         = wp_remote_retrieve_response_code( $response );
+		$content      = wp_remote_retrieve_body( $response );
+		$content_type = wp_remote_retrieve_header( $response, 'content-type' );
+
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
+		$file_exists   = ! is_wp_error( $response ) && 404 !== $code && ( false !== stripos( $content_type, 'text/plain' ) );
+		$header_exists = false !== strpos( $content, Wpadcenter::TOP );
+
+		$res = array(
+			'exists'         => $file_exists && $header_exists,
+			'is_third_party' => $file_exists && ! $header_exists,
+		);
+		return $res;
+	}
+
+	/**
+	 * Check if si sub-directory.
+	 *
+	 * @param null $url URL.
+	 * 
+	 * @return bool
+	 */
+	public function wpadcenter_is_subdir( $url = null ) {
+		$url        = $url ? $url : home_url( '/' );
+		$parsed_url = wp_parse_url( $url );
+		if ( ! empty( $parsed_url['path'] ) && '/' !== $parsed_url['path'] ) {
+			return true;
+		}
+		return false;
+
+	}
 }
