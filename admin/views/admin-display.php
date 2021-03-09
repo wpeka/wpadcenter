@@ -10,10 +10,17 @@
  */
 
 $the_options = get_option( WPADCENTER_SETTINGS_FIELD );
+$data_obj    = \Wpeka\Adcenter\Wpadcenter_Adsense::get_instance();
+$data        = $data_obj->get_saved_accounts();
+$nonce       = wp_create_nonce( 'wpeka-google-adsense' );
+$auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
+
 ?>
+
 <div id="app" style="width: 750px;">
 	<c-tabs>
 		<c-tab title="General" active>
+		<?php do_action( 'wpadcenter_before_general_settings' ); ?>
 			<c-card>
 				<c-card-header><?php esc_html_e( 'Auto Refresh Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
@@ -36,7 +43,7 @@ $the_options = get_option( WPADCENTER_SETTINGS_FIELD );
 				</c-card-body>
 			</c-card>
 			<c-card>
-				<c-card-header>Hide Settings</c-card-header>
+				<c-card-header><?php esc_html_e( 'Hide Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>			
 					<div class="ad-toggle">
 						<c-switch ref="hide_ads_logged" v-model="hide_ads_logged" id="inline-form-hide_ads_logged" variant="3d" size="sm" color="dark" <?php checked( $the_options['hide_ads_logged'] ); ?> v-on:update:checked="hide_ads_logged = !hide_ads_logged"></c-switch>
@@ -47,7 +54,7 @@ $the_options = get_option( WPADCENTER_SETTINGS_FIELD );
 			</c-card>
 
 			<c-card>
-				<c-card-header>Ad Block Settings</c-card-header>
+				<c-card-header><?php esc_html_e( 'Ad Block Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
 					<div class="ad-toggle">
 						<c-switch ref="adblock_detector" v-model="adblock_detector" id="inline-form-adblock_detector" variant="3d" size="sm" color="dark" <?php checked( $the_options['adblock_detector'] ); ?> v-on:update:checked="adblock_detector = !adblock_detector"></c-switch>
@@ -61,8 +68,9 @@ $the_options = get_option( WPADCENTER_SETTINGS_FIELD );
 			<?php do_action( 'wpadcenter_after_general_settings' ); ?>
 		</c-tab>
 		<c-tab title="Scripts">
+		<?php do_action( 'wpadcenter_before_scripts_settings' ); ?>
 			<c-card>
-				<c-card-header>Scripts Settings</c-card-header>
+				<c-card-header><?php esc_html_e( 'Scripts Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
 					<div class="ad-toggle">
 						<c-switch ref="enable_scripts" v-model="enable_scripts" id="inline-form-enable_scripts" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_scripts'] ); ?> v-on:update:checked="enable_scripts = !enable_scripts"></c-switch>
@@ -72,15 +80,15 @@ $the_options = get_option( WPADCENTER_SETTINGS_FIELD );
 				</c-card-body>
 			</c-card>
 			<c-card v-show="enable_scripts">
-				<c-card-header>Enter Scripts</c-card-header>
+				<c-card-header><?php esc_html_e( 'Enter Scripts', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
 					<div class="enable_scripts_enabled">
 						<label for="header_scripts_field" class="form-label" style="margin-top: 0px;">Header Scripts</label>
 						<textarea id="header_scripts_field" name="header_scripts_field" class="form-control" style="width: 100%;" rows="6" v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the head section on all pages and/or posts.', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['header_scripts'] ) ); ?></textarea>
-						<label for="header_scripts_field" class="form-label">Body Scripts</label>
-						<textarea name="body_scripts_field" class="form-control" style="width: 100%;" rows="6" v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the body section on all pages and/or posts.', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['body_scripts'] ) ); ?></textarea>
-						<label for="header_scripts_field" class="form-label">Footer Scripts</label>
-						<textarea name="footer_scripts_field" class="form-control" style="width: 100%;" rows="6" v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the footer section on all pages and/or posts.', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['footer_scripts'] ) ); ?></textarea>
+						<label for="body_scripts_field" class="form-label">Body Scripts</label>
+						<textarea id="body_scripts_field" name="body_scripts_field" class="form-control" style="width: 100%;" rows="6" v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the body section on all pages and/or posts.', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['body_scripts'] ) ); ?></textarea>
+						<label for="footer_scripts_field" class="form-label">Footer Scripts</label>
+						<textarea id="footer_scripts_field" name="footer_scripts_field" class="form-control" style="width: 100%;" rows="6" v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the footer section on all pages and/or posts.', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['footer_scripts'] ) ); ?></textarea>
 					</div>
 				</c-card-body>
 			</c-card>
@@ -88,8 +96,8 @@ $the_options = get_option( WPADCENTER_SETTINGS_FIELD );
 		</c-tab>
 		<c-tab title="ads.txt">
 			<c-card>
-
-				<c-card-header>Ads.txt Settings</c-card-header>
+				<?php do_action( 'wpadcenter_before_ads_txt_settings' ); ?>
+				<c-card-header><?php esc_html_e( 'Ads.txt Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
 				<div class="ad-toggle">
 					<input type="hidden" name="ads_txt_tab" v-model="value" />
@@ -107,13 +115,47 @@ $the_options = get_option( WPADCENTER_SETTINGS_FIELD );
 					<input type="button" class="button" name="check_ads_txt_problems" value="Check for Problems" />
 				</div>
 				</c-card-body>
+				<?php do_action( 'wpadcenter_after_ads_txt_settings' ); ?>
 			</c-card>
 		</c-tab>
 		<c-tab title="Import From Adsense">
+		<?php do_action( 'wpadcenter_before_adsense_settings' ); ?>
+			<c-card>
+				<c-card-header><?php esc_html_e( 'Connect to Adsense', 'wpadcenter' ); ?></c-card-header>
+				<c-card-body>
+					<?php if ( ! empty( $data['accounts'] ) && is_array( $data['accounts'] ) ) : ?>
+						<select name="gadsense_account_id">
+							<?php foreach ( $data['accounts'] as $key => $account ) { ?>
+								<option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $key ); ?></option>
+							<?php } ?>
+						</select>
 
+					<?php else : ?>					
+						<c-input type="text" id="mapi-code" label="<?php esc_html_e( 'Token', 'wpadcenter' ); ?>" value="" placeholder="<?php esc_html_e( 'Copy and Paste the token after you have clicked connect to adsense', 'wpadcenter' ); ?>"></c-input>
+						<p style="margin-top: 10px;"></p>
+						<div class="token-submit">
+							<button class="button init-gauthentication"><?php esc_html_e( 'Connect to AdSense', 'wpadcenter' ); ?></button>
+								<button id="mapi-confirm-code" class="button">
+									<?php esc_html_e( 'Submit Token', 'wpadcenter' ); ?>
+								</button>
+							<span class="spinner"></span>
+						</div>
+						<p style="margin-top: 10px;"><?php esc_html_e( 'This will open another window. Please allow access to your AdSense account. Copy the text you get at the end and come back here.', 'wpadcenter' ); ?></p>
+					<?php endif; ?>
+				</c-card-body>
+			</c-card>
+			<?php do_action( 'wpadcenter_after_adsense_settings' ); ?>
 		</c-tab>
 	</c-tabs>
 	<?php
 	require 'admin-display-save-button.php';
 	?>
 </div>
+
+<script type="text/javascript">
+	if ('undefined' == typeof window.AdsenseGAPI) {
+		AdsenseGAPI = {};
+	}
+	AdsenseGAPI.nonce = '<?php echo esc_html( $nonce ); ?>';
+	AdsenseGAPI.oAuth2 = '<?php echo $auth_url; // phpcs:ignore WordPress.Security.EscapeOutput ?>';
+</script>

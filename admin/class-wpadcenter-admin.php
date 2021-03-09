@@ -41,6 +41,13 @@ class Wpadcenter_Admin {
 	private $version;
 
 	/**
+ * Wpadcenter_Adsense class singleton
+	 *
+	 * @var \Wpeka\Adcenter\Wpadcenter_Adsense
+	 */
+	private $adsense;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @param string    $plugin_name       The name of this plugin.
@@ -51,8 +58,8 @@ class Wpadcenter_Admin {
 	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-
+		$this->version     = $version;
+		$this->adsense     = \Wpeka\Adcenter\Wpadcenter_Adsense::get_instance();
 	}
 
 	/**
@@ -119,6 +126,13 @@ class Wpadcenter_Admin {
 			array( 'jquery' ),
 			$this->version,
 			false
+		);
+		wp_enqueue_script(
+			$this->plugin_name . '-gapi-settings',
+			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-gapi-settings' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			array( 'jquery' ),
+			$this->version,
+			true
 		);
 	}
 

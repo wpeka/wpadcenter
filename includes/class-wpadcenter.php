@@ -133,6 +133,10 @@ class Wpadcenter {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wpadcenter-public.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-google-api.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-adsense.php';
+
 		$this->loader = new Wpadcenter_Loader();
 
 	}

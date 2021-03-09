@@ -37,7 +37,7 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
-	$(
+	$( document ).ready(
 		function() {
 			var wpadcenter_nav_tab = $( '.wpadcenter-tab-head .nav-tab' );
 			if (wpadcenter_nav_tab.length > 0) {
