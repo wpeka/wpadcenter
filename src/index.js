@@ -12,8 +12,26 @@ var vm = new Vue({
    el: '#app',
     data () {
         return {
-            currentAlertCounter: 10,
+            auto_refresh: null,
+            adblock_detector: null,
+            enable_scripts: null,
+            hide_ads_logged: null,
+            enable_ads_txt: null,
+            value: 0,
         }
+    },
+    methods: {
+        setValues: function() {
+            this.auto_refresh = this.$refs.auto_refresh.checked;
+            this.adblock_detector = this.$refs.adblock_detector.checked;
+            this.enable_scripts = this.$refs.enable_scripts.checked;
+            this.hide_ads_logged = this.$refs.hide_ads_logged.checked;
+            this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
+            this.value = this.enable_ads_txt ? "1" : "0";
+        },
+    },
+    mounted() {
+        this.setValues();
     },
     icons: { cilPencil, cilSettings }
 });

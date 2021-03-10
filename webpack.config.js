@@ -12,9 +12,9 @@ module.exports = {
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'admin/js'),
-        filename: 'wpeka-core-ui-admin-main.js'
+        filename: 'wpadcenter-admin-main.js'
     },
-    mode: 'production',
+    mode: 'development',
     resolve: {
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
@@ -27,5 +27,6 @@ module.exports = {
                 use: ['style-loader', 'css-loader']
             }
         ]
-    }
+    },
+    watch: true
 }
