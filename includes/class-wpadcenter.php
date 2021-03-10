@@ -124,6 +124,11 @@ class Wpadcenter {
 
 		$this->loader = new Wpadcenter_Loader();
 
+		/**
+		 * Helper class for admin functionality
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wpadcenter-admin-helper.php';
+
 	}
 
 	/**
@@ -162,7 +167,11 @@ class Wpadcenter {
 		$this->loader->add_action( 'manage_edit-wpadcenter-ads_columns', $plugin_admin, 'wpadcenter_manage_edit_ads_columns' );
 		$this->loader->add_action( 'manage_edit-wpadcenter-adgroups_columns', $plugin_admin, 'wpadcenter_manage_edit_adgroups_columns' );
 		$this->loader->add_filter( 'plugin_action_links_' . WPADCENTER_PLUGIN_BASENAME, $plugin_admin, 'wpadcenter_plugin_action_links' );
-
+		$this->loader->add_action( 'edit_form_after_title', $plugin_admin, 'wpadcenter_edit_form_after_title' );
+		$this->loader->add_action( 'add_meta_boxes_wpadcenter-ads', $plugin_admin, 'wpadcenter_add_meta_boxes' );
+		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_ad_meta' );
+		$this->loader->add_action( 'post_submitbox_start', $plugin_admin, 'wpadcenter_post_submitbox_start' );
+		$this->loader->add_filter( 'manage_wpadcenter-ads_posts_custom_column', $plugin_admin, 'wpadcenter_manage_ads_column_values', 10, 2 );
 	}
 
 	/**
