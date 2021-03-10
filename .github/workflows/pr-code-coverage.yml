@@ -1,9 +1,9 @@
-name: Run code sniff on PR
+name: Run code coverage on PR
 on:
   pull_request
 jobs:
   test:
-    name: Code sniff (PHP 7.4, WP Latest)
+    name: Code coverage (PHP 7.4, WP Latest)
     timeout-minutes: 15
     runs-on: ubuntu-latest
     services:
@@ -45,7 +45,9 @@ jobs:
         run: composer install
 
       - name: Init DB and WP
-        run: ./tests/bin/install.sh wpadcenter_test root root 127.0.0.1 latest
+        run: ./tests/bin/install.sh woo_test root root 127.0.0.1 latest
 
-      - name: Run code sniff
-        run: RUN_PHPCS=1 bash ./tests/bin/phpcs.sh
+      - name: Run unit tests with code coverage. Allow to fail.
+        run: |
+          RUN_CODE_COVERAGE=1 bash ./tests/bin/phpunit.sh
+          exit 0
