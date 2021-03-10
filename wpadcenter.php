@@ -34,6 +34,16 @@ if ( ! defined( 'WPADCENTER_PLUGIN_URL' ) ) {
 	define( 'WPADCENTER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 
+if ( ! defined( 'WPADCENTER_SCRIPT_SUFFIX' ) ) {
+	define( 'WPADCENTER_SCRIPT_SUFFIX', ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min' );
+}
+
+if ( ! defined( 'WPADCENTER_PLUGIN_FILENAME' ) ) {
+	define( 'WPADCENTER_PLUGIN_FILENAME', __FILE__ );
+}
+
+define( 'WPADCENTER_SETTINGS_FIELD', 'WPAdCenter-Settings' );
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
