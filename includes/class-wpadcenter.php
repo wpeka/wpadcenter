@@ -170,7 +170,8 @@ class Wpadcenter {
 		$this->loader->add_action( 'edit_form_after_title', $plugin_admin, 'wpadcenter_edit_form_after_title' );
 		$this->loader->add_action( 'add_meta_boxes_wpadcenter-ads', $plugin_admin, 'wpadcenter_add_meta_boxes' );
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_ad_meta' );
-
+		$this->loader->add_action( 'post_submitbox_start', $plugin_admin, 'wpadcenter_post_submitbox_start' );
+		$this->loader->add_filter( 'manage_wpadcenter-ads_posts_custom_column', $plugin_admin, 'wpadcenter_manage_ads_column_values', 10, 2 );
 	}
 
 	/**

@@ -34,6 +34,9 @@ class Wpadcenter_Admin_Helper {
 			'nofollow-on-link'    => array( 'wpadcenter_nofollow_on_link', 'bool' ),
 			'ad-code'             => array( 'wpadcenter_ad_code', 'raw' ),
 			'external-image-link' => array( 'wpadcenter_external_image_link', 'url' ),
+			'ad-google-adsense'   => array( 'wpadcenter_ad_google_adsense', 'raw' ),
+			'start_date'          => array( 'wpadcenter_start_date', 'date' ),
+			'end_date'            => array( 'wpadcenter_end_date', 'date' ),
 		);
 
 		return apply_filters( 'wpadcenter_get_default_metafields', $metafields );
@@ -69,7 +72,9 @@ class Wpadcenter_Admin_Helper {
 				),
 			),
 			'import_from_adsense' => array(
-				'active_meta_box' => array(),
+				'active_meta_box' => array(
+					'ad-google-adsense',
+				),
 			),
 
 		);
@@ -109,6 +114,7 @@ class Wpadcenter_Admin_Helper {
 			'external_image_link' => 'External Image Link',
 			'ad_code'             => 'Ad Code',
 			'import_from_adsense' => 'Import from Adsense',
+
 		);
 
 		return apply_filters( 'wpadcenter_get_default_ad_types', $ad_types );

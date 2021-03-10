@@ -2,3 +2,19 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+ .wpadcenter-time-container{
+   margin: 5px 0 10px 0;
+   width:100%;
+   display:flex;
+
+ }
+ .wpadcenter-schedule-ok{
+     margin-left:20px !important;
+ }
+ .wpadcenter-date-input{
+     width:100%;
+ }
+ .wpadcenter-time-input{
+     width:100%;
+ }
