@@ -5,8 +5,8 @@
  *
  * This file is used to markup the admin-facing aspects of the plugin.
  *
- * @link       https://wpadcenter.com/
- * @since      1.0.0
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
  *
  * @package    Wpadcenter
  * @subpackage Wpadcenter/admin/partials

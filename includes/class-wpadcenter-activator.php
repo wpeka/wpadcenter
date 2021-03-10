@@ -3,8 +3,8 @@
 /**
  * Fired during plugin activation
  *
- * @link       https://wpadcenter.com/
- * @since      1.0.0
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
  *
  * @package    Wpadcenter
  * @subpackage Wpadcenter/includes
@@ -27,9 +27,10 @@ class Wpadcenter_Activator {
 	 *
 	 * Long Description.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public static function activate() {
+		add_option( 'wpadcenter_active', true );
 
 	}
 
