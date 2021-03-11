@@ -94,6 +94,7 @@ class Wpadcenter_Admin {
 		);
 		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css', array(), $this->version, 'all' );
 		wp_register_style( $this->plugin_name . 'jquery-ui', 'https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css', array(), $this->version, 'all' ); // styles for datepicker.
+		wp_register_style( $this->plugin_name . '-gettingstarted-css', plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin-gettingstarted' . WPADCENTER_SCRIPT_SUFFIX . '.css', array(), $this->version, 'all' );
 	}
 
 
@@ -141,7 +142,7 @@ class Wpadcenter_Admin {
 
 		wp_register_script( $this->plugin_name . 'moment', plugin_dir_url( __FILE__ ) . 'lib/moment/moment.min.js', array( 'jquery' ), $this->version, false );
 		wp_register_script( $this->plugin_name . 'moment-timezone', plugin_dir_url( __FILE__ ) . 'lib/moment/moment-timezone.min.js', array( 'jquery' ), $this->version, false );
-
+		wp_register_script( $this->plugin_name . '-gettingstarted', plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-gettingstarted' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), $this->version, false );
 	}
 
 
@@ -297,7 +298,8 @@ class Wpadcenter_Admin {
 			'Getting Started',
 			__( 'Getting Started', 'wpadcenter' ),
 			'manage_options',
-			'wpadcenter-getting-started'
+			'wpadcenter-getting-started',
+			array( $this, 'wpadcenter_getting_started' )
 		);
 		do_action( 'wpadcenter_admin_menu', 'edit.php?post_type=wpadcenter-ads', 'manage_options' ); // action to add submenu pages for pro versions
 		// Getting Started - submenu.
@@ -1298,4 +1300,68 @@ class Wpadcenter_Admin {
 
 
 
+
+	/**
+	 * Getting Started Page
+	 */
+	public function wpadcenter_getting_started() {
+		// Lock out non-admins.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+		$is_pro   = get_option( 'wpadcenter_pro_active' );
+		$disabled = get_option( 'wpadcenter_pro_woo_integrated' );
+		if ( $is_pro ) {
+			$support_url = 'https://club.wpeka.com/my-account/orders/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=support';
+		} else {
+			$support_url = 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=forums';
+		}
+		wp_enqueue_style( $this->plugin_name . '-gettingstarted-css' );
+		wp_enqueue_script( $this->plugin_name . '-gettingstarted' );
+		wp_localize_script(
+			$this->plugin_name . '-gettingstarted',
+			'obj',
+			array(
+				'menu_items'          => array(
+					'support_text'       => __( 'Support', 'wpadcenter' ),
+					'support_url'        => $support_url,
+					'documentation_text' => __( 'Documentation', 'wpadcenter' ),
+					'documentation_url'  => 'https://docs.wpeka.com/wp-adcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=documentation',
+					'faq_text'           => __( 'FAQ', 'wpadcenter' ),
+					'faq_url'            => 'https://docs.wpeka.com/wp-adcenter/faq/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=faq',
+					'upgrade_text'       => __( 'Upgrade to Pro &raquo;', 'wpadcenter' ),
+					'upgrade_url'        => 'https://club.wpeka.com/product/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=upgrade-to-pro',
+				),
+				'ajax_url'            => admin_url( 'admin-ajax.php' ),
+				'ajax_nonce'          => wp_create_nonce( 'admin-ajax-nonce' ),
+				'is_pro'              => $is_pro,
+				'disabled'            => $disabled,
+				'welcome_text'        => __( 'Welcome to WP AdCenter!', 'wpadcenter' ),
+				'welcome_subtext'     => __( 'Complete Ad Management Plugin.', 'wpadcenter' ),
+				'welcome_description' => __( 'Thank you for choosing WP AdCenter plugin - the powerful WordPress ads plugin.', 'wpadcenter' ),
+				'welcome_sub_desc'    => __( 'You can control every aspect of ads on your website. Place ads or Ad scripts anywhere on your website. Compatible with Gutenberg & Popular Page Builders.', 'wpadcenter' ),
+				'quick_links_text'    => __( 'See Quick Links', 'wpadcenter' ),
+				'separator_text'      => __( '--- OR ---', 'wpadcenter' ),
+				'configure'           => array(
+					'text'           => __( 'Configure WP AdCenter Settings including:', 'wpadcenter' ),
+					'button_text'    => __( 'Configure WP AdCenter', 'wpadcenter' ),
+					'url'            => admin_url() . 'edit.php?post_type=wpadcenter-ads&page=wpadcenter-settings',
+					'settings_items' => apply_filters(
+						'wpadcenter_settings_items',
+						array(
+							__( 'Auto-refresh of ads', 'wpadcenter' ),
+							__( 'Transitions, and more', 'wpadcenter' ),
+							__( 'Third-Party Advertisers', 'wpadcenter' ),
+							__( 'Notification', 'wpadcenter' ),
+							__( 'Geo Location', 'wpadcenter' ),
+						)
+					),
+				),
+			)
+		);
+		?>
+		<div id="adc-gettingstarted-app"></div>
+		<div id="adc-mascot-app"></div>
+		<?php
+	}
 }
