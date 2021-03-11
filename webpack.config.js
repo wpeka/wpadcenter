@@ -9,10 +9,13 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        main: './src/index.js',
+        gettingstarted: './src/getting-started.js'
+    },
     output: {
         path: path.resolve(__dirname, 'admin/js'),
-        filename: 'wpadcenter-admin-main.js'
+        filename: 'wpadcenter-admin-[name].js'
     },
     mode: 'development',
     resolve: {
