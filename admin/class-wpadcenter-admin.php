@@ -41,7 +41,7 @@ class Wpadcenter_Admin {
 	private $version;
 
 	/**
- * Wpadcenter_Adsense class singleton
+	 * Wpadcenter_Adsense class singleton
 	 *
 	 * @var \Wpeka\Adcenter\Wpadcenter_Adsense
 	 */
@@ -60,6 +60,91 @@ class Wpadcenter_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 		$this->adsense     = \Wpeka\Adcenter\Wpadcenter_Adsense::get_instance();
+		$this->init_admin_hooks();
+
+	}
+
+	/**
+	 * Initialize all admin related hooks like ajax handlers
+	 */
+	private function init_admin_hooks() {
+		add_action( 'wp_ajax_adsense_load_adcode', array( $this, 'load_google_adsense_code' ), 10 );
+	}
+
+	/**
+	 * Add custom html to import from google adsense ad type
+	 */
+	public function render_adsense_selection() {
+		$data = $this->adsense->get_ad_units();
+		if ( true === $data['error'] ) {
+			$url = admin_url( 'edit.php?post_type=wpadcenter-ads&page=wpadcenter-settings#adsense' );
+			?>
+			<a href='<?php echo esc_attr( $url ); ?>'>
+				<?php esc_html_e( 'Connect to Adsense', 'wpadcenter' ); ?>
+			</a>
+			<?php
+
+			return;
+		}
+		?>
+		<?php $nonce = wp_create_nonce( 'wpeka-google-adsense' ); ?>
+		<script>
+			if ('undefined' == typeof window.AdsenseGAPI) {
+				AdsenseGAPI = {};
+			}
+			AdsenseGAPI.nonce = '<?php echo esc_html( $nonce ); ?>';
+		</script>
+		<table class="form-table">
+			<thead>
+			<th><?php esc_html_e( 'Name', 'wpadcenter' ); ?></th>
+			<th><?php esc_html_e( 'Status', 'wpadcenter' ); ?></th>
+			</thead>
+			<tbody id="adsense-adunits">
+
+			<?php foreach ( $data['adunits'] as $unit ) : ?>
+
+				<tr>
+					<td><?php echo esc_html( $unit['name'] ); ?></td>
+					<td><?php echo esc_html( $unit['status'] ); ?></td>
+					<td>
+						<button class="button button-primary" data-unitid="<?php echo esc_attr( $unit['id'] ); ?>"
+								id="<?php echo esc_attr( $unit['code'] ); ?>">
+							<?php esc_html_e( 'Load', 'wpadcenter' ); ?>
+						</button>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+
+		<?php
+
+		wp_enqueue_script(
+			$this->plugin_name . 'ad-selection-script',
+			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-ad-selection' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			array( 'jquery' ),
+			$this->version,
+			true
+		);
+
+	}
+
+	/**
+	 * Fetch adcode from the api
+	 */
+	public function load_google_adsense_code() {
+		$nonce = isset( $_POST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ) : '';
+		if ( ! isset( $_POST['adunit'] ) || false === wp_verify_nonce( $nonce, 'wpeka-google-adsense' ) ) {
+			wp_send_json(
+				array(
+					'error'   => true,
+					'message' => 'Invalid Nonce',
+				)
+			);
+		}
+
+		$code = $this->adsense->get_ad_code( sanitize_text_field( wp_unslash( $_POST['adunit'] ) ) );
+		wp_send_json( $code );
 
 	}
 
@@ -82,7 +167,6 @@ class Wpadcenter_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css', array(), $this->version, 'all' );
 		wp_register_style(
 			$this->plugin_name . '-settings',
 			plugin_dir_url(
@@ -92,9 +176,27 @@ class Wpadcenter_Admin {
 			$this->version,
 			'all'
 		);
-		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css', array(), $this->version, 'all' );
-		wp_register_style( $this->plugin_name . 'jquery-ui', 'https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css', array(), $this->version, 'all' ); // styles for datepicker.
-		wp_register_style( $this->plugin_name . '-gettingstarted-css', plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin-gettingstarted' . WPADCENTER_SCRIPT_SUFFIX . '.css', array(), $this->version, 'all' );
+		wp_register_style(
+			$this->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_register_style(
+			$this->plugin_name . 'jquery-ui',
+			'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css',
+			array(),
+			$this->version,
+			'all'
+		); // styles for datepicker.
+		wp_register_style(
+			$this->plugin_name . '-gettingstarted-css',
+			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin-gettingstarted' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
 	}
 
 
@@ -138,11 +240,28 @@ class Wpadcenter_Admin {
 			$this->version,
 			true
 		);
-		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), $this->version, false );
+		wp_register_script(
+			$this->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
 
-		wp_register_script( $this->plugin_name . 'moment', plugin_dir_url( __FILE__ ) . 'lib/moment/moment.min.js', array( 'jquery' ), $this->version, false );
-		wp_register_script( $this->plugin_name . 'moment-timezone', plugin_dir_url( __FILE__ ) . 'lib/moment/moment-timezone.min.js', array( 'jquery' ), $this->version, false );
-		wp_register_script( $this->plugin_name . '-gettingstarted', plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-gettingstarted' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), $this->version, false );
+		wp_register_script(
+			$this->plugin_name . 'adscheduler',
+			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-adscheduler' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-gettingstarted',
+			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-gettingstarted' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
 	}
 
 
@@ -184,23 +303,27 @@ class Wpadcenter_Admin {
 				'labels'              => apply_filters(
 					'wpadcenter_cpt_args_labels_ads',
 					array(
-						'name'               => __( 'WPAdCenter: Ads', 'wpadcenter' ),
-						'singular_name'      => __( 'Ad', 'wpadcenter' ),
-						'menu_name'          => __( 'WPAdCenter', 'wpadcenter' ),
-						'all_items'          => __( 'Manage Ads', 'wpadcenter' ),
-						'add_new_item'       => __( 'Create New Ad', 'wpadcenter' ),
-						'add_new'            => __( 'Create New', 'wpadcenter' ),
-						'new_item'           => __( 'New Ad', 'wpadcenter' ),
-						'edit_item'          => __( 'Edit Ad', 'wpadcenter' ),
-						'update_item'        => __( 'Update Ad', 'wpadcenter' ),
-						'view_item'          => __( 'View Ad', 'wpadcenter' ),
-						'view_items'         => __( 'View Ad', 'wpadcenter' ),
-						'search_items'       => __( 'Search Ad', 'wpadcenter' ),
-						'not_found'          => __( 'No Ads found', 'wpadcenter' ),
-						'not_found_in_trash' => __( 'No Ads found in Trash', 'wpadcenter' ),
+						'name'                  => __( 'WPAdCenter: Ads', 'wpadcenter' ),
+						'singular_name'         => __( 'Ad', 'wpadcenter' ),
+						'menu_name'             => __( 'WPAdCenter', 'wpadcenter' ),
+						'all_items'             => __( 'Manage Ads', 'wpadcenter' ),
+						'add_new_item'          => __( 'Create New Ad', 'wpadcenter' ),
+						'add_new'               => __( 'Create Ad', 'wpadcenter' ),
+						'new_item'              => __( 'New Ad', 'wpadcenter' ),
+						'edit_item'             => __( 'Edit Ad', 'wpadcenter' ),
+						'update_item'           => __( 'Update Ad', 'wpadcenter' ),
+						'view_item'             => __( 'View Ad', 'wpadcenter' ),
+						'view_items'            => __( 'View Ad', 'wpadcenter' ),
+						'search_items'          => __( 'Search Ad', 'wpadcenter' ),
+						'not_found'             => __( 'No Ads found', 'wpadcenter' ),
+						'not_found_in_trash'    => __( 'No Ads found in Trash', 'wpadcenter' ),
+						'featured_image'        => __( 'Ad Image', 'wpadcenter' ),
+						'set_featured_image'    => __( 'Set ad image', 'wpadcenter' ),
+						'remove_featured_image' => __( 'Remove ad image', 'wpadcenter' ),
+						'use_featured_image'    => __( 'Set ad image', 'wpadcenter' ),
 					)
 				),
-				'supports'            => array( 'title' ),
+				'supports'            => array( 'title', 'thumbnail' ),
 				'public'              => true,
 				'show_ui'             => true,
 				'show_in_menu'        => true,
@@ -267,6 +390,112 @@ class Wpadcenter_Admin {
 		);
 
 		register_taxonomy( 'wpadcenter-adgroups', array( 'wpadcenter-ads' ), $args );
+	}
+
+	/**
+	 * Returns default metafields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array $metafields default metafields.
+	 */
+	public static function get_default_metafields() {
+		$metafields = array(
+			'ad-type'             => array( 'wpadcenter_ad_type', 'string' ),
+			'ad-size'             => array( 'wpadcenter_ad_size', 'string' ),
+			'open-in-new-tab'     => array( 'wpadcenter_open_in_new_tab', 'bool' ),
+			'nofollow-on-link'    => array( 'wpadcenter_nofollow_on_link', 'bool' ),
+			'link-url'            => array( 'wpadcenter_link_url', 'url' ),
+			'ad-code'             => array( 'wpadcenter_ad_code', 'raw' ),
+			'external-image-link' => array( 'wpadcenter_external_image_link', 'url' ),
+			'ad-google-adsense'   => array( 'wpadcenter_ad_google_adsense', 'raw' ),
+			'start_date'          => array( 'wpadcenter_start_date', 'date' ),
+			'end_date'            => array( 'wpadcenter_end_date', 'date' ),
+		);
+
+		return apply_filters( 'wpadcenter_get_default_metafields', $metafields );
+	}
+
+	/**
+	 * Returns metafields and ad types relation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array $metabox_relation array containing relation between metafields and ad-types.
+	 */
+	public static function get_ad_meta_relation() {
+
+		$ad_meta_relation = array(
+			'banner_image'        => array(
+				'active_meta_box' => array(
+					'ad-size',
+					'postimagediv',
+					'ad-details',
+				),
+			),
+			'external_image_link' => array(
+				'active_meta_box' => array(
+					'ad-size',
+					'external-image-link',
+					'ad-details',
+				),
+			),
+			'ad_code'             => array(
+				'active_meta_box' => array(
+					'ad-code',
+				),
+			),
+			'import_from_adsense' => array(
+				'active_meta_box' => array(
+					'ad-google-adsense',
+				),
+			),
+
+		);
+
+		return apply_filters( 'wpadcenter_get_ad_meta_relation', $ad_meta_relation );
+
+	}
+
+	/**
+	 * Returns default ad sizes.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array $sizes array containing default ad sizes.
+	 */
+	public static function get_default_ad_sizes() {
+		$sizes = array(
+			'468x60'  => __( 'IAB Full Banner (468 x 60)', 'wpadcenter' ),
+			'120x600' => __( 'IAB Skyscraper (120 x 600)', 'wpadcenter' ),
+			'160x600' => __( 'IAB Wide Skyscraper (160 x 600)', 'wpadcenter' ),
+			'728x90'  => __( 'IAB Leaderboard (728 x 90)', 'wpadcenter' ),
+			'180x150' => __( 'IAB Rectangle (180 x 150)', 'wpadcenter' ),
+			'300x250' => __( 'IAB Medium Rectangle (300 x 250)', 'wpadcenter' ),
+			'120x90'  => __( 'IAB Button 1 (120 x 90)', 'wpadcenter' ),
+			'120x60'  => __( 'IAB Button 2 (120 x 60)', 'wpadcenter' ),
+			'125x125' => __( 'IAB Square Button (125 x 125)', 'wpadcenter' ),
+		);
+		return apply_filters( 'wpadcenter_get_default_ad_sizes', $sizes );
+	}
+
+	/**
+	 * Returns default ad types.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array $ array containing default ad sizes.
+	 */
+	public static function get_default_ad_types() {
+		$ad_types = array(
+			'banner_image'        => 'Banner Image',
+			'external_image_link' => 'External Image Link',
+			'ad_code'             => 'Ad Code',
+			'import_from_adsense' => 'Import from Adsense',
+
+		);
+
+		return apply_filters( 'wpadcenter_get_default_ad_types', $ad_types );
 	}
 
 	/**
@@ -452,7 +681,7 @@ class Wpadcenter_Admin {
 	 * Process ads.txt content.
 	 *
 	 * @param Array $the_options setting options.
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function wpadcenter_after_save_settings( $the_options ) {
@@ -572,7 +801,7 @@ class Wpadcenter_Admin {
 	 * Parse file data.
 	 *
 	 * @param Object $file File.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function wpadcenter_parse_file( $file ) {
@@ -724,7 +953,7 @@ class Wpadcenter_Admin {
 	 * Get root domain info.
 	 *
 	 * @param null $url URL.
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function wpadcenter_get_root_domain_info( $url = null ) {
@@ -793,7 +1022,7 @@ class Wpadcenter_Admin {
 	 * Get File info.
 	 *
 	 * @param null $url URL.
-	 * 
+	 *
 	 * @return array|WP_Error
 	 */
 	public function wpadcenter_get_file_info( $url = null ) {
@@ -801,7 +1030,7 @@ class Wpadcenter_Admin {
 
 		// Disable ssl verification to prevent errors on servers that are not properly configured with its https certificates.
 		/**
- * This filter is documented in wp-includes/class-wp-http-streams.php 
+ * This filter is documented in wp-includes/class-wp-http-streams.php
 */
 		$sslverify    = apply_filters( 'https_local_ssl_verify', false );
 		$response     = wp_remote_get(
@@ -836,7 +1065,7 @@ class Wpadcenter_Admin {
 	 * Check if si sub-directory.
 	 *
 	 * @param null $url URL.
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function wpadcenter_is_subdir( $url = null ) {
@@ -858,8 +1087,8 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_manage_ads_column_values( $column = '', $ad_id = 1 ) {
 
-		$sizes_list    = Wpadcenter_Admin_Helper::get_default_ad_sizes();
-		$ad_types_list = Wpadcenter_Admin_Helper::get_default_ad_types();
+		$sizes_list    = $this->get_default_ad_sizes();
+		$ad_types_list = $this->get_default_ad_types();
 
 		if ( 'ad-type' === $column ) {
 			$ad_type = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
@@ -927,7 +1156,7 @@ class Wpadcenter_Admin {
 			array( $this, 'wpadcenter_ad_detail_metabox' ),
 			'wpadcenter-ads',
 			'normal',
-			'high'
+			'low'
 		);
 		add_meta_box(
 			'ad-code',
@@ -966,7 +1195,7 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_ad_size_metabox( $post ) {
 
-		$sizes_list = Wpadcenter_Admin_Helper::get_default_ad_sizes();
+		$sizes_list = $this->get_default_ad_sizes();
 
 		$default_size = apply_filters( 'wpadcenter_ad_size_default', '300x250' );
 
@@ -995,10 +1224,15 @@ class Wpadcenter_Admin {
 	public function wpadcenter_ad_detail_metabox( $post ) {
 		$open_in_new_tab  = get_post_meta( $post->ID, 'wpadcenter_open_in_new_tab', true );
 		$nofollow_on_link = get_post_meta( $post->ID, 'wpadcenter_nofollow_on_link', true );
+		$url              = get_post_meta( $post->ID, 'wpadcenter_link_url', true );
 		echo '
 		<div>
 		<label for="open-in-new-tab"><input name="open-in-new-tab" type="checkbox" value="1" id="open-in-new-tab" ' . checked( '1', $open_in_new_tab, false ) . '> ' . esc_html__( 'Open Link In a New Tab', 'wpadcenter' ) . '</label>
 		<label for="nofollow-on-link" style="margin-left:20px"><input name="nofollow-on-link" type="checkbox" value="1" id="nofollow-on-link" ' . checked( '1', $nofollow_on_link, false ) . '>' . esc_html__( 'Use nofollow on Link', 'wpadcenter' ) . '</label>
+		</div>
+		<div style="margin-top:10px">
+		<label for="link-url"><strong>' . esc_html__( 'Link URL', 'wpadcenter' ) . '</strong></label>
+		<input type="text" name="link-url" value="' . esc_attr( $url ) . '" id="link-url" style="width:100%" >
 		</div>
 		';
 	}
@@ -1025,8 +1259,8 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_ad_google_adsense( $post ) {
 		$ad_google_adsense = get_post_meta( $post->ID, 'wpadcenter_ad_google_adsense', true );
-		echo '<textarea name="ad-google-adsense" style="width:100%;height:200px" >' . esc_textarea( $ad_google_adsense ) . '</textarea>';
-		echo '<a href=# >Connect to adsense</a>';
+		echo '<textarea name="ad-google-adsense" id="wpadcenter-google-adsense-code" style="width:100%;height:200px" >' . esc_textarea( $ad_google_adsense ) . '</textarea>';
+		$this->render_adsense_selection();
 	}
 
 	/**
@@ -1053,7 +1287,7 @@ class Wpadcenter_Admin {
 
 		wp_nonce_field( 'wpadcenter_save_ad', 'wpadcenter_save_ad_nonce' );
 
-		$ad_types_list = Wpadcenter_Admin_Helper::get_default_ad_types();
+		$ad_types_list = $this->get_default_ad_types();
 
 		$ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
 
@@ -1098,7 +1332,7 @@ class Wpadcenter_Admin {
 
 		$raw_data = $_POST;
 
-		$metafields = Wpadcenter_Admin_Helper::get_default_metafields();
+		$metafields = $this->get_default_metafields();
 
 		foreach ( $metafields as $meta_name => $meta_data ) {
 
@@ -1146,7 +1380,7 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_edit_form_after_title( $post ) {
 
-		$ad_meta_relation = Wpadcenter_Admin_Helper::get_ad_meta_relation();
+		$ad_meta_relation = $this->get_ad_meta_relation();
 
 		$current_ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
 		$current_ad_type = ! empty( $current_ad_type ) ? $current_ad_type : 'banner_image';
@@ -1181,15 +1415,14 @@ class Wpadcenter_Admin {
 				),
 			);
 
-			wp_localize_script( $this->plugin_name, 'wpadcenter_ad_scheduler', $ad_scheduler );
-			wp_enqueue_script( $this->plugin_name );
+			wp_localize_script( $this->plugin_name . 'adscheduler', 'wpadcenter_ad_scheduler', $ad_scheduler );
+
 			wp_enqueue_style( $this->plugin_name );
 
 			wp_enqueue_style( $this->plugin_name . 'jquery-ui' );
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 
-			wp_enqueue_script( $this->plugin_name . 'moment' );
-			wp_enqueue_script( $this->plugin_name . 'moment-timezone' );
+			wp_enqueue_script( $this->plugin_name . 'adscheduler' );
 
 			$start_date = get_post_meta( $post->ID, 'wpadcenter_start_date', true );
 			$end_date   = get_post_meta( $post->ID, 'wpadcenter_end_date', true );
