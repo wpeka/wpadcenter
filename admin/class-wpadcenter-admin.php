@@ -1105,10 +1105,13 @@ class Wpadcenter_Admin {
 			}
 		}
 		if ( 'end-date' === $column ) {
-
+			$expire_limit     = '1924905600'; // unix timestamp for 31 dec 2030.
 			$current_end_date = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
-			if ( $current_end_date ) {
+			if ( $current_end_date && $current_end_date === $expire_limit ) {
+				echo esc_html__( 'Forever', 'wpadcenter' );
+			} elseif ( $current_end_date ) {
 				echo esc_html( gmdate( 'm/d/Y H:i:s', $current_end_date ) );
+
 			}
 		}
 
@@ -1513,7 +1516,7 @@ class Wpadcenter_Admin {
 
 			echo '</div>';
 
-			$end_time = ! $end_date ? time() : $end_date;
+			$end_time = ! $end_date ? $ad_scheduler['expire_limit'] : $end_date;
 
 			printf(
 				'<input type="hidden" name="end_date" id="end_date" value="%s">',
