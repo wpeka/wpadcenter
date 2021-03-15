@@ -18,6 +18,8 @@ wp-content/themes/twenty*/
 node_modules/
 vendor/
 composer.lock
+release
+build
 
 # ignore log files and databases
 *.log
