@@ -1,4 +1,5 @@
 {
+  "name": "wpadcenter",
   "dependencies": {
     "@coreui/coreui": "^3.4.0",
     "@coreui/vue": "^3.2.7",
@@ -8,5 +9,21 @@
     "style-loader": "^2.0.0",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.1.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-compress": "^1.4.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-shell": "^2.1.0",
+    "grunt-text-replace": "^0.4.0",
+    "grunt-wp-readme-to-markdown": "^2.0.1",
+    "@wordpress/scripts": "^13.0.3",
+    "matchdep": "^2.0.0"
+  },
+  "scripts": {
+    "start": "wp-scripts start --config webpack.config.js --progress",
+    "build": "wp-scripts build --config webpack.config.js",
+    "makepot": "wp i18n make-pot . languages/wpadcenter.pot --exclude=release,analytics,node_modules,vendor,src,bin,tests"
   }
 }
