@@ -4,6 +4,7 @@
     "@coreui/vue": "^3.2.7",
     "@coreui/vue-chartjs": "^1.0.6",
     "css-loader": "^5.0.2",
+    "moment-timezone": "^0.5.33",
     "style-loader": "^2.0.0",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0"
