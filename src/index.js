@@ -28,6 +28,11 @@ var vm = new Vue({
             this.hide_ads_logged = this.$refs.hide_ads_logged.checked;
             this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
             this.value = this.enable_ads_txt ? "1" : "0";
+            if( window.location.href.match(/#adsense/g) ) {
+                this.$refs.active_tab.activeTabIndex=3;
+            }
+
+
         },
     },
     mounted() {

@@ -139,11 +139,6 @@ class Wpadcenter {
 
 		$this->loader = new Wpadcenter_Loader();
 
-		/**
-		 * Helper class for admin functionality
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wpadcenter-admin-helper.php';
-
 	}
 
 	/**
@@ -190,6 +185,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_ad_meta' );
 		$this->loader->add_action( 'post_submitbox_start', $plugin_admin, 'wpadcenter_post_submitbox_start' );
 		$this->loader->add_filter( 'manage_wpadcenter-ads_posts_custom_column', $plugin_admin, 'wpadcenter_manage_ads_column_values', 10, 2 );
+
 	}
 
 	/**
@@ -254,9 +250,9 @@ class Wpadcenter {
 	 * If you override the settings here, be ultra careful to use escape characters.
 	 *
 	 * @param string $key Return default settings for particular key.
-	 * 
+	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @return mixed|void
 	 */
 	public static function wpadcenter_get_default_settings( $key = '' ) {
@@ -292,7 +288,7 @@ class Wpadcenter {
 	/**
 	 * Returns sanitised content based on field-specific rules defined here
 	 * used for both read AND write operations.
-	 * 
+	 *
 	 * @param string $key Key for the setting.
 	 * @param string $value Value for the setting.
 	 *
@@ -400,7 +396,7 @@ class Wpadcenter {
 	 *
 	 * @param array $directories                  A list of directories. If any of these do
 	 *                                            not exist, a WP_Error object will be returned.
-	 * 
+	 *
 	 * @return bool|WP_Error True if able to connect, false or a WP_Error otherwise.
 	 */
 	public static function fs_connect( $directories = array() ) {
