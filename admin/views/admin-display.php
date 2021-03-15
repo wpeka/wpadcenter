@@ -18,7 +18,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 ?>
 
 <div id="app" style="width: 750px;">
-	<c-tabs>
+	<c-tabs ref="active_tab">
 		<c-tab title="General" active>
 		<?php do_action( 'wpadcenter_before_general_settings' ); ?>
 			<c-card>
@@ -118,7 +118,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 				<?php do_action( 'wpadcenter_after_ads_txt_settings' ); ?>
 			</c-card>
 		</c-tab>
-		<c-tab title="Import From Adsense">
+		<c-tab title="Import From Adsense" href="#adsense">
 		<?php do_action( 'wpadcenter_before_adsense_settings' ); ?>
 			<c-card>
 				<c-card-header><?php esc_html_e( 'Connect to Adsense', 'wpadcenter' ); ?></c-card-header>
