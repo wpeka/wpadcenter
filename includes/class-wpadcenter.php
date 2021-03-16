@@ -185,7 +185,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_ad_meta' );
 		$this->loader->add_action( 'post_submitbox_start', $plugin_admin, 'wpadcenter_post_submitbox_start' );
 		$this->loader->add_filter( 'manage_wpadcenter-ads_posts_custom_column', $plugin_admin, 'wpadcenter_manage_ads_column_values', 10, 2 );
-
+		$this->loader->add_action( 'wp_ajax_selected_adgroup_reports', $plugin_admin, 'wpadcenter_ad_group_selected' );
 	}
 
 	/**
@@ -202,7 +202,8 @@ class Wpadcenter {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
-
+		$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
+		$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
 	}
 
 	/**
@@ -460,5 +461,28 @@ class Wpadcenter {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Set impressions.
+	 *
+	 * @param int $ad_id Advertisement ID.
+	 */
+	public static function wpadcenter_set_impressions( $ad_id ) {
+		global $wpdb;
+		$meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+		$today = gmdate( 'Y-m-d' );
+		$meta['total_impressions']++;
+		$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date = %s and ad_id = %d LIMIT 1', array( $today, $ad_id ) ) ); // db call ok; no-cache ok.
+		if ( count( $records ) ) {
+			$record      = $records[0];
+			$impressions = $record->ad_impressions + 1;
+			$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'ads_statistics SET ad_impressions = %d WHERE ad_date = %s and ad_id = %d', array( $impressions, $today, $ad_id ) ) ); // db call ok; no-cache ok.
+			do_action( 'wpadcenter_after_set_impressions', $impressions );
+		} else {
+			$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'ads_statistics` (`ad_impressions`, `ad_date`, `ad_id`) VALUES (%d,%s,%d)', array( 1, $today, $ad_id ) ) ); // db call ok; no-cache ok.
+		}
+
+		update_post_meta( $ad_id, 'wpadcenter_ads_stats', $meta );
 	}
 }

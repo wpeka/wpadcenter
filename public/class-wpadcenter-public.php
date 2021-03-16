@@ -52,7 +52,9 @@ class Wpadcenter_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
+		if ( ! shortcode_exists( 'wpadcenter_ad' ) ) {
+			add_shortcode( 'wpadcenter_ad', array( $this, 'wpadcenter_display_single_ad' ) );
+		}
 	}
 
 	/**
@@ -97,7 +99,7 @@ class Wpadcenter_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpadcenter-public' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), $this->version, false );
+		wp_register_script( $this->plugin_name . '-frontend', plugin_dir_url( __FILE__ ) . 'js/wpadcenter-public' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), $this->version, false );
 
 	}
 
@@ -233,6 +235,117 @@ class Wpadcenter_Public {
 			}
 		}
 		return true;
+	}
+	/**
+	 * Shortcode for single ad.
+	 *
+	 * @param int $atts attributes.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string $single_ad_html html for the ad to be displayed.
+	 */
+	public function wpadcenter_display_single_ad( $atts ) {
+		if ( current_user_can( 'edit_posts' ) && is_admin() ) {
+			return;
+		}
+		return $this->display_single_ad( $atts['id'] );
+	}
+
+	/**
+	 * Get single ad html.
+	 *
+	 * @param int $ad_id Id of the ad that is displayed.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string $single_ad_html html for the ad to be displayed.
+	 */
+	public function display_single_ad( $ad_id ) {
+		$current_time = time();
+		wp_enqueue_script( $this->plugin_name . '-frontend' );
+		wp_localize_script(
+			$this->plugin_name . '-frontend',
+			'ajax_url',
+			array(
+				'url'      => admin_url( 'admin-ajax.php' ),
+				'security' => wp_create_nonce( 'wpadcenter_set_clicks' ),
+			)
+		);
+		$start_date = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
+		$end_date   = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
+		if ( $current_time < $start_date || $current_time > $end_date ) {
+			return;
+		}
+		$ad_size         = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
+		$ad_type         = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		$link_url        = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
+		$open_in_new_tab = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
+		$nofollow        = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
+		$link_target     = '_self';
+		if ( true === (bool) $open_in_new_tab ) {
+			$link_target = '_blank';
+		}
+		$ad_size         = explode( 'x', $ad_size );
+		$width           = $ad_size[0];
+		$height          = $ad_size[1];
+		$single_ad_html  = '';
+		$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
+		if ( true === (bool) $nofollow ) {
+			$single_ad_html .= 'rel="nofollow"';
+		}
+		$single_ad_html .= '>';
+		switch ( $ad_type ) {
+			case 'banner_image':
+				$banner_img      = get_the_post_thumbnail( $ad_id, array( $width, $height ) );
+				$single_ad_html .= $banner_img;
+				break;
+			case 'external_image_link':
+				$external_img_link = get_post_meta( $ad_id, 'wpadcenter_external_image_link', true );
+				$single_ad_html   .= '<img width="' . $width . '" height="' . $height . '" src="' . esc_url( $external_img_link ) . '"/>';
+				break;
+			case 'ad_code':
+				$ad_code         = get_post_meta( $ad_id, 'wpadcenter_ad_code', true );
+				$single_ad_html .= '<span class="wpadcenter-ad-code">' . $ad_code . '</span>';
+				break;
+			case 'import_from_adsense':
+				$adsense_code    = get_post_meta( $ad_id, 'wpadcenter_ad_google_adsense', true );
+				$single_ad_html .= '<div style="min-height:200px;min-width: 200px" class="wpadcenter-ad-code">' . $adsense_code . '</div>';
+				break;
+		}
+		$single_ad_html .= '</a>';
+		Wpadcenter::wpadcenter_set_impressions( $ad_id );
+		return $single_ad_html;
+	}
+
+	/**
+	 * Set tracking for ad click.
+	 *
+	 * @since 1.0.0
+	 */
+	public static function wpadcenter_set_clicks() {
+		global $wpdb;
+		if ( isset( $_POST['action'] ) ) {
+			$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
+			if ( wp_verify_nonce( $security, 'wpadcenter_set_clicks' ) ) {
+				if ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) {
+					$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
+					$meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+					$today = gmdate( 'Y-m-d' );
+					$meta['total_clicks']++;
+					$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date = %s and ad_id = %d LIMIT 1', array( $today, $ad_id ) ) ); // db call ok; no-cache ok.
+					if ( count( $records ) ) {
+						$record = $records[0];
+						$clicks = $record->ad_clicks + 1;
+						$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'ads_statistics SET ad_clicks = %d WHERE ad_date = %s and ad_id = %d', array( $clicks, $today, $ad_id ) ) ); // db call ok; no-cache ok.
+						do_action( 'wpadcenter_after_set_impressions', $clicks );
+					} else {
+						$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'ads_statistics` (`ad_clicks`, `ad_date`, `ad_id`) VALUES (%d,%s,%d)', array( 1, $today, $ad_id ) ) ); // db call ok; no-cache ok.
+					}
+					update_post_meta( $ad_id, 'wpadcenter_ads_stats', $meta );
+				}
+			}
+		}
 	}
 
 }
