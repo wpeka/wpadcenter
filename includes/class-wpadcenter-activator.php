@@ -31,7 +31,19 @@ class Wpadcenter_Activator {
 	 */
 	public static function activate() {
 		add_option( 'wpadcenter_active', true );
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
+		$table_name = $wpdb->prefix . 'ads_statistics';
+
+		$sql = "CREATE TABLE $table_name (
+			ad_id int(11) NOT NULL,
+			ad_date DATE DEFAULT NULL,
+			ad_clicks int(11) DEFAULT 0,
+			ad_impressions int(11) DEFAULT 0
+			) $charset_collate;";
+		dbDelta( $sql );
 	}
 
 }

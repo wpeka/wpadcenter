@@ -262,6 +262,14 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
+		wp_register_script(
+			$this->plugin_name . '-reports',
+			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-reports' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			array(),
+			$this->version,
+			false
+		);
+
 	}
 
 
@@ -510,7 +518,8 @@ class Wpadcenter_Admin {
 			'Reports',
 			__( 'Reports', 'wpadcenter' ),
 			'manage_options',
-			'wpadcenter-reports'
+			'wpadcenter-reports',
+			array( $this, 'wpadcenter_reports' )
 		);
 		// Settings - submenu.
 		add_submenu_page(
@@ -579,10 +588,6 @@ class Wpadcenter_Admin {
 	 * @return array|void
 	 */
 	public function wpadcenter_manage_edit_adgroups_columns() {
-		global $current_screen;
-		if ( 'wpadcenter-ads' !== $current_screen->post_type ) {
-			return;
-		}
 		$columns = array(
 			'cb'                   => '<input type="checkbox" />',
 			'name'                 => __( 'Name', 'wpadcenter' ),
@@ -596,6 +601,38 @@ class Wpadcenter_Admin {
 		}
 		return $columns;
 	}
+	/**
+	 * Callback function for reports menu.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_reports() {
+		wp_enqueue_script( $this->plugin_name . '-reports' );
+		// reports data..
+		$args         = array(
+			'post_type'      => 'wpadcenter-ads',
+			'post_status'    => 'publish',
+			'posts_per_page' => '-1',
+		);
+		$the_query    = new WP_Query( $args );
+		$return_array = array();
+		if ( $the_query->have_posts() ) {
+			while ( $the_query->have_posts() ) {
+				$the_query->the_post();
+				$temp_array             = array();
+				$temp_array['ad_id']    = get_the_ID();
+				$temp_array['ad_title'] = get_the_title();
+				$temp_array['ad_meta']  = get_post_meta( get_the_ID(), 'wpadcenter_ads_stats', true );
+				if ( is_array( $temp_array['ad_meta'] ) ) :
+					array_push( $return_array, $temp_array );
+				endif;
+			}
+		}
+		wp_localize_script( $this->plugin_name . '-reports', 'reportsArray', $return_array );
+		require_once plugin_dir_path( __FILE__ ) . 'views/admin-display-reports.php';
+	}
+
+
 
 	/**
 	 * Callback function for Settings menu.
@@ -1369,6 +1406,13 @@ class Wpadcenter_Admin {
 				delete_post_meta( $post_id, $meta_data[0] );
 
 			}
+			if ( ! get_post_meta( $post_id, 'wpadcenter_ads_stats' ) ) {
+				$meta = array(
+					'total_impressions' => 0,
+					'total_clicks'      => 0,
+				);
+				update_post_meta( $post_id, 'wpadcenter_ads_stats', $meta );
+			}
 		}
 
 	}
@@ -1600,4 +1644,46 @@ class Wpadcenter_Admin {
 		<div id="adc-mascot-app"></div>
 		<?php
 	}
+
+	/**
+	 * Ajax when ad group is selected in reports page.
+	 */
+	public function wpadcenter_ad_group_selected() {
+		// check nonce security.
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'adgroups_security', 'security' );
+		}
+		if ( 'selected_adgroup_reports' === $_POST['action'] ) {
+			$selected_ad_group = isset( $_POST['selected_ad_group'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_ad_group'] ) ) : '';
+			$args              = array(
+				'post_type' => 'wpadcenter-ads',
+				'tax_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+					array(
+						'taxonomy' => 'wpadcenter-adgroups',
+						'terms'    => $selected_ad_group,
+					),
+				),
+			);
+			$the_query         = new WP_Query( $args );
+			$return_array      = array();
+			if ( $the_query->have_posts() ) {
+				while ( $the_query->have_posts() ) {
+					$the_query->the_post();
+					$ad_id    = get_the_ID();
+					$ad_title = get_the_title();
+					$ad_meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+					$temp     = array(
+						'ad_id'    => $ad_id,
+						'ad_title' => $ad_title,
+						'ad_meta'  => $ad_meta,
+					);
+					array_push( $return_array, $temp );
+				}
+			}
+			// echo reports data as per ad group selected and die.
+			echo wp_json_encode( $return_array );
+			wp_die();
+		}
+	}
+
 }
