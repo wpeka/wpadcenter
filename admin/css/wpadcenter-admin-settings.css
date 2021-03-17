@@ -7,9 +7,7 @@
 	display: flex;
 	justify-content: center;
 }
-
-#wpbody-content {
-	height: 100vh;
+#wpwrap {
 	background: #F3F6FF;
 }
 

@@ -12,7 +12,8 @@ module.exports = {
     entry: {
         main: './src/index.js',
         gettingstarted: './src/getting-started.js',
-        adscheduler: './src/adscheduler.js'
+        adscheduler: './src/adscheduler.js',
+        reports: './src/reports.js'
     },
     output: {
         path: path.resolve(__dirname, 'admin/js'),
