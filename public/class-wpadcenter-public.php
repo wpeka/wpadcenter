@@ -261,11 +261,11 @@ class Wpadcenter_Public {
 	 *
 	 * @return string $single_ad_html html for the ad to be displayed.
 	 */
-	public function display_single_ad( $ad_id ) {
+	public static function display_single_ad( $ad_id ) {
 		$current_time = time();
-		wp_enqueue_script( $this->plugin_name . '-frontend' );
+		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
-			$this->plugin_name . '-frontend',
+			'wpadcenter-frontend',
 			'ajax_url',
 			array(
 				'url'      => admin_url( 'admin-ajax.php' ),

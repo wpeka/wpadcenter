@@ -588,10 +588,6 @@ class Wpadcenter_Admin {
 	 * @return array|void
 	 */
 	public function wpadcenter_manage_edit_adgroups_columns() {
-		global $current_screen;
-		if ( 'wpadcenter-ads' !== $current_screen->post_type ) {
-			return;
-		}
 		$columns = array(
 			'cb'                   => '<input type="checkbox" />',
 			'name'                 => __( 'Name', 'wpadcenter' ),
