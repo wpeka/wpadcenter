@@ -36,5 +36,26 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
-
+	
+	 $( document ).ready(
+		function() {
+			$( document ).on(
+				'click',
+				'#wpadcenter_ad',
+				function() {
+					let ad_id = $( this ).data( 'value' );
+					var request = {
+						action: "set_clicks",
+						ad_id: ad_id,
+						security: ajax_url.security,
+					};
+					$.post( ajax_url.url, request ).always(
+						function(response){
+							response = JSON.parse( response );
+						}
+					);
+				}
+			);
+		}
+	);
 })( jQuery );
