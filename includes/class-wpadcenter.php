@@ -139,6 +139,16 @@ class Wpadcenter {
 
 		$this->loader = new Wpadcenter_Loader();
 
+		/**
+		 * The class responsible for defining single ad widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-single-ad-widget.php';
+
+		/**
+		 * The class responsible for defining single ad elementor widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
+
 	}
 
 	/**
@@ -186,6 +196,11 @@ class Wpadcenter {
 		$this->loader->add_action( 'post_submitbox_start', $plugin_admin, 'wpadcenter_post_submitbox_start' );
 		$this->loader->add_filter( 'manage_wpadcenter-ads_posts_custom_column', $plugin_admin, 'wpadcenter_manage_ads_column_values', 10, 2 );
 		$this->loader->add_action( 'wp_ajax_selected_adgroup_reports', $plugin_admin, 'wpadcenter_ad_group_selected' );
+		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_single_ad_widget' );
+		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_gutenberg_blocks' );
+		$this->loader->add_filter( 'block_categories', $plugin_admin, 'wpadcenter_gutenberg_block_categories', 10, 1 );
+		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'wpadcenter_register_rest_fields' );
+
 	}
 
 	/**

@@ -176,7 +176,7 @@ class Wpadcenter_Admin {
 			$this->version,
 			'all'
 		);
-		wp_register_style(
+		wp_enqueue_style(
 			$this->plugin_name,
 			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css',
 			array(),
@@ -197,6 +197,7 @@ class Wpadcenter_Admin {
 			$this->version,
 			'all'
 		);
+
 	}
 
 
@@ -341,8 +342,8 @@ class Wpadcenter_Admin {
 				'has_archive'         => false,
 				'hierarchical'        => false,
 				'exclude_from_search' => true,
-				'show_in_rest'        => false,
-				'publicly_queryable'  => false,
+				'show_in_rest'        => true,
+				'publicly_queryable'  => true,
 				'menu_icon'           => WPADCENTER_PLUGIN_URL . 'images/menu-icon.png',
 				'rewrite'             => array( 'slug' => 'wpadcenter-ads' ),
 				'capability_type'     => 'post',
@@ -1138,7 +1139,7 @@ class Wpadcenter_Admin {
 		if ( 'start-date' === $column ) {
 			$current_start_date = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
 			if ( $current_start_date ) {
-				echo esc_html( gmdate( 'm/d/Y H:i:s', $current_start_date ) );
+				echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_start_date ) );
 			}
 		}
 		if ( 'end-date' === $column ) {
@@ -1147,8 +1148,20 @@ class Wpadcenter_Admin {
 			if ( $current_end_date && $current_end_date === $expire_limit ) {
 				echo esc_html__( 'Forever', 'wpadcenter' );
 			} elseif ( $current_end_date ) {
-				echo esc_html( gmdate( 'm/d/Y H:i:s', $current_end_date ) );
 
+				echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_end_date ) );
+
+			}
+		}
+		if ( 'ad-group' === $column ) {
+			$adgroups = get_the_terms( $ad_id, 'wpadcenter-adgroups' );
+
+			if ( $adgroups ) {
+				$adgroups_display = array();
+				foreach ( $adgroups as $adgroup ) {
+					array_push( $adgroups_display, $adgroup->name );
+				}
+				echo esc_html( implode( ', ', $adgroups_display ) );
 			}
 		}
 
@@ -1684,6 +1697,120 @@ class Wpadcenter_Admin {
 			echo wp_json_encode( $return_array );
 			wp_die();
 		}
+	}
+
+	/**
+	 * Registers single ads widget.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_single_ad_widget() {
+		register_widget( 'Wpadcenter_Single_Ad_Widget' );
+	}
+
+	/**
+	 * Registers gutenberg block for single ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_gutenberg_blocks() {
+
+		wp_register_script(
+			'wpadcenter-gutenberg-single-ad',
+			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-singlead.js',
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components' ),
+			$this->version,
+			false
+		);
+		register_block_type(
+			'wpadcenter/single-ad',
+			array(
+				'editor_script'   => 'wpadcenter-gutenberg-single-ad',
+				'attributes'      => array(
+					'ad_id'        => array(
+						'type' => 'number',
+					),
+					'ad_alignment' => array(
+						'type' => 'string',
+					),
+
+				),
+				'render_callback' => array( $this, 'gutenberg_display_single_ad_cb' ),
+			)
+		);
+
+	}
+
+	/**
+	 * Renders gutenberg single ad on frontend.
+	 *
+	 * @param array $attributes contains attributes of the ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function gutenberg_display_single_ad_cb( $attributes ) {
+
+		$ad_id = 0;
+		if ( array_key_exists( 'ad_id', $attributes ) ) {
+			$ad_id = $attributes['ad_id'];
+		}
+
+		$ad_attributes = array();
+		if ( array_key_exists( 'ad_alignment', $attributes ) ) {
+			$ad_attributes = array(
+				'classes' => $attributes['ad_alignment'],
+			);
+		}
+
+		return Wpadcenter_Public::display_single_ad( $ad_id, $ad_attributes );
+	}
+
+	/**
+	 * Registers single ads widget.
+	 *
+	 * @param array $categories contains categories of gutenberg block.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_gutenberg_block_categories( $categories ) {
+
+		return array_merge(
+			$categories,
+			array(
+				array(
+					'slug'  => 'wpadcenter',
+					'title' => __( 'WPAdCenter', 'wpadcenter' ),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Registers rest api field for wpadceter-ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_rest_fields() {
+		register_rest_field(
+			'wpadcenter-ads',
+			'ad_html',
+			array(
+				'get_callback' => array( $this, 'wpadcenter_ad_html_rest_field_cb' ),
+				'schema'       => null,
+			)
+		);
+	}
+
+	/**
+	 * Assigns value to the rest api filed ad_html.
+	 *
+	 * @param object $object contains the post inforamtion.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_html_rest_field_cb( $object ) {
+		$ad_id = $object['id'];
+		return Wpadcenter_Public::display_single_ad( $ad_id );
 	}
 
 }

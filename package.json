@@ -6,11 +6,15 @@
     "@coreui/vue-chartjs": "^1.0.6",
     "css-loader": "^5.0.2",
     "moment-timezone": "^0.5.33",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-select": "^2.3.0",
     "style-loader": "^2.0.0",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0"
   },
   "devDependencies": {
+    "@wordpress/scripts": "^13.0.3",
     "grunt": "^1.1.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-compress": "^1.4.1",
@@ -18,12 +22,12 @@
     "grunt-shell": "^2.1.0",
     "grunt-text-replace": "^0.4.0",
     "grunt-wp-readme-to-markdown": "^2.0.1",
-    "@wordpress/scripts": "^13.0.3",
     "matchdep": "^2.0.0"
   },
   "scripts": {
     "start": "wp-scripts start --config webpack.config.js --progress",
     "build": "wp-scripts build --config webpack.config.js",
+    "build:gutenbergblocks": "wp-scripts build --config webpack.config.gutenbergscripts.js",
     "makepot": "wp i18n make-pot . languages/wpadcenter.pot --exclude=release,analytics,node_modules,vendor,src,bin,tests"
   }
 }

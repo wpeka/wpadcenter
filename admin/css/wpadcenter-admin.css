@@ -18,3 +18,12 @@
  .wpadcenter-time-input{
      width:100%;
  }
+ 
+ .wpadcenter-activebutton{
+    border:1px solid ;
+    border-radius:3px;
+    padding: 18px 9px;
+  }
+  .wpadcenter-async-select input[type="text"]:focus{
+    box-shadow: none;
+  }
