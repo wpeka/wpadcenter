@@ -1686,4 +1686,90 @@ class Wpadcenter_Admin {
 		}
 	}
 
+	/**
+	 * Ajax when ad is selected in reports custom-reports page.
+	 */
+	public function wpadcenter_ad_selected() {
+		// check nonce security.
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'selectad_security', 'security' );
+		}
+
+		if ( 'selected_ad_reports' === $_POST['action'] ) {
+			$start_date = isset( $_POST['start_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['start_date'] ) ) : '';
+			$end_date   = isset( $_POST['end_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['end_date'] ) ) : '';
+			$ads = $_POST['selected_ad']; // phpcs:ignore
+			$ad_ids     = array();
+			if ( is_array( $ads ) ) {
+				foreach ( $ads as $ad ) {
+					$ad_id = intval( $ad['ad_id'] );
+					array_push( $ad_ids, $ad_id );
+				}
+			}
+
+			if ( '' === $start_date || '' === $end_date || ! count( $ad_ids ) ) {
+				$return_array = array( 'error' => 'Error' );
+				echo wp_json_encode( $return_array );
+			}
+			global $wpdb;
+			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs.ignore
+			if ( is_array( $records ) ) {
+				foreach ( $records as $record ) {
+					$record->ad_title = get_the_title( intval( $record->ad_id ) );
+				}
+				echo wp_json_encode( $records );
+			}
+			wp_die();
+		}
+	}
+
+	/**
+	 * Post request when export csv is called on custom-reports page.
+	 */
+	public function wpadcenter_export_csv() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'exportcsv_security', 'security' );
+		}
+		$filename       = $this->plugin_name . '-stats';
+		$generated_date = gmdate( 'd-m-Y His' );
+		$csv_string     = isset( $_POST['csv_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['csv_data'] ) ) : '';
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . ' ' . $generated_date . '.csv";' );
+		echo wp_kses_data( $csv_string );
+		die();
+	}
+
+	/**
+	 * Dequeue forms.css.
+	 *
+	 * @param string $href url of styles in loop.
+	 */
+	public function wpadcanter_dequeue_styles( $href ) {
+		if ( is_admin() ) {
+			$my_current_screen = get_current_screen();
+
+			if ( isset( $my_current_screen->post_type ) && 'wpadcenter-ads' === $my_current_screen->post_type ) {
+				if ( strpos( $href, 'forms.css' ) !== false ) {
+					return false;
+				}
+			}
+		}
+		return $href;
+	}
+	/**
+	 * Dequeue forms.css for newer version of WordPress.
+	 *
+	 * @param array $to_dos .
+	 */
+	public function wpadcenter_remove_forms_style( $to_dos ) {
+		if ( is_admin() ) {
+			$my_current_screen = get_current_screen();
+
+			if ( isset( $my_current_screen->post_type ) && 'wpadcenter-ads' === $my_current_screen->post_type && in_array( 'forms', $to_dos, true ) ) {
+				$key = array_search( 'forms', $to_dos, true );
+				unset( $to_dos[ $key ] );
+			}
+		}
+		return $to_dos;
+	}
 }
