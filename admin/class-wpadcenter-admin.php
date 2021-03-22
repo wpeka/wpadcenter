@@ -1756,4 +1756,21 @@ class Wpadcenter_Admin {
 		}
 		return $href;
 	}
+	/**
+	 * Dequeue forms.css for newer version of WordPress.
+	 *
+	 * @param array $to_dos .
+	 */
+	public function wpadcenter_remove_forms_style( $to_dos ) {
+		if ( is_admin() ) {
+			$my_current_screen = get_current_screen();
+
+			if ( isset( $my_current_screen->post_type ) && 'wpadcenter-ads' === $my_current_screen->post_type && in_array( 'forms', $to_dos, true ) ) {
+				$key = array_search( 'forms', $to_dos, true );
+				unset( $to_dos[ $key ] );
+			}
+		}
+		return $to_dos;
+	}
+
 }
