@@ -1772,5 +1772,4 @@ class Wpadcenter_Admin {
 		}
 		return $to_dos;
 	}
-
 }
