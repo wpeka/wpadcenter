@@ -186,6 +186,10 @@ class Wpadcenter {
 		$this->loader->add_action( 'post_submitbox_start', $plugin_admin, 'wpadcenter_post_submitbox_start' );
 		$this->loader->add_filter( 'manage_wpadcenter-ads_posts_custom_column', $plugin_admin, 'wpadcenter_manage_ads_column_values', 10, 2 );
 		$this->loader->add_action( 'wp_ajax_selected_adgroup_reports', $plugin_admin, 'wpadcenter_ad_group_selected' );
+		$this->loader->add_action( 'wp_ajax_selected_ad_reports', $plugin_admin, 'wpadcenter_ad_selected' );
+		$this->loader->add_action( 'admin_post_export_csv', $plugin_admin, 'wpadcenter_export_csv' );
+		$this->loader->add_filter( 'style_loader_src', $plugin_admin, 'wpadcanter_dequeue_styles' );
+		$this->loader->add_filter( 'print_styles_array', $plugin_admin, 'wpadcenter_remove_forms_style' );
 	}
 
 	/**
