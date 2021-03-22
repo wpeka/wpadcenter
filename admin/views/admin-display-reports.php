@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Admin reports page with Core ui vue library
  *
