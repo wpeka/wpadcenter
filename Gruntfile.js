@@ -18,6 +18,7 @@ module.exports = function( grunt ) {
                         expand: true,
                         src: [
                             'wpadcenter.php',
+                            'icon.png',
                             'LICENSE.txt',
                             'admin/**',
                             'analytics/**',

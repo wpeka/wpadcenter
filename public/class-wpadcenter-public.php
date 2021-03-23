@@ -328,7 +328,10 @@ class Wpadcenter_Public {
 		}
 		$single_ad_html .= '</a>';
 		$single_ad_html .= '</div>';
-		Wpadcenter::wpadcenter_set_impressions( $ad_id );
+
+		if ( self::wpadcenter_check_exclude_roles() ) {
+			Wpadcenter::wpadcenter_set_impressions( $ad_id );
+		}
 		return $single_ad_html;
 	}
 
@@ -339,7 +342,7 @@ class Wpadcenter_Public {
 	 */
 	public static function wpadcenter_set_clicks() {
 		global $wpdb;
-		if ( isset( $_POST['action'] ) ) {
+		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() ) {
 			$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 			if ( wp_verify_nonce( $security, 'wpadcenter_set_clicks' ) ) {
 				if ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) {
@@ -362,4 +365,83 @@ class Wpadcenter_Public {
 		}
 	}
 
+	/**
+	 * Check to exclude tracking as per settings role.
+	 */
+	public static function wpadcenter_check_exclude_roles() {
+		global $current_user;
+		$the_options = Wpadcenter::wpadcenter_get_settings();
+
+		$user_roles = $current_user->roles;
+		$user_role  = array_shift( $user_roles );
+		// if current user is not signed in else if - check for excluded roles.
+		if ( '' === $user_role ) {
+			return true;
+		} elseif ( ! stripos( strtolower( $the_options['roles_selected'] ), strval( $user_role ) ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Template redirect for header, body and footer scripts.
+	 *
+	 * @since 1.0.1
+	 */
+	public function wpadcenter_template_redirect() {
+		global $post;
+		$the_options = Wpadcenter::wpadcenter_get_settings();
+
+		if ( is_admin() || defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) || ! $the_options['enable_scripts'] ) {
+			return;
+		}
+
+		$body_open_supported = function_exists( 'wp_body_open' ) && version_compare( get_bloginfo( 'version' ), '5.2', '>=' );
+		if ( is_home() ) {
+			add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
+			if ( $body_open_supported ) {
+				add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
+			}
+			add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
+		}
+	}
+
+	/**
+	 * Output global header scripts.
+	 *
+	 * @since 1.0.1
+	 */
+	public function wpadcenter_output_header_global() {
+		$the_options    = Wpadcenter::wpadcenter_get_settings();
+		$header_scripts = $the_options['header_scripts'];
+		if ( $header_scripts ) {
+			echo "\r\n" . $header_scripts . "\r\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+	}
+
+	/**
+	 * Output global body scripts.
+	 *
+	 * @since 1.0.1
+	 */
+	public function wpadcenter_output_body_global() {
+		$the_options  = Wpadcenter::wpadcenter_get_settings();
+		$body_scripts = $the_options['body_scripts'];
+		if ( $body_scripts ) {
+			echo "\r\n" . $body_scripts . "\r\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+	}
+
+	/**
+	 * Output global footer scripts.
+	 *
+	 * @since 1.0.1
+	 */
+	public function wpadcenter_output_footer_global() {
+		$the_options    = Wpadcenter::wpadcenter_get_settings();
+		$footer_scripts = $the_options['footer_scripts'];
+		if ( $footer_scripts ) {
+			echo "\r\n" . $footer_scripts . "\r\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+	}
 }

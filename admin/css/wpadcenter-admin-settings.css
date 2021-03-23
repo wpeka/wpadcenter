@@ -19,9 +19,15 @@
 label {
 	margin: 0;
 	margin-right: 10px;
-	margin-bottom: 5px;
+}
+.ad-toggle {
+	display: flex;
+	align-items: center;
 }
 
+.wpadcenter-margin-mod {
+	margin-bottom: 6px;
+}
 .auto_refresh_enabled {
 	margin-top: 15px;
 	display: grid;
