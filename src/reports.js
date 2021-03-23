@@ -137,7 +137,6 @@ const chartOptions = {
 		}]
 	}
 }
-
 var reports = new Vue({
 	el: '#reports',
 	data: function() {

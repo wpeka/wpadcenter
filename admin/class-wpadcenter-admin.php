@@ -1712,7 +1712,7 @@ class Wpadcenter_Admin {
 				echo wp_json_encode( $return_array );
 			}
 			global $wpdb;
-			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs.ignore
+			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs:ignore
 			if ( is_array( $records ) ) {
 				foreach ( $records as $record ) {
 					$record->ad_title = get_the_title( intval( $record->ad_id ) );
@@ -1773,4 +1773,12 @@ class Wpadcenter_Admin {
 		return $to_dos;
 	}
 
+	/**
+	 * Registers single ads widget.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_single_ad_widget() {
+		register_widget( 'Wpadcenter_Single_Ad_Widget' );
+	}
 }

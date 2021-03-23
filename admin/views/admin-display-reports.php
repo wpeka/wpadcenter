@@ -74,7 +74,6 @@
 	.vs__selected > button > svg {
 		fill: white;
 	}
-
 </style>
 
 <div id="reports">

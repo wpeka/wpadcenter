@@ -139,6 +139,16 @@ class Wpadcenter {
 
 		$this->loader = new Wpadcenter_Loader();
 
+		/**
+		 * The class responsible for defining single ad widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-single-ad-widget.php';
+
+		/**
+		 * The class responsible for defining single ad elementor widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
+
 	}
 
 	/**
@@ -190,6 +200,8 @@ class Wpadcenter {
 		$this->loader->add_action( 'admin_post_export_csv', $plugin_admin, 'wpadcenter_export_csv' );
 		$this->loader->add_filter( 'style_loader_src', $plugin_admin, 'wpadcanter_dequeue_styles' );
 		$this->loader->add_filter( 'print_styles_array', $plugin_admin, 'wpadcenter_remove_forms_style' );
+		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_single_ad_widget' );
+
 	}
 
 	/**
