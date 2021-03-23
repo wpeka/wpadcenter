@@ -22,7 +22,7 @@ use Elementor\Controls_Manager;
  * @subpackage Wpadcenter/includes/elementor
  * @author     WPEka <hello@wpeka.com>
  */
-class Wpadcenter_Elementor_SingleAd_Widget extends Widget_Base {
+class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 
 	/**
 	 * Name slug for widget
