@@ -2,3 +2,17 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+ .wpadcenter-alignright{
+    display:inline;
+    float:right;
+    margin-left: 1.5em;
+  }
+  .wpadcenter-alignleft{
+    display:inline;
+    float:left ;
+    margin-right: 1.5em;
+ }
+  .wpadcenter-aligncenter{
+    display: flex;
+  justify-content: center;
+  }
