@@ -139,6 +139,16 @@ class Wpadcenter {
 
 		$this->loader = new Wpadcenter_Loader();
 
+		/**
+		 * The class responsible for defining single ad widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-single-ad-widget.php';
+
+		/**
+		 * The class responsible for defining single ad elementor widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
+
 	}
 
 	/**
@@ -168,7 +178,8 @@ class Wpadcenter {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Wpadcenter_Admin( $this->get_plugin_name(), $this->get_version() );
-
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_pro_admin_init' );
+		$this->loader->add_action( 'wpadcenter_monthly_cron', $plugin_admin, 'wpadcenter_monthly_schedule_clean_stats' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_cpt' );
@@ -187,9 +198,13 @@ class Wpadcenter {
 		$this->loader->add_filter( 'manage_wpadcenter-ads_posts_custom_column', $plugin_admin, 'wpadcenter_manage_ads_column_values', 10, 2 );
 		$this->loader->add_action( 'wp_ajax_selected_adgroup_reports', $plugin_admin, 'wpadcenter_ad_group_selected' );
 		$this->loader->add_action( 'wp_ajax_selected_ad_reports', $plugin_admin, 'wpadcenter_ad_selected' );
+		$this->loader->add_action( 'wp_ajax_get_roles', $plugin_admin, 'wpadcenter_get_roles' );
+		$this->loader->add_action( 'wp_ajax_get_adgroups', $plugin_admin, 'wpadcenter_get_adgroups' );
 		$this->loader->add_action( 'admin_post_export_csv', $plugin_admin, 'wpadcenter_export_csv' );
 		$this->loader->add_filter( 'style_loader_src', $plugin_admin, 'wpadcanter_dequeue_styles' );
 		$this->loader->add_filter( 'print_styles_array', $plugin_admin, 'wpadcenter_remove_forms_style' );
+		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_single_ad_widget' );
+
 	}
 
 	/**
@@ -202,12 +217,14 @@ class Wpadcenter {
 	private function define_public_hooks() {
 
 		$plugin_public = new Wpadcenter_Public( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
-		$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
-		$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
+		if ( self::is_request( 'frontend' ) ) {
+			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+			$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
+			$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
+			$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
+			$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
+		}
 	}
 
 	/**
@@ -251,6 +268,26 @@ class Wpadcenter {
 	}
 
 	/**
+	 * What type of request is this?
+	 *
+	 * @param string $type admin, ajax, cron or frontend.
+	 * 
+	 * @return bool
+	 */
+	public static function is_request( $type ) {
+		switch ( $type ) {
+			case 'admin':
+				return is_admin();
+			case 'ajax':
+				return defined( 'DOING_AJAX' );
+			case 'cron':
+				return defined( 'DOING_CRON' );
+			case 'frontend':
+				return ( ! is_admin() || defined( 'DOING_AJAX' ) ) && ! defined( 'DOING_CRON' ) && ! defined( 'REST_REQUEST' );
+		}
+	}
+
+	/**
 	 * Returns default settings.
 	 * If you override the settings here, be ultra careful to use escape characters.
 	 *
@@ -285,6 +322,7 @@ class Wpadcenter {
 			'geo_location'             => 'none',
 			'trim_stats'               => '0',
 			'hide_ads_logged'          => false,
+			'roles_selected'           => '',
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -310,6 +348,7 @@ class Wpadcenter {
 			case 'enable_advertisers':
 			case 'enable_ads_txt':
 			case 'hide_ads_logged':
+			case 'trim_statistics':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {
@@ -320,6 +359,7 @@ class Wpadcenter {
 					$ret = 'fffffff';
 				}
 				break;
+			case 'roles_selected':
 			case 'header_scripts':
 			case 'body_scripts':
 			case 'footer_scripts':

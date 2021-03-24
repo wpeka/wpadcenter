@@ -26,10 +26,6 @@
 		background: #F3F6FF;
 	}
 
-	#wpcontent {
-		padding-right: 20px;
-	}
-
 	.inline-flex {
 		display: flex;
 		align-items: center;
@@ -37,7 +33,6 @@
 
 	.wpads-custom-reports {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
 	}
 
@@ -65,18 +60,48 @@
 		min-width: 100px;
 		width: auto;
 	}
-	.vs__selected {
-		border: none;
-		background: #39f;
-		color: white;
+
+	.alert-dismissible .close {
+		position: absolute;
+		top: 0;
+		padding: 0;
+		margin-right: 4px;
 	}
 
-	.vs__selected > button > svg {
-		fill: white;
+	.alert-dismissible .close:focus {
+		outline: none;
+	}
+
+	.close {
+		opacity: 0.5;
+	}
+
+	.inline-flex {
+		display: flex;
+		align-items: center;
+	}
+
+	.wpads-custom-reports {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.wpadcenter-date {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.wpadcenter-date-item {
+		margin-right: 40px;
+	}
+
+	.wpadcenter-select {
+		display: block;
 	}
 </style>
 
-<div id="reports">
+<div id="reports" class="wrap">
 	<c-tabs>
 		<c-tab title="Dashboard" active>
 			<c-card style="width: 100%; max-width: 100%">
@@ -115,7 +140,7 @@
 							<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports of top 10 ads as per clicks', 'wpadcenter' ); ?></c-card-subtitle>
 						</c-card-header>
 						<c-card-body>
-							<c-data-table :fields="topTenClicksFields" :items="topTenClicksOptions" :no-items-view="{ noResults: 'no filtering results available', noItems: 'no items available' }">
+							<c-data-table :fields="topTenClicksFields" :items="topTenClicksOptions">
 							</c-data-table>
 						</c-card-body>
 					</c-card>
@@ -141,16 +166,7 @@
 							</div>
 							<input type="hidden" ref="adgroups_ajaxurl" name="adgroups_ajaxurl" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 							<input type="hidden" ref="adgroups_security" name="adgroups_security" value="<?php echo esc_attr( wp_create_nonce( 'adgroups_security' ) ); ?>">
-							<select ref="select_ad_group" @change="onSelectAdGroupChange" v-model="selected_ad_group" id="adgroup_select_input">
-								<?php
-								$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
-								if ( is_array( $array ) ) {
-									foreach ( $array as $item ) {
-										echo '<option value=' . esc_attr( $item->term_id ) . '>' . esc_attr( $item->name ) . '</option>';
-									}
-								}
-								?>
-							</select>
+							<v-select placeholder="Select Ad Group" :options="select_adgroup" label="name" @input="onSelectAdGroupChange" style="min-width: 150px;"></v-select>
 						</c-card-header>
 						<c-card-body>
 						<c-row style="margin: 0px 10px 20px 10px;" v-if="totalAdGroupClicks != null || totalAdGroupViews !=  null || totalAdGroupCTR != null">
@@ -225,7 +241,7 @@
 							<input type="hidden" ref="selectad_security" name="selectad_security" value="<?php echo esc_attr( wp_create_nonce( 'selectad_security' ) ); ?>">
 						</div>
 						</div>
-					<c-alert v-if="validationError.length" color="danger" :fade="true" style="margin: 0;">{{ validationError }}</c-alert>
+					<c-alert v-if="validationError.length" color="danger" :show.sync="currentAlertCounter" :fade="true" style="margin: 0;" close-button>{{ validationError }}</c-alert>
 				</c-card-body>
 			</c-card>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>?action=export_csv" id="post_csv">

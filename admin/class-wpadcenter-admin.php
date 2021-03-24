@@ -272,6 +272,39 @@ class Wpadcenter_Admin {
 
 	}
 
+	/**
+	 * Monthly schedule cron for clean stats..
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_pro_admin_init() {
+		if ( ! wp_next_scheduled( 'wpadcenter_monthly_cron' ) ) {
+			$date = new DateTime( 'now' );
+			$date->modify( 'first day of next month' );
+			wp_schedule_single_event( $date->format( 'U' ), 'wpadcenter_monthly_cron' );
+		}
+	}
+
+	/**
+	 * Admin init.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_monthly_schedule_clean_stats() {
+		global $wpdb;
+		if ( class_exists( 'Wpadcenter' ) ) {
+			$the_options = Wpadcenter::wpadcenter_get_settings();
+			$trim_point  = $the_options['trim_stats'];
+			if ( isset( $trim_point ) && $trim_point > 0 ) {
+				$stat_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ad_id FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date < DATE_ADD( NOW() , INTERVAL -%d MONTH )', array( $trim_point ) ) ); // db call ok; no-cache ok.
+				if ( is_array( $stat_ids ) && ! empty( $stat_ids ) ) {
+					$stat_ids = implode( $stat_ids, ',' );
+					$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_id IN ( %s )', array( $stat_ids ) ) ); // db call ok; no-cache ok.
+				}
+			}
+		}
+		wp_clear_scheduled_hook( 'wpadcenter_monthly_cron' );
+	}
 
 	/**
 	 * Adds action links to the plugin list table.
@@ -547,7 +580,7 @@ class Wpadcenter_Admin {
 				'Go Pro',
 				__( 'Go Pro', 'wpadcenter' ),
 				'manage_options',
-				'wpadcenter-go-pro'
+				'https://club.wpeka.com/product/wpadcenter/'
 			);
 		}
 	}
@@ -1712,7 +1745,7 @@ class Wpadcenter_Admin {
 				echo wp_json_encode( $return_array );
 			}
 			global $wpdb;
-			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs.ignore
+			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs:ignore
 			if ( is_array( $records ) ) {
 				foreach ( $records as $record ) {
 					$record->ad_title = get_the_title( intval( $record->ad_id ) );
@@ -1749,7 +1782,7 @@ class Wpadcenter_Admin {
 			$my_current_screen = get_current_screen();
 
 			if ( isset( $my_current_screen->post_type ) && 'wpadcenter-ads' === $my_current_screen->post_type ) {
-				if ( strpos( $href, 'forms.css' ) !== false ) {
+				if ( strpos( $href, 'forms.css' ) !== false || strpos( $href, 'revisions' ) ) {
 					return false;
 				}
 			}
@@ -1768,8 +1801,50 @@ class Wpadcenter_Admin {
 			if ( isset( $my_current_screen->post_type ) && 'wpadcenter-ads' === $my_current_screen->post_type && in_array( 'forms', $to_dos, true ) ) {
 				$key = array_search( 'forms', $to_dos, true );
 				unset( $to_dos[ $key ] );
+				$key = array_search( 'revisions', $to_dos, true );
+				unset( $to_dos[ $key ] );
 			}
 		}
 		return $to_dos;
+	}
+
+	/**
+	 * Registers single ads widget.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_single_ad_widget() {
+		register_widget( 'Wpadcenter_Single_Ad_Widget' );
+	}
+	/**
+	 * Ajax when ad is selected in reports custom-reports page.
+	 */
+	public function wpadcenter_get_roles() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'roles_security', 'security' );
+		}
+		$return_array = array();
+		$roles        = get_editable_roles();
+		if ( is_array( $roles ) ) {
+			foreach ( $roles as $role ) {
+				array_push( $return_array, $role['name'] );
+			}
+		}
+		$the_options = Wpadcenter::wpadcenter_get_settings();
+		array_push( $return_array, $the_options['roles_selected'] );
+		echo wp_json_encode( $return_array );
+		wp_die();
+	}
+
+	/**
+	 * Ajax for getting ad groups from server.
+	 */
+	public function wpadcenter_get_adgroups() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'adgroups_security', 'security' );
+		}
+		$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
+		echo wp_json_encode( $array );
+		wp_die();
 	}
 }
