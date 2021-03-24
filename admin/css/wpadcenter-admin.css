@@ -18,3 +18,18 @@
  .wpadcenter-time-input{
      width:100%;
  }
+ .wpadcenter-activebutton{
+    border:1px solid ;
+    border-radius:3px;
+    padding: 18px 9px;
+    
+  }
+  .wpadcenter-align-container .dashicon{
+    padding-left:3px;
+  }
+  .wpadcenter-async-select input[type="text"]:focus{
+    box-shadow: none;
+  }
+  .Wpadcenter-gutenberg-container .components-placeholder{
+    background-color:#F3F6FF;
+  }
