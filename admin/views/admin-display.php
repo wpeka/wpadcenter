@@ -19,62 +19,39 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 
 <div id="app" style="width: 750px;">
 	<c-tabs ref="active_tab">
-		<c-tab title="General" active>
+		<c-tab title="General" active href="#general">
 		<?php do_action( 'wpadcenter_before_general_settings' ); ?>
 			<c-card>
-				<c-card-header><?php esc_html_e( 'Auto Refresh Settings', 'wpadcenter' ); ?></c-card-header>
+				<c-card-header><?php esc_html_e( 'Tracking Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
-					<div class="ad-toggle">		
-						<c-switch ref="auto_refresh" v-model="auto_refresh" id="inline-form-auto_refresh" variant="3d" size="sm" color="dark" <?php checked( $the_options['auto_refresh'] ); ?> v-on:update:checked="auto_refresh = !auto_refresh"></c-switch>
-						<label for="inline-form-auto_refresh"><?php esc_html_e( 'Auto Refresh (Global)', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Auto refresh all ads on pages.', 'wpadcenter' ); ?>'" color="primary" name="cil-settings"></c-icon>
-						<input type="hidden" name="auto_refresh_field" v-model="auto_refresh"><br>
+					<div class="wpadcenter-margin-mod">
+						<input type="hidden" ref="roles_security" name="roles_security" value="<?php echo esc_attr( wp_create_nonce( 'roles_security' ) ); ?>">
+						<input type="hidden" ref="roles_ajaxurl" name="roles_ajaxurl" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+						<label for="wpadcenter-select-roles"><?php esc_html_e( 'Roles to exclude from tracking', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Select certain roles to exclude from tracking the ads', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+						<input type="hidden" ref="roles_selected" v-model="roles_selected" name="roles_selected_field" value="<?php echo esc_html( stripslashes( $the_options['roles_selected'] ) ); ?>">
 					</div>
-
-					<div class="auto_refresh_enabled" v-show="auto_refresh">
-						<div class="transition_effect">
-							<label for="inline-form-transition_effect_field">Transition Effect</label><br>
-							<select name="transition_effect_field" id="transition_effect_field" ref="transition_effect" style="width: 100%;" class="form-control">
-								<?php $this->print_combobox_options( $this->get_transition_effect_options(), $the_options['transition_effect'] ); ?>
-							</select>
-						</div>
-						<c-input type="number" label="Transition Delay" value="<?php echo esc_html( stripslashes( $the_options['transition_delay'] ) ); ?>" name="transition_delay_field"></c-input>
-						<c-input type="number" label="Transition Speed" value="<?php echo esc_html( stripslashes( $the_options['transition_speed'] ) ); ?>" name="transition_speed_field"></c-input>
-					</div>
+					<v-select id="wpadcenter-select-roles" :options="roles" taggable multiple v-model="roles_selected">
+					</v-select>
 				</c-card-body>
 			</c-card>
 			<c-card>
-				<c-card-header><?php esc_html_e( 'Hide Settings', 'wpadcenter' ); ?></c-card-header>
-				<c-card-body>			
-					<div class="ad-toggle">
-						<c-switch ref="hide_ads_logged" v-model="hide_ads_logged" id="inline-form-hide_ads_logged" variant="3d" size="sm" color="dark" <?php checked( $the_options['hide_ads_logged'] ); ?> v-on:update:checked="hide_ads_logged = !hide_ads_logged"></c-switch>
-						<label for="inline-form-hide_ads_logged"><?php esc_html_e( 'Hide ads for logged users (Global)', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Hides all the ads for logged in users if enabled.', 'wpadcenter' ); ?>'" color="primary" name="cil-settings"></c-icon>
-						<input type="hidden" name="hide_ads_logged_field" v-model="hide_ads_logged">
-					</div>
-				</c-card-body>
-			</c-card>
-
-			<c-card>
-				<c-card-header><?php esc_html_e( 'Ad Block Settings', 'wpadcenter' ); ?></c-card-header>
+				<c-card-header><?php esc_html_e( 'Statistics Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
-					<div class="ad-toggle">
-						<c-switch ref="adblock_detector" v-model="adblock_detector" id="inline-form-adblock_detector" variant="3d" size="sm" color="dark" <?php checked( $the_options['adblock_detector'] ); ?> v-on:update:checked="adblock_detector = !adblock_detector"></c-switch>
-						<label for="inline-form-adblock_detector"><?php esc_html_e( 'Ad Block Detector', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Enable adblock on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cil-settings"></c-icon>
-						<input type="hidden" name="adblock_detector_field" v-model="adblock_detector">
-					</div>
-					<label for="inline-form-adblock_detector_message" v-show="adblock_detector" class="form-label"><?php esc_html_e( 'Ad Block Detector Message', 'wpadcenter' ); ?></label>
-					<textarea id="inline-form-adblock_detector_message" class="form-control" name="adblock_detected_message_field" style="width: 100%;" rows="6" v-show="adblock_detector" v-c-tooltip="'<?php esc_html_e( 'Message displayed on the adblocker detected pop up.', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['adblock_detected_message'] ) ); ?></textarea>
+
+					<label for="inline-form-trim_stats" class="wpadcenter-margin-mod"><?php esc_html_e( 'Trim Statistics', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="{content:'<?php esc_html_e( 'Automatically clean the statistics database records older than a set point. Setting this to 0 will disable it.', 'wpadcenter' ); ?>',placement:'right'}" color="primary" name="cib-google-keep"></c-icon>
+					<c-input type="number" min="0" name="trim_stats_field" value="<?php echo esc_html( stripslashes( $the_options['trim_stats'] ) ); ?>" />
 				</c-card-body>
 			</c-card>
 			<?php do_action( 'wpadcenter_after_general_settings' ); ?>
 		</c-tab>
-		<c-tab title="Scripts">
+		<c-tab title="Scripts" href="#scripts">
 		<?php do_action( 'wpadcenter_before_scripts_settings' ); ?>
 			<c-card>
 				<c-card-header><?php esc_html_e( 'Scripts Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
 					<div class="ad-toggle">
 						<c-switch ref="enable_scripts" v-model="enable_scripts" id="inline-form-enable_scripts" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_scripts'] ); ?> v-on:update:checked="enable_scripts = !enable_scripts"></c-switch>
-						<label for="inline-form-enable_scripts"><?php esc_html_e( 'Enable Scripts', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Enable scripts on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cil-settings"></c-icon>
+						<label for="inline-form-enable_scripts"><?php esc_html_e( 'Enable Scripts', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Enable scripts on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
 						<input type="hidden" name="enable_scripts_field" v-model="enable_scripts">
 					</div>
 				</c-card-body>
@@ -94,25 +71,25 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 			</c-card>
 			<?php do_action( 'wpadcenter_after_scripts_settings' ); ?>
 		</c-tab>
-		<c-tab title="ads.txt">
+		<c-tab title="ads.txt" href="#adstxt">
 			<c-card>
 				<?php do_action( 'wpadcenter_before_ads_txt_settings' ); ?>
 				<c-card-header><?php esc_html_e( 'Ads.txt Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
 				<div class="ad-toggle">
-					<input type="hidden" name="ads_txt_tab" v-model="value" />
+					<input type="hidden" name="ads_txt_tab" value="0" ref="ads_txt_tab">
 					<input type="hidden" name="ads_txt_security" value="<?php echo esc_attr( wp_create_nonce( 'check_ads_txt_problems' ) ); ?>">
 					<input type="hidden" name="ads_txt_replace_security" value="<?php echo esc_attr( wp_create_nonce( 'check_ads_txt_replace' ) ); ?>">
 					<input type="hidden" name="ads_txt_ajaxurl" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
-					<c-switch ref="enable_ads_txt" v-model="enable_ads_txt" id="inline-form-enable_ads_txt" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_ads_txt'] ); ?> v-on:update:checked="enable_ads_txt = !enable_ads_txt; this.value = enable_ads_txt ? '1' : '0';"></c-switch>
-					<label for="inline-form-enable_ads_txt"><?php esc_html_e( 'Enable Ads.txt', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Enable ads.txt functionality', 'wpadcenter' ); ?>'" color="primary" name="cil-settings"></c-icon>
+					<c-switch ref="enable_ads_txt" v-model="enable_ads_txt" id="inline-form-enable_ads_txt" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_ads_txt'] ); ?> v-on:update:checked="onChangeEnableAdsTxt"></c-switch>
+					<label for="inline-form-enable_ads_txt"><?php esc_html_e( 'Enable Ads.txt', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Enable ads.txt functionality', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
 					<input type="hidden" name="enable_ads_txt_field" v-model="enable_ads_txt">
 				</div>
 				<div class="enable_ads_txt_enabled" v-show="enable_ads_txt">
 					<br>
 					<textarea name="ads_txt_content_field" class="form-control" style="width: 100%;" rows="6" v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the footer section on all pages and/or posts.', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['ads_txt_content'] ) ); ?></textarea>
 					<c-spinner class="ads_txt_spinner" style="display:block; margin: 10px 0px;" color="dark" grow></c-spinner><span class="ads_txt_problems"></span></td>
-					<input type="button" class="button" name="check_ads_txt_problems" value="Check for Problems" />
+					<input type="button" class="button" name="check_ads_txt_problems" value="Check for Problems" id="check_ads_txt_problems" />
 				</div>
 				</c-card-body>
 				<?php do_action( 'wpadcenter_after_ads_txt_settings' ); ?>

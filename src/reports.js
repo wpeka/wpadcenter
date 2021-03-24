@@ -182,11 +182,14 @@ var reports = new Vue({
 			totalAdGroupViews: null,
 			totalAdGroupCTR: null,
 			chartDataSets: [],
+			// alert counter in seconds
+			currentAlertCounter: 10,
+			// select ad group option
+			select_adgroup: [{ name: 'none' }],
 		}
 	},
 	mounted: function() {
 		// get necessary data from DOM
-		this.selected_ad_group = this.$refs.select_ad_group.value;
 		this.ajax_url = this.$refs.adgroups_ajaxurl.value;
 		this.adgroups_security = this.$refs.adgroups_security.value;
 		this.selectad_security = this.$refs.selectad_security.value;
@@ -194,10 +197,31 @@ var reports = new Vue({
 		this.endDate = new Date();
 		this.startDate = new Date();
 		this.startDate.setMonth( this.startDate.getMonth() - 1 );
+		// get ad groups from server
+		j.ajax({
+			type: "POST",
+			url: this.ajax_url,
+			data: {
+				action: 'get_adgroups',
+				security: this.adgroups_security,
+			}
+		}).done(data => {
+			data = JSON.parse(data);
+			this.select_adgroup = data;
+		});
 	},
 	methods: {
 		// ajax call when select ad group is changed
-		onSelectAdGroupChange() {
+		onSelectAdGroupChange(data) {
+			if( data === null ) {
+				this.selected_ad_group = [];
+				this.byAdGroup = [];
+				this.totalAdGroupCTR = 0;
+				this.totalAdGroupClicks = 0;
+				this.totalAdGroupViews = 0;
+				return;
+			}
+			this.selected_ad_group = data.term_id;
 			j.ajax({
                 type: "POST",
                 url: this.ajax_url,
@@ -255,6 +279,7 @@ var reports = new Vue({
 			}
 			if ( flag ) {
 				this.detailedReportsOptions = [];
+				this.currentAlertCounter = 10;
 				this.chartData = {
 					datasets: [],
 				};
