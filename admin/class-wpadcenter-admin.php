@@ -341,8 +341,8 @@ class Wpadcenter_Admin {
 				'has_archive'         => false,
 				'hierarchical'        => false,
 				'exclude_from_search' => true,
-				'show_in_rest'        => false,
-				'publicly_queryable'  => false,
+				'show_in_rest'        => true,
+				'publicly_queryable'  => true,
 				'menu_icon'           => WPADCENTER_PLUGIN_URL . 'images/menu-icon.png',
 				'rewrite'             => array( 'slug' => 'wpadcenter-ads' ),
 				'capability_type'     => 'post',
@@ -1780,5 +1780,126 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_register_single_ad_widget() {
 		register_widget( 'Wpadcenter_Single_Ad_Widget' );
+	}
+
+	/**
+	 * Registers gutenberg block for single ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_gutenberg_blocks() {
+
+		wp_register_script(
+			'wpadcenter-gutenberg-single-ad',
+			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-singlead.js',
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components' ),
+			$this->version,
+			false
+		);
+		register_block_type(
+			'wpadcenter/single-ad',
+			array(
+				'editor_script'   => 'wpadcenter-gutenberg-single-ad',
+				'attributes'      => array(
+					'ad_id'        => array(
+						'type' => 'number',
+					),
+					'ad_alignment' => array(
+						'type' => 'string',
+					),
+
+				),
+				'render_callback' => array( $this, 'gutenberg_display_single_ad_cb' ),
+			)
+		);
+
+	}
+
+	/**
+	 * Renders gutenberg single ad on frontend.
+	 *
+	 * @param array $attributes contains attributes of the ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function gutenberg_display_single_ad_cb( $attributes ) {
+
+		$ad_id = 0;
+		if ( array_key_exists( 'ad_id', $attributes ) ) {
+			$ad_id = $attributes['ad_id'];
+		}
+
+		$ad_attributes = array();
+		if ( array_key_exists( 'ad_alignment', $attributes ) ) {
+			$ad_attributes = array(
+				'classes' => $attributes['ad_alignment'],
+			);
+		}
+
+		return Wpadcenter_Public::display_single_ad( $ad_id, $ad_attributes );
+	}
+
+	/**
+	 * Registers single ads widget.
+	 *
+	 * @param array $categories contains categories of gutenberg block.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_gutenberg_block_categories( $categories ) {
+
+		return array_merge(
+			$categories,
+			array(
+				array(
+					'slug'  => 'wpadcenter',
+					'title' => __( 'WPAdCenter', 'wpadcenter' ),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Registers rest api field for wpadceter-ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_rest_fields() {
+		register_rest_field(
+			'wpadcenter-ads',
+			'ad_html',
+			array(
+				'get_callback' => array( $this, 'wpadcenter_ad_html_rest_field_cb' ),
+				'schema'       => null,
+			)
+		);
+	}
+
+	/**
+	 * Assigns value to the rest api filed ad_html.
+	 *
+	 * @param object $object contains the post inforamtion.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_html_rest_field_cb( $object ) {
+		$ad_id = $object['id'];
+		return Wpadcenter_Public::display_single_ad( $ad_id );
+	}
+
+	/**
+	 * Register scripts for gutenberg block.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_gutenberg_scripts() {
+		wp_enqueue_style(
+			$this->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+
 	}
 }
