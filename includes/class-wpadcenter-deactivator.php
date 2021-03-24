@@ -30,7 +30,7 @@ class Wpadcenter_Deactivator {
 	 * @since 1.0.0
 	 */
 	public static function deactivate() {
-
+		wp_clear_scheduled_hook( 'wpadcenter_monthly_cron' );
 	}
 
 }
