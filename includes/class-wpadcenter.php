@@ -196,6 +196,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_ad_meta' );
 		$this->loader->add_action( 'post_submitbox_start', $plugin_admin, 'wpadcenter_post_submitbox_start' );
 		$this->loader->add_filter( 'manage_wpadcenter-ads_posts_custom_column', $plugin_admin, 'wpadcenter_manage_ads_column_values', 10, 2 );
+		$this->loader->add_filter( 'manage_wpadcenter-adgroups_custom_column', $plugin_admin, 'wpadcenter_manage_ad_groups_column_values', 10, 3 );
 		$this->loader->add_action( 'wp_ajax_selected_adgroup_reports', $plugin_admin, 'wpadcenter_ad_group_selected' );
 		$this->loader->add_action( 'wp_ajax_selected_ad_reports', $plugin_admin, 'wpadcenter_ad_selected' );
 		$this->loader->add_action( 'wp_ajax_get_roles', $plugin_admin, 'wpadcenter_get_roles' );

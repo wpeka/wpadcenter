@@ -16,8 +16,12 @@ $nonce       = wp_create_nonce( 'wpeka-google-adsense' );
 $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 
 ?>
-
-<div id="app" style="width: 750px;">
+<style>
+	[v-cloak] {
+		display: none;
+	}
+</style>
+<div id="app" style="width: 750px;" v-cloak>
 	<c-tabs ref="active_tab">
 		<c-tab title="General" active href="#general">
 		<?php do_action( 'wpadcenter_before_general_settings' ); ?>

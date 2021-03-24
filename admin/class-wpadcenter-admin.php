@@ -298,7 +298,7 @@ class Wpadcenter_Admin {
 			if ( isset( $trim_point ) && $trim_point > 0 ) {
 				$stat_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ad_id FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date < DATE_ADD( NOW() , INTERVAL -%d MONTH )', array( $trim_point ) ) ); // db call ok; no-cache ok.
 				if ( is_array( $stat_ids ) && ! empty( $stat_ids ) ) {
-					$stat_ids = implode( $stat_ids, ',' );
+					$stat_ids = explode( $stat_ids, ',' );
 					$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_id IN ( %s )', array( $stat_ids ) ) ); // db call ok; no-cache ok.
 				}
 			}
@@ -1185,6 +1185,105 @@ class Wpadcenter_Admin {
 			}
 		}
 
+		if ( 'ad-group' === $column ) {
+			$names = wp_get_post_terms( $ad_id, 'wpadcenter-adgroups', array( 'fields' => 'names' ) );
+			echo esc_html( implode( ', ', $names ) );
+		}
+
+		if ( 'shortcode' === $column ) {
+			echo sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="[wpadcenter_ad id=%d align=\'none\']">[shortcode]</a>', intval( $ad_id ) );
+		}
+
+		if ( 'template-tag' === $column ) {
+			echo sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="wpadcenter_display_ad( array( \'id\' => %d, \'align\' => \'none\' ) );">&lt;?php .. ?&gt;</a>', intval( $ad_id ) );
+		}
+
+		if ( 'stats-for-today' === $column ) {
+			$today = gmdate( 'Y-m-d' );
+			global $wpdb;
+			$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics where ad_date=%s AND ad_id=%d', array( $today, $ad_id ) ) ); // phpcs:ignore
+			if ( ! count( $results ) ) {
+				echo '0 clicks / 0 views / 0.00% CTR';
+			} else {
+				$record = $results[0];
+				$ctr    = number_format( (float) ( $record->ad_clicks / $record->ad_impressions ) * 100, 2, '.', '' ) . '%';
+				echo sprintf( '%d clicks / %d views / %s CTR', esc_html( $record->ad_clicks ), esc_html( $record->ad_impressions ), esc_html( $ctr ) );
+			}
+		}
+	}
+
+
+	/**
+	 * Display values in manage ads columns.
+	 *
+	 * @param string  $value echo for the column value.
+	 * @param string  $column column name.
+	 * @param integer $term_id Id of the term - wpadcenter-adgroup.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_manage_ad_groups_column_values( $value, $column, $term_id ) {
+		$output = '';
+		switch ( $column ) {
+			case 'shortcode':
+				$output = sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="[wpadcenter_adgroup adgroup_ids=%d align=\'none\' num_ads=1 num_columns=1]">[shortcode]</a>', intval( $term_id ) );
+				break;
+			case 'template-tag':
+				$output = sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="wpadcenter_display_adgroup( array( \'adgroup_ids\' => %d, \'align\' => \'none\', \'num_ads\' => 1, \'num_columns\' => 1 ) );">&lt;?php .. ?&gt;</a>', intval( $term_id ) );
+				break;
+			case 'number-of-ads':
+				$args      = array(
+					'post_type' => 'wpadcenter-ads',
+					'tax_query' => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+						array(
+							'taxonomy' => 'wpadcenter-adgroups',
+							'field'    => 'term_id',
+							'terms'    => $term_id,
+						),
+					),
+				);
+				$output    = 0;
+				$the_query = new WP_Query( $args );
+				if ( $the_query->have_posts() ) {
+					while ( $the_query->have_posts() ) {
+						$the_query->the_post();
+						$output++;
+					}
+				}
+				break;
+			case 'number-of-active-ads':
+				$args      = array(
+					'post_type' => 'wpadcenter-ads',
+					'tax_query' => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+						array(
+							'taxonomy' => 'wpadcenter-adgroups',
+							'field'    => 'term_id',
+							'terms'    => $term_id,
+						),
+					),
+				);
+				$output    = 0;
+				$the_query = new WP_Query( $args );
+				if ( $the_query->have_posts() ) {
+					while ( $the_query->have_posts() ) {
+						$the_query->the_post();
+						$ad_id        = get_the_ID();
+						$current_time = time();
+						$start_date   = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
+						$end_date     = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
+						if ( $current_time < $start_date || $current_time > $end_date ) {
+							continue;
+						} else {
+							$output++;
+						}
+					}
+				}
+				break;
+			default:
+				break;
+		}
+		$value = $output;
+		return $value;
 	}
 
 
@@ -1780,8 +1879,7 @@ class Wpadcenter_Admin {
 	public function wpadcanter_dequeue_styles( $href ) {
 		if ( is_admin() ) {
 			$my_current_screen = get_current_screen();
-
-			if ( isset( $my_current_screen->post_type ) && 'wpadcenter-ads' === $my_current_screen->post_type ) {
+			if ( isset( $my_current_screen->post_type ) && ( 'wpadcenter-ads_page_wpadcenter-reports' === $my_current_screen->base || 'wpadcenter-ads_page_wpadcenter-settings' === $my_current_screen->base ) ) {
 				if ( strpos( $href, 'forms.css' ) !== false || strpos( $href, 'revisions' ) ) {
 					return false;
 				}
@@ -1790,7 +1888,7 @@ class Wpadcenter_Admin {
 		return $href;
 	}
 	/**
-	 * Dequeue forms.css for newer version of WordPress.
+	 * Dequeue forms.css && revisions.css for newer version of WordPress.
 	 *
 	 * @param array $to_dos .
 	 */
@@ -1798,7 +1896,7 @@ class Wpadcenter_Admin {
 		if ( is_admin() ) {
 			$my_current_screen = get_current_screen();
 
-			if ( isset( $my_current_screen->post_type ) && 'wpadcenter-ads' === $my_current_screen->post_type && in_array( 'forms', $to_dos, true ) ) {
+			if ( isset( $my_current_screen->post_type ) && ('wpadcenter-ads_page_wpadcenter-reports' === $my_current_screen->base || 'wpadcenter-ads_page_wpadcenter-settings' === $my_current_screen->base) && (in_array( 'forms', $to_dos, true ) || in_array( 'revisions', $to_dos, true )) ) {
 				$key = array_search( 'forms', $to_dos, true );
 				unset( $to_dos[ $key ] );
 				$key = array_search( 'revisions', $to_dos, true );

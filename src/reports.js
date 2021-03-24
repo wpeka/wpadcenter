@@ -216,9 +216,9 @@ var reports = new Vue({
 			if( data === null ) {
 				this.selected_ad_group = [];
 				this.byAdGroup = [];
-				this.totalAdGroupCTR = 0;
-				this.totalAdGroupClicks = 0;
-				this.totalAdGroupViews = 0;
+				this.totalAdGroupCTR = null;
+				this.totalAdGroupClicks = null;
+				this.totalAdGroupViews = null;
 				return;
 			}
 			this.selected_ad_group = data.term_id;

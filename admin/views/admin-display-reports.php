@@ -107,7 +107,6 @@
 
 	.wpads-custom-reports {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
 	}
 
@@ -135,18 +134,12 @@
 		min-width: 100px;
 		width: auto;
 	}
-	.vs__selected {
-		border: none;
-		background: #39f;
-		color: white;
-	}
-
-	.vs__selected > button > svg {
-		fill: white;
+	[v-cloak] {
+		display: none;
 	}
 </style>
 
-<div id="reports" class="wrap">
+<div id="reports" class="wrap" v-cloak>
 	<c-tabs>
 		<c-tab title="Dashboard" active>
 			<c-card style="width: 100%; max-width: 100%">
