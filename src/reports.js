@@ -213,6 +213,14 @@ var reports = new Vue({
 	methods: {
 		// ajax call when select ad group is changed
 		onSelectAdGroupChange(data) {
+			if( data === null ) {
+				this.selected_ad_group = [];
+				this.byAdGroup = [];
+				this.totalAdGroupCTR = 0;
+				this.totalAdGroupClicks = 0;
+				this.totalAdGroupViews = 0;
+				return;
+			}
 			this.selected_ad_group = data.term_id;
 			j.ajax({
                 type: "POST",

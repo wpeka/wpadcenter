@@ -83,7 +83,6 @@
 
 	.wpads-custom-reports {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
 	}
 
@@ -99,26 +98,6 @@
 
 	.wpadcenter-select {
 		display: block;
-	}
-
-	#adgroup_select_input {
-		width: 100px;
-		height: 30px;
-		margin: 10px;
-		border: 1px solid #d8dbe0;
-	}
-	#adgroup_select_input:focus {
-		min-width: 100px;
-		width: auto;
-	}
-	.vs__selected {
-		border: none;
-		background: #39f;
-		color: white;
-	}
-
-	.vs__selected > button > svg {
-		fill: white;
 	}
 </style>
 
@@ -161,7 +140,7 @@
 							<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports of top 10 ads as per clicks', 'wpadcenter' ); ?></c-card-subtitle>
 						</c-card-header>
 						<c-card-body>
-							<c-data-table :fields="topTenClicksFields" :items="topTenClicksOptions" :no-items-view="{ noResults: 'no filtering results available', noItems: 'no items available' }">
+							<c-data-table :fields="topTenClicksFields" :items="topTenClicksOptions">
 							</c-data-table>
 						</c-card-body>
 					</c-card>

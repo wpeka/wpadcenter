@@ -270,8 +270,8 @@ class Wpadcenter {
 	/**
 	 * What type of request is this?
 	 *
-	 * @since 1.0.1
-	 * @param  string $type admin, ajax, cron or frontend.
+	 * @param string $type admin, ajax, cron or frontend.
+	 * 
 	 * @return bool
 	 */
 	public static function is_request( $type ) {
