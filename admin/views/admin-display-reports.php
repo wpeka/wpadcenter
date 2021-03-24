@@ -134,9 +134,12 @@
 		min-width: 100px;
 		width: auto;
 	}
+	[v-cloak] {
+		display: none;
+	}
 </style>
 
-<div id="reports" class="wrap">
+<div id="reports" class="wrap" v-cloak>
 	<c-tabs>
 		<c-tab title="Dashboard" active>
 			<c-card style="width: 100%; max-width: 100%">
