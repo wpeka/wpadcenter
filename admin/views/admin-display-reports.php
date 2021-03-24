@@ -99,6 +99,51 @@
 	.wpadcenter-select {
 		display: block;
 	}
+
+	.inline-flex {
+		display: flex;
+		align-items: center;
+	}
+
+	.wpads-custom-reports {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.wpadcenter-date {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.wpadcenter-date-item {
+		margin-right: 40px;
+	}
+
+	.wpadcenter-select {
+		display: block;
+	}
+
+	#adgroup_select_input {
+		width: 100px;
+		height: 30px;
+		margin: 10px;
+		border: 1px solid #d8dbe0;
+	}
+	#adgroup_select_input:focus {
+		min-width: 100px;
+		width: auto;
+	}
+	.vs__selected {
+		border: none;
+		background: #39f;
+		color: white;
+	}
+
+	.vs__selected > button > svg {
+		fill: white;
+	}
 </style>
 
 <div id="reports" class="wrap">

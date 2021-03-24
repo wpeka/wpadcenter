@@ -1816,6 +1816,7 @@ class Wpadcenter_Admin {
 	public function wpadcenter_register_single_ad_widget() {
 		register_widget( 'Wpadcenter_Single_Ad_Widget' );
 	}
+
 	/**
 	 * Ajax when ad is selected in reports custom-reports page.
 	 */
@@ -1846,5 +1847,5 @@ class Wpadcenter_Admin {
 		$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
 		echo wp_json_encode( $array );
 		wp_die();
-	}
+  }
 }
