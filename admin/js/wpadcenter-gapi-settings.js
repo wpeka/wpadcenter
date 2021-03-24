@@ -72,6 +72,18 @@
 
 			}
 		);
+
+		$('.wpadcenter_copy_text').click(function(e) {
+			e.preventDefault();
+			let data = $(this).attr('data-attr');
+			document.addEventListener('copy', function(e) {
+				e.clipboardData.setData('text/plain', data);
+				e.preventDefault();
+			 }, true);
+		  
+			document.execCommand('copy');
+			alert('copied to clipboard!');
+		});
 	});
 
 })( window.jQuery );
