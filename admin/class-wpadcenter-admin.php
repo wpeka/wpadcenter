@@ -1817,6 +1817,7 @@ class Wpadcenter_Admin {
 		register_widget( 'Wpadcenter_Single_Ad_Widget' );
 	}
 
+	/*
 	 * Registers gutenberg block for single ads.
 	 *
 	 * @since 1.0.0
