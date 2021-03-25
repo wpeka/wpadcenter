@@ -342,7 +342,7 @@ class Wpadcenter_Public {
 	 */
 	public static function wpadcenter_set_clicks() {
 		global $wpdb;
-		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() ) {
+		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 			if ( wp_verify_nonce( $security, 'wpadcenter_set_clicks' ) ) {
 				if ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) {
