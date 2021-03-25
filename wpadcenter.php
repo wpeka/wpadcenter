@@ -16,7 +16,7 @@
  * Plugin Name:       WPAdCenter
  * Plugin URI:        https://wpadcenter.com
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
+ * Version:           2.0.0
  * Author:            WPEka Club
  * Author URI:        https://club.wpeka.com/
  * License:           GPL-2.0+
@@ -49,7 +49,7 @@ define( 'WPADCENTER_SETTINGS_FIELD', 'WPAdCenter-Settings' );
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WPADCENTER_VERSION', '1.0.0' );
+define( 'WPADCENTER_VERSION', '2.0.0' );
 
 if ( ! function_exists( 'adc_fs' ) ) {
 	/**

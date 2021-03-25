@@ -1,5 +1,7 @@
 {
   "name": "wpadcenter",
+  "version": "2.0.0",
+  "tested_up_to": "5.7",
   "dependencies": {
     "@coreui/coreui": "^3.4.0",
     "@coreui/vue": "^3.2.7",
