@@ -53,7 +53,10 @@ class Wpadcenter_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 		if ( ! shortcode_exists( 'wpadcenter_ad' ) ) {
-			add_shortcode( 'wpadcenter_ad', array( $this, 'wpadcenter_display_single_ad' ) );
+			add_shortcode( 'wpadcenter_ad', array( $this, 'wpadcenter_ad_shortcode' ) );
+		}
+		if ( ! shortcode_exists( 'wpadcenter_adgroup' ) ) {
+			add_shortcode( 'wpadcenter_adgroup', array( $this, 'wpadcenter_adgroup_shortcode' ) );
 		}
 	}
 
@@ -243,13 +246,22 @@ class Wpadcenter_Public {
 	 *
 	 * @since 1.0.0
 	 */
-	public function wpadcenter_display_single_ad( $atts ) {
+	public function wpadcenter_ad_shortcode( $atts ) {
+
+		$atts = shortcode_atts(
+			array(
+				'id'    => 0,
+				'align' => 'none',
+			),
+			$atts
+		);
 
 		$ad_id      = $atts['id'];
 		$attributes = array(
 			'classes' => 'wpadcenter-align' . $atts['align'],
 		);
-		echo $this->display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
+		return $this->display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
+
 	}
 
 	/**
@@ -329,7 +341,7 @@ class Wpadcenter_Public {
 		$single_ad_html .= '</a>';
 		$single_ad_html .= '</div>';
 
-		if ( self::wpadcenter_check_exclude_roles() ) {
+		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			Wpadcenter::wpadcenter_set_impressions( $ad_id );
 		}
 		return $single_ad_html;
@@ -342,7 +354,7 @@ class Wpadcenter_Public {
 	 */
 	public static function wpadcenter_set_clicks() {
 		global $wpdb;
-		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() ) {
+		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 			if ( wp_verify_nonce( $security, 'wpadcenter_set_clicks' ) ) {
 				if ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) {
@@ -374,10 +386,11 @@ class Wpadcenter_Public {
 
 		$user_roles = $current_user->roles;
 		$user_role  = array_shift( $user_roles );
+		$user_role  = '/' . $user_role . '/i';
 		// if current user is not signed in else if - check for excluded roles.
-		if ( '' === $user_role ) {
+		if ( '//i' === $user_role ) {
 			return true;
-		} elseif ( ! stripos( strtolower( $the_options['roles_selected'] ), strval( $user_role ) ) ) {
+		} elseif ( ! preg_match( $user_role, $the_options['roles_selected'] ) ) {
 			return true;
 		}
 		return false;
@@ -443,5 +456,124 @@ class Wpadcenter_Public {
 		if ( $footer_scripts ) {
 			echo "\r\n" . $footer_scripts . "\r\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
+	}
+
+	/**
+	 * Shortcode for adgroup ads.
+	 *
+	 * @param int $atts attributes.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_adgroup_shortcode( $atts ) {
+
+		$atts                = shortcode_atts(
+			array(
+				'adgroup_ids' => '',
+				'align'       => 'none',
+				'num_ads'     => 1,
+				'num_columns' => 1,
+			),
+			$atts
+		);
+		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
+		$atts['align']       = 'wpadcenter-align' . $atts['align'];
+
+		return $this->display_adgroup_ads( $atts ); // phpcs:ignore
+	}
+
+	/**
+	 * Get html for displaying ads from adgroups.
+	 *
+	 * @param array $attributes contains attributes for display function.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string $adgroup_html html for the ads to be displayed.
+	 */
+	public static function display_adgroup_ads( $attributes = array() ) {
+
+		wp_enqueue_style( 'wpadcenter-frontend' );
+
+		$default_attributes = array(
+			'adgroup_ids' => array(),
+			'align'       => 'wpadcenter-alignnone',
+			'num_ads'     => 1,
+			'num_columns' => 1,
+		);
+
+		$attributes = wp_parse_args( $attributes, $default_attributes );
+
+		$current_time = time();
+
+		$args = array(
+			'post_type'      => 'wpadcenter-ads',
+			'posts_per_page' => $attributes['num_ads'],
+			'tax_query'      => array( //phpcs:ignore
+				array(
+					'taxonomy' => 'wpadcenter-adgroups',
+					'field'    => 'id',
+					'terms'    => $attributes['adgroup_ids'],
+				),
+			),
+			'meta_query'     => array( //phpcs:ignore
+				array(
+					'key'     => 'wpadcenter_start_date',
+					'value'   => $current_time,
+					'type'    => 'numeric',
+					'compare' => '<=',
+				),
+				array(
+					'key'     => 'wpadcenter_end_date',
+					'value'   => $current_time,
+					'type'    => 'numeric',
+					'compare' => '>=',
+				),
+			),
+
+			'no_found_rows'  => true,
+		);
+
+		$ads = new WP_Query( $args );
+
+		if ( $ads->have_posts() ) {
+
+			$adgroup_html  = '';
+			$adgroup_html .= '<div class=' . $attributes['align'] . '>';
+
+			$col_count = 0;
+			$ad_count  = 0;
+			while ( $ads->have_posts() ) {
+
+				$ads->the_post();
+
+				if ( 0 === $col_count || intval( $attributes['num_columns'] ) === $col_count ) {
+					$adgroup_html .= '<div class="wpadcenter-adgroup-row">';
+				}
+
+				$ad_id                = get_the_ID();
+				$single_ad_attributes = array(
+					'classes' => 'wpadcenter-ad-spacing',
+				);
+				$adgroup_html        .= self::display_single_ad( $ad_id, $single_ad_attributes );
+				$ad_count++;
+				$col_count++;
+				if ( intval( $attributes['num_ads'] ) === $ad_count || intval( $attributes['num_columns'] ) === $col_count ) {
+					$adgroup_html .= '</div>';
+
+				}
+
+				if ( intval( $attributes['num_columns'] ) === $col_count ) {
+					$col_count = 0;
+				}
+			}
+			$adgroup_html .= '</div>';
+
+			return $adgroup_html;
+		} else {
+			return;
+
+		}
+
 	}
 }

@@ -138,8 +138,9 @@
 		display: none;
 	}
 </style>
-
-<div id="reports" class="wrap" v-cloak>
+<div class="wrap">
+<h2></h2>
+<div id="reports" v-cloak>
 	<c-tabs>
 		<c-tab title="Dashboard" active>
 			<c-card style="width: 100%; max-width: 100%">
@@ -303,4 +304,5 @@
 			</c-card>
 		</c-tab>
 	</c-tabs>
+</div>
 </div>
