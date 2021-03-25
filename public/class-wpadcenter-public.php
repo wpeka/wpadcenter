@@ -341,7 +341,7 @@ class Wpadcenter_Public {
 		$single_ad_html .= '</a>';
 		$single_ad_html .= '</div>';
 
-		if ( self::wpadcenter_check_exclude_roles() ) {
+		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			Wpadcenter::wpadcenter_set_impressions( $ad_id );
 		}
 		return $single_ad_html;
@@ -354,7 +354,7 @@ class Wpadcenter_Public {
 	 */
 	public static function wpadcenter_set_clicks() {
 		global $wpdb;
-		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() ) {
+		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 			if ( wp_verify_nonce( $security, 'wpadcenter_set_clicks' ) ) {
 				if ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) {
@@ -386,10 +386,11 @@ class Wpadcenter_Public {
 
 		$user_roles = $current_user->roles;
 		$user_role  = array_shift( $user_roles );
+		$user_role  = '/' . $user_role . '/i';
 		// if current user is not signed in else if - check for excluded roles.
-		if ( '' === $user_role ) {
+		if ( '//i' === $user_role ) {
 			return true;
-		} elseif ( ! stripos( strtolower( $the_options['roles_selected'] ), strval( $user_role ) ) ) {
+		} elseif ( ! preg_match( $user_role, $the_options['roles_selected'] ) ) {
 			return true;
 		}
 		return false;
