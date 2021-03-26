@@ -2097,42 +2097,26 @@ class Wpadcenter_Admin {
 		$array = get_post_meta( $post->ID, 'scripts', true );
 		wp_nonce_field( 'action', 'nonce' );
 		?>
-			<style>
-				.wpadcenter-left-cell {
-					width: 20%;
-					padding: 10px 10px;
-				}
-				.wpadcenter-right-cell {
-					width: 80%;
-					padding: 10px 10px;
-				}
-				.wpadcenter-right-cell > textarea {
-					width: 100%;
-				}
-				.wpadcenter-table tr td {
-					border: 1px solid rgba(0, 0, 0, 0.2) !important;
-				}
-			</style>
-			<table style="width:100%; border-collapse: collapse;" class="wpadcenter-table">
+			<table class="wpadcenter-table">
 				<tr>
 					<td class="wpadcenter-left-cell"><label for="disable_global_scripts"><?php esc_html_e( 'Disable Global Scripts', 'wpadcenter' ); ?></label></td>
 					<td class="wpadcenter-right-cell"><input type="checkbox" id="disable_global_scripts" name="disable_global_scripts" <?php checked( isset( $array['disable_global_scripts'] ) ? $array['disable_global_scripts'] : false, 'on' ); ?>></td>
 				</tr>
-				<tr style="vertical-align: top;">
+				<tr class="wpadcenter-table-tr">
 					<td class="wpadcenter-left-cell"><label for="header_scripts"><?php esc_html_e( 'Header Scripts', 'wpadcenter' ); ?></label></td>
 					<td class="wpadcenter-right-cell">
 						<textarea name="header_scripts" id="header_scripts" rows="6"><?php echo( isset( $array['header_scripts'] ) ? esc_attr( $array['header_scripts'] ) : '' ); ?></textarea>
 						<small><?php esc_html_e( 'These scripts will be printed in head section.', 'wpadcenter' ); ?></small>
 					</td>
 				</tr>
-				<tr style="vertical-align: top;">
+				<tr class="wpadcenter-table-tr">
 					<td class="wpadcenter-left-cell"><label for="body_scripts"><?php esc_html_e( 'Body Scripts', 'wpadcenter' ); ?></label></td>
 					<td class="wpadcenter-right-cell">
 						<textarea name="body_scripts" id="body_scripts" rows="6"><?php echo( isset( $array['body_scripts'] ) ? esc_attr( $array['body_scripts'] ) : '' ); ?></textarea>
 						<small><?php esc_html_e( 'These scripts will be printed in body section.', 'wpadcenter' ); ?></small>
 					</td>
 				</tr>
-				<tr style="vertical-align: top;">
+				<tr class="wpadcenter-table-tr">
 					<td class="wpadcenter-left-cell"><label for="footer_scripts"><?php esc_html_e( 'Footer Scripts', 'wpadcenter' ); ?></label></td>
 					<td class="wpadcenter-right-cell">
 						<textarea name="footer_scripts" id="footer_scripts" rows="6"><?php echo( isset( $array['footer_scripts'] ) ? esc_attr( $array['footer_scripts'] ) : '' ); ?></textarea>

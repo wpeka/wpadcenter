@@ -107,6 +107,7 @@
 
 	.wpadcenter-select {
 		display: block;
+		width: 200px;
 	}
 
 	#adgroup_select_input {
@@ -122,13 +123,39 @@
 	[v-cloak] {
 		display: none;
 	}
+
+	.wpadcenter-width-mod {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.wpadcenter-select-adgroup {
+		min-width: 150px;
+		margin-top: 10px;
+	}
+
+	.wpadcenter-datepicker {
+		height: 20px;
+		width: 20px;
+		fill: #0D86FF;
+		cursor: pointer;
+	}
+
+	#wpadcenter-select-ads {
+		max-width: 200px;
+	}
+	.wpadcenter-flex-mod {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
 </style>
 <div class="wrap">
 <h2></h2>
 <div id="reports" v-cloak>
 	<c-tabs>
 		<c-tab title="Dashboard" active>
-			<c-card style="width: 100%; max-width: 100%">
+			<c-card>
 				<c-card-header>
 					<c-card-title tag="h5"><?php esc_html_e( 'All-Time Summary', 'wpadcenter' ); ?></c-card-title>
 					<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports regarding clicks, views and CTR of all time.', 'wpadcenter' ); ?></c-card-subtitle>
@@ -192,7 +219,7 @@
 							<input type="hidden" ref="adgroups_security" name="adgroups_security" value="<?php echo esc_attr( wp_create_nonce( 'adgroups_security' ) ); ?>">
 							<c-row>
 								<c-col lg="12" md="12" sm="12" xs="12">
-								<v-select placeholder="Select Ad Group" :options="select_adgroup" label="name" @input="onSelectAdGroupChange" style="min-width: 150px; margin-top: 10px;"></v-select>
+								<v-select placeholder="Select Ad Group" :options="select_adgroup" label="name" @input="onSelectAdGroupChange" class="wpadcenter-select-adgroup"></v-select>
 								</c-col>
 							</c-row>
 						</c-card-header>
@@ -239,7 +266,7 @@
 									<template v-slot="{ inputValue, togglePopover }">
 										<c-input :value="inputValue" readonly>
 											<template v-slot:prepend-content>
-												<svg style="height: 20px; width: 20px; fill: #0D86FF; cursor: pointer;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" @click="togglePopover">
+												<svg class="wpadcenter-datepicker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" @click="togglePopover">
 													<path d="M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z"></path>
 												</svg>
 											</template>
@@ -253,7 +280,7 @@
 									<template v-slot="{ inputValue, togglePopover }">
 										<c-input :value="inputValue" readonly @change="onSelectAdGroupChange">
 											<template v-slot:prepend-content>
-												<svg style="height: 20px; width: 20px; fill: #0D86FF; cursor: pointer;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" @click="togglePopover">
+												<svg class="wpadcenter-datepicker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" @click="togglePopover">
 													<path d="M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z"></path>
 												</svg>
 											</template>
@@ -262,9 +289,9 @@
 								</v-date-picker>
 							</div>
 						</div>
-						<div class="wpadcenter-select" style="width: 200px;">
+						<div class="wpadcenter-select">
 							<label for="wpadcenter-select-ads"><?php esc_html_e( 'Choose ad ', 'wpadcenter' ); ?></label>
-							<v-select placeholder="Select ad" id="wpadcenter-select-ads" label="ad_title" :options="select_ad" taggable multiple style="max-width: 200px;" ref="wpadcenter_select_ads"  @input="onAdSelection">
+							<v-select placeholder="Select ad" id="wpadcenter-select-ads" label="ad_title" :options="select_ad" taggable multiple ref="wpadcenter_select_ads"  @input="onAdSelection">
 							</v-select>
 							<input type="hidden" ref="selectad_security" name="selectad_security" value="<?php echo esc_attr( wp_create_nonce( 'selectad_security' ) ); ?>">
 						</div>
@@ -277,7 +304,7 @@
 				<input type="hidden" name="exportcsv_security" value="<?php echo esc_attr( wp_create_nonce( 'exportcsv_security' ) ); ?>" />
 			</form>
 			<c-card>
-				<c-card-header style="display: flex; align-items: center; justify-content: space-between;">
+				<c-card-header class="wpadcenter-flex-mod">
 					<div>
 						<c-card-title tag="h5"><?php esc_html_e( 'Detailed Reports', 'wpadcenter' ); ?></c-card-title>
 						<c-card-subtitle tag="p"><?php esc_html_e( 'Generated custom reports will be displayed below', 'wpadcenter' ); ?></c-card-subtitle>

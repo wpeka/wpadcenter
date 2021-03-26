@@ -21,7 +21,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 		display: none;
 	}
 </style>
-<div id="app" style="width: 750px;" v-cloak>
+<div id="app" v-cloak>
 	<c-tabs ref="active_tab">
 		<c-tab title="General" active href="#general">
 		<?php do_action( 'wpadcenter_before_general_settings' ); ?>
@@ -58,13 +58,13 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 						<input type="hidden" name="enable_scripts_field" v-model="enable_scripts">
 					</div>
 					<c-switch ref="enable_scripts" v-model="enable_scripts" id="inline-form-enable_scripts" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_scripts'] ); ?> v-on:update:checked="enable_scripts = !enable_scripts"></c-switch>
-					<div class="enable_scripts_enabled" v-show="enable_scripts" style="margin-top: 20px;">
-						<label for="header_scripts_field" class="form-label" style="margin-top: 0px;">Header Scripts</label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the head section on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-						<textarea id="header_scripts_field" :placeholder="scriptInfo" name="header_scripts_field" class="form-control" style="width: 100%;" rows="6"><?php echo esc_html( stripslashes( $the_options['header_scripts'] ) ); ?></textarea>
+					<div class="enable_scripts_enabled" v-show="enable_scripts">
+						<label for="header_scripts_field" class="form-label header-scripts">Header Scripts</label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the head section on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+						<textarea id="header_scripts_field" :placeholder="scriptInfo" name="header_scripts_field" class="form-control" rows="6"><?php echo esc_html( stripslashes( $the_options['header_scripts'] ) ); ?></textarea>
 						<label for="body_scripts_field" class="form-label">Body Scripts</label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the body section on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-						<textarea id="body_scripts_field" :placeholder="scriptInfo" name="body_scripts_field" class="form-control" style="width: 100%;" rows="6"><?php echo esc_html( stripslashes( $the_options['body_scripts'] ) ); ?></textarea>
+						<textarea id="body_scripts_field" :placeholder="scriptInfo" name="body_scripts_field" class="form-control" rows="6"><?php echo esc_html( stripslashes( $the_options['body_scripts'] ) ); ?></textarea>
 						<label for="footer_scripts_field" class="form-label">Footer Scripts</label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the footer section on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-						<textarea id="footer_scripts_field" :placeholder="scriptInfo" name="footer_scripts_field" class="form-control" style="width: 100%;" rows="6"><?php echo esc_html( stripslashes( $the_options['footer_scripts'] ) ); ?></textarea>
+						<textarea id="footer_scripts_field" :placeholder="scriptInfo" name="footer_scripts_field" class="form-control" rows="6"><?php echo esc_html( stripslashes( $the_options['footer_scripts'] ) ); ?></textarea>
 					</div>
 				</c-card-body>
 			</c-card>
@@ -84,10 +84,10 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 					<input type="hidden" name="enable_ads_txt_field" v-model="enable_ads_txt">
 				</div>
 				<c-switch ref="enable_ads_txt" v-model="enable_ads_txt" id="inline-form-enable_ads_txt" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_ads_txt'] ); ?> v-on:update:checked="onChangeEnableAdsTxt"></c-switch>
-				<div class="enable_ads_txt_enabled" v-show="enable_ads_txt" style="margin-top: 20px;">
-					<label for="ads_txt_content" style="margin-bottom: 7px; margin-right: 10px;"><?php esc_html_e( 'Content', 'wpadcenter' );?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Additional records to add to the file, one record per line.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-					<textarea id="ads_txt_content" name="ads_txt_content_field" class="form-control" style="width: 100%; margin-bottom: 1em;" rows="6" placeholder="google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0" v-c-tooltip="'<?php esc_html_e( '', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['ads_txt_content'] ) ); ?></textarea>
-					<c-spinner class="ads_txt_spinner" style="display:block; margin: 10px 0px;" color="dark" grow></c-spinner><span class="ads_txt_problems"></span></td>
+				<div class="enable_ads_txt_enabled" v-show="enable_ads_txt">
+					<label for="ads_txt_content" class="ads-txt-label"><?php esc_html_e( 'Content', 'wpadcenter' );?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Additional records to add to the file, one record per line.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+					<textarea id="ads_txt_content" name="ads_txt_content_field" class="form-control" rows="6" placeholder="google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0" v-c-tooltip="'<?php esc_html_e( '', 'wpadcenter' ); ?>'"><?php echo esc_html( stripslashes( $the_options['ads_txt_content'] ) ); ?></textarea>
+					<c-spinner class="ads_txt_spinner" color="dark" grow></c-spinner><span class="ads_txt_problems"></span></td>
 					<input type="button" class="button" name="check_ads_txt_problems" value="Check for Problems" id="check_ads_txt_problems" />
 				</div>
 				</c-card-body>
@@ -107,9 +107,9 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 						</select>
 
 					<?php else : ?>
-						<label for="mapi-code" style="margin-bottom: 10px;"><?php esc_html_e( 'Token', 'wpadcenter' ); ?></label>			
+						<label for="mapi-code" class="wpadcenter-label-margin-bottom"><?php esc_html_e( 'Token', 'wpadcenter' ); ?></label>			
 						<c-input type="text" id="mapi-code" value="" placeholder="<?php esc_html_e( 'Copy and paste the token after you have clicked connect to AdSense', 'wpadcenter' ); ?>"></c-input>
-						<p style="margin-top: 10px;"></p>
+						<p class="wpadcenter-p-margin-mod"></p>
 						<div class="token-submit">
 							<button class="button init-gauthentication"><?php esc_html_e( 'Connect to AdSense', 'wpadcenter' ); ?></button>
 								<button id="mapi-confirm-code" class="button">
@@ -117,7 +117,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 								</button>
 							<span class="spinner"></span>
 						</div>
-						<p style="margin-top: 10px;"><?php esc_html_e( 'This will open another window. Please allow access to your AdSense account. Copy the text you get at the end and come back here.', 'wpadcenter' ); ?></p>
+						<p class="wpadcenter-p-margin-mod"><?php esc_html_e( 'This will open another window. Please allow access to your AdSense account. Copy the text you get at the end and come back here.', 'wpadcenter' ); ?></p>
 					<?php endif; ?>
 				</c-card-body>
 			</c-card>
