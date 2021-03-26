@@ -23,6 +23,7 @@ label {
 .ad-toggle {
 	display: flex;
 	align-items: center;
+	margin-bottom: 10px;
 }
 
 .wpadcenter-margin-mod {
@@ -41,6 +42,14 @@ label {
 
 .form-label {
 	margin: 10px 0px 7px 0px;
+}
+
+.enable_scripts_enabled > label {
+	margin-right: 10px;
+}
+.c-icon {
+	vertical-align: text-top;
+	margin-left: -5px;
 }
  #wpcontent {
 	background: #F3F6FF;

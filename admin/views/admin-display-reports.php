@@ -61,21 +61,6 @@
 		width: auto;
 	}
 
-	.alert-dismissible .close {
-		position: absolute;
-		top: 0;
-		padding: 0;
-		margin-right: 4px;
-	}
-
-	.alert-dismissible .close:focus {
-		outline: none;
-	}
-
-	.close {
-		opacity: 0.5;
-	}
-
 	.inline-flex {
 		display: flex;
 		align-items: center;
@@ -145,7 +130,7 @@
 		<c-tab title="Dashboard" active>
 			<c-card style="width: 100%; max-width: 100%">
 				<c-card-header>
-					<c-card-title tag="h5"><?php esc_html_e( 'All time summary', 'wpadcenter' ); ?></c-card-title>
+					<c-card-title tag="h5"><?php esc_html_e( 'All-Time Summary', 'wpadcenter' ); ?></c-card-title>
 					<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports regarding clicks, views and CTR of all time.', 'wpadcenter' ); ?></c-card-subtitle>
 				</c-card-header>
 				<c-card-body>
@@ -176,7 +161,7 @@
 					<c-card>
 						<c-card-header>
 							<c-card-title tag="h5"><?php esc_html_e( 'All-Time Top 10 Clicks', 'wpadcenter' ); ?></c-card-title>
-							<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports of top 10 ads as per clicks', 'wpadcenter' ); ?></c-card-subtitle>
+							<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports of top 10 ads as per clicks.', 'wpadcenter' ); ?></c-card-subtitle>
 						</c-card-header>
 						<c-card-body>
 							<c-data-table :fields="topTenClicksFields" :items="topTenClicksOptions">
@@ -188,7 +173,7 @@
 					<c-card>
 						<c-card-header>
 							<c-card-title tag="h5"><?php esc_html_e( 'All-Time Top 10 Click Through Rate', 'wpadcenter' ); ?></c-card-title>
-							<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports of top 10 ads as per CTR', 'wpadcenter' ); ?></c-card-subtitle>
+							<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports of top 10 ads as per CTR.', 'wpadcenter' ); ?></c-card-subtitle>
 						</c-card-header>
 						<c-card-body>
 							<c-data-table :fields="topTenCTRFields" :items="topTenCTROptions">
@@ -198,14 +183,18 @@
 				</c-col>
 				<c-col lg="4" md="12" sm="12">
 					<c-card>
-						<c-card-header style="display: flex; align-items: center; justify-content: space-between;">
+						<c-card-header>
 							<div>
 								<c-card-title tag="h5"><?php esc_html_e( 'All-Time By Ad Group', 'wpadcenter' ); ?></c-card-title>
-								<c-card-subtitle tag="p"><?php esc_html_e( 'Shows Reports of all ads related to ad-group', 'wpadcenter' ); ?></c-card-subtitle>
+								<c-card-subtitle tag="p"><?php esc_html_e( 'Shows reports of all ads related to ad-group.', 'wpadcenter' ); ?></c-card-subtitle>
 							</div>
 							<input type="hidden" ref="adgroups_ajaxurl" name="adgroups_ajaxurl" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 							<input type="hidden" ref="adgroups_security" name="adgroups_security" value="<?php echo esc_attr( wp_create_nonce( 'adgroups_security' ) ); ?>">
-							<v-select placeholder="Select Ad Group" :options="select_adgroup" label="name" @input="onSelectAdGroupChange" style="min-width: 150px;"></v-select>
+							<c-row>
+								<c-col lg="12" md="12" sm="12" xs="12">
+								<v-select placeholder="Select Ad Group" :options="select_adgroup" label="name" @input="onSelectAdGroupChange" style="min-width: 150px; margin-top: 10px;"></v-select>
+								</c-col>
+							</c-row>
 						</c-card-header>
 						<c-card-body>
 						<c-row style="margin: 0px 10px 20px 10px;" v-if="totalAdGroupClicks != null || totalAdGroupViews !=  null || totalAdGroupCTR != null">
@@ -239,13 +228,13 @@
 			<c-card>
 				<c-card-header>
 					<c-card-title tag="h5"><?php esc_html_e( 'Custom Reports', 'wpadcenter' ); ?></c-card-title>
-					<c-card-subtitle tag="p"><?php esc_html_e( 'Choose from the options below to generate custom reports', 'wpadcenter' ); ?></c-card-subtitle>
+					<c-card-subtitle tag="p"><?php esc_html_e( 'Choose from the options below to generate custom reports.', 'wpadcenter' ); ?></c-card-subtitle>
 				</c-card-header>
 				<c-card-body >
 						<div class="wpads-custom-reports">
 							<div class="wpadcenter-date">
 							<div class="wpadcenter-date-item">
-								<label><?php esc_html_e( 'Start Date:', 'wpadcenter' ); ?></label>
+								<label><?php esc_html_e( 'Start date', 'wpadcenter' ); ?></label>
 								<v-date-picker class="inline-block h-full" v-model="startDate">
 									<template v-slot="{ inputValue, togglePopover }">
 										<c-input :value="inputValue" readonly>
@@ -259,7 +248,7 @@
 								</v-date-picker>
 							</div>
 							<div class="wpadcenter-date-item">
-								<label><?php esc_html_e( 'End Date:', 'wpadcenter' ); ?></label>
+								<label><?php esc_html_e( 'End date', 'wpadcenter' ); ?></label>
 								<v-date-picker class="inline-block h-full" v-model="endDate">
 									<template v-slot="{ inputValue, togglePopover }">
 										<c-input :value="inputValue" readonly @change="onSelectAdGroupChange">
@@ -274,8 +263,8 @@
 							</div>
 						</div>
 						<div class="wpadcenter-select" style="width: 200px;">
-							<label for="wpadcenter-select-ads"><?php esc_html_e( 'Choose Ad: ', 'wpadcenter' ); ?></label>
-							<v-select placeholder="Select Ad" id="wpadcenter-select-ads" label="ad_title" :options="select_ad" taggable multiple style="max-width: 200px;" ref="wpadcenter_select_ads"  @input="onAdSelection">
+							<label for="wpadcenter-select-ads"><?php esc_html_e( 'Choose ad ', 'wpadcenter' ); ?></label>
+							<v-select placeholder="Select ad" id="wpadcenter-select-ads" label="ad_title" :options="select_ad" taggable multiple style="max-width: 200px;" ref="wpadcenter_select_ads"  @input="onAdSelection">
 							</v-select>
 							<input type="hidden" ref="selectad_security" name="selectad_security" value="<?php echo esc_attr( wp_create_nonce( 'selectad_security' ) ); ?>">
 						</div>
@@ -291,7 +280,7 @@
 				<c-card-header style="display: flex; align-items: center; justify-content: space-between;">
 					<div>
 						<c-card-title tag="h5"><?php esc_html_e( 'Detailed Reports', 'wpadcenter' ); ?></c-card-title>
-						<c-card-subtitle tag="p"><?php esc_html_e( 'Generated Detailed Reports are displayed', 'wpadcenter' ); ?></c-card-subtitle>
+						<c-card-subtitle tag="p"><?php esc_html_e( 'Generated custom reports will be displayed below', 'wpadcenter' ); ?></c-card-subtitle>
 					</div>
 					<c-button color="info" @click="onExportCSV" :disabled="detailedReportsOptions.length === 0">Export CSV</c-button>
 				</c-card-header>
