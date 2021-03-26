@@ -28,6 +28,7 @@ var vm = new Vue({
             roles_security: null,
             roles: [],
             roles_selected: [],
+            scriptInfo: '<script type="text/javascript">console.log( "hello world" );</script>'
         }
     },
     methods: {

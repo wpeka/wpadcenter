@@ -33,3 +33,26 @@
   .Wpadcenter-gutenberg-container .components-placeholder{
     background-color:#F3F6FF;
   }
+  .wpadcenter-left-cell {
+    width: 20%;
+    padding: 10px 10px;
+  }
+  .wpadcenter-right-cell {
+    width: 80%;
+    padding: 10px 10px;
+  }
+  .wpadcenter-right-cell > textarea {
+    width: 100%;
+  }
+  .wpadcenter-table tr td {
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .wpadcenter-table {
+    width:100%;
+    border-collapse: collapse;
+  }
+
+  .wpadcenter-table-tr {
+    vertical-align: top;
+  }
