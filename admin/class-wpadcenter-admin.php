@@ -1493,6 +1493,10 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_save_ad_meta( $post_id ) {
 
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return $post_id;
+		}
+
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
@@ -1899,7 +1903,7 @@ class Wpadcenter_Admin {
 		if ( is_admin() ) {
 			$my_current_screen = get_current_screen();
 
-			if ( isset( $my_current_screen->post_type ) && ('wpadcenter-ads_page_wpadcenter-reports' === $my_current_screen->base || 'wpadcenter-ads_page_wpadcenter-settings' === $my_current_screen->base) && (in_array( 'forms', $to_dos, true ) || in_array( 'revisions', $to_dos, true )) ) {
+			if ( isset( $my_current_screen->post_type ) && ( 'wpadcenter-ads_page_wpadcenter-reports' === $my_current_screen->base || 'wpadcenter-ads_page_wpadcenter-settings' === $my_current_screen->base ) && ( in_array( 'forms', $to_dos, true ) || in_array( 'revisions', $to_dos, true ) ) ) {
 				$key = array_search( 'forms', $to_dos, true );
 				unset( $to_dos[ $key ] );
 				$key = array_search( 'revisions', $to_dos, true );
@@ -1918,7 +1922,7 @@ class Wpadcenter_Admin {
 		register_widget( 'Wpadcenter_Single_Ad_Widget' );
 	}
 
-	/*
+	/**
 	 * Registers gutenberg block for single ads.
 	 *
 	 * @since 1.0.0
@@ -2039,7 +2043,7 @@ class Wpadcenter_Admin {
 
 	}
 
-  /**
+	/**
 	 * Ajax when ad is selected in reports custom-reports page.
 	 */
 	public function wpadcenter_get_roles() {
@@ -2069,5 +2073,30 @@ class Wpadcenter_Admin {
 		$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
 		echo wp_json_encode( $array );
 		wp_die();
-  }
+	}
+
+	/**
+	 * Registers adgroups widget.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_adgroup_widget() {
+		register_widget( 'Wpadcenter_Adgroup_Widget' );
+	}
+
+	/**
+	 * Remove permalink from create ad page.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_remove_permalink() {
+
+		global $post_type;
+
+		if ( 'wpadcenter-ads' === $post_type ) {
+			echo '<style>#edit-slug-box {display:none;}</style>';
+		}
+	}
+
+
 }
