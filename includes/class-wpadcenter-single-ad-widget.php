@@ -113,7 +113,7 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		if ( $ads ) {
 			?>
 			<p>
-				<lable for="title"><?php echo esc_html__( 'Title : ', 'wpadcenter' ); ?></lable>
+				<label for="title"><?php echo esc_html__( 'Title : ', 'wpadcenter' ); ?></label>
 				<input class="widefat" type="text" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
 				id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
 				value="<?php echo esc_attr( $title ); ?>">

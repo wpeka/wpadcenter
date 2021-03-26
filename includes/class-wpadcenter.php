@@ -145,6 +145,11 @@ class Wpadcenter {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-single-ad-widget.php';
 
 		/**
+		 * The class responsible for defining adgroup widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-adgroup-widget.php';
+
+		/**
 		 * The class responsible for defining single ad elementor widget.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
@@ -205,12 +210,15 @@ class Wpadcenter {
 		$this->loader->add_filter( 'style_loader_src', $plugin_admin, 'wpadcanter_dequeue_styles' );
 		$this->loader->add_filter( 'print_styles_array', $plugin_admin, 'wpadcenter_remove_forms_style' );
 		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_single_ad_widget' );
+		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_adgroup_widget' );
 		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_gutenberg_blocks' );
 		$this->loader->add_filter( 'block_categories', $plugin_admin, 'wpadcenter_gutenberg_block_categories', 10, 1 );
 		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'wpadcenter_register_rest_fields' );
 		$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_admin, 'wpadcenter_register_gutenberg_scripts' );
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'wpadcenter_page_posts_scripts' );
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_scripts' );
+		$this->loader->add_action( 'admin_head', $plugin_admin, 'wpadcenter_remove_permalink' );
+  
 	}
 
 	/**
@@ -277,7 +285,7 @@ class Wpadcenter {
 	 * What type of request is this?
 	 *
 	 * @param string $type admin, ajax, cron or frontend.
-	 * 
+	 *
 	 * @return bool
 	 */
 	public static function is_request( $type ) {
