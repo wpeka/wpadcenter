@@ -23,6 +23,7 @@ label {
 .ad-toggle {
 	display: flex;
 	align-items: center;
+	margin-bottom: 10px;
 }
 
 .wpadcenter-margin-mod {
@@ -41,6 +42,51 @@ label {
 
 .form-label {
 	margin: 10px 0px 7px 0px;
+}
+
+.header-scripts {
+	margin-top: 0px;
+}
+
+.enable_scripts_enabled > label {
+	margin-right: 10px;
+}
+.c-icon {
+	vertical-align: text-top;
+	margin-left: -5px;
+}
+
+#app {
+	width: 750px;
+}
+.enable_scripts_enabled {
+	margin-top: 20px;
+}
+
+.form-control {
+	width: 100%;
+}
+.enable_ads_txt_enabled {
+	margin-top: 20px;
+}
+.ads-txt-label {
+	margin-bottom: 7px;
+	margin-right: 10px;
+}
+#ads_txt_content {
+	width: 100%;
+	margin-bottom: 1em;
+}
+.ads_txt_spinner {
+	display:block;
+	margin: 10px 0px;
+}
+.wpadcenter-p-margin-mod {
+	margin-top: 10px;
+}
+
+.wpadcenter-label-margin-bottom {
+	margin-bottom: 10px;
 }
  #wpcontent {
 	background: #F3F6FF;

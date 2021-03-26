@@ -266,15 +266,15 @@ var reports = new Vue({
 			this.selectedAds = data;
 			let flag = false;
 			if( this.startDate === null || this.endDate === null ) {
-				this.validationError = "Select Start Date and End Date to generate reports";
+				this.validationError = "Start date And/or End date cannot be empty.";
 				flag = true;
 			}
 			else if( this.startDate > this.endDate ) {
-				this.validationError = "Start Date cannot be greater than End Date";
+				this.validationError = "Start date cannot be greater than End date.";
 				flag = true;
 			}
 			else if( data.length === 0 ) {
-				this.validationError = "Please Select Ad to generate Reports";
+				this.validationError = "You must choose an ad to generate reports.";
 				flag = true;
 			}
 			if ( flag ) {
