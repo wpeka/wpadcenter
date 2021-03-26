@@ -2081,7 +2081,7 @@ class Wpadcenter_Admin {
 
 			add_meta_box(
 				'wpadcenter_scripts',
-				__( 'WPAdCenter Scripts', 'myplugin_textdomain' ),
+				__( 'WPAdCenter Scripts', 'wpadcenter' ),
 				array( $this, 'wpadcenter_page_posts_metabox_render' ),
 				$screen,
 				'normal',
