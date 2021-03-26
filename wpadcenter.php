@@ -142,3 +142,27 @@ function run_wpadcenter() {
 
 }
 run_wpadcenter();
+
+/**
+ * Wpadcenter display single ad template.
+ *
+ * @param array $atts attributes/parameters for shortcode.
+ *
+ * @return void echos html to render on frontend
+ */
+function wpadcenter_display_ad( $atts ) {
+	$shortcode = '[wpadcenter_ad id=' . $atts['id'] . ' align=' . $atts['align'] . ']';
+	echo do_shortcode( $shortcode );
+}
+
+/**
+ * Wpadcenter display ad group.
+ *
+ * @param array $atts attributes/parameters for shortcode.
+ *
+ * @return void echos html to render on frontend
+ */
+function wpadcenter_display_adgroup( $atts ) {
+	$shortcode = '[wpadcenter_adgroup adgroup_ids=' . $atts['adgroup_ids'] . ' align=' . $atts['align'] . ' num_ads=' . $atts['num_ads'] . ' num_columns=' . $atts['num_columns'] . ']';
+	echo do_shortcode( $shortcode );
+}

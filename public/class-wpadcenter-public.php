@@ -402,11 +402,31 @@ class Wpadcenter_Public {
 	 * @since 1.0.1
 	 */
 	public function wpadcenter_template_redirect() {
-		global $post;
+		global $wp_query;
+		$post_id     = isset( $wp_query->post->ID ) ? $wp_query->post->ID : 0;
 		$the_options = Wpadcenter::wpadcenter_get_settings();
 
 		if ( is_admin() || defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) || ! $the_options['enable_scripts'] ) {
 			return;
+		}
+
+		$body_open_supported = function_exists( 'wp_body_open' ) && version_compare( get_bloginfo( 'version' ), '5.2', '>=' );
+
+		if ( is_singular() ) {
+			$disable_global_scripts = get_post_meta( $post_id, 'scripts', true );
+
+			add_action( 'wp_head', array( $this, 'wpadcenter_output_header_post' ) );
+			if ( $body_open_supported ) {
+				add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_post' ) );
+			}
+			add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_post' ) );
+			if ( 'off' === $disable_global_scripts['disable_global_scripts'] ) {
+				add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
+				if ( $body_open_supported ) {
+					add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
+				}
+				add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
+			}
 		}
 
 		$body_open_supported = function_exists( 'wp_body_open' ) && version_compare( get_bloginfo( 'version' ), '5.2', '>=' );
@@ -416,6 +436,54 @@ class Wpadcenter_Public {
 				add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
 			}
 			add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
+		}
+	}
+
+	/**
+	 * Output header scripts for post.
+	 *
+	 * @since 1.0.1
+	 */
+	public function wpadcenter_output_header_post() {
+		global $wp_query;
+		if ( isset( $wp_query->post->ID ) ) {
+			$post_id = $wp_query->post->ID; // gets the current post id displayed on screen.
+			$array   = get_post_meta( $post_id, 'scripts', true );
+			if ( isset( $array['header_scripts'] ) ) {
+				echo "\r\n" . $array['header_scripts'] . "\r\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+		}
+	}
+
+	/**
+	 * Output body scripts for post.
+	 *
+	 * @since 1.0.1
+	 */
+	public function wpadcenter_output_body_post() {
+		global $wp_query;
+		if ( isset( $wp_query->post->ID ) ) {
+			$post_id = $wp_query->post->ID; // gets the current post id displayed on screen.
+			$array   = get_post_meta( $post_id, 'scripts', true );
+			if ( isset( $array['body_scripts'] ) ) {
+				echo "\r\n" . $array['body_scripts'] . "\r\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+		}
+	}
+
+	/**
+	 * Output footer scripts for post.
+	 *
+	 * @since 1.0.1
+	 */
+	public function wpadcenter_output_footer_post() {
+		global $wp_query;
+		if ( isset( $wp_query->post->ID ) ) {
+			$post_id = $wp_query->post->ID; // gets the current post id displayed on screen.
+			$array   = get_post_meta( $post_id, 'scripts', true );
+			if ( isset( $array['footer_scripts'] ) ) {
+				echo "\r\n" . $array['footer_scripts'] . "\r\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
 		}
 	}
 
