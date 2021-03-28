@@ -33,9 +33,6 @@ Display banner images or ads from ad networks like Google AdSense, Media.net, an
 - Generates ads.txt with custom content.
 - Customizable banner sizes supported (Pro feature).
 - Unlimited advertiser accounts (Pro feature).
-- Geo targeted ads displayed ads to audiences at specific locations (Pro feature).
-- Allow advertisers to signup on your website using a signup form (Pro feature).
-- Paypal integration to accept payments online from advertisers (Pro feature).
 
 == Upgrade to Pro ==
 
@@ -45,9 +42,9 @@ Get more from your WPAdCenter. Upgrade to the [Pro version](https://club.wpeka.c
 
 If you like this plugin, then consider checking out our other projects:
 
-- [WP Legal Pages](https://club.wpeka.com/product/wplegalpages/?utm_source=wporg&utm_medium=wpadcenter&utm_campaign=wplegalpages&utm_content=wp-legal-pages): Generate 25+ legal policy pages for your WordPress website in just a few minutes, including, Privacy Policy, Terms & Conditions, Cookie Policy and many more.
-- [WP Cookie Consent](https://club.wpeka.com/product/wp-gdpr-cookie-consent/?utm_source=wporg&utm_medium=wpadcenter&utm_campaign=wp-cookie-consent&utm_content=wp-cookie-consent): Display a customized cookie consent notice (for GDPR), and "Do Not Sell" opt-out notice (for CCPA). Get granular consent and record a consent log.
-- [WP Local Plus](https://club.wpeka.com/product/wp-local-plus/?utm_source=wporg&utm_medium=wpadcenter&utm_campaign=wplocalplsu&utm_content=wp-local-plus): A local business directory plugin for WordPress websites. Pull business data directly from Google Places and City Grid.
+- [WP Legal Pages](https://wplegalpages.com/?utm_source=wporg&utm_medium=referral&utm_campaign=wpadcenter): Generate 25+ legal policy pages for your WordPress website in just a few minutes, including, Privacy Policy, Terms & Conditions, Cookie Policy and many more.
+- [WP Cookie Consent](https://wplegalpages.com/cookie-consent-banner-on-your-website/?utm_source=wporg&utm_medium=referral&utm_campaign=wpadcenter): Display a customized cookie consent notice (for GDPR), and "Do Not Sell" opt-out notice (for CCPA). Get granular consent and record a consent log.
+- [WPeka Woo Auction Software](https://wpauctionsoftware.com/?utm_source=wporg&utm_medium=referral&utm_campaign=wpadcenter): Host eBay like auctions or Simple / Reverse / Penny Auctions on your WooCommerce website.
 
 == Installation ==
 

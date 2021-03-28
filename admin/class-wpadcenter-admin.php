@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -228,7 +227,7 @@ class Wpadcenter_Admin {
 		);
 		wp_register_script(
 			$this->plugin_name . '-main',
-			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-main' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-main.js',
 			array( 'jquery' ),
 			$this->version,
 			false
@@ -250,21 +249,21 @@ class Wpadcenter_Admin {
 
 		wp_register_script(
 			$this->plugin_name . 'adscheduler',
-			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-adscheduler' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-adscheduler.js',
 			array( 'jquery' ),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-gettingstarted',
-			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-gettingstarted' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-gettingstarted.js',
 			array( 'jquery' ),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-reports',
-			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-admin-reports' . WPADCENTER_SCRIPT_SUFFIX . '.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-reports.js',
 			array(),
 			$this->version,
 			false
@@ -608,10 +607,8 @@ class Wpadcenter_Admin {
 			'start-date'      => __( 'Start Date', 'wpadcenter' ),
 			'end-date'        => __( 'End Date', 'wpadcenter' ),
 		);
-		if ( get_option( 'wpadcenter_pro_active' ) ) {
-			$columns['advertiser'] = __( 'Advertiser', 'wpadcenter' );
-		}
-		return $columns;
+
+		return apply_filters( 'wpadcenter_manage_edit_ads_columns', $columns );
 	}
 
 	/**
@@ -629,10 +626,8 @@ class Wpadcenter_Admin {
 			'number-of-ads'        => __( 'Number of ads', 'wpadcenter' ),
 			'number-of-active-ads' => __( 'Number of active ads', 'wpadcenter' ),
 		);
-		if ( get_option( 'wpadcenter_pro_active' ) ) {
-			$columns['advertiser'] = __( 'Advertiser', 'wpadcenter' );
-		}
-		return $columns;
+
+		return apply_filters( 'wpadcenter_manage_edit_adgroups_columns', $columns );
 	}
 	/**
 	 * Callback function for reports menu.
@@ -1209,10 +1204,8 @@ class Wpadcenter_Admin {
 					echo sprintf( '%d clicks / %d views / %s CTR', esc_html( $record->ad_clicks ), esc_html( $record->ad_impressions ), esc_html( $ctr ) );
 				}
 				break;
-			default:
-				echo '-';
-				break;
 		}
+		do_action( 'wpadcenter_manage_ads_column_values', $column, $ad_id );
 	}
 
 
@@ -1282,11 +1275,8 @@ class Wpadcenter_Admin {
 					}
 				}
 				break;
-			default:
-				break;
 		}
-		$value = $output;
-		return $value;
+		return do_action( 'wpadcenter_manage_ad_groups_column_values', $column, $term_id );
 	}
 
 
@@ -1357,6 +1347,8 @@ class Wpadcenter_Admin {
 			'normal',
 			'high'
 		);
+
+		do_action( 'wpadcenter_add_meta_boxes', $post );
 
 	}
 
@@ -1553,6 +1545,8 @@ class Wpadcenter_Admin {
 				update_post_meta( $post_id, 'wpadcenter_ads_stats', $meta );
 			}
 		}
+
+		do_action( 'wpadcenter_save_ad_meta', $raw_data, $post_id );
 
 	}
 
@@ -2096,6 +2090,8 @@ class Wpadcenter_Admin {
 
 	/**
 	 * Header, body and footer scripts meta boxes render on pages and/or posts.
+	 *
+	 * @param Object $post Post object.
 	 */
 	public function wpadcenter_page_posts_metabox_render( $post ) {
 		$array = get_post_meta( $post->ID, 'scripts', true );
@@ -2158,8 +2154,8 @@ class Wpadcenter_Admin {
 		);
 		update_post_meta( $post_id, 'scripts', $array );
 	}
-  
-  /*
+
+	/**
 	 * Registers adgroups widget.
 	 *
 	 * @since 1.0.0

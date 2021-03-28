@@ -6,6 +6,7 @@
  *
  * @package Wpadcenter
  */
+
 (function( $ ) {
 	'use strict';
 
@@ -36,14 +37,14 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
-	
-	 $( document ).ready(
+
+	$( document ).ready(
 		function() {
 			$( document ).on(
 				'click',
 				'#wpadcenter_ad',
 				function() {
-					let ad_id = $( this ).data( 'value' );
+					var ad_id   = $( this ).data( 'value' );
 					var request = {
 						action: "set_clicks",
 						ad_id: ad_id,
