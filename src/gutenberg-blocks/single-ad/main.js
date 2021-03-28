@@ -1,8 +1,10 @@
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 
 const {registerBlockType} = wp.blocks;
 const apiFetch = wp.apiFetch;
 const { Placeholder } = wp.components;
+const { __, }       = wp.i18n;
+
 
 
 
@@ -13,8 +15,8 @@ import AdAlignment from '../ad-alignment-component';
 
 registerBlockType('wpadcenter/single-ad',{
 
-     title:'WPAdCenter Single Ad',
-     description: 'Block to generate WPAdCenter single ad',
+     title:__('WPAdCenter Single Ad','wpadcenter'),
+     description: __('Block to generate WPAdCenter single ad','wpadcenter'),
      icon:'flag',
      category:'wpadcenter',
 
@@ -109,12 +111,12 @@ const onAdSelection = ( selection ) => {
     }
 
 
-       return <div className="Wpadcenter-gutenberg-container" styles={{zIndex:"20"}}>
+       return <div className="Wpadcenter-gutenberg-container">
        { !! props.isSelected ? (
 
        <Placeholder label="WPAdCenter Single Ad"  isColumnLayout="true">
 
-      <h3 style={{fontWeight:"300",textAlign:"center"}}>Select Ad</h3>
+      <h3 style={{fontWeight:"300",textAlign:"center",fontSize:"medium"}}>{__('Select Ad','wpadcenter')}</h3>
        <div style={{display:"flex",justifyContent:"center"}}>
        
        <AsyncSelect

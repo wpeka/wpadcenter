@@ -14,7 +14,9 @@
      ...defaultConfig,
      entry: {
  
-         singlead:'./src/gutenberg-blocks/single-ad/main.js'
+         singlead:'./src/gutenberg-blocks/single-ad/main.js',
+         adgroup:'./src/gutenberg-blocks/adgroup/adgroup-main.js'
+
  
      },
      output: {

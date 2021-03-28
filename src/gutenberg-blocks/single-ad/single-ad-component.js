@@ -1,5 +1,6 @@
 const apiFetch       = wp.apiFetch;
 const { Component, } = wp.element;
+const { __, }       = wp.i18n;
 
 
 
@@ -19,7 +20,7 @@ class SingleAd extends Component{
   componentDidMount() {
     this.setState( {
       ad_html:{
-        __html:`<h4 style="font-weight:300">Loading Ad</h4>`,
+        __html:`<h4 style="font-weight:300">${__('Loading Ad','wpadcenter')}</h4>`,
       },
     } );
 		  this.apiFetch();
@@ -37,7 +38,7 @@ class SingleAd extends Component{
     }).catch(error=>{
       this.setState( {
         ad_html:{
-          __html:`<h4 style="font-weight:300">Select Ad</h4>`,
+          __html:`<h4 style="font-weight:300">${__('Select Ad','wpadcenter')}</h4>`,
         },
       } );
     });

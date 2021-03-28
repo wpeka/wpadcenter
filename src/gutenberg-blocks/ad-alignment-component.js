@@ -1,5 +1,7 @@
 const { Component, } = wp.element;
 const {IconButton }       = wp.components;
+const { __, }       = wp.i18n;
+
 
 
 class AdAlignment extends Component{
@@ -30,7 +32,7 @@ class AdAlignment extends Component{
 
     <div style={{display:"flex"}}>
       <div className="wpadcenter-align-container">
-    <h3 style={{fontWeight:"300",textAlign:"center",marginTop:"20px"}}>Alignment</h3>
+    <h3 style={{fontWeight:"300",textAlign:"center",marginTop:"20px",fontSize:"medium"}}>{__('Alignment','wpadcenter')}</h3>
     
     <IconButton
     isDefault
