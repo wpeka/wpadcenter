@@ -33,6 +33,9 @@
   .Wpadcenter-gutenberg-container .components-placeholder{
     background-color:#F3F6FF;
   }
+  .Wpadcenter-gutenberg-container{
+    z-index:20;
+  }
   .wpadcenter-left-cell {
     width: 20%;
     padding: 10px 10px;
@@ -55,4 +58,13 @@
 
   .wpadcenter-table-tr {
     vertical-align: top;
+  }
+  .wpadcenter-adgroup-row{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+  }
+
+  .wpadcenter-ad-spacing{
+    margin:5px;
   }
