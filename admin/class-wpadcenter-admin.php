@@ -1277,7 +1277,7 @@ class Wpadcenter_Admin {
 				}
 				break;
 		}
-		return do_action( 'wpadcenter_manage_ad_groups_column_values', $column, $term_id );
+		return $output;
 	}
 
 
