@@ -422,11 +422,12 @@ class Wpadcenter_Admin {
 			'no_terms'          => __( 'No Ad Groups', 'wpadcenter' ),
 		);
 		$args   = array(
-			'labels'       => $labels,
-			'hierarchical' => true,
-			'show_ui'      => true,
-			'show_in_rest' => false,
-			'rewrite'      => array( 'slug' => 'wpadcenter-adgroups' ),
+			'labels'             => $labels,
+			'hierarchical'       => true,
+			'show_ui'            => true,
+			'show_in_rest'       => true,
+			'publicly_queryable' => true,
+			'rewrite'            => array( 'slug' => 'wpadcenter-adgroups' ),
 		);
 
 		register_taxonomy( 'wpadcenter-adgroups', array( 'wpadcenter-ads' ), $args );
@@ -1926,7 +1927,7 @@ class Wpadcenter_Admin {
 		wp_register_script(
 			'wpadcenter-gutenberg-single-ad',
 			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-singlead.js',
-			array( 'wp-blocks', 'wp-api-fetch', 'wp-components' ),
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
 			$this->version,
 			false
 		);
@@ -1946,8 +1947,44 @@ class Wpadcenter_Admin {
 				'render_callback' => array( $this, 'gutenberg_display_single_ad_cb' ),
 			)
 		);
+		wp_register_script(
+			'wpadcenter-gutenberg-adgroup',
+			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-adgroup.js',
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
+			$this->version,
+			false
+		);
+		register_block_type(
+			'wpadcenter/adgroup',
+			array(
+				'editor_script'   => 'wpadcenter-gutenberg-adgroup',
+				'attributes'      => array(
+					'ad_ids'            => array(
+						'type' => 'array',
+					),
+					'adgroup_ids'       => array(
+						'type' => 'array',
+					),
+					'adroups'           => array(
+						'type' => 'array',
+					),
+					'adgroup_alignment' => array(
+						'type' => 'string',
+					),
+					'num_ads'           => array(
+						'type' => 'string',
+					),
+					'num_columns'       => array(
+						'type' => 'string',
+					),
+
+				),
+				'render_callback' => array( $this, 'gutenberg_display_adgroup_cb' ),
+			)
+		);
 
 	}
+
 
 	/**
 	 * Renders gutenberg single ad on frontend.
@@ -1972,6 +2009,42 @@ class Wpadcenter_Admin {
 
 		return Wpadcenter_Public::display_single_ad( $ad_id, $ad_attributes );
 	}
+
+	/**
+	 * Renders gutenberg adgroup on frontend.
+	 *
+	 * @param array $attributes contains attributes of the ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function gutenberg_display_adgroup_cb( $attributes ) {
+		$adgroup_ids = array();
+		if ( array_key_exists( 'adgroup_ids', $attributes ) ) {
+			$adgroup_ids = $attributes['adgroup_ids'];
+		}
+		$adgroup_alignment = 'wpadcenter-alignnone';
+		if ( array_key_exists( 'adgroup_alignment', $attributes ) ) {
+			$adgroup_alignment = $attributes['adgroup_alignment'];
+		}
+			$num_ads = '1';
+		if ( array_key_exists( 'num_ads', $attributes ) ) {
+			$num_ads = $attributes['num_ads'];
+		}
+			$num_columns = '1';
+		if ( array_key_exists( 'num_columns', $attributes ) ) {
+			$num_columns = $attributes['num_columns'];
+		}
+			$adgroup_attributes = array(
+				'adgroup_ids' => $adgroup_ids,
+				'align'       => $adgroup_alignment,
+				'num_ads'     => $num_ads,
+				'num_columns' => $num_columns,
+			);
+			return Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes );
+
+	}
+
+
 
 	/**
 	 * Registers single ads widget.
@@ -2007,6 +2080,14 @@ class Wpadcenter_Admin {
 				'schema'       => null,
 			)
 		);
+		register_rest_field(
+			'wpadcenter-adgroups',
+			'ad_ids',
+			array(
+				'get_callback' => array( $this, 'wpadcenter_ad_ids_rest_field_cb' ),
+				'schema'       => null,
+			)
+		);
 	}
 
 	/**
@@ -2020,6 +2101,59 @@ class Wpadcenter_Admin {
 		$ad_id = $object['id'];
 		return Wpadcenter_Public::display_single_ad( $ad_id );
 	}
+
+	/**
+	 * Assigns ad ids of the adgroup to the rest api field .
+	 *
+	 * @param object $object contains the post inforamtion.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_ids_rest_field_cb( $object ) {
+
+		$current_time = time();
+
+		$args = array(
+			'post_type'     => 'wpadcenter-ads',
+			'tax_query'      => array( //phpcs:ignore
+				array(
+					'taxonomy' => 'wpadcenter-adgroups',
+					'field'    => 'id',
+					'terms'    => $object['id'],
+				),
+			),
+			'meta_query'     => array( //phpcs:ignore
+				array(
+					'key'     => 'wpadcenter_start_date',
+					'value'   => $current_time,
+					'type'    => 'numeric',
+					'compare' => '<=',
+				),
+				array(
+					'key'     => 'wpadcenter_end_date',
+					'value'   => $current_time,
+					'type'    => 'numeric',
+					'compare' => '>=',
+				),
+			),
+
+			'no_found_rows' => true,
+		);
+		$ad_ids = array();
+		$ads    = new WP_Query( $args );
+		if ( $ads->have_posts() ) {
+			while ( $ads->have_posts() ) {
+
+				$ads->the_post();
+				array_push( $ad_ids, get_the_ID() );
+			}
+			return $ad_ids;
+		} else {
+			return;
+		}
+
+	}
+
 
 	/**
 	 * Register scripts for gutenberg block.
