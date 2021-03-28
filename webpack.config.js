@@ -16,7 +16,7 @@ module.exports = {
         reports: './src/reports.js'
     },
     output: {
-        path: path.resolve(__dirname, 'admin/js'),
+        path: path.resolve(__dirname, 'admin/js/vue'),
         filename: 'wpadcenter-admin-[name].js'
     },
     mode: 'development',

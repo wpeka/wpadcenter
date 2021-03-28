@@ -1,0 +1,918 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: WPAdCenter\n"
+"POT-Creation-Date: 2021-03-28 15:27+0530\n"
+"PO-Revision-Date: 2021-03-28 13:06+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: wpadcenter.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"X-Poedit-SearchPathExcluded-1: vendor\n"
+"X-Poedit-SearchPathExcluded-2: node_modules\n"
+"X-Poedit-SearchPathExcluded-3: release\n"
+"X-Poedit-SearchPathExcluded-4: src\n"
+"X-Poedit-SearchPathExcluded-5: analytics\n"
+"X-Poedit-SearchPathExcluded-6: tests\n"
+"X-Poedit-SearchPathExcluded-7: bin\n"
+
+#: admin/class-wpadcenter-admin.php:82
+msgid "Connect to Adsense"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:98 admin/class-wpadcenter-admin.php:623
+msgid "Name"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:99
+msgid "Status"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:111
+msgid "Load"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:323
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:346
+msgid "WPAdCenter: Ads"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:347
+msgid "Ad"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+#: admin/class-wpadcenter-admin.php:348 admin/class-wpadcenter-admin.php:1990
+msgid "WPAdCenter"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:349
+msgid "Manage Ads"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:350
+msgid "Create New Ad"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:351
+msgid "Create Ad"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:352
+msgid "New Ad"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:353
+msgid "Edit Ad"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:354
+msgid "Update Ad"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:355 admin/class-wpadcenter-admin.php:356
+msgid "View Ad"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:357
+msgid "Search Ad"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:358
+msgid "No Ads found"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:359
+msgid "No Ads found in Trash"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:360 admin/class-wpadcenter-admin.php:1312
+msgid "Ad Image"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:361 admin/class-wpadcenter-admin.php:363
+msgid "Set ad image"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:362
+msgid "Remove ad image"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:409
+msgctxt "taxonomy general name"
+msgid "Manage Ad Groups"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:410
+msgctxt "taxonomy singular name"
+msgid "Manage Ad Group"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:411
+msgid "Search Ad Groups"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:412
+msgid "All Groups"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:413
+msgid "Parent Group"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:414
+msgid "Parent Group:"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:415
+msgid "Edit Group"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:416
+msgid "Update Group"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:417
+msgid "Add New Group"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:418
+msgid "New Group Name"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:419
+msgid "Manage Ad Groups"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:420
+msgid "No Ad Groups Found"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:421
+msgid "View Ad Group"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:422
+msgid "No Ad Groups"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:509
+msgid "IAB Full Banner (468 x 60)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:510
+msgid "IAB Skyscraper (120 x 600)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:511
+msgid "IAB Wide Skyscraper (160 x 600)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:512
+msgid "IAB Leaderboard (728 x 90)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:513
+msgid "IAB Rectangle (180 x 150)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:514
+msgid "IAB Medium Rectangle (300 x 250)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:515
+msgid "IAB Button 1 (120 x 90)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:516
+msgid "IAB Button 2 (120 x 60)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:517
+msgid "IAB Square Button (125 x 125)"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:551
+msgid "Reports"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:560
+msgid "Settings"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:569
+msgid "Getting Started"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:580
+msgid "Go Pro"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:600
+msgid "Ad Title"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:601 admin/class-wpadcenter-admin.php:1295
+msgid "Ad Type"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:602
+msgid "Ad Dimensions"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:603
+msgid "Ad Group"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:604 admin/class-wpadcenter-admin.php:624
+msgid "Shortcode"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:605
+msgid "Template Tag"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:606
+msgid "Stats for today"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:607
+msgid "Start Date"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:608
+msgid "End Date"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:625
+msgid "Template tag"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:626
+msgid "Number of ads"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:627
+msgid "Number of active ads"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:673 admin/class-wpadcenter-admin.php:777
+#: admin/class-wpadcenter-admin.php:792 admin/class-wpadcenter-admin.php:1723
+msgid "You do not have sufficient permission to perform this operation"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:700
+msgid "Settings Updated."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:734
+#: includes/class-wpadcenter-adgroup-widget.php:163
+msgid "None"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:735
+msgid "Fade"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:736
+msgid "Fade Out"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:737
+msgid "Scroll Right to Left"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:738
+msgid "Scroll Left to Right"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:739
+msgid "Scroll Top to Bottom"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:740
+msgid "Scroll Bottom to Top"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:805
+msgid "The ads.txt is now managed with WPAdCenter."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:822
+msgid "Not the main blog"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:858
+msgid "Could not delete the existing ads.txt file"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:861
+msgid "Could not find the existing ads.txt file"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:917
+msgid "Unable to connect to the filesystem. Please confirm your credentials."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:940
+#: includes/class-wpadcenter-adsense.php:105
+#: includes/class-wpadcenter-adsense.php:115
+msgid "Something went wrong."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:953
+#, php-format
+msgid ""
+"The ads.txt file cannot be placed because the URL contains a subdirectory. "
+"You need to make the file available at %s"
+msgstr ""
+
+#. translators: %s file path
+#: admin/class-wpadcenter-admin.php:969
+#, php-format
+msgid "The file is available on %s."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:973
+msgid "The file was not created."
+msgstr ""
+
+#. translators: %s third party file path
+#: admin/class-wpadcenter-admin.php:979
+#, php-format
+msgid "A third-party file exists: %s"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:985
+msgid "Import & Replace"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:988
+msgid ""
+"Move the content of the existing ads.txt file into WPAdCenter and remove it."
+msgstr ""
+
+#. translators: %s default file errors
+#: admin/class-wpadcenter-admin.php:998
+#, php-format
+msgid "An error occured: %s."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1006
+#, php-format
+msgid ""
+"If your site is located on a subdomain, you need to add the following line "
+"to the ads.txt file of the root domain: %s"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1176
+msgid "Forever"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1304
+msgid "Ad Size"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1320
+msgid "Ad details"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1328
+msgid "Ad Code"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1336
+msgid "External Image Link"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1344
+msgid "Ad Google Adsense"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1397
+msgid "Open Link In a New Tab"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1398
+msgid "Use nofollow on Link"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1401
+msgid "Link URL"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1590
+msgid "Ad Expires on"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1593
+msgid "Publish"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1594
+msgid "forever"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1622
+msgid "Starts From"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1664
+msgid "Expires On"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1739
+msgid "Support"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1741
+msgid "Documentation"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1743
+msgid "FAQ"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1745
+msgid "Upgrade to Pro &raquo;"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1752
+msgid "Welcome to WP AdCenter!"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1753
+msgid "Complete Ad Management Plugin."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1754
+msgid ""
+"Thank you for choosing WP AdCenter plugin - the powerful WordPress ads "
+"plugin."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1755
+msgid ""
+"You can control every aspect of ads on your website. Place ads or Ad scripts "
+"anywhere on your website. Compatible with Gutenberg & Popular Page Builders."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1756
+msgid "See Quick Links"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1757
+msgid "--- OR ---"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1759
+msgid "Configure WP AdCenter Settings including:"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1760
+msgid "Configure WP AdCenter"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1765
+msgid "Auto-refresh of ads"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1766
+msgid "Transitions, and more"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1767
+msgid "Third-Party Advertisers"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1768
+msgid "Notification"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:1769
+msgid "Geo Location"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:2082
+msgid "WPAdCenter Scripts"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:2102
+msgid "Disable Global Scripts"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:2106
+msgid "Header Scripts"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:2109
+msgid "These scripts will be printed in head section."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:2113
+msgid "Body Scripts"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:2116
+msgid "These scripts will be printed in body section."
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:2120
+msgid "Footer Scripts"
+msgstr ""
+
+#: admin/class-wpadcenter-admin.php:2123
+msgid "These scripts will be printed in footer section."
+msgstr ""
+
+#: admin/partials/wpadcenter-admin-display.php:18
+msgid "Settings updated."
+msgstr ""
+
+#: admin/partials/wpadcenter-admin-display.php:19
+msgid "Unable to update Settings."
+msgstr ""
+
+#: admin/views/admin-display-reports.php:160
+msgid "All-Time Summary"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:161
+msgid "Shows reports regarding clicks, views and CTR of all time."
+msgstr ""
+
+#: admin/views/admin-display-reports.php:167
+#: admin/views/admin-display-reports.php:230
+msgid "Total Clicks"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:173
+#: admin/views/admin-display-reports.php:236
+msgid "Total Views"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:179
+#: admin/views/admin-display-reports.php:242
+msgid "Total Click Through Rate"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:190
+msgid "All-Time Top 10 Clicks"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:191
+msgid "Shows reports of top 10 ads as per clicks."
+msgstr ""
+
+#: admin/views/admin-display-reports.php:202
+msgid "All-Time Top 10 Click Through Rate"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:203
+msgid "Shows reports of top 10 ads as per CTR."
+msgstr ""
+
+#: admin/views/admin-display-reports.php:215
+msgid "All-Time By Ad Group"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:216
+msgid "Shows reports of all ads related to ad-group."
+msgstr ""
+
+#: admin/views/admin-display-reports.php:257
+msgid "Custom Reports"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:258
+msgid "Choose from the options below to generate custom reports."
+msgstr ""
+
+#: admin/views/admin-display-reports.php:264
+msgid "Start date"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:278
+msgid "End date"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:293
+msgid "Choose ad "
+msgstr ""
+
+#: admin/views/admin-display-reports.php:309
+msgid "Detailed Reports"
+msgstr ""
+
+#: admin/views/admin-display-reports.php:310
+msgid "Generated custom reports will be displayed below"
+msgstr ""
+
+#: admin/views/admin-display-save-button.php:23
+msgid "Update"
+msgstr ""
+
+#: admin/views/admin-display.php:29
+msgid "Tracking Settings"
+msgstr ""
+
+#: admin/views/admin-display.php:34
+msgid "Roles to exclude from tracking"
+msgstr ""
+
+#: admin/views/admin-display.php:34
+msgid "Select certain roles to exclude from tracking the ads"
+msgstr ""
+
+#: admin/views/admin-display.php:42
+msgid "Statistics Settings"
+msgstr ""
+
+#: admin/views/admin-display.php:45
+msgid "Trim statistics older than (in months)"
+msgstr ""
+
+#: admin/views/admin-display.php:45
+msgid ""
+"Automatically clean the statistics database records older than a set point. "
+"Setting this to 0 will disable it."
+msgstr ""
+
+#: admin/views/admin-display.php:54
+msgid "Scripts Settings"
+msgstr ""
+
+#: admin/views/admin-display.php:57
+msgid "Enable Scripts"
+msgstr ""
+
+#: admin/views/admin-display.php:57
+msgid "Enable scripts on all pages and/or posts."
+msgstr ""
+
+#: admin/views/admin-display.php:62
+msgid ""
+"These scripts will be printed in the head section on all pages and/or posts."
+msgstr ""
+
+#: admin/views/admin-display.php:64
+msgid ""
+"These scripts will be printed in the body section on all pages and/or posts."
+msgstr ""
+
+#: admin/views/admin-display.php:66
+msgid ""
+"These scripts will be printed in the footer section on all pages and/or "
+"posts."
+msgstr ""
+
+#: admin/views/admin-display.php:76
+msgid "Ads.txt Settings"
+msgstr ""
+
+#: admin/views/admin-display.php:83
+msgid "Enable ads.txt"
+msgstr ""
+
+#: admin/views/admin-display.php:83
+msgid ""
+"Ads.txt or “Authorized Digital Sellers” is a technical specification "
+"developed by the IAB to combat ad fraud. Enable this option to create/update "
+"ads.txt file."
+msgstr ""
+
+#: admin/views/admin-display.php:88
+msgid "Content"
+msgstr ""
+
+#: admin/views/admin-display.php:88
+msgid "Additional records to add to the file, one record per line."
+msgstr ""
+
+#: admin/views/admin-display.php:100 admin/views/admin-display.php:114
+msgid "Connect to AdSense"
+msgstr ""
+
+#: admin/views/admin-display.php:110
+msgid "Token"
+msgstr ""
+
+#: admin/views/admin-display.php:111
+msgid "Copy and paste the token after you have clicked connect to AdSense"
+msgstr ""
+
+#: admin/views/admin-display.php:116
+msgid "Submit Token"
+msgstr ""
+
+#: admin/views/admin-display.php:120
+msgid ""
+"This will open another window. Please allow access to your AdSense account. "
+"Copy the text you get at the end and come back here."
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:29
+msgid "Display Ads from Adgroup"
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:116
+#: includes/class-wpadcenter-single-ad-widget.php:116
+msgid "Title : "
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:124
+msgid "Select Ad Groups : "
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:141
+msgid "No Adgroups Found."
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:149
+msgid "Number of Ads : "
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:155
+msgid "Number of Columns : "
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:160
+msgid "Alignment : "
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:164
+#: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:109
+#: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:86
+msgid "Left"
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:165
+#: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:113
+#: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:90
+msgid "Center"
+msgstr ""
+
+#: includes/class-wpadcenter-adgroup-widget.php:166
+#: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:117
+#: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:94
+msgid "Right"
+msgstr ""
+
+#. translators: %s: account
+#: includes/class-wpadcenter-adsense.php:255
+#, php-format
+msgid "Error while retrieving adUnits list for \"%s\"."
+msgstr ""
+
+#. translators: %s: account
+#: includes/class-wpadcenter-adsense.php:268
+#, php-format
+msgid "Invalid response while retrieving adUnits list for \"%s\"."
+msgstr ""
+
+#: includes/class-wpadcenter-adsense.php:281
+msgid "Reason:"
+msgstr ""
+
+#: includes/class-wpadcenter-adsense.php:284
+msgid "Message:"
+msgstr ""
+
+#: includes/class-wpadcenter-adsense.php:301
+#, php-format
+msgid ""
+"The account \"%1$s\" does not seem to have any ad units. Please create some "
+"%2$shere%3$s."
+msgstr ""
+
+#. translators: %s: account
+#: includes/class-wpadcenter-adsense.php:357
+#, php-format
+msgid "Error while retrieving ad code for \"%s\"."
+msgstr ""
+
+#. translators: %s : adunit
+#: includes/class-wpadcenter-adsense.php:389
+#, php-format
+msgid "Invalid response while retrieving ad code for \"%s\"."
+msgstr ""
+
+#: includes/class-wpadcenter-adsense.php:438
+msgid ""
+"It seems that some changes have been made in the Advanced Ads settings. "
+"Please refresh this page."
+msgstr ""
+
+#: includes/class-wpadcenter-adsense.php:451
+#, php-format
+msgid ""
+"Adcenter does not have access to your account (<code>%s</code>) anymore."
+msgstr ""
+
+#. translators: %s: account
+#: includes/class-wpadcenter-adsense.php:482
+#, php-format
+msgid "error while renewing access token for \"%s\""
+msgstr ""
+
+#. translators: %s: account
+#: includes/class-wpadcenter-adsense.php:506
+#, php-format
+msgid "invalid response received while renewing access token for \"%s\""
+msgstr ""
+
+#: includes/class-wpadcenter-google-api.php:67
+msgid "An error occurred while requesting account details."
+msgstr ""
+
+#: includes/class-wpadcenter-single-ad-widget.php:29
+msgid "Display single ads in a Widget"
+msgstr ""
+
+#: includes/class-wpadcenter-single-ad-widget.php:127
+msgid "Select Ad : "
+msgstr ""
+
+#: includes/class-wpadcenter.php:486
+msgid "Could not access filesystem."
+msgstr ""
+
+#: includes/class-wpadcenter.php:490
+msgid "Filesystem error."
+msgstr ""
+
+#: includes/class-wpadcenter.php:497
+msgid "Unable to locate WordPress root directory."
+msgstr ""
+
+#: includes/class-wpadcenter.php:502
+msgid "Unable to locate WordPress content directory (wp-content)."
+msgstr ""
+
+#. translators: %s folder name
+#: includes/class-wpadcenter.php:511
+#, php-format
+msgid "Unable to locate needed folder (%s)."
+msgstr ""
+
+#: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:63
+msgid "WPAdCenter Adgroup"
+msgstr ""
+
+#: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:72
+msgid "Select Ad Groups"
+msgstr ""
+
+#: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:83
+msgid "Number of Ads"
+msgstr ""
+
+#: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:94
+msgid "Number of Columns"
+msgstr ""
+
+#: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:105
+#: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:82
+msgid "Alignment"
+msgstr ""
+
+#: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:63
+msgid "WPAdCenter Single Ad"
+msgstr ""
+
+#: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:72
+msgid "Select Ad"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://wpadcenter.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"This is a short description of what the plugin does. It's displayed in the "
+"WordPress admin area."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "WPEka Club"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://club.wpeka.com/"
+msgstr ""
