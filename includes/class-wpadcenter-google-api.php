@@ -45,7 +45,7 @@ class Wpadcenter_Google_Api {
 	 * List all accounts available to this AdSense account.
 	 *
 	 * @param string $access_token access token from google.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_account_list( $access_token ) {
@@ -83,7 +83,7 @@ class Wpadcenter_Google_Api {
 	 * Generate tokens
 	 *
 	 * @param string $code Authentication code.
-	 * 
+	 *
 	 * @return array|\WP_Error
 	 */
 	public function generate_tokens( $code ) {
@@ -117,7 +117,7 @@ class Wpadcenter_Google_Api {
 	 *
 	 * @param string $account account.
 	 * @param string $access_token token.
-	 * 
+	 *
 	 * @return array|\WP_Error
 	 */
 	public function get_ad_units( $account, $access_token ) {
@@ -138,7 +138,7 @@ class Wpadcenter_Google_Api {
 	 * @param string $account_id   account id.
 	 * @param string $ad_unit      ad unit.
 	 * @param string $access_token token.
-	 * 
+	 *
 	 * @return String the ad code or info on the error.
 	 */
 	public function get_ad_code( $account_id, $ad_unit, $access_token ) {
@@ -160,7 +160,7 @@ class Wpadcenter_Google_Api {
 	 * Renew the current access token.
 	 *
 	 * @param string $refresh_token Token.
-	 * 
+	 *
 	 * @return array|WP_Error
 	 */
 	public function renew_access_token( $refresh_token ) {

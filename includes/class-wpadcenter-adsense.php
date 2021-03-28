@@ -330,7 +330,7 @@ class Wpadcenter_Adsense {
 	 * Return the ad code for a given client and unit.
 	 *
 	 * @param string $ad_unit Ad unit.
-	 * 
+	 *
 	 * @return array the ad code or info on the error.
 	 */
 	public function get_ad_code( $ad_unit ) {
@@ -411,7 +411,7 @@ class Wpadcenter_Adsense {
 	 * Get access token
 	 *
 	 * @param string $account Account id.
-	 * 
+	 *
 	 * @return array|mixed
 	 */
 	public function get_access_token( $account ) {
@@ -465,7 +465,7 @@ class Wpadcenter_Adsense {
 	 *  Renew the current access token.
 	 *
 	 * @param string $account Account.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function renew_access_token( $account ) {

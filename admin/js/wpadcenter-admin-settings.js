@@ -7,6 +7,7 @@
  * @package    Wpadcenter
  * @subpackage Wpadcenter/admin/js
  */
+
 (function( $ ) {
 	'use strict';
 

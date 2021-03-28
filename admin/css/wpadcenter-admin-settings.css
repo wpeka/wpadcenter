@@ -2,7 +2,7 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
- #wpadcenter_settings_form {
+#wpadcenter_settings_form {
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -88,7 +88,7 @@ label {
 .wpadcenter-label-margin-bottom {
 	margin-bottom: 10px;
 }
- #wpcontent {
+#wpcontent {
 	background: #F3F6FF;
 }
 .wpadcenter-tab-head {
