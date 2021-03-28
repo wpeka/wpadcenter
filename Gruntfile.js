@@ -1,82 +1,159 @@
+/**
+ * Grunt Tasks JavaScript.
+ *
+ * @package    Wpadcenter
+ * @subpackage Wpadcenter
+ * @author     WPeka <https://club.wpeka.com/>
+ */
+
 module.exports = function( grunt ) {
     'use strict';
 
-    const pkg = grunt.file.readJSON( 'package.json' );
+    grunt.initConfig(
+        {
 
-    grunt.initConfig( {
-
-        pkg,
+        pkg: grunt.file.readJSON( 'package.json' ),
 
         clean: {
-            release: [ 'release/' ],
+            build: ['release/<%= pkg.version %>']
         },
 
+        uglify: {
+            options: {
+
+            },
+            admin: {
+                files: [{
+                    expand: true,
+                    cwd: 'release/<%= pkg.version %>/admin/js/',
+                    src: [
+                        '*.js',
+                        '!*.min.js'
+                    ],
+                    dest: 'release/<%= pkg.version %>/admin/js/',
+                    ext: '.min.js'
+                }]
+            },
+            frontend: {
+                files: [{
+                    expand: true,
+                    cwd: 'release/<%= pkg.version %>/public/js/',
+                    src: [
+                        '*.js',
+                        '!*.min.js'
+                    ],
+                    dest: 'release/<%= pkg.version %>/public/js/',
+                    ext: '.min.js'
+                }]
+            },
+        },
+        cssmin: {
+            options: {
+
+            },
+            admin: {
+                files: [{
+                    expand: true,
+                    cwd: 'release/<%= pkg.version %>/admin/css/',
+                    src: [
+                        '*.css',
+                        '!*.min.css'
+                    ],
+                    dest: 'release/<%= pkg.version %>/admin/css/',
+                    ext: '.min.css'
+                }]
+            },
+            frontend: {
+                files: [{
+                    expand: true,
+                    cwd: 'release/<%= pkg.version %>/public/css/',
+                    src: [
+                        '*.css',
+                        '!*.min.css'
+                    ],
+                    dest: 'release/<%= pkg.version %>/public/css/',
+                    ext: '.min.css'
+                }]
+            },
+        },
         copy: {
-            release: {
-                files: [
-                    {
-                        expand: true,
-                        src: [
-                            'wpadcenter.php',
-                            'icon.png',
-                            'LICENSE.txt',
-                            'admin/**',
-                            'analytics/**',
-                            'images/**',
-                            'includes/**',
-                            'languages/**',
-                            'public/**',
-                            'README.txt',
-                            '!**/*.css.map',
-                            '!**/*.js.map',
-                            '!**/*.{ai,eps,psd}'
-                        ],
-                        dest: 'release/<%= pkg.name %>',
-                    },
-                ],
-            },
-        },
-
-        compress: {
-            wpadcenter: {
+            build: {
                 options: {
-                    archive: 'release/wpadcenter.zip',
+                    mode: true,
+                    expand: true,
                 },
-                files: [
-                    {
-                        cwd: 'release/<%= pkg.name %>/',
-                        dest: '<%= pkg.name %>/',
-                        src: [ '**' ],
-                    },
+                src: [
+                    '**',
+                    '!node_modules/**',
+                    '!release/**',
+                    '!tests/**',
+                    '!build/**',
+                    '!src/**',
+                    '!.git/**',
+                    '!.github/**',
+                    '!bin/*',
+                    '!Gruntfile.js',
+                    '!package.json',
+                    '!package-lock.json',
+                    '!.gitignore',
+                    '!.gitmodules',
+                    '!composer.lock',
+                    '!composer.json',
+                    '!*.yml',
+                    '!*.xml',
+                    '!*.config.*'
                 ],
+                dest: 'release/<%= pkg.version %>/'
+            }
+        },
+        compress: {
+            build: {
+                options: {
+                    mode: 'zip',
+                    archive: './release/<%= pkg.name %>.<%= pkg.version %>.zip'
+                },
+                expand: true,
+                cwd: 'release/<%= pkg.version %>/',
+                src: ['**/*'],
+                dest: '<%= pkg.name %>'
+            }
+        },
+
+        addtextdomain: {
+            options: {
+                textdomain: 'wpadcenter',
+            },
+            update_all_domains: {
+                options: {
+                    updateDomains: true
+                },
+                src: ['*.php', '**/*.php', '!\.git/**/*', '!\.github/**/*', '!bin/*', '!src/**/*', '!src/*', '!node_modules/**/*', '!tests/**/*', '!vendor/**/*', '!analytics/*', '!analytics/**/*']
+            }
+        },
+
+        wp_readme_to_markdown: {
+            your_target: {
+                files: {
+                    'README.md': 'README.txt'
+                }
             },
         },
 
-        replace: {
-            readme: {
-                src: 'readme.*',
-                overwrite: true,
-                replacements: [
-                    {
-                        from: /^(\*\*|)Stable tag:(\*\*|)(\s*?)[a-zA-Z0-9.-]+(\s*?)$/mi,
-                        to: '$1Stable tag:$2$3<%= pkg.version %>$4',
+        makepot: {
+            target: {
+                options: {
+                    domainPath: '/languages',
+                    exclude: ['\.git/*', '\.gitbook/*', 'bin/*', 'node_modules/*', 'tests/*', 'vendor/**/*', 'analytics/**/*', 'src/**/*'],
+                    mainFile: 'wpadcenter.php',
+                    potFilename: 'wpadcenter.pot',
+                    potHeaders: {
+                        poedit: true,
+                        'x-poedit-keywordslist': true
                     },
-                    {
-                        from: /Tested up to:(\s*?)[a-zA-Z0-9\.\-\+]+$/m,
-                        to: 'Tested up to:$1' + pkg.tested_up_to,
-                    },
-                ],
-            },
-            languages: {
-                src: 'languages/wpadcenter.pot',
-                overwrite: true,
-                replacements: [
-                    {
-                        from: /(Project-Id-Version: WP AdCenter )[0-9\.]+/,
-                        to: '$1' + pkg.version,
-                    },
-                ],
-            },
+                    type: 'wp-plugin',
+                    updateTimestamp: true
+                }
+            }
         },
 
         shell: {
@@ -88,7 +165,10 @@ module.exports = function( grunt ) {
 
     require( 'matchdep' ).filterDev( 'grunt-*' ).forEach( grunt.loadNpmTasks );
 
-    grunt.registerTask( 'build', [ 'shell:build', 'update-pot', 'replace', 'clean:release', 'copy:release', 'compress' ] );
-    grunt.registerTask( 'update-pot', [ 'replace:languages' ] );
-    grunt.registerTask( 'version', [ 'replace' ] );
+    grunt.registerTask( 'default', ['i18n', 'readme'] );
+    grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
+    grunt.registerTask( 'readme', ['wp_readme_to_markdown'] );
+    grunt.registerTask( 'compile', ['shell:build'] );
+    grunt.registerTask( 'build', ['shell:build', 'clean:build', 'copy:build', 'uglify:admin', 'uglify:frontend', 'cssmin:admin', 'cssmin:frontend', 'compress:build'] );
+    grunt.util.linefeed = '\n';
 };

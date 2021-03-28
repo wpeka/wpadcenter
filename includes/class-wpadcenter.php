@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The file that defines the core plugin class
  *
@@ -98,7 +97,7 @@ class Wpadcenter {
 	 * Include the following files that make up the plugin:
 	 *
 	 * - Wpadcenter_Loader. Orchestrates the hooks of the plugin.
-	 * - Wpadcenter_i18n. Defines internationalization functionality.
+	 * - Wpadcenter_I18n. Defines internationalization functionality.
 	 * - Wpadcenter_Admin. Defines all hooks for the admin area.
 	 * - Wpadcenter_Public. Defines all hooks for the public side of the site.
 	 *
@@ -159,7 +158,7 @@ class Wpadcenter {
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Wpadcenter_i18n class in order to set the domain and to register the hook
+	 * Uses the Wpadcenter_I18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since  1.0.0
@@ -167,7 +166,7 @@ class Wpadcenter {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Wpadcenter_i18n();
+		$plugin_i18n = new Wpadcenter_I18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -218,7 +217,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'wpadcenter_page_posts_scripts' );
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_scripts' );
 		$this->loader->add_action( 'admin_head', $plugin_admin, 'wpadcenter_remove_permalink' );
-  
+
 	}
 
 	/**

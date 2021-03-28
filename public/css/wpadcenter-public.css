@@ -2,27 +2,26 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
- .wpadcenter-alignright{
-    display:inline;
-    float:right;
-    margin-left: 1.5em;
-  }
-  .wpadcenter-alignleft{
-    display:inline;
-    float:left ;
-    margin-right: 1.5em;
- }
- .wpadcenter-aligncenter{
-  display: flex;
-  flex-direction:column;
-  align-items: center;
+.wpadcenter-alignright{
+	display:inline;
+	float:right;
+	margin-left: 1.5em;
+}
+.wpadcenter-alignleft{
+	display:inline;
+	float:left ;
+	margin-right: 1.5em;
+}
+.wpadcenter-aligncenter{
+	display: flex;
+	flex-direction:column;
+	align-items: center;
 }
 .wpadcenter-adgroup-row{
-  display:flex;
-  flex-direction:row;
-  flex-wrap:wrap;
+	display:flex;
+	flex-direction:row;
+	flex-wrap:wrap;
 }
-
 .wpadcenter-ad-spacing{
-  margin:5px;
+	margin:5px;
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Define the internationalization functionality
  *
@@ -24,7 +23,7 @@
  * @subpackage Wpadcenter/includes
  * @author     WPEka <hello@wpeka.com>
  */
-class Wpadcenter_i18n {
+class Wpadcenter_I18n {
 
 
 	/**
