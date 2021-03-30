@@ -312,9 +312,13 @@ class Wpadcenter_Public {
 		if ( true === (bool) $open_in_new_tab ) {
 			$link_target = '_blank';
 		}
-		$ad_size         = explode( 'x', $ad_size );
-		$width           = $ad_size[0];
-		$height          = $ad_size[1];
+		$width  = '';
+		$height = '';
+		if ( 'none' !== $ad_size ) {
+			$ad_size = explode( 'x', $ad_size );
+			$width   = $ad_size[0];
+			$height  = $ad_size[1];
+		}
 		$single_ad_html  = '';
 		$single_ad_html .= '<div ';
 		if ( $attributes['classes'] ) {
