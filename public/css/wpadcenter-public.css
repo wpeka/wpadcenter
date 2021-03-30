@@ -15,3 +15,10 @@
 .aligncenter .wpadcenter-adgroup-row div{
 	margin:0 auto;
 }
+.wpadcenter-single-ad-default{
+	display:flex;
+	align-items:center;
+}
+.wpadcenter-single-ad-default div{
+	margin:0 auto;
+}
