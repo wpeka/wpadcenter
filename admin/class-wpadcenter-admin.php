@@ -507,6 +507,7 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_ad_sizes() {
 		$sizes = array(
+			'none'    => '-',
 			'468x60'  => __( 'IAB Full Banner (468 x 60)', 'wpadcenter' ),
 			'120x600' => __( 'IAB Skyscraper (120 x 600)', 'wpadcenter' ),
 			'160x600' => __( 'IAB Wide Skyscraper (160 x 600)', 'wpadcenter' ),
@@ -1500,6 +1501,12 @@ class Wpadcenter_Admin {
 			! wp_verify_nonce( sanitize_key( $_POST[ $nonce_field ] ), 'wpadcenter_save_ad' )
 		) {
 			return;
+		}
+
+		if ( isset( $_POST['ad-type'] ) ) {
+			if ( 'ad_code' === $_POST['ad-type'] || 'import_from_adsense' === $_POST['ad-type'] ) {
+				$_POST['ad-size'] = 'none';
+			}
 		}
 
 		$raw_data = $_POST;
