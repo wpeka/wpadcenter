@@ -2029,7 +2029,7 @@ class Wpadcenter_Admin {
 		if ( array_key_exists( 'adgroup_ids', $attributes ) ) {
 			$adgroup_ids = $attributes['adgroup_ids'];
 		}
-		$adgroup_alignment = 'wpadcenter-alignnone';
+		$adgroup_alignment = 'alignnone';
 		if ( array_key_exists( 'adgroup_alignment', $attributes ) ) {
 			$adgroup_alignment = $attributes['adgroup_alignment'];
 		}
