@@ -274,7 +274,10 @@ class Wpadcenter_Public {
 	 * @return string $single_ad_html html for the ad to be displayed.
 	 */
 	public static function display_single_ad( $ad_id, $attributes = array() ) {
-
+		$current_url = isset( $_SERVER['REQUEST_URI'] ) ? home_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) : '';
+		if ( strstr( $current_url, 'ads.txt' ) ) {
+			return;
+		}
 		wp_enqueue_style( 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
