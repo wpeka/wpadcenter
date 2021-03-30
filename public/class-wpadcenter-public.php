@@ -257,7 +257,7 @@ class Wpadcenter_Public {
 
 		$ad_id      = $atts['id'];
 		$attributes = array(
-			'classes' => 'wpadcenter-align' . $atts['align'],
+			'classes' => 'align' . $atts['align'],
 		);
 		return $this->display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
 
@@ -544,7 +544,7 @@ class Wpadcenter_Public {
 			$atts
 		);
 		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
-		$atts['align']       = 'wpadcenter-align' . $atts['align'];
+		$atts['align']       = 'align' . $atts['align'];
 
 		return $this->display_adgroup_ads( $atts ); // phpcs:ignore
 	}
@@ -564,7 +564,7 @@ class Wpadcenter_Public {
 
 		$default_attributes = array(
 			'adgroup_ids' => array(),
-			'align'       => 'wpadcenter-alignnone',
+			'align'       => 'alignnone',
 			'num_ads'     => 1,
 			'num_columns' => 1,
 		);

@@ -49,42 +49,22 @@ class SingleAd extends Component{
 
     let adAlignmentCurrent=this.props.adAlignment;
     let adAlignment;
-    if (adAlignmentCurrent=== 'wpadcenter-alignright'){
-      adAlignment = {
-    display:'inline',
-    float:'right',
-    marginLeft:"1.5em",
-    zIndex:"20",
-    position:"relative",
-
-  };
-
-    }
-    else if (adAlignmentCurrent=== 'wpadcenter-aligncenter'){
+ if (adAlignmentCurrent=== 'aligncenter'){
       adAlignment = {
     display:'flex',
-    justifyContent:'center',
+    flexDirection:'column',
+    alignItems:'center',
     zIndex:"20",
     position:"relative",
 
   };
 }
 
-  else if (adAlignmentCurrent=== 'wpadcenter-alignleft'){
-    adAlignment = {
-      display:'inline',
-      float:'left',
-      marginRight:"1.5em",
-      zIndex:"20",
-      position:"relative",
-
+else {
+ adAlignment = {
+  zIndex:"20",
+  position:"relative",
 };
-}
-else{
-    adAlignment = {
-        zIndex:"20",
-        position:"relative",
-    };
 }
 
 
@@ -93,7 +73,7 @@ else{
 
 return (
 
-  <div style={adAlignment} dangerouslySetInnerHTML={ this.state.ad_html } ></div>
+  <div style={adAlignment} className={this.props.adAlignment} dangerouslySetInnerHTML={ this.state.ad_html } ></div>
 )
 
   	}

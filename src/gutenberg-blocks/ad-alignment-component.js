@@ -38,37 +38,37 @@ class AdAlignment extends Component{
     isDefault
 
      icon="editor-alignleft"
-     className={this.state.value==="wpadcenter-alignleft"?"wpadcenter-activebutton":''}
+     className={this.state.value==="alignleft"?"wpadcenter-activebutton":''}
      onClick={ () => {
-						this.onClick( 'wpadcenter-alignleft' );
+						this.onClick( 'alignleft' );
 					} }
 
     />
     <IconButton
     isDefault
      icon="editor-aligncenter"
-     className={this.state.value==="wpadcenter-aligncenter"?"wpadcenter-activebutton":''}
+     className={this.state.value==="aligncenter"?"wpadcenter-activebutton":''}
 
      onClick={ () => {
-           this.onClick( 'wpadcenter-aligncenter' );
+           this.onClick( 'aligncenter' );
          } }
     />
     <IconButton
     isDefault
      icon="editor-alignright"
-     className={this.state.value==="wpadcenter-alignright"?"wpadcenter-activebutton":''}
+     className={this.state.value==="alignright"?"wpadcenter-activebutton":''}
 
      onClick={ () => {
-           this.onClick( 'wpadcenter-alignright' );
+           this.onClick( 'alignright' );
          } }
     />
     <IconButton
     isDefault
 
      icon="no-alt"
-     className={this.state.value==="wpadcenter-alignnone"?"wpadcenter-activebutton":''}
+     className={this.state.value==="alignnone"?"wpadcenter-activebutton":''}
      onClick={ () => {
-						this.onClick( 'wpadcenter-alignnone' );
+						this.onClick( 'alignnone' );
 					} }
 
     />
