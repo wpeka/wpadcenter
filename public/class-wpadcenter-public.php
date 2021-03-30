@@ -419,12 +419,14 @@ class Wpadcenter_Public {
 				add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_post' ) );
 			}
 			add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_post' ) );
-			if ( 'off' === $disable_global_scripts['disable_global_scripts'] ) {
-				add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
-				if ( $body_open_supported ) {
-					add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
+			if ( is_array( $disable_global_scripts ) ) {
+				if ( 'off' === $disable_global_scripts['disable_global_scripts'] ) {
+					add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
+					if ( $body_open_supported ) {
+						add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
+					}
+					add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
 				}
-				add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
 			}
 		}
 
