@@ -104,5 +104,8 @@
   flex-wrap:wrap;
 }
 .wpadcenter-ad-spacing{
-  margin:5px;
+  padding:5px;
+}
+.aligncenter .wpadcenter-adgroup-row div{
+	margin:0 auto;
 }

@@ -52,15 +52,15 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 		$num_columns = empty( $instance['num_columns'] ) ? 1 : $instance['num_columns'];
 		$alignment   = empty( $instance['alignment'] ) ? 1 : $instance['alignment'];
 
+		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
 		$attributes = array(
 			'adgroup_ids' => $adgroup_ids,
-			'align'       => 'wpadcenter-' . $alignment,
+			'align'       => $alignment,
 			'num_ads'     => $num_ads,
 			'num_columns' => $num_columns,
 		);

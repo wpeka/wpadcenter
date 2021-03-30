@@ -54,9 +54,7 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		$attributes = array(
-			'title' => $title,
-		);
+		$attributes = array();
 
 		echo Wpadcenter_Public::display_single_ad( $instance['ad_id'], $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

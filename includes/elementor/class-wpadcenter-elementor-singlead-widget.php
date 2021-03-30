@@ -82,20 +82,20 @@ class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 				'label'   => __( 'Alignment', 'wpadcenter' ),
 				'type'    => \Elementor\Controls_Manager::CHOOSE,
 				'options' => array(
-					'wpadcenter-alignleft'   => array(
+					'alignleft'   => array(
 						'title' => __( 'Left', 'wpadcenter' ),
 						'icon'  => 'fa fa-align-left',
 					),
-					'wpadcenter-aligncenter' => array(
+					'aligncenter' => array(
 						'title' => __( 'Center', 'wpadcenter' ),
 						'icon'  => 'fa fa-align-center',
 					),
-					'wpadcenter-alignright'  => array(
+					'alignright'  => array(
 						'title' => __( 'Right', 'wpadcenter' ),
 						'icon'  => 'fa fa-align-right',
 					),
 				),
-				'default' => 'wpadcenter-alignleft',
+				'default' => 'alignleft',
 			)
 		);
 
