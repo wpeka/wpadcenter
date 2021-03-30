@@ -106,3 +106,10 @@
 .wpadcenter-ad-spacing{
   margin:5px;
 }
+.edit-post-layout__metaboxes {
+  padding: 0 !important;
+}
+
+.edit-post-meta-boxes-area {
+  margin: 0 !important;
+}

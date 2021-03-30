@@ -274,7 +274,10 @@ class Wpadcenter_Public {
 	 * @return string $single_ad_html html for the ad to be displayed.
 	 */
 	public static function display_single_ad( $ad_id, $attributes = array() ) {
-
+		$current_url = isset( $_SERVER['REQUEST_URI'] ) ? home_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) : '';
+		if ( strstr( $current_url, 'ads.txt' ) ) {
+			return;
+		}
 		wp_enqueue_style( 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
@@ -419,12 +422,14 @@ class Wpadcenter_Public {
 				add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_post' ) );
 			}
 			add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_post' ) );
-			if ( 'off' === $disable_global_scripts['disable_global_scripts'] ) {
-				add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
-				if ( $body_open_supported ) {
-					add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
+			if ( is_array( $disable_global_scripts ) ) {
+				if ( 'off' === $disable_global_scripts['disable_global_scripts'] ) {
+					add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
+					if ( $body_open_supported ) {
+						add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
+					}
+					add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
 				}
-				add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
 			}
 		}
 
