@@ -91,54 +91,21 @@ class AdGroup extends Component{
 
   render() {
 
-    let adAlignmentCurrent=this.props.adgroupAlignment;
-    let adAlignment;
-    if (adAlignmentCurrent=== 'wpadcenter-alignright'){
-      adAlignment = {
-    display:'inline',
-    float:'right',
-    marginLeft:"1.5em",
-    zIndex:"20",
-    position:"relative",
 
-    };
 
-    }
-    else if (adAlignmentCurrent=== 'wpadcenter-aligncenter'){
-      adAlignment = {
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    zIndex:"20",
-    position:"relative",
-
-    };
-    }
-
-    else if (adAlignmentCurrent=== 'wpadcenter-alignleft'){
-    adAlignment = {
-      display:'inline',
-      float:'left',
-      marginRight:"1.5em",
+    let adAlignment = {
       zIndex:"20",
       position:"relative",
+  };
 
-    };
-    }
-    else{
-    adAlignment = {
-        zIndex:"20",
-        position:"relative",
-    };
-    }
-
+    
 
 
 
 
     return (
 
-        <div style={adAlignment} dangerouslySetInnerHTML={ this.state.ad_html } ></div>
+        <div style={adAlignment} className={this.props.adgroupAlignment} dangerouslySetInnerHTML={ this.state.ad_html } ></div>
         )
 
   	}

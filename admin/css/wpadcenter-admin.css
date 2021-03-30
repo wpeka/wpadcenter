@@ -104,12 +104,14 @@
   flex-wrap:wrap;
 }
 .wpadcenter-ad-spacing{
-  margin:5px;
+  padding:5px;
+}
+.aligncenter .wpadcenter-adgroup-row div{
+	margin:0 auto;
 }
 .edit-post-layout__metaboxes {
   padding: 0 !important;
 }
-
 .edit-post-meta-boxes-area {
   margin: 0 !important;
 }
