@@ -74,7 +74,7 @@
 				}
 			);
 
-			$( '.wpadcenter_copy_text' ).click(
+			$( document ).on('click', '.wpadcenter_copy_text',
 				function(e) {
 					e.preventDefault();
 					var data = $( this ).attr( 'data-attr' );
@@ -88,9 +88,16 @@
 					);
 
 					document.execCommand( 'copy' );
-					alert( 'copied to clipboard!' );
+					if( data.includes('wpadcenter_display') ) 
+						alert( 'Template tag copied to clipboard!' );
+					else
+						alert( 'Shortcode copied to clipboard!' );
 				}
 			);
+
+			$(function() {
+				$('#wpadcenter_scripts').addClass('closed');
+			});
 		}
 	);
 
