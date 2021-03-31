@@ -15,3 +15,7 @@
 .aligncenter .wpadcenter-adgroup-row div{
 	margin:0 auto;
 }
+
+#wpadcenter_ad {
+	display: block;
+}
