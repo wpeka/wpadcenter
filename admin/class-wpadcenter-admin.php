@@ -506,6 +506,7 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_ad_sizes() {
 		$sizes = array(
+			'none'    =>  __( 'Select Ad Size', 'wpadcenter' ),
 			'468x60'  => __( 'IAB Full Banner (468 x 60)', 'wpadcenter' ),
 			'120x600' => __( 'IAB Skyscraper (120 x 600)', 'wpadcenter' ),
 			'160x600' => __( 'IAB Wide Skyscraper (160 x 600)', 'wpadcenter' ),
@@ -1161,7 +1162,11 @@ class Wpadcenter_Admin {
 				break;
 			case 'ad-dimensions':
 				$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-				echo esc_html( $sizes_list[ $ad_size ] );
+				if ( 'none' !== $ad_size ) {
+					echo esc_html( $sizes_list[ $ad_size ] );
+				} else {
+					echo '-';
+				}
 				break;
 			case 'start-date':
 				$current_start_date = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
@@ -1364,7 +1369,7 @@ class Wpadcenter_Admin {
 
 		$sizes_list = $this->get_default_ad_sizes();
 
-		$default_size = apply_filters( 'wpadcenter_ad_size_default', '300x250' );
+		$default_size = apply_filters( 'wpadcenter_ad_size_default', 'none' );
 
 		$size = get_post_meta( $post->ID, 'wpadcenter_ad_size', true );
 		echo '<select name="ad-size" id="size" size="1">';
@@ -2021,7 +2026,7 @@ class Wpadcenter_Admin {
 		if ( array_key_exists( 'adgroup_ids', $attributes ) ) {
 			$adgroup_ids = $attributes['adgroup_ids'];
 		}
-		$adgroup_alignment = 'wpadcenter-alignnone';
+		$adgroup_alignment = 'alignnone';
 		if ( array_key_exists( 'adgroup_alignment', $attributes ) ) {
 			$adgroup_alignment = $attributes['adgroup_alignment'];
 		}

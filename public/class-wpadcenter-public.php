@@ -278,6 +278,10 @@ class Wpadcenter_Public {
 		if ( strstr( $current_url, 'ads.txt' ) ) {
 			return;
 		}
+
+		if ( 'publish' !== get_post_status( $ad_id ) ) {
+			return;
+		}
 		wp_enqueue_style( 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
@@ -308,15 +312,20 @@ class Wpadcenter_Public {
 		if ( true === (bool) $open_in_new_tab ) {
 			$link_target = '_blank';
 		}
-		$ad_size         = explode( 'x', $ad_size );
-		$width           = $ad_size[0];
-		$height          = $ad_size[1];
+		$width  = '';
+		$height = '';
+		if ( 'none' !== $ad_size ) {
+			$ad_size = explode( 'x', $ad_size );
+			$width   = $ad_size[0];
+			$height  = $ad_size[1];
+		}
 		$single_ad_html  = '';
 		$single_ad_html .= '<div ';
 		if ( $attributes['classes'] ) {
-			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
+			$single_ad_html .= 'class="wpadcenter-single-ad-default ' . $attributes['classes'] . '" ';
 		}
 		$single_ad_html .= '>';
+		$single_ad_html .= '<div>';
 		$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
 		if ( true === (bool) $nofollow ) {
 			$single_ad_html .= 'rel="nofollow"';
@@ -341,6 +350,7 @@ class Wpadcenter_Public {
 				break;
 		}
 		$single_ad_html .= '</a>';
+		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
 
 		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
