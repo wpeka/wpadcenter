@@ -432,17 +432,14 @@ class Wpadcenter_Public {
 				add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_post' ) );
 			}
 			add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_post' ) );
-			if ( is_array( $disable_global_scripts ) ) {
-				if ( 'off' === $disable_global_scripts['disable_global_scripts'] ) {
-					add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
-					if ( $body_open_supported ) {
-						add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
-					}
-					add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
+			if ( ! $disable_global_scripts || ( isset( $disable_global_scripts['disable_global_scripts'] ) && 'off' === $disable_global_scripts['disable_global_scripts'] ) ) {
+				add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
+				if ( $body_open_supported ) {
+					add_action( 'wp_body_open', array( $this, 'wpadcenter_output_body_global' ) );
 				}
+				add_action( 'wp_footer', array( $this, 'wpadcenter_output_footer_global' ) );
 			}
 		}
-
 		$body_open_supported = function_exists( 'wp_body_open' ) && version_compare( get_bloginfo( 'version' ), '5.2', '>=' );
 		if ( is_home() ) {
 			add_action( 'wp_head', array( $this, 'wpadcenter_output_header_global' ) );
