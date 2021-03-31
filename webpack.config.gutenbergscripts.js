@@ -29,7 +29,6 @@
              ...defaultConfig.module.rules,
  
          ],
-     },
-     watch: true,
+     }
  };
  
