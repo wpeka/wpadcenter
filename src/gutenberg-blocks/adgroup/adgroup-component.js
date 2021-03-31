@@ -41,7 +41,6 @@ class AdGroup extends Component{
           num_columns:this.props.numColumns,   
       }
   }).done(adgroup_html => {
-
         this.setState( {
             ad_html:{
             __html:adgroup_html,
