@@ -32,3 +32,5 @@ build
 wpadcenter/admin/js/gutenberg-blocks/*.php
 package-lock.json
 
+*.asset.php
+

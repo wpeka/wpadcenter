@@ -84,6 +84,7 @@ module.exports = function( grunt ) {
                 },
                 src: [
                     '**',
+                    '!admin/js/gutenberg-blocks/*.php',
                     '!node_modules/**',
                     '!release/**',
                     '!tests/**',
@@ -91,7 +92,7 @@ module.exports = function( grunt ) {
                     '!src/**',
                     '!.git/**',
                     '!.github/**',
-                    '!bin/*',
+                    '!bin/**',
                     '!Gruntfile.js',
                     '!package.json',
                     '!package-lock.json',
@@ -158,6 +159,7 @@ module.exports = function( grunt ) {
 
         shell: {
             build: [ 'npm run build' ].join( ' && ' ),
+            buildguten: [ 'npm run build:gutenbergblocks' ].join( ' && ' ),
             translations: [ 'npm run makepot' ].join( ' && ' ),
         },
 
@@ -169,6 +171,6 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
     grunt.registerTask( 'readme', ['wp_readme_to_markdown'] );
     grunt.registerTask( 'compile', ['shell:build'] );
-    grunt.registerTask( 'build', ['shell:build', 'clean:build', 'copy:build', 'uglify:admin', 'uglify:frontend', 'cssmin:admin', 'cssmin:frontend', 'compress:build'] );
+    grunt.registerTask( 'build', ['shell:build', 'shell:buildguten', 'clean:build', 'copy:build', 'uglify:admin', 'uglify:frontend', 'cssmin:admin', 'cssmin:frontend', 'compress:build'] );
     grunt.util.linefeed = '\n';
 };
