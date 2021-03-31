@@ -2,3 +2,116 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+.wpadcenter-time-container{
+	margin: 5px 0 10px 0;
+	width:100%;
+	display:flex;
+}
+.wpadcenter-schedule-ok{
+	margin-left:20px !important;
+}
+.wpadcenter-date-input{
+	width:100%;
+}
+.wpadcenter-time-input{
+	width:100%;
+}
+.wpadcenter-activebutton{
+	border:1px solid ;
+	border-radius:3px;
+	padding: 18px 9px;
+}
+.wpadcenter-align-container .dashicon{
+	padding-left:3px;
+}
+.wpadcenter-async-select input[type="text"]:focus{
+	box-shadow: none;
+}
+.Wpadcenter-gutenberg-container .components-placeholder{
+	background-color:#F3F6FF;
+}
+.wpadcenter-left-cell {
+	width: 20%;
+	padding: 10px 10px;
+}
+.wpadcenter-right-cell {
+	width: 80%;
+	padding: 10px 10px;
+}
+.wpadcenter-right-cell > textarea {
+	width: 100%;
+}
+.wpadcenter-table tr td {
+	border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+.wpadcenter-table {
+	width:100%;
+	border-collapse: collapse;
+}
+.wpadcenter-table-tr {
+	vertical-align: top;
+}
+.wpadcenter-schedule-ok{
+   margin-left:20px !important;
+}
+.wpadcenter-date-input{
+   width:100%;
+}
+.wpadcenter-time-input{
+   width:100%;
+}
+.wpadcenter-activebutton{
+  border:1px solid ;
+  border-radius:3px;
+  padding: 18px 9px;
+}
+.wpadcenter-align-container .dashicon{
+  padding-left:3px;
+}
+.wpadcenter-async-select input[type="text"]:focus{
+  box-shadow: none;
+}
+.Wpadcenter-gutenberg-container .components-placeholder{
+  background-color:#F3F6FF;
+}
+.Wpadcenter-gutenberg-container{
+  z-index:20;
+}
+.wpadcenter-left-cell {
+  width: 20%;
+  padding: 10px 10px;
+}
+.wpadcenter-right-cell {
+  width: 80%;
+  padding: 10px 10px;
+}
+.wpadcenter-right-cell > textarea {
+  width: 100%;
+}
+.wpadcenter-table tr td {
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+.wpadcenter-table {
+  width:100%;
+  border-collapse: collapse;
+}
+.wpadcenter-table-tr {
+  vertical-align: top;
+}
+.wpadcenter-adgroup-row{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+}
+.wpadcenter-ad-spacing{
+  padding:5px;
+}
+.aligncenter .wpadcenter-adgroup-row div{
+	margin:0 auto;
+}
+.edit-post-layout__metaboxes {
+  padding: 0 !important;
+}
+.edit-post-meta-boxes-area {
+  margin: 0 !important;
+}

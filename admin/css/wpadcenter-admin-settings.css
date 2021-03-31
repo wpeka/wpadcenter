@@ -1,0 +1,210 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+#wpadcenter_settings_form {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+#wpwrap {
+	background: #F3F6FF;
+}
+
+.card {
+	padding: 0;
+	max-width: 100%;
+}
+
+label {
+	margin: 0;
+	margin-right: 10px;
+}
+.ad-toggle {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.wpadcenter-margin-mod {
+	margin-bottom: 6px;
+}
+.auto_refresh_enabled {
+	margin-top: 15px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 30px;
+}
+
+.auto_refresh_enabled label {
+	margin-bottom: 5px;
+}
+
+.form-label {
+	margin: 10px 0px 7px 0px;
+}
+
+.header-scripts {
+	margin-top: 0px;
+}
+
+.enable_scripts_enabled > label {
+	margin-right: 10px;
+}
+.c-icon {
+	vertical-align: text-top;
+	margin-left: -5px;
+}
+
+#app {
+	width: 750px;
+}
+.enable_scripts_enabled {
+	margin-top: 20px;
+}
+
+.form-control {
+	width: 100%;
+}
+.enable_ads_txt_enabled {
+	margin-top: 20px;
+}
+.ads-txt-label {
+	margin-bottom: 7px;
+	margin-right: 10px;
+}
+#ads_txt_content {
+	width: 100%;
+	margin-bottom: 1em;
+}
+.ads_txt_spinner {
+	display:block;
+	margin: 10px 0px;
+}
+.wpadcenter-p-margin-mod {
+	margin-top: 10px;
+}
+
+.wpadcenter-label-margin-bottom {
+	margin-bottom: 10px;
+}
+#wpcontent {
+	background: #F3F6FF;
+}
+.wpadcenter-tab-head {
+	margin-right: 0px;
+}
+.wpadcenter-tab-head .nav-tab-active {
+	background: #F3F6FF;
+	border-bottom: solid 1px #fff;
+}
+.wpadcenter-tab-head .nav-tab:focus {
+	box-shadow: none;
+}
+.wpadcenter_settings_left {
+	width: 100%;
+	margin-bottom: 25px;
+	float: left;
+}
+.wpadcenter_settings_right {
+	width: 25%;
+	float: right;
+}
+@media screen and (max-width:1210px) {
+	.wpadcenter_settings_left {
+		width:100%;
+	}
+	.wpadcenter_settings_right {
+		padding-left:0px;
+		width:100%;
+	}
+}
+.wpadcenter-tab-container {
+	background: #F3F6FF;
+	box-sizing: border-box;
+	width: 100%;
+	height: auto;
+}
+.wpadcenter-tab-container .button-primary {
+	height: 34px;
+	font-size: 14px;
+	font-weight: 400;
+}
+.wpadcenter-tab-content {
+	display: none;
+	width: 100%;
+	height: auto;
+}
+.wpadcenter-tab-content .vvv_combobox {
+	width: 50%;
+}
+.wpadcenter-tab-content .vvv_textbox {
+	height: 150px;
+	width: 75%;
+}
+.wpadcenter-tab-content .form-table {
+	border-bottom: 1px solid #ccc;
+}
+.wpadcenter-tab-content .form-table input[type="text"],
+.wpadcenter-tab-content .form-table input[type="select"],
+.wpadcenter-tab-content .form-table input[type="email"],
+.wpadcenter-tab-content .form-table input[type="password"],
+.wpadcenter_sub_tab_content .vvv_textfield {
+	width: 50%;
+	margin-bottom: 5px;
+}
+.wpadcenter-tab-content .wpadcenter_form_help {
+	color: #aaa;
+	font-style: italic;
+	font-weight: 250;
+	font-size: 12px;
+	display: inline-block;
+	width: 100%;
+}
+.wpadcenter-tab-content .wpadcenter-plugin-toolbar {
+	height: 40px;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+.wpadcenter-tab-content .wpadcenter-plugin-toolbar .left {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+.wpadcenter-tab-content .wpadcenter-plugin-toolbar .left img {
+	vertical-align: text-bottom;
+	margin-right: 10px;
+}
+.wpadcenter-tab-content .wpadcenter-plugin-toolbar .right {
+	float: right;
+	margin: 0 10px 0 0;
+	padding: 0;
+}
+.wpadcenter-tab-content .wpadcenter-plugin-toolbar.top {
+	margin-bottom: -5px;
+}
+.wpadcenter-tab-content .wpadcenter-plugin-toolbar.bottom {
+	margin-top: 12px;
+}
+.wpadcenter-plugin-toolbar.top {
+	margin-top:-15px;
+	background: #f5f5f5;
+	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	margin-left: -15px;
+	margin-right: -15px;
+	margin-bottom: -15px;
+	padding:15px;
+}
+.notify_msg {
+	position: fixed;
+	width: 300px;
+	padding: 15px;
+	color: #fff;
+	right: 60px;
+	top: 0px;
+	opacity: 0;
+	box-shadow: 0px 2px 2px #ccc;
+	border-radius: 5px;
+}

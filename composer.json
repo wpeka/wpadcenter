@@ -17,7 +17,9 @@
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
     "phpcompatibility/phpcompatibility-wp": "*",
     "wp-coding-standards/wpcs": "^2.1.0",
-    "wptrt/wpthemereview": "^0.2.0"
+    "wptrt/wpthemereview": "^0.2.0",
+    "bamarni/composer-bin-plugin": "^1.4",
+    "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
   },
   "config": {
     "optimize-autoloader": true,

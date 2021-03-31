@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Fired during plugin deactivation
  *
- * @link       https://wpadcenter.com/
- * @since      1.0.0
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
  *
  * @package    Wpadcenter
  * @subpackage Wpadcenter/includes
@@ -27,10 +26,10 @@ class Wpadcenter_Deactivator {
 	 *
 	 * Long Description.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public static function deactivate() {
-
+		wp_clear_scheduled_hook( 'wpadcenter_monthly_cron' );
 	}
 
 }

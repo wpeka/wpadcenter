@@ -1,13 +1,12 @@
 <?php
-
 /**
  * Define the internationalization functionality
  *
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       https://wpadcenter.com/
- * @since      1.0.0
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
  *
  * @package    Wpadcenter
  * @subpackage Wpadcenter/includes
@@ -24,13 +23,13 @@
  * @subpackage Wpadcenter/includes
  * @author     WPEka <hello@wpeka.com>
  */
-class Wpadcenter_i18n {
+class Wpadcenter_I18n {
 
 
 	/**
 	 * Load the plugin text domain for translation.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public function load_plugin_textdomain() {
 

@@ -1,3 +1,12 @@
+/**
+ * Javascript file for public section.
+ *
+ * @link  https://wpadcenter.com/
+ * @since 1.0.0
+ *
+ * @package Wpadcenter
+ */
+
 (function( $ ) {
 	'use strict';
 
@@ -29,4 +38,25 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+	$( document ).ready(
+		function() {
+			$( document ).on(
+				'click',
+				'#wpadcenter_ad',
+				function() {
+					var ad_id   = $( this ).data( 'value' );
+					var request = {
+						action: "set_clicks",
+						ad_id: ad_id,
+						security: ajax_url.security,
+					};
+					$.post( ajax_url.url, request ).always(
+						function(response){
+							response = JSON.parse( response );
+						}
+					);
+				}
+			);
+		}
+	);
 })( jQuery );
