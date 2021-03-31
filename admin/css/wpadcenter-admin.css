@@ -16,20 +16,6 @@
 .wpadcenter-time-input{
 	width:100%;
 }
-.wpadcenter-activebutton{
-	border:1px solid ;
-	border-radius:3px;
-	padding: 18px 9px;
-}
-.wpadcenter-align-container .dashicon{
-	padding-left:3px;
-}
-.wpadcenter-async-select input[type="text"]:focus{
-	box-shadow: none;
-}
-.Wpadcenter-gutenberg-container .components-placeholder{
-	background-color:#F3F6FF;
-}
 .wpadcenter-left-cell {
 	width: 20%;
 	padding: 10px 10px;
@@ -60,23 +46,6 @@
 .wpadcenter-time-input{
    width:100%;
 }
-.wpadcenter-activebutton{
-  border:1px solid ;
-  border-radius:3px;
-  padding: 18px 9px;
-}
-.wpadcenter-align-container .dashicon{
-  padding-left:3px;
-}
-.wpadcenter-async-select input[type="text"]:focus{
-  box-shadow: none;
-}
-.Wpadcenter-gutenberg-container .components-placeholder{
-  background-color:#F3F6FF;
-}
-.Wpadcenter-gutenberg-container{
-  z-index:20;
-}
 .wpadcenter-left-cell {
   width: 20%;
   padding: 10px 10px;
@@ -97,17 +66,6 @@
 }
 .wpadcenter-table-tr {
   vertical-align: top;
-}
-.wpadcenter-adgroup-row{
-  display:flex;
-  flex-direction:row;
-  flex-wrap:wrap;
-}
-.wpadcenter-ad-spacing{
-  padding:5px;
-}
-.aligncenter .wpadcenter-adgroup-row div{
-	margin:0 auto;
 }
 .edit-post-layout__metaboxes {
   padding: 0 !important;

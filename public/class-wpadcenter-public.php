@@ -296,10 +296,11 @@ class Wpadcenter_Public {
 			'classes' => '',
 
 		);
-		$attributes   = wp_parse_args( $attributes, $default_attributes );
-		$current_time = time();
-		$start_date   = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
-		$end_date     = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
+		$attributes             = wp_parse_args( $attributes, $default_attributes );
+		$attributes['classes'] .= ' wpadcenter-single-ad-default ';
+		$current_time           = time();
+		$start_date             = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
+		$end_date               = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
@@ -315,14 +316,16 @@ class Wpadcenter_Public {
 		$width  = '';
 		$height = '';
 		if ( 'none' !== $ad_size ) {
-			$ad_size = explode( 'x', $ad_size );
-			$width   = $ad_size[0];
-			$height  = $ad_size[1];
+			$ad_size                = explode( 'x', $ad_size );
+			$width                  = $ad_size[0];
+			$height                 = $ad_size[1];
+			$attributes['classes'] .= ' wpadcenter-' . $width . 'x' . $height;
+
 		}
 		$single_ad_html  = '';
 		$single_ad_html .= '<div ';
 		if ( $attributes['classes'] ) {
-			$single_ad_html .= 'class="wpadcenter-single-ad-default ' . $attributes['classes'] . '" ';
+			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
 		}
 		$single_ad_html .= '>';
 		$single_ad_html .= '<div>';
@@ -333,7 +336,7 @@ class Wpadcenter_Public {
 		$single_ad_html .= '>';
 		switch ( $ad_type ) {
 			case 'banner_image':
-				$banner_img      = get_the_post_thumbnail( $ad_id, array( $width, $height ) );
+				$banner_img      = get_the_post_thumbnail( $ad_id );
 				$single_ad_html .= $banner_img;
 				break;
 			case 'external_image_link':
@@ -653,6 +656,22 @@ class Wpadcenter_Public {
 			return;
 
 		}
+
+	}
+
+	/**
+	 * Register scripts for gutenberg block.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_gutenberg_scripts() {
+		wp_enqueue_style(
+			$this->plugin_name . '-frontend',
+			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-public' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
 
 	}
 }
