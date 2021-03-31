@@ -297,8 +297,7 @@ class Wpadcenter_Admin {
 			if ( isset( $trim_point ) && $trim_point > 0 ) {
 				$stat_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ad_id FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date < DATE_ADD( NOW() , INTERVAL -%d MONTH )', array( $trim_point ) ) ); // db call ok; no-cache ok.
 				if ( is_array( $stat_ids ) && ! empty( $stat_ids ) ) {
-					$stat_ids = implode( $stat_ids, ',' );
-					$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_id IN ( %s )', array( $stat_ids ) ) ); // db call ok; no-cache ok.
+					$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date < DATE_ADD( NOW() , INTERVAL -%d MONTH )', array( $trim_point ) ) ); // db call ok; no-cache ok.
 				}
 			}
 		}
