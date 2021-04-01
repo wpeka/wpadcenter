@@ -506,7 +506,7 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_ad_sizes() {
 		$sizes = array(
-			'none'    =>  __( 'Select Ad Size', 'wpadcenter' ),
+			'none'    => __( 'Select Ad Size', 'wpadcenter' ),
 			'468x60'  => __( 'IAB Full Banner (468 x 60)', 'wpadcenter' ),
 			'120x600' => __( 'IAB Skyscraper (120 x 600)', 'wpadcenter' ),
 			'160x600' => __( 'IAB Wide Skyscraper (160 x 600)', 'wpadcenter' ),
@@ -1958,6 +1958,7 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
+		wp_localize_script( 'wpadcenter-gutenberg-adgroup', 'wpadcenter_adgroup_verify', array( 'adgroup_nonce' => wp_create_nonce( 'adgroup_nonce' ) ) );
 		register_block_type(
 			'wpadcenter/adgroup',
 			array(
@@ -2158,23 +2159,6 @@ class Wpadcenter_Admin {
 
 	}
 
-
-	/**
-	 * Register scripts for gutenberg block.
-	 *
-	 * @since 1.0.0
-	 */
-	public function wpadcenter_register_gutenberg_scripts() {
-		wp_enqueue_style(
-			$this->plugin_name,
-			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css',
-			array(),
-			$this->version,
-			'all'
-		);
-
-	}
-
 	/**
 	 * Ajax when ad is selected in reports custom-reports page.
 	 */
@@ -2314,5 +2298,41 @@ class Wpadcenter_Admin {
 		if ( 'wpadcenter-ads' === $post_type ) {
 			echo '<style>#edit-slug-box {display:none;}</style>';
 		}
+	}
+
+	/**
+	 * Provides adgroup html for gutenberg preview.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_adgroup_gutenberg_preview() {
+
+		if ( ! isset( $_POST['adgroup_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['adgroup_nonce'] ), 'adgroup_nonce' ) ) {
+			wp_die();
+		}
+		$adgroup_ids = array();
+		if ( ! empty( $_POST['ad_groups'] ) ) {
+			$adgroup_ids = $_POST['ad_groups']; //phpcs:ignore
+		}
+		$adgroup_alignment = 'alignnone';
+		if ( ! empty( $_POST['alignment'] ) ) {
+			$adgroup_alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ) );
+		}
+			$num_ads = '1';
+		if ( ! empty( $_POST['num_ads'] ) ) {
+			$num_ads = sanitize_text_field( wp_unslash( $_POST['num_ads'] ) );
+		}
+			$num_columns = '1';
+		if ( ! empty( $_POST['num_columns'] ) ) {
+			$num_columns = sanitize_text_field( wp_unslash( $_POST['num_columns'] ) );
+		}
+			$adgroup_attributes = array(
+				'adgroup_ids' => $adgroup_ids,
+				'align'       => $adgroup_alignment,
+				'num_ads'     => $num_ads,
+				'num_columns' => $num_columns,
+			);
+			echo Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes ); //phpcs:ignore
+			wp_die();
 	}
 }
