@@ -3,7 +3,7 @@
 <p align="center">
 <a href="https://wordpress.org/plugins/wpadcenter/"><img src="https://img.shields.io/wordpress/plugin/v/wpadcenter" alt="Latest Stable Version"></a>
 <img src="https://img.shields.io/wordpress/plugin/dt/wpadcenter" alt="WordPress.org downloads">
-<a href="https://travis-ci.com/wpeka/wpadcenter"><img src="https://travis-ci.com/wpeka/wpadcenter.svg?branch=trunk" alt="Build Status"></a>
+<a href="https://github.com/wpeka/wpadcenter/actions/workflows/pr-code-coverage.yml"><img src="https://github.com/wpeka/wpadcenter/actions/workflows/pr-code-coverage.yml/badge.svg" alt="Github Actions"></a>
 <a href="https://codecov.io/gh/wpeka/wpadcenter"><img src="https://codecov.io/gh/wpeka/wpadcenter/branch/trunk/graph/badge.svg?token=1IY9393BLU" alt="codecov"></a>
 </p>
 

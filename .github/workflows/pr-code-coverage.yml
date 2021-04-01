@@ -1,4 +1,4 @@
-name: Run code coverage on PR
+name: Run CI
 on:
   pull_request
 jobs:
