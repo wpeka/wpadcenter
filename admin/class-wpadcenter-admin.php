@@ -2217,6 +2217,7 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_page_posts_metabox_render( $post ) {
 		$array = get_post_meta( $post->ID, 'scripts', true );
+		wp_enqueue_style( $this->plugin_name );
 		wp_nonce_field( 'action', 'nonce' );
 		?>
 			<table class="wpadcenter-table">
