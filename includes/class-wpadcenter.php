@@ -238,7 +238,6 @@ class Wpadcenter {
 			$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
 		}
 		$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_public, 'wpadcenter_register_gutenberg_scripts' );
-
 	}
 
 	/**

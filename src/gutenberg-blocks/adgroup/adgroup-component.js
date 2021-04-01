@@ -60,6 +60,7 @@ class AdGroup extends Component{
       zIndex:"20",
       position:"relative",
   };
+
   if (this.props.adgroupAlignment !== 'aligncenter'){
     adAlignment = {
       zIndex:"20",

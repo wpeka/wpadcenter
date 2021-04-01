@@ -1374,7 +1374,6 @@ class Wpadcenter_Admin {
 		$size = get_post_meta( $post->ID, 'wpadcenter_ad_size', true );
 		echo '<select name="ad-size" id="size" size="1">';
 		foreach ( $sizes_list as $val => $name ) {
-
 			echo sprintf(
 				'<option value="%s" %s>%s</option>',
 				esc_attr( $val ),
@@ -2325,6 +2324,669 @@ class Wpadcenter_Admin {
 			$num_columns = '1';
 		if ( ! empty( $_POST['num_columns'] ) ) {
 			$num_columns = sanitize_text_field( wp_unslash( $_POST['num_columns'] ) );
+
+			echo sprintf(
+				'<option value="%s" %s>%s</option>',
+				esc_attr( $val ),
+				( empty( $size ) && $val === $default_size ? 'selected="selected"' : selected( $size, $val ) ),
+				esc_html( $name )
+			);
+
+		}
+		echo '</select>';
+	}
+
+	/**
+	 * Ad-detail meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_detail_metabox( $post ) {
+		$open_in_new_tab  = get_post_meta( $post->ID, 'wpadcenter_open_in_new_tab', true );
+		$nofollow_on_link = get_post_meta( $post->ID, 'wpadcenter_nofollow_on_link', true );
+		$url              = get_post_meta( $post->ID, 'wpadcenter_link_url', true );
+		echo '
+		<div>
+		<label for="open-in-new-tab"><input name="open-in-new-tab" type="checkbox" value="1" id="open-in-new-tab" ' . checked( '1', $open_in_new_tab, false ) . '> ' . esc_html__( 'Open Link In a New Tab', 'wpadcenter' ) . '</label>
+		<label for="nofollow-on-link" style="margin-left:20px"><input name="nofollow-on-link" type="checkbox" value="1" id="nofollow-on-link" ' . checked( '1', $nofollow_on_link, false ) . '>' . esc_html__( 'Use nofollow on Link', 'wpadcenter' ) . '</label>
+		</div>
+		<div style="margin-top:10px">
+		<label for="link-url"><strong>' . esc_html__( 'Link URL', 'wpadcenter' ) . '</strong></label>
+		<input type="text" name="link-url" value="' . esc_attr( $url ) . '" id="link-url" style="width:100%" >
+		</div>
+		';
+	}
+
+
+	/**
+	 * Ad-code meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_code_metabox( $post ) {
+		$ad_code = get_post_meta( $post->ID, 'wpadcenter_ad_code', true );
+		echo '<textarea name="ad-code" style="width:100%;height:200px" >' . esc_textarea( $ad_code ) . '</textarea>';
+	}
+
+	/**
+	 * Ad Google Adsense meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_google_adsense( $post ) {
+		$ad_google_adsense = get_post_meta( $post->ID, 'wpadcenter_ad_google_adsense', true );
+		echo '<textarea name="ad-google-adsense" id="wpadcenter-google-adsense-code" style="width:100%;height:200px" >' . esc_textarea( $ad_google_adsense ) . '</textarea>';
+		$this->render_adsense_selection();
+	}
+
+	/**
+	 * External Image Link meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_external_image_link_metabox( $post ) {
+		$image_link          = get_post_meta( $post->ID, 'wpadcenter_external_image_link', true );
+		$external_image_link = ! empty( $image_link ) ? $image_link : '';
+		echo '<input name="external-image-link" type="text" value="' . esc_url( $external_image_link ) . '" style="width:100%">';
+	}
+
+	/**
+	 * Ad type meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_type( $post ) {
+
+		wp_nonce_field( 'wpadcenter_save_ad', 'wpadcenter_save_ad_nonce' );
+
+		$ad_types_list = $this->get_default_ad_types();
+
+		$ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
+
+		$default_ad_type = apply_filters( 'wpadcenter_ad_type_default', 'banner_image' );
+
+		echo '<select name="ad-type" id="ad-type">';
+		foreach ( $ad_types_list as $val => $name ) {
+
+			echo sprintf(
+				'<option value="%s" %s>%s</option>',
+				esc_attr( $val ),
+				( empty( $ad_type ) && $val === $default_ad_type ? 'selected="selected"' : selected( $ad_type, $val ) ),
+				esc_html( $name )
+			);
+
+		}
+
+		echo '</select>';
+
+	}
+
+	/**
+	 * Save ad meta data.
+	 *
+	 * @param integer $post_id post id of post being saved.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_save_ad_meta( $post_id ) {
+
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return $post_id;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		$nonce_field = 'wpadcenter_save_ad_nonce';
+		if (
+			! isset( $_POST[ $nonce_field ] ) ||
+			! wp_verify_nonce( sanitize_key( $_POST[ $nonce_field ] ), 'wpadcenter_save_ad' )
+		) {
+			return;
+		}
+
+		$raw_data = $_POST;
+
+		$metafields = $this->get_default_metafields();
+
+		foreach ( $metafields as $meta_name => $meta_data ) {
+
+			$sanitized_data = false;
+
+			switch ( $meta_data[1] ) {
+
+				case 'string':
+					$sanitized_data = sanitize_text_field( $raw_data[ $meta_name ] );
+					break;
+				case 'bool':
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) ? (bool) $raw_data[ $meta_name ] : 0;
+					break;
+				case 'raw':
+					$sanitized_data = $raw_data[ $meta_name ];
+					break;
+				case 'url':
+					$sanitized_data = esc_url_raw( $raw_data[ $meta_name ] );
+					break;
+				case 'date':
+					$sanitized_data = intval( $raw_data[ $meta_name ] );
+					break;
+			}
+
+			if ( true === (bool) $sanitized_data || empty( $sanitized_data ) ) {
+
+				update_post_meta( $post_id, $meta_data[0], $sanitized_data );
+
+			} elseif ( ! isset( $raw_data[ $meta_name ] ) && 'bool' === $meta_data[1] ) {
+
+				delete_post_meta( $post_id, $meta_data[0] );
+
+			}
+			if ( ! get_post_meta( $post_id, 'wpadcenter_ads_stats' ) ) {
+				$meta = array(
+					'total_impressions' => 0,
+					'total_clicks'      => 0,
+				);
+				update_post_meta( $post_id, 'wpadcenter_ads_stats', $meta );
+			}
+		}
+
+		do_action( 'wpadcenter_save_ad_meta', $raw_data, $post_id );
+
+	}
+
+
+	/**
+	 * Renders meta boxes as per ad-type.
+	 *
+	 * @param WP_POST $post post being edited.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_edit_form_after_title( $post ) {
+
+		$ad_meta_relation = $this->get_ad_meta_relation();
+
+		$current_ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
+		$current_ad_type = ! empty( $current_ad_type ) ? $current_ad_type : 'banner_image';
+
+		wp_localize_script( $this->plugin_name, 'wpadcenter_render_metaboxes', array( $ad_meta_relation, $current_ad_type ) );
+		wp_enqueue_script( $this->plugin_name );
+
+	}
+
+	/**
+	 * Adds options to set start and end date for ads.
+	 *
+	 * @param WP_POST $post post being edited.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_post_submitbox_start( $post ) {
+		if ( get_post_type() === 'wpadcenter-ads' || get_query_var( 'post_type' ) === 'wpadcenter-ads' ) {
+
+			global $wp_locale;
+
+			$ad_scheduler = array(
+				'gmt_offset'      => get_option( 'gmt_offset' ),
+				'timezone_string' => get_option( 'timezone_string' ),
+				'months'          => $wp_locale->month,
+				'expire_limit'    => 1924905600, // unix timestamp for 31 dec 2030.
+				'expires_message' => __( 'Ad Expires on', 'wpadcenter' ),
+				'forever_message' => sprintf(
+					'%s <strong>%s</strong> ',
+					__( 'Publish', 'wpadcenter' ),
+					__( 'forever', 'wpadcenter' )
+				),
+			);
+
+			wp_localize_script( $this->plugin_name . 'adscheduler', 'wpadcenter_ad_scheduler', $ad_scheduler );
+
+			wp_enqueue_style( $this->plugin_name );
+
+			wp_enqueue_style( $this->plugin_name . 'jquery-ui' );
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+
+			wp_enqueue_script( $this->plugin_name . 'adscheduler' );
+
+			$start_date = get_post_meta( $post->ID, 'wpadcenter_start_date', true );
+			$end_date   = get_post_meta( $post->ID, 'wpadcenter_end_date', true );
+
+			echo '<div class="misc-pub-section curtime misc-pub-curtime">
+
+		<span id="timestamp">
+		 <span id="publish-text"></span>
+		</span>
+		<a href="#" id="edit-ad-schedule">Edit</a>
+
+		
+		</div>';
+
+			echo '<div id="ad-schedule-show" class="ad-schedule-box" style="display:none">';
+			// start date code starts.
+			echo '<label for="start-date">' . esc_html__( 'Starts From', 'wpadcenter' ) . '</label>';
+			echo '<div>';
+			echo '<input id="start-date" type="text" class="wpadcenter-date-input" autocomplete="off">';
+			echo '</div>';
+			// time in hours and minutes.
+			echo '<div class="wpadcenter-time-container">';
+
+			echo '<select id="start-hours" class="wpadcenter-time-input">';
+			for ( $i = 0; $i < 24; ++$i ) {
+
+				$hour = str_pad( $i, 2, '0', STR_PAD_LEFT );
+
+				printf(
+					'<option value="%1$s">%1$s</option>',
+					esc_attr( $hour )
+				);
+			}
+			echo '</select>';
+			echo ' : ';
+
+			echo '<select id="start-minutes" class="wpadcenter-time-input">';
+			for ( $i = 0; $i < 60; ++$i ) {
+				$minutes = str_pad( $i, 2, '0', STR_PAD_LEFT );
+				printf(
+					'<option value="%1$s">%1$s</option>',
+					esc_attr( $minutes )
+				);
+			}
+			echo '</select>';
+
+			echo '</div>';
+
+			$start_time = ! $start_date ? time() : $start_date;
+
+			printf(
+				'<input type="hidden" name="start_date" id="start_date" value="%s">',
+				esc_attr( $start_time )
+			);
+
+			// start date code ends.
+
+			// end date code starts.
+			echo '<label for="end-date">' . esc_html__( 'Expires On', 'wpadcenter' ) . '</label>';
+			echo '<div>';
+			echo '<input id="end-date" type="text" class="wpadcenter-date-input" autocomplete="off">';
+			echo '</div>';
+			// time in hours and minutes.
+			echo '<div class="wpadcenter-time-container">';
+
+			echo '<select id="end-hours" class="wpadcenter-time-input">';
+			for ( $i = 0; $i < 24; ++$i ) {
+
+				$hour = str_pad( $i, 2, '0', STR_PAD_LEFT );
+
+				printf(
+					'<option value="%1$s">%1$s</option>',
+					esc_attr( $hour )
+				);
+			}
+			echo '</select> ';
+			echo ' : ';
+
+			echo '<select id="end-minutes" class="wpadcenter-time-input">';
+			for ( $i = 0; $i < 60; ++$i ) {
+				$minutes = str_pad( $i, 2, '0', STR_PAD_LEFT );
+				printf(
+					'<option value="%1$s">%1$s</option>',
+					esc_attr( $minutes )
+				);
+			}
+			echo '</select>';
+
+			echo '</div>';
+
+			$end_time = ! $end_date ? $ad_scheduler['expire_limit'] : $end_date;
+
+			printf(
+				'<input type="hidden" name="end_date" id="end_date" value="%s">',
+				esc_attr( $end_time )
+			);
+
+			// end date code ends.
+
+			echo '<a href="#" id="ad-publish-forever" class="button">Publish Forever</a>';
+			echo '<a href="#" id="ad-schedule-ok" class="wpadcenter-schedule-ok button">OK</a>';
+
+			echo '</div>';
+		}
+
+	}
+
+
+
+
+
+	/**
+	 * Getting Started Page
+	 */
+	public function wpadcenter_getting_started() {
+		// Lock out non-admins.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+		$is_pro   = get_option( 'wpadcenter_pro_active' );
+		$disabled = get_option( 'wpadcenter_pro_woo_integrated' );
+		if ( $is_pro ) {
+			$support_url = 'https://club.wpeka.com/my-account/orders/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=support';
+		} else {
+			$support_url = 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=forums';
+		}
+		wp_enqueue_style( $this->plugin_name . '-gettingstarted-css' );
+		wp_enqueue_script( $this->plugin_name . '-gettingstarted' );
+		wp_localize_script(
+			$this->plugin_name . '-gettingstarted',
+			'obj',
+			array(
+				'menu_items'          => array(
+					'support_text'       => __( 'Support', 'wpadcenter' ),
+					'support_url'        => $support_url,
+					'documentation_text' => __( 'Documentation', 'wpadcenter' ),
+					'documentation_url'  => 'https://docs.wpeka.com/wp-adcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=documentation',
+					'faq_text'           => __( 'FAQ', 'wpadcenter' ),
+					'faq_url'            => 'https://docs.wpeka.com/wp-adcenter/faq/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=faq',
+					'upgrade_text'       => __( 'Upgrade to Pro &raquo;', 'wpadcenter' ),
+					'upgrade_url'        => 'https://club.wpeka.com/product/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=upgrade-to-pro',
+				),
+				'ajax_url'            => admin_url( 'admin-ajax.php' ),
+				'ajax_nonce'          => wp_create_nonce( 'admin-ajax-nonce' ),
+				'is_pro'              => $is_pro,
+				'disabled'            => $disabled,
+				'welcome_text'        => __( 'Welcome to WP AdCenter!', 'wpadcenter' ),
+				'welcome_subtext'     => __( 'Complete Ad Management Plugin.', 'wpadcenter' ),
+				'welcome_description' => __( 'Thank you for choosing WP AdCenter plugin - the powerful WordPress ads plugin.', 'wpadcenter' ),
+				'welcome_sub_desc'    => __( 'You can control every aspect of ads on your website. Place ads or Ad scripts anywhere on your website. Compatible with Gutenberg & Popular Page Builders.', 'wpadcenter' ),
+				'quick_links_text'    => __( 'See Quick Links', 'wpadcenter' ),
+				'separator_text'      => __( '--- OR ---', 'wpadcenter' ),
+				'configure'           => array(
+					'text'           => __( 'Configure WP AdCenter Settings including:', 'wpadcenter' ),
+					'button_text'    => __( 'Configure WP AdCenter', 'wpadcenter' ),
+					'url'            => admin_url() . 'edit.php?post_type=wpadcenter-ads&page=wpadcenter-settings',
+					'settings_items' => apply_filters(
+						'wpadcenter_settings_items',
+						array(
+							__( 'Auto-refresh of ads', 'wpadcenter' ),
+							__( 'Transitions, and more', 'wpadcenter' ),
+							__( 'Third-Party Advertisers', 'wpadcenter' ),
+							__( 'Notification', 'wpadcenter' ),
+							__( 'Geo Location', 'wpadcenter' ),
+						)
+					),
+				),
+			)
+		);
+		?>
+		<div id="adc-gettingstarted-app"></div>
+		<div id="adc-mascot-app"></div>
+		<?php
+	}
+
+	/**
+	 * Ajax when ad group is selected in reports page.
+	 */
+	public function wpadcenter_ad_group_selected() {
+		// check nonce security.
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'adgroups_security', 'security' );
+		}
+		if ( 'selected_adgroup_reports' === $_POST['action'] ) {
+			$selected_ad_group = isset( $_POST['selected_ad_group'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_ad_group'] ) ) : '';
+			$args              = array(
+				'post_type' => 'wpadcenter-ads',
+				'tax_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+					array(
+						'taxonomy' => 'wpadcenter-adgroups',
+						'terms'    => $selected_ad_group,
+					),
+				),
+			);
+			$the_query         = new WP_Query( $args );
+			$return_array      = array();
+			if ( $the_query->have_posts() ) {
+				while ( $the_query->have_posts() ) {
+					$the_query->the_post();
+					$ad_id    = get_the_ID();
+					$ad_title = get_the_title();
+					$ad_meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+					$temp     = array(
+						'ad_id'    => $ad_id,
+						'ad_title' => $ad_title,
+						'ad_meta'  => $ad_meta,
+					);
+					array_push( $return_array, $temp );
+				}
+			}
+			// echo reports data as per ad group selected and die.
+			echo wp_json_encode( $return_array );
+			wp_die();
+		}
+	}
+
+	/**
+	 * Ajax when ad is selected in reports custom-reports page.
+	 */
+	public function wpadcenter_ad_selected() {
+		// check nonce security.
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'selectad_security', 'security' );
+		}
+
+		if ( 'selected_ad_reports' === $_POST['action'] ) {
+			$start_date = isset( $_POST['start_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['start_date'] ) ) : '';
+			$end_date   = isset( $_POST['end_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['end_date'] ) ) : '';
+			$ads = $_POST['selected_ad']; // phpcs:ignore
+			$ad_ids     = array();
+			if ( is_array( $ads ) ) {
+				foreach ( $ads as $ad ) {
+					$ad_id = intval( $ad['ad_id'] );
+					array_push( $ad_ids, $ad_id );
+				}
+			}
+
+			if ( '' === $start_date || '' === $end_date || ! count( $ad_ids ) ) {
+				$return_array = array( 'error' => 'Error' );
+				echo wp_json_encode( $return_array );
+			}
+			global $wpdb;
+			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs:ignore
+			if ( is_array( $records ) ) {
+				foreach ( $records as $record ) {
+					$record->ad_title = get_the_title( intval( $record->ad_id ) );
+				}
+				echo wp_json_encode( $records );
+			}
+			wp_die();
+		}
+	}
+
+	/**
+	 * Post request when export csv is called on custom-reports page.
+	 */
+	public function wpadcenter_export_csv() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'exportcsv_security', 'security' );
+		}
+		$filename       = $this->plugin_name . '-stats';
+		$generated_date = gmdate( 'd-m-Y His' );
+		$csv_string     = isset( $_POST['csv_data'] ) ? sanitize_textarea_field( wp_unslash( $_POST['csv_data'] ) ) : '';
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . ' ' . $generated_date . '.csv";' );
+		echo wp_kses_data( $csv_string );
+		die();
+	}
+
+	/**
+	 * Dequeue forms.css.
+	 *
+	 * @param string $href url of styles in loop.
+	 */
+	public function wpadcanter_dequeue_styles( $href ) {
+		if ( is_admin() ) {
+			$my_current_screen = get_current_screen();
+			if ( isset( $my_current_screen->post_type ) && ( 'wpadcenter-ads_page_wpadcenter-reports' === $my_current_screen->base || 'wpadcenter-ads_page_wpadcenter-settings' === $my_current_screen->base ) ) {
+				if ( strpos( $href, 'forms.css' ) !== false || strpos( $href, 'revisions' ) ) {
+					return false;
+				}
+			}
+		}
+		return $href;
+	}
+	/**
+	 * Dequeue forms.css && revisions.css for newer version of WordPress.
+	 *
+	 * @param array $to_dos .
+	 */
+	public function wpadcenter_remove_forms_style( $to_dos ) {
+		if ( is_admin() ) {
+			$my_current_screen = get_current_screen();
+
+			if ( isset( $my_current_screen->post_type ) && ( 'wpadcenter-ads_page_wpadcenter-reports' === $my_current_screen->base || 'wpadcenter-ads_page_wpadcenter-settings' === $my_current_screen->base ) && ( in_array( 'forms', $to_dos, true ) || in_array( 'revisions', $to_dos, true ) ) ) {
+				$key = array_search( 'forms', $to_dos, true );
+				unset( $to_dos[ $key ] );
+				$key = array_search( 'revisions', $to_dos, true );
+				unset( $to_dos[ $key ] );
+			}
+		}
+		return $to_dos;
+	}
+
+	/**
+	 * Registers single ads widget.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_single_ad_widget() {
+		register_widget( 'Wpadcenter_Single_Ad_Widget' );
+	}
+
+	/**
+	 * Registers gutenberg block for single ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_gutenberg_blocks() {
+
+		wp_register_script(
+			'wpadcenter-gutenberg-single-ad',
+			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-singlead.js',
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
+			$this->version,
+			false
+		);
+		register_block_type(
+			'wpadcenter/single-ad',
+			array(
+				'editor_script'   => 'wpadcenter-gutenberg-single-ad',
+				'attributes'      => array(
+					'ad_id'        => array(
+						'type' => 'number',
+					),
+					'ad_alignment' => array(
+						'type' => 'string',
+					),
+
+				),
+				'render_callback' => array( $this, 'gutenberg_display_single_ad_cb' ),
+			)
+		);
+		wp_register_script(
+			'wpadcenter-gutenberg-adgroup',
+			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-adgroup.js',
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
+			$this->version,
+			false
+		);
+		register_block_type(
+			'wpadcenter/adgroup',
+			array(
+				'editor_script'   => 'wpadcenter-gutenberg-adgroup',
+				'attributes'      => array(
+					'ad_ids'            => array(
+						'type' => 'array',
+					),
+					'adgroup_ids'       => array(
+						'type' => 'array',
+					),
+					'adroups'           => array(
+						'type' => 'array',
+					),
+					'adgroup_alignment' => array(
+						'type' => 'string',
+					),
+					'num_ads'           => array(
+						'type' => 'string',
+					),
+					'num_columns'       => array(
+						'type' => 'string',
+					),
+
+				),
+				'render_callback' => array( $this, 'gutenberg_display_adgroup_cb' ),
+			)
+		);
+
+	}
+
+
+	/**
+	 * Renders gutenberg single ad on frontend.
+	 *
+	 * @param array $attributes contains attributes of the ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function gutenberg_display_single_ad_cb( $attributes ) {
+
+		$ad_id = 0;
+		if ( array_key_exists( 'ad_id', $attributes ) ) {
+			$ad_id = $attributes['ad_id'];
+		}
+
+		$ad_attributes = array();
+		if ( array_key_exists( 'ad_alignment', $attributes ) ) {
+			$ad_attributes = array(
+				'classes' => $attributes['ad_alignment'],
+			);
+		}
+
+		return Wpadcenter_Public::display_single_ad( $ad_id, $ad_attributes );
+	}
+
+	/**
+	 * Renders gutenberg adgroup on frontend.
+	 *
+	 * @param array $attributes contains attributes of the ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function gutenberg_display_adgroup_cb( $attributes ) {
+		$adgroup_ids = array();
+		if ( array_key_exists( 'adgroup_ids', $attributes ) ) {
+			$adgroup_ids = $attributes['adgroup_ids'];
+		}
+		$adgroup_alignment = 'alignnone';
+		if ( array_key_exists( 'adgroup_alignment', $attributes ) ) {
+			$adgroup_alignment = $attributes['adgroup_alignment'];
+		}
+			$num_ads = '1';
+		if ( array_key_exists( 'num_ads', $attributes ) ) {
+			$num_ads = $attributes['num_ads'];
+		}
+			$num_columns = '1';
+		if ( array_key_exists( 'num_columns', $attributes ) ) {
+			$num_columns = $attributes['num_columns'];
 		}
 			$adgroup_attributes = array(
 				'adgroup_ids' => $adgroup_ids,
@@ -2334,5 +2996,274 @@ class Wpadcenter_Admin {
 			);
 			echo Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes ); //phpcs:ignore
 			wp_die();
+			
+	}
+
+
+
+	/**
+	 * Registers single ads widget.
+	 *
+	 * @param array $categories contains categories of gutenberg block.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_gutenberg_block_categories( $categories ) {
+
+		return array_merge(
+			$categories,
+			array(
+				array(
+					'slug'  => 'wpadcenter',
+					'title' => __( 'WPAdCenter', 'wpadcenter' ),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Registers rest api field for wpadceter-ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_rest_fields() {
+		register_rest_field(
+			'wpadcenter-ads',
+			'ad_html',
+			array(
+				'get_callback' => array( $this, 'wpadcenter_ad_html_rest_field_cb' ),
+				'schema'       => null,
+			)
+		);
+		register_rest_field(
+			'wpadcenter-adgroups',
+			'ad_ids',
+			array(
+				'get_callback' => array( $this, 'wpadcenter_ad_ids_rest_field_cb' ),
+				'schema'       => null,
+			)
+		);
+	}
+
+	/**
+	 * Assigns value to the rest api filed ad_html.
+	 *
+	 * @param object $object contains the post inforamtion.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_html_rest_field_cb( $object ) {
+		$ad_id = $object['id'];
+		return Wpadcenter_Public::display_single_ad( $ad_id );
+	}
+
+	/**
+	 * Assigns ad ids of the adgroup to the rest api field .
+	 *
+	 * @param object $object contains the post inforamtion.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_ids_rest_field_cb( $object ) {
+
+		$current_time = time();
+
+		$args = array(
+			'post_type'     => 'wpadcenter-ads',
+			'tax_query'      => array( //phpcs:ignore
+				array(
+					'taxonomy' => 'wpadcenter-adgroups',
+					'field'    => 'id',
+					'terms'    => $object['id'],
+				),
+			),
+			'meta_query'     => array( //phpcs:ignore
+				array(
+					'key'     => 'wpadcenter_start_date',
+					'value'   => $current_time,
+					'type'    => 'numeric',
+					'compare' => '<=',
+				),
+				array(
+					'key'     => 'wpadcenter_end_date',
+					'value'   => $current_time,
+					'type'    => 'numeric',
+					'compare' => '>=',
+				),
+			),
+
+			'no_found_rows' => true,
+		);
+		$ad_ids = array();
+		$ads    = new WP_Query( $args );
+		if ( $ads->have_posts() ) {
+			while ( $ads->have_posts() ) {
+
+				$ads->the_post();
+				array_push( $ad_ids, get_the_ID() );
+			}
+			return $ad_ids;
+		} else {
+			return;
+		}
+
+	}
+
+
+	/**
+	 * Register scripts for gutenberg block.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_gutenberg_scripts() {
+		wp_enqueue_style(
+			$this->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-admin' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+
+	}
+
+	/**
+	 * Ajax when ad is selected in reports custom-reports page.
+	 */
+	public function wpadcenter_get_roles() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'roles_security', 'security' );
+		}
+		$return_array = array();
+		$roles        = get_editable_roles();
+		if ( is_array( $roles ) ) {
+			foreach ( $roles as $role ) {
+				array_push( $return_array, $role['name'] );
+			}
+		}
+		$the_options = Wpadcenter::wpadcenter_get_settings();
+		array_push( $return_array, $the_options['roles_selected'] );
+		echo wp_json_encode( $return_array );
+		wp_die();
+	}
+
+	/**
+	 * Ajax for getting ad groups from server.
+	 */
+	public function wpadcenter_get_adgroups() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'adgroups_security', 'security' );
+		}
+		$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
+		echo wp_json_encode( $array );
+		wp_die();
+	}
+
+	/**
+	 * Header, body and footer scripts meta boxes on pages and/or posts.
+	 */
+	public function wpadcenter_page_posts_scripts() {
+		$screens = array( 'post', 'page' );
+
+		foreach ( $screens as $screen ) {
+
+			add_meta_box(
+				'wpadcenter_scripts',
+				__( 'WPAdCenter Scripts', 'wpadcenter' ),
+				array( $this, 'wpadcenter_page_posts_metabox_render' ),
+				$screen,
+				'normal',
+				'high'
+			);
+		}
+	}
+
+	/**
+	 * Header, body and footer scripts meta boxes render on pages and/or posts.
+	 *
+	 * @param Object $post Post object.
+	 */
+	public function wpadcenter_page_posts_metabox_render( $post ) {
+		$array = get_post_meta( $post->ID, 'scripts', true );
+		wp_nonce_field( 'action', 'nonce' );
+		?>
+			<table class="wpadcenter-table">
+				<tr>
+					<td class="wpadcenter-left-cell"><label for="disable_global_scripts"><?php esc_html_e( 'Disable Global Scripts', 'wpadcenter' ); ?></label></td>
+					<td class="wpadcenter-right-cell"><input type="checkbox" id="disable_global_scripts" name="disable_global_scripts" <?php checked( isset( $array['disable_global_scripts'] ) ? $array['disable_global_scripts'] : false, 'on' ); ?>></td>
+				</tr>
+				<tr class="wpadcenter-table-tr">
+					<td class="wpadcenter-left-cell"><label for="header_scripts"><?php esc_html_e( 'Header Scripts', 'wpadcenter' ); ?></label></td>
+					<td class="wpadcenter-right-cell">
+						<textarea name="header_scripts" id="header_scripts" rows="6"><?php echo( isset( $array['header_scripts'] ) ? esc_attr( $array['header_scripts'] ) : '' ); ?></textarea>
+						<small><?php esc_html_e( 'These scripts will be printed in head section.', 'wpadcenter' ); ?></small>
+					</td>
+				</tr>
+				<tr class="wpadcenter-table-tr">
+					<td class="wpadcenter-left-cell"><label for="body_scripts"><?php esc_html_e( 'Body Scripts', 'wpadcenter' ); ?></label></td>
+					<td class="wpadcenter-right-cell">
+						<textarea name="body_scripts" id="body_scripts" rows="6"><?php echo( isset( $array['body_scripts'] ) ? esc_attr( $array['body_scripts'] ) : '' ); ?></textarea>
+						<small><?php esc_html_e( 'These scripts will be printed in body section.', 'wpadcenter' ); ?></small>
+					</td>
+				</tr>
+				<tr class="wpadcenter-table-tr">
+					<td class="wpadcenter-left-cell"><label for="footer_scripts"><?php esc_html_e( 'Footer Scripts', 'wpadcenter' ); ?></label></td>
+					<td class="wpadcenter-right-cell">
+						<textarea name="footer_scripts" id="footer_scripts" rows="6"><?php echo( isset( $array['footer_scripts'] ) ? esc_attr( $array['footer_scripts'] ) : '' ); ?></textarea>
+						<small><?php esc_html_e( 'These scripts will be printed in footer section.', 'wpadcenter' ); ?></small>
+					</td>
+				</tr>
+			</table>
+		<?php
+	}
+	/**
+	 * Save scripts.
+	 *
+	 * @param int $post_id post id of the post getting saved.
+	 */
+	public function wpadcenter_save_scripts( $post_id ) {
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		$nonce_checker = empty( $_REQUEST['nonce'] ) ? '' : sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) );
+		if ( ! wp_verify_nonce( $nonce_checker, 'action' ) ) {
+			return;
+		}
+
+		$disable_global_scripts = isset( $_POST['disable_global_scripts'] ) ? sanitize_text_field( wp_unslash( $_POST['disable_global_scripts'] ) ) : 'off';
+		$header_scripts         = isset( $_POST['header_scripts'] ) ? wp_unslash( $_POST['header_scripts'] ) : ''; // phpcs:ignore
+		$body_scripts           = isset( $_POST['body_scripts'] ) ? wp_unslash( $_POST['body_scripts'] ) : ''; // phpcs:ignore
+		$footer_scripts         = isset( $_POST['footer_scripts'] ) ? wp_unslash( $_POST['footer_scripts'] ) : ''; // phpcs:ignore
+
+		$array = array(
+			'disable_global_scripts' => $disable_global_scripts,
+			'header_scripts'         => $header_scripts,
+			'body_scripts'           => $body_scripts,
+			'footer_scripts'         => $footer_scripts,
+		);
+		update_post_meta( $post_id, 'scripts', $array );
+	}
+
+	/**
+	 * Registers adgroups widget.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_register_adgroup_widget() {
+		register_widget( 'Wpadcenter_Adgroup_Widget' );
+	}
+
+	/**
+	 * Remove permalink from create ad page.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_remove_permalink() {
+
+		global $post_type;
+
+		if ( 'wpadcenter-ads' === $post_type ) {
+			echo '<style>#edit-slug-box {display:none;}</style>';
+		}
 	}
 }
