@@ -17,6 +17,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+
       - name: Checkout submodules
         run: git submodule update --init --recursive
 
@@ -51,3 +54,7 @@ jobs:
         run: |
           RUN_CODE_COVERAGE=1 bash ./tests/bin/phpunit.sh
           exit 0
+
+      - name: Send code coverage to Codecov.
+        run: |
+          bash <(curl -s https://codecov.io/bash)
