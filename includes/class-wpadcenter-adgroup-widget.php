@@ -64,8 +64,9 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 			'num_ads'     => $num_ads,
 			'num_columns' => $num_columns,
 		);
-
+		echo '<div class="wpadcenter-adgroup-widget-container">';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo Wpadcenter_Public::display_adgroup_ads( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</div>';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
