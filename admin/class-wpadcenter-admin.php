@@ -1505,7 +1505,11 @@ class Wpadcenter_Admin {
 		) {
 			return;
 		}
-
+		if ( isset( $_POST['ad-type'] ) ) {
+			if ( 'ad_code' === $_POST['ad-type'] || 'import_from_adsense' === $_POST['ad-type'] ) {
+				$_POST['ad-size'] = 'none';
+			}
+		}
 		$raw_data = $_POST;
 
 		$metafields = $this->get_default_metafields();
