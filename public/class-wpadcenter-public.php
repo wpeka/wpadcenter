@@ -650,6 +650,8 @@ class Wpadcenter_Public {
 					$col_count = 0;
 				}
 			}
+			wp_reset_postdata();
+
 			$adgroup_html .= '</div>';
 
 			return $adgroup_html;
