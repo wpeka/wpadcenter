@@ -64,7 +64,6 @@ class AdGroup extends Component{
     adAlignment = {
       zIndex:"20",
       position:"relative",
-      maxWidth:"400px",
   };
   }
 
