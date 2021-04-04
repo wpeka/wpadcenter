@@ -239,7 +239,7 @@
 							</c-col>
 							<c-col md="4" sm="4" xs="4" class="wpadcenter-stats">
 								<div class="adgroup-callout">
-									<small class="p"><?php esc_html_e( 'Total Click Through Rate', 'wpadcenter' ); ?></small><br>
+									<small class="p"><?php esc_html_e( 'Total CTR', 'wpadcenter' ); ?></small><br>
 									<strong class="h4">{{ totalAdGroupCTR.toFixed(2)+"%" }}</strong>
 								</div>
 							</c-col>
