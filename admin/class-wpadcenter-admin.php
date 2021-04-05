@@ -1505,7 +1505,11 @@ class Wpadcenter_Admin {
 		) {
 			return;
 		}
-
+		if ( isset( $_POST['ad-type'] ) ) {
+			if ( 'ad_code' === $_POST['ad-type'] || 'import_from_adsense' === $_POST['ad-type'] ) {
+				$_POST['ad-size'] = 'none';
+			}
+		}
 		$raw_data = $_POST;
 
 		$metafields = $this->get_default_metafields();
@@ -1767,11 +1771,10 @@ class Wpadcenter_Admin {
 					'settings_items' => apply_filters(
 						'wpadcenter_settings_items',
 						array(
-							__( 'Auto-refresh of ads', 'wpadcenter' ),
-							__( 'Transitions, and more', 'wpadcenter' ),
-							__( 'Third-Party Advertisers', 'wpadcenter' ),
-							__( 'Notification', 'wpadcenter' ),
-							__( 'Geo Location', 'wpadcenter' ),
+							__( 'Disable tracking for Admin and other user roles.', 'wpadcenter' ),
+							__( 'Scripts', 'wpadcenter' ),
+							__( 'ads.txt', 'wpadcenter' ),
+							__( 'Integrate AdSense Account', 'wpadcenter' )
 						)
 					),
 				),

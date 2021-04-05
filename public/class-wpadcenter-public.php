@@ -259,7 +259,7 @@ class Wpadcenter_Public {
 		$attributes = array(
 			'classes' => 'align' . $atts['align'],
 		);
-		return $this->display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
+		return self::display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
 
 	}
 
@@ -561,7 +561,7 @@ class Wpadcenter_Public {
 		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
 		$atts['align']       = 'align' . $atts['align'];
 
-		return $this->display_adgroup_ads( $atts ); // phpcs:ignore
+		return self::display_adgroup_ads( $atts ); // phpcs:ignore
 	}
 
 	/**
@@ -582,6 +582,7 @@ class Wpadcenter_Public {
 			'align'       => 'alignnone',
 			'num_ads'     => 1,
 			'num_columns' => 1,
+			'max_width'   => '728px',
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
@@ -621,7 +622,7 @@ class Wpadcenter_Public {
 		if ( $ads->have_posts() ) {
 
 			$adgroup_html  = '';
-			$adgroup_html .= '<div class=' . $attributes['align'] . '>';
+			$adgroup_html .= '<div class="' . $attributes['align'] . '" style="max-width:' . $attributes['max_width'] . '">';
 
 			$col_count = 0;
 			$ad_count  = 0;
@@ -649,6 +650,8 @@ class Wpadcenter_Public {
 					$col_count = 0;
 				}
 			}
+			wp_reset_postdata();
+
 			$adgroup_html .= '</div>';
 
 			return $adgroup_html;
