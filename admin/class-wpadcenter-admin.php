@@ -1938,22 +1938,24 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
-		register_block_type(
-			'wpadcenter/single-ad',
-			array(
-				'editor_script'   => 'wpadcenter-gutenberg-single-ad',
-				'attributes'      => array(
-					'ad_id'        => array(
-						'type' => 'number',
-					),
-					'ad_alignment' => array(
-						'type' => 'string',
-					),
+		if ( function_exists( 'register_block_type' ) ) {
+			register_block_type(
+				'wpadcenter/single-ad',
+				array(
+					'editor_script'   => 'wpadcenter-gutenberg-single-ad',
+					'attributes'      => array(
+						'ad_id'        => array(
+							'type' => 'number',
+						),
+						'ad_alignment' => array(
+							'type' => 'string',
+						),
 
-				),
-				'render_callback' => array( $this, 'gutenberg_display_single_ad_cb' ),
-			)
-		);
+					),
+					'render_callback' => array( $this, 'gutenberg_display_single_ad_cb' ),
+				)
+			);
+		}
 		wp_register_script(
 			'wpadcenter-gutenberg-adgroup',
 			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-adgroup.js',
@@ -1962,34 +1964,36 @@ class Wpadcenter_Admin {
 			false
 		);
 		wp_localize_script( 'wpadcenter-gutenberg-adgroup', 'wpadcenter_adgroup_verify', array( 'adgroup_nonce' => wp_create_nonce( 'adgroup_nonce' ) ) );
-		register_block_type(
-			'wpadcenter/adgroup',
-			array(
-				'editor_script'   => 'wpadcenter-gutenberg-adgroup',
-				'attributes'      => array(
-					'ad_ids'            => array(
-						'type' => 'array',
-					),
-					'adgroup_ids'       => array(
-						'type' => 'array',
-					),
-					'adroups'           => array(
-						'type' => 'array',
-					),
-					'adgroup_alignment' => array(
-						'type' => 'string',
-					),
-					'num_ads'           => array(
-						'type' => 'string',
-					),
-					'num_columns'       => array(
-						'type' => 'string',
-					),
+		if ( function_exists( 'register_block_type' ) ) {
+			register_block_type(
+				'wpadcenter/adgroup',
+				array(
+					'editor_script'   => 'wpadcenter-gutenberg-adgroup',
+					'attributes'      => array(
+						'ad_ids'            => array(
+							'type' => 'array',
+						),
+						'adgroup_ids'       => array(
+							'type' => 'array',
+						),
+						'adroups'           => array(
+							'type' => 'array',
+						),
+						'adgroup_alignment' => array(
+							'type' => 'string',
+						),
+						'num_ads'           => array(
+							'type' => 'string',
+						),
+						'num_columns'       => array(
+							'type' => 'string',
+						),
 
-				),
-				'render_callback' => array( $this, 'gutenberg_display_adgroup_cb' ),
-			)
-		);
+					),
+					'render_callback' => array( $this, 'gutenberg_display_adgroup_cb' ),
+				)
+			);
+		}
 
 	}
 
