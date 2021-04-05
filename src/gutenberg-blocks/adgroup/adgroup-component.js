@@ -59,18 +59,8 @@ class AdGroup extends Component{
     let adAlignment = {
       zIndex:"20",
       position:"relative",
-  };
-  if (this.props.adgroupAlignment !== 'aligncenter'){
-    adAlignment = {
-      zIndex:"20",
-      position:"relative",
-  };
-  }
-
-    
-
-
-
+      maxWidth:"728px",
+  }; 
 
     return (
 
