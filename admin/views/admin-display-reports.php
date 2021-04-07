@@ -48,6 +48,7 @@
 
 	.wpadcenter-select {
 		display: block;
+		margin-left: 20px;
 	}
 
 	#adgroup_select_input {
@@ -289,11 +290,14 @@
 								</v-date-picker>
 							</div>
 						</div>
-						<div class="wpadcenter-select">
-							<label for="wpadcenter-select-ads"><?php esc_html_e( 'Choose ad ', 'wpadcenter' ); ?></label>
-							<v-select placeholder="Select ad" id="wpadcenter-select-ads" label="ad_title" :options="select_ad" taggable multiple ref="wpadcenter_select_ads"  @input="onAdSelection">
-							</v-select>
-							<input type="hidden" ref="selectad_security" name="selectad_security" value="<?php echo esc_attr( wp_create_nonce( 'selectad_security' ) ); ?>">
+						<div class="wpadcenter-flex-mod">
+							<?php do_action( 'wpadcenter_before_select_ad' ); ?>
+							<div class="wpadcenter-select-ad wpadcenter-select">
+								<label for="wpadcenter-select-ads"><?php esc_html_e( 'Choose ad ', 'wpadcenter' ); ?></label>
+								<v-select placeholder="Select ad" id="wpadcenter-select-ads" label="ad_title" :options="select_ad" taggable multiple ref="wpadcenter_select_ads"  @input="onAdSelection">
+								</v-select>
+								<input type="hidden" ref="selectad_security" name="selectad_security" value="<?php echo esc_attr( wp_create_nonce( 'selectad_security' ) ); ?>">
+							</div>
 						</div>
 						</div>
 					<c-alert v-if="validationError.length" color="danger" :show.sync="currentAlertCounter" :fade="true" style="margin: 0;" close-button>{{ validationError }}</c-alert>
