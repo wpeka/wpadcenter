@@ -48,14 +48,12 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 
 		$title = empty( $instance['title'] ) ? '' : $instance['title'];
 
+		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
 		$attributes = array();
-
 		echo Wpadcenter_Public::display_single_ad( $instance['ad_id'], $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
