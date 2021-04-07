@@ -268,7 +268,13 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
-
+		wp_register_script(
+			$this->plugin_name . '-weekly-stats',
+			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-weeklyStats.js',
+			array(),
+			$this->version,
+			false
+		);
 	}
 
 	/**
@@ -1352,9 +1358,48 @@ class Wpadcenter_Admin {
 			'normal',
 			'high'
 		);
-
+		if ( 'publish' === $post->post_status ) {
+			add_meta_box(
+				'ad-stats',
+				__( 'Ad Statistics', 'wpadcenter' ),
+				array( $this, 'wpadcenter_ad_statistics' ),
+				'wpadcenter-ads',
+				'normal',
+				'high'
+			);
+		}
 		do_action( 'wpadcenter_add_meta_boxes', $post );
 
+	}
+	/**
+	 * Shows Ads Stats for last 7 days.
+	 *
+	 * @param WP_POST $post post object.
+	 */
+	public function wpadcenter_ad_statistics( $post ) {
+		global $wpdb;
+		$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date > now() - interval 7 day and ad_id = %d;', $post->ID ) );//phpcs:ignore
+		if ( empty( $results ) ) {
+			$results = array();
+		}
+		$dates = array();
+		$today = strtotime( 'now' );
+		array_push( $dates, gmdate( 'Y-m-d' ) );
+		for ( $i = 1; $i < 7; $i++ ) {
+			array_push( $dates, gmdate( 'Y-m-d', strtotime( '-' . $i . ' day', $today ) ) );
+		}
+		array_push( $results, $dates );
+		wp_enqueue_script( $this->plugin_name . '-weekly-stats' );
+		wp_localize_script( $this->plugin_name . '-weekly-stats', 'returnArray', $results );
+		?>
+			<div id="wpadcenter-weekly-stats">
+				<h4><?php esc_html_e( 'Stats Summary for past 7 days', 'wpadcenter' ); ?></h4>
+				<p>{{ totalClicks }} <?php esc_html_e( 'Total Clicks', 'wpadcenter' ); ?> | {{ totalViews }} <?php esc_html_e( 'Total Views', 'wpadcenter' ); ?> | {{ totalCTR }} <?php esc_html_e( 'Total CTR', 'wpadcenter' ); ?> </p>
+				<div class="chart-container">
+					<line-chart :chart-data="chartData" :options="chartOptions"></line-chart>
+				</div>
+			</div>
+		<?php
 	}
 
 
