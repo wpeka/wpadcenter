@@ -28,7 +28,9 @@ var vm = new Vue({
             roles_security: null,
             roles: [],
             roles_selected: [],
-            scriptInfo: '<script type="text/javascript">console.log( "hello world" );</script>'
+            scriptInfo: '<script type="text/javascript">console.log( "hello world" );</script>',
+            enable_advertisers: null,
+            enable_notifications: null,
         }
     },
     methods: {
@@ -36,6 +38,9 @@ var vm = new Vue({
             this.enable_scripts = this.$refs.enable_scripts.checked;
             this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
             this.$refs.ads_txt_tab.value = this.enable_ads_txt ? "1" : "0";
+            this.enable_advertisers = this.$refs.hasOwnProperty('enable_advertisers') ? this.$refs.enable_advertisers.checked : false; 
+            this.enable_notifications = this.$refs.hasOwnProperty('enable_notifications') ? this.$refs.enable_notifications.checked : false; 
+            
             if( window.location.href.match(/#adsense/g) ) {
                 this.$refs.active_tab.activeTabIndex=3;
             }else if( window.location.href.match(/#adstxt/g) ) {

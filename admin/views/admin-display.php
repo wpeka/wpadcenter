@@ -23,6 +23,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 </style>
 <div id="app" v-cloak>
 	<c-tabs ref="active_tab">
+		<?php do_action( 'wpadcenter_before_general_tab' ); ?>
 		<c-tab title="General" active href="#general">
 		<?php do_action( 'wpadcenter_before_general_settings' ); ?>
 			<c-card>
@@ -48,6 +49,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 			</c-card>
 			<?php do_action( 'wpadcenter_after_general_settings' ); ?>
 		</c-tab>
+		<?php do_action( 'wpadcenter_before_scripts_tab' ); ?>
 		<c-tab title="Scripts" href="#scripts">
 		<?php do_action( 'wpadcenter_before_scripts_settings' ); ?>
 			<c-card>
@@ -70,6 +72,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 			</c-card>
 			<?php do_action( 'wpadcenter_after_scripts_settings' ); ?>
 		</c-tab>
+		<?php do_action( 'wpadcenter_before_ads_txt_tab' ); ?>
 		<c-tab title="ads.txt" href="#adstxt">
 			<c-card>
 				<?php do_action( 'wpadcenter_before_ads_txt_settings' ); ?>
@@ -94,6 +97,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 				<?php do_action( 'wpadcenter_after_ads_txt_settings' ); ?>
 			</c-card>
 		</c-tab>
+		<?php do_action( 'wpadcenter_before_adsense_tab' ); ?>
 		<c-tab title="Import From AdSense" href="#adsense">
 		<?php do_action( 'wpadcenter_before_adsense_settings' ); ?>
 			<c-card>
