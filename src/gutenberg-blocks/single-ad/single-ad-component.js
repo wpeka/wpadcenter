@@ -56,6 +56,7 @@ class SingleAd extends Component{
     alignItems:'center',
     zIndex:"20",
     position:"relative",
+    maxWidth:"728px",
 
   };
 }
@@ -64,6 +65,7 @@ else {
  adAlignment = {
   zIndex:"20",
   position:"relative",
+  maxWidth:"728px",
 };
 }
 

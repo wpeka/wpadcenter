@@ -25,6 +25,8 @@
 }
 .Wpadcenter-gutenberg-container{
 	z-index:20;
+	display:block;
+	clear:both;
 }
 .aligncenter .wpadcenter-adgroup-row div{
 	margin:5px auto;
@@ -61,7 +63,6 @@
 .wpadcenter-468x60{
 	max-width:468px !important;
 	height:60px;
-
 }
 .wpadcenter-120x600{
 	max-width:120px!important;
@@ -91,3 +92,6 @@
 	max-width:125px!important;
 	height:125px;
 }
+.wpadcenter-clearfix::after { 
+	overflow:hidden;
+ }

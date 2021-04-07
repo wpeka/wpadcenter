@@ -322,7 +322,9 @@ class Wpadcenter_Public {
 			$attributes['classes'] .= ' wpadcenter-' . $width . 'x' . $height;
 
 		}
-		$single_ad_html  = '';
+		$single_ad_html = '';
+		$single_ad_html = '<div class="wpadcenter-clearfix" >';
+
 		$single_ad_html .= '<div ';
 		if ( $attributes['classes'] ) {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
@@ -353,6 +355,7 @@ class Wpadcenter_Public {
 				break;
 		}
 		$single_ad_html .= '</a>';
+		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
 
@@ -621,7 +624,9 @@ class Wpadcenter_Public {
 
 		if ( $ads->have_posts() ) {
 
-			$adgroup_html  = '';
+			$adgroup_html = '';
+			$adgroup_html = '<div class="wpadcenter-clearfix" >';
+
 			$adgroup_html .= '<div class="' . $attributes['align'] . '" style="max-width:' . $attributes['max_width'] . '">';
 
 			$col_count = 0;
@@ -652,6 +657,7 @@ class Wpadcenter_Public {
 			}
 			wp_reset_postdata();
 
+			$adgroup_html .= '</div>';
 			$adgroup_html .= '</div>';
 
 			return $adgroup_html;
