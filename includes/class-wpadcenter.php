@@ -217,6 +217,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_scripts' );
 		$this->loader->add_action( 'admin_head', $plugin_admin, 'wpadcenter_remove_permalink' );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_adgroup_gutenberg_preview', $plugin_admin, 'wpadcenter_adgroup_gutenberg_preview' );
+		$this->loader->add_action( 'wp_ajax_save_settings', $plugin_admin, 'wpadcenter_settings' );
 	}
 
 	/**
@@ -314,7 +315,7 @@ class Wpadcenter {
 	public static function wpadcenter_get_default_settings( $key = '' ) {
 		$settings = array(
 			// General settings.
-			'notification'             => false,
+			'enable_notifications'             => false,
 
 			'auto_refresh'             => false,
 			'transition_effect'        => 'none',
@@ -355,7 +356,7 @@ class Wpadcenter {
 		$ret = null;
 		switch ( $key ) {
 			// Convert all boolean values from text to bool.
-			case 'notification':
+			case 'enable_notifications':
 			case 'auto_refresh':
 			case 'adblock_detector':
 			case 'enable_scripts':

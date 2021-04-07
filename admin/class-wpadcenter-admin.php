@@ -782,7 +782,7 @@ class Wpadcenter_Admin {
 		}
 		$notices = $this->wpadcenter_get_notices();
 		echo wp_json_encode( $notices );
-		exit();
+		wp_die();
 	}
 
 	/**
@@ -1877,7 +1877,7 @@ class Wpadcenter_Admin {
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename="' . $filename . ' ' . $generated_date . '.csv";' );
 		echo wp_kses_data( $csv_string );
-		die();
+		wp_die();
 	}
 
 	/**
