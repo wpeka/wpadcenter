@@ -13,7 +13,8 @@ module.exports = {
         main: './src/index.js',
         gettingstarted: './src/getting-started.js',
         adscheduler: './src/adscheduler.js',
-        reports: './src/reports.js'
+        reports: './src/reports.js',
+        weeklyStats: './src/weekly-stats.js',
     },
     output: {
         path: path.resolve(__dirname, 'admin/js/vue'),
