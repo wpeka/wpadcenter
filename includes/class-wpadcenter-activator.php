@@ -21,6 +21,7 @@
  */
 class Wpadcenter_Activator {
 
+
 	/**
 	 * Short Description. (use period)
 	 *
@@ -29,14 +30,26 @@ class Wpadcenter_Activator {
 	 * @since 1.0.0
 	 */
 	public static function activate() {
-		add_option( 'wpadcenter_active', true );
+		global $wpdb;
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		if ( is_multisite() ) {
+			// Get all blogs in the network and activate plugin on each one
+			$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+			foreach ( $blog_ids as $blog_id ) {
+				switch_to_blog( $blog_id );
+				self::wpadcenter_install_table();
+				restore_current_blog();
+			}
+		} else {
+			self::wpadcenter_install_table();
+		}
+	}
+
+	public static function wpadcenter_install_table() {
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
-		$table_name = $wpdb->prefix . 'ads_statistics';
-
-		$sql = "CREATE TABLE $table_name (
+		$table_name      = $wpdb->prefix . 'ads_statistics';
+		$sql             = "CREATE TABLE $table_name (
 			ad_id int(11) NOT NULL,
 			ad_date DATE DEFAULT NULL,
 			ad_clicks int(11) DEFAULT 0,
