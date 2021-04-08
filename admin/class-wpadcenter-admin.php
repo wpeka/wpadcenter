@@ -1922,7 +1922,7 @@ class Wpadcenter_Admin {
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename="' . $filename . ' ' . $generated_date . '.csv";' );
 		echo wp_kses_data( $csv_string );
-		wp_die();
+		die();
 	}
 
 	/**
