@@ -61,7 +61,7 @@ if ( ! function_exists( 'adc_fs' ) ) {
 
 		if ( ! isset( $adc_fs ) ) {
 			// Include Analytics SDK.
-			include_once dirname( __FILE__ ) . '/analytics/start.php';
+			require_once dirname( __FILE__ ) . '/analytics/start.php';
 
 			$adc_fs = ras_dynamic_init(
 				array(
@@ -104,7 +104,7 @@ if ( ! defined( 'WPADCENTER_SCRIPT_SUFFIX' ) ) {
  *  * This action is documented in includes/class-wpadcenter-activator.php
  */
 function activate_wpadcenter() {
-	include_once plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter-activator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter-activator.php';
 	Wpadcenter_Activator::activate();
 }
 
@@ -114,7 +114,7 @@ function activate_wpadcenter() {
  * This action is documented in includes/class-wpadcenter-deactivator.php
  */
 function deactivate_wpadcenter() {
-	include_once plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter-deactivator.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter-deactivator.php';
 	Wpadcenter_Deactivator::deactivate();
 }
 

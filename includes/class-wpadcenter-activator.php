@@ -31,7 +31,7 @@ class Wpadcenter_Activator {
 	 */
 	public static function activate() {
 		global $wpdb;
-		include_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		if ( is_multisite() ) {
 			// Get all blogs in the network and activate plugin on each one
 			$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
