@@ -40,6 +40,15 @@ class Wpadcenter_Public {
 	private $version;
 
 	/**
+	 * The version of this plugin.
+	 *
+	 * @since  1.0.0
+	 * @access private
+	 * @var    string    $version    The current version of this plugin.
+	 */
+	private static $released_version;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @param string $plugin_name       The name of the plugin.
@@ -49,8 +58,9 @@ class Wpadcenter_Public {
 	 */
 	public function __construct( $plugin_name, $version ) {
 
-		$this->plugin_name = $plugin_name;
-		$this->version     = $version;
+		$this->plugin_name      = $plugin_name;
+		$this->version          = $version;
+		self::$released_version = $version;
 		if ( ! shortcode_exists( 'wpadcenter_ad' ) ) {
 			add_shortcode( 'wpadcenter_ad', array( $this, 'wpadcenter_ad_shortcode' ) );
 		}
@@ -295,7 +305,8 @@ class Wpadcenter_Public {
 		$default_attributes = array(
 			'align'           => 'alignnone',
 			'classes'         => '',
-			'max_width'       => '728px',
+			'max_width'       => false,
+			'max_width_px'    => '100',
 			'display_adgroup' => false,
 		);
 		$attributes         = wp_parse_args( $attributes, $default_attributes );
@@ -328,7 +339,7 @@ class Wpadcenter_Public {
 
 		if ( ! $attributes['display_adgroup'] ) {
 			$attributes['classes'] .= ' wpadcenter-' . $attributes['align'] . ' ' . $attributes['align'];
-			$single_ad_html        .= '<!-- Ad space powered by WP AdCenter v2.0.0 -https://wpadcenter.com/ -->';
+			$single_ad_html        .= '<!-- Ad space powered by WP AdCenter v' . self::$released_version . ' - https://wpadcenter.com/ -->';
 		}
 		$single_ad_html .= '<div class="wpadcenter-ad-container">';
 
@@ -338,7 +349,9 @@ class Wpadcenter_Public {
 		if ( $attributes['classes'] ) {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
 		}
-		$single_ad_html .= 'style="max-width:' . $attributes['max_width'] . '" ';
+		if ( $attributes['max_width'] ) {
+			$single_ad_html .= 'style="max-width:' . $attributes['max_width_px'] . '" ';
+		}
 
 		$single_ad_html .= '>';
 		$single_ad_html .= '<div class="wpadcenter-ad-inner" >';
@@ -635,8 +648,7 @@ class Wpadcenter_Public {
 
 		if ( $ads->have_posts() ) {
 
-			$adgroup_html = '';
-			$adgroup_html = '<!-- Ad space powered by WP AdCenter v2.0.0 -https://wpadcenter.com/ -->';
+			$adgroup_html = '<!-- Ad space powered by WP AdCenter v' . self::$released_version . ' - https://wpadcenter.com/ -->';
 
 			$adgroup_html .= '<div class="wpadcenter-adgroup" >';
 
