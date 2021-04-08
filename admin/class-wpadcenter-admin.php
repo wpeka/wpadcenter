@@ -654,9 +654,9 @@ class Wpadcenter_Admin {
 			'cb'                   => '<input type="checkbox" />',
 			'name'                 => __( 'Name', 'wpadcenter' ),
 			'shortcode'            => __( 'Shortcode', 'wpadcenter' ),
-			'template-tag'         => __( 'Template tag', 'wpadcenter' ),
-			'number-of-ads'        => __( 'Number of ads', 'wpadcenter' ),
-			'number-of-active-ads' => __( 'Number of active ads', 'wpadcenter' ),
+			'template-tag'         => __( 'Template Tag', 'wpadcenter' ),
+			'number-of-ads'        => __( 'Number of Ads', 'wpadcenter' ),
+			'number-of-active-ads' => __( 'Number of Active Ads', 'wpadcenter' ),
 		);
 
 		return apply_filters( 'wpadcenter_manage_edit_adgroups_columns', $columns );
