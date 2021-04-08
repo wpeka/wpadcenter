@@ -7,8 +7,10 @@
  * @package Wpadcenter
  */
 const path = require('path');
+const MiniCssExtractPlugin =require('mini-css-extract-plugin');
+const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 
-module.exports = {
+var vueconfig = {
     entry: {
         main: './src/index.js',
         gettingstarted: './src/getting-started.js',
@@ -35,3 +37,36 @@ module.exports = {
         ]
     }
 }
+var sassconfig={
+    entry: {
+        
+        public: './src/sass/wpadcenter-public.scss'
+    },
+    output: {
+        path: path.resolve(__dirname),
+    },
+    mode: 'development',
+  
+    module: {
+        rules: [
+            
+            {test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ]
+    }
+        ]
+    },
+    plugins: [
+        new FixStyleOnlyEntriesPlugin(),
+
+        new MiniCssExtractPlugin({
+            filename:'public/css/wpadcenter-[name].css'
+        })
+    ]
+}
+module.exports = [
+    vueconfig,sassconfig      
+];

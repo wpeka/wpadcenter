@@ -1,0 +1,200 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+ .wpadcenter-adgroup__row {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	clear: both;
+  }
+  
+  .wpadcenter-activebutton {
+	border: 1px solid;
+	border-radius: 3px;
+	padding: 18px 9px;
+  }
+  
+  .wpadcenter-align-container .dashicon {
+	padding-left: 3px;
+  }
+  
+  .wpadcenter-async-select input[type=text]:focus {
+	box-shadow: none;
+  }
+  
+  .Wpadcenter-gutenberg-container .components-placeholder {
+	background-color: #F3F6FF;
+  }
+  
+  .Wpadcenter-gutenberg-container {
+	z-index: 20;
+	display: block;
+	clear: both;
+  }
+  
+  .wpadcenter-aligncenter.wpadcenter-adgroup__row {
+	  display:flex;
+	justify-content: center;
+  }
+  
+  .wpadcenter-alignright.wpadcenter-adgroup__row  {
+	justify-content:flex-end;
+  }
+  
+  .wpadcenter-alignleft.wpadcenter-adgroup__row {
+	  justify-content:flex-start;
+  }
+  
+  #wpadcenter_ad {
+	display: block;
+  }
+  
+  .wpadcenter-adgroup-widget-container {
+	overflow: hidden;
+  }
+  
+
+  .wpadcenter-{
+	&200x200,
+	&240x400,
+	&250x250,
+	&250x360,
+	&300x250,
+	&336x280,
+	&580x400,
+	&120x600,
+	&160x600,
+	&300x600,
+	&300x1050,
+	&468x60,
+	&728x90,
+	&930x180,
+	&970x90,
+	&970x250,
+	&980x120,
+	&120x60,
+	&120x90,
+	&125x125,
+	&300x50 ,
+	&320x50,
+	&320x100{
+			display:flex;
+			align-items:center;
+			overflow:hidden;
+			margin:10px;
+			justify-content:center;
+		}
+
+}
+  
+  .wpadcenter-alignright {
+	float: right;
+	margin-left: 10px;
+  }
+  
+  .wpadcenter-alignleft {
+	float: left;
+	margin-right: 10px;
+  }
+  
+  .wpadcenter-aligncenter {
+	display: block;
+	margin: 10px auto;
+  }
+  
+  .wpadcenter-{
+	  &200x200{
+		max-width: 200px !important;
+		height: 200px;
+	  }
+	  &240x400{
+		max-width: 240px !important;
+		height: 400px;
+	  }
+	  &250x250{
+		max-width: 250px !important;
+		height: 250px;
+	  }
+	  &250x360{
+		max-width: 250px !important;
+		height: 360px;
+	  }
+	  &300x250{
+		max-width: 300px !important;
+		height: 250px;
+	  }
+	  &336x280{
+		max-width: 336px !important;
+		height: 280px;
+	  }
+	  &580x400{
+		max-width: 580px !important;
+		height: 400px;
+	  }
+	  &120x600{
+		max-width: 120px !important;
+		height: 600px;
+	  }
+	  &160x600{
+		max-width: 160px !important;
+		height: 600px;
+	  }
+	  &300x600{
+		max-width: 300px !important;
+		height: 600px;
+	  }
+	  &300x1050{
+		max-width: 300px !important;
+		height: 1050px;
+	  }
+	  &468x60{
+		max-width: 468px !important;
+		height: 60px;
+	  }
+	  &728x90{
+		max-width: 728px !important;
+		height: 90px;
+	  }
+	  &930x180{
+		max-width: 930px !important;
+		height: 180px;
+	  }
+	  &970x90{
+		max-width: 970px !important;
+		height: 90px;
+	  }
+	  &970x250{
+		max-width: 970px !important;
+		height: 250px;
+	  }
+	  &980x120{
+		max-width: 980px !important;
+		height: 120px;
+	  }
+	  &120x60{
+		max-width: 120px !important;
+		height: 60px;
+	  }
+	  &120x90{
+		max-width: 120px !important;
+		height: 90px;
+	  }
+	  &125x125{
+		max-width: 125px !important;
+		height: 125px;
+	  }
+	  &300x50{
+		max-width: 300px !important;
+		height: 50px;
+	  }
+	  &320x50{
+		max-width: 320px !important;
+		height: 50px;
+	  }
+	  &320x100{
+		max-width: 320px !important;
+		height: 100px;
+	  }
+  }

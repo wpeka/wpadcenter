@@ -23,59 +23,50 @@ class SingleAd extends Component{
         __html:`<h4 style="font-weight:300">${__('Loading Ad','wpadcenter')}</h4>`,
       },
     } );
-		  this.apiFetch();
+    this.loadAds();
+
 	}
 
-  apiFetch(){
-    apiFetch({
-      path:`wp/v2/wpadcenter-ads/${this.props.adId}`
-    }).then(ad=>{
-      this.setState( {
-        ad_html:{
-          __html:ad.ad_html,
+  loadAds(){
+   
+
+
+    var j = jQuery.noConflict();
+    j.ajax({
+      type:"POST",
+      url: "./admin-ajax.php",
+      data: {
+          action:'wpadcenter_singlead_gutenberg_preview', 
+          singlead_nonce:wpadcenter_singlead_verify.singlead_nonce,   
+          ad_id:this.props.adId,
+          alignment:this.props.adAlignment, 
+          
+      }
+  }).done(singlead_html => {
+        this.setState( {
+            ad_html:{
+            __html:singlead_html,
         },
-      } );
-    }).catch(error=>{
-      this.setState( {
-        ad_html:{
-          __html:`<h4 style="font-weight:300">${__('Select Ad','wpadcenter')}</h4>`,
-        },
-      } );
-    });
+    } );
+  });
+
+
   }
 
 
   render() {
 
-    let adAlignmentCurrent=this.props.adAlignment;
-    let adAlignment;
- if (adAlignmentCurrent=== 'aligncenter'){
-      adAlignment = {
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    zIndex:"20",
-    position:"relative",
-    maxWidth:"728px",
-
-  };
-}
-
-else {
- adAlignment = {
-  zIndex:"20",
-  position:"relative",
-  maxWidth:"728px",
-};
-}
-
+    let adAlignment = {
+      zIndex:"20",
+      position:"relative",
+  }; 
 
 
 
 
 return (
 
-  <div style={adAlignment} className={this.props.adAlignment} dangerouslySetInnerHTML={ this.state.ad_html } ></div>
+  <div style={adAlignment} dangerouslySetInnerHTML={ this.state.ad_html } ></div>
 )
 
   	}
