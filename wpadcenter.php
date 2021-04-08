@@ -98,14 +98,16 @@ if ( ! defined( 'WPADCENTER_SCRIPT_SUFFIX' ) ) {
 }
 
 
+
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-wpadcenter-activator.php
+ *  * This action is documented in includes/class-wpadcenter-activator.php
  */
 function activate_wpadcenter() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter-activator.php';
 	Wpadcenter_Activator::activate();
 }
+
 
 /**
  * The code that runs during plugin deactivation.
@@ -135,7 +137,6 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter.php';
  * @since 1.0.0
  */
 function run_wpadcenter() {
-
 	$plugin = new Wpadcenter();
 	$plugin->run();
 
