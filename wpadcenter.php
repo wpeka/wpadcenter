@@ -100,11 +100,34 @@ if ( ! defined( 'WPADCENTER_SCRIPT_SUFFIX' ) ) {
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-wpadcenter-activator.php
  */
-function activate_wpadcenter() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter-activator.php';
-	Wpadcenter_Activator::activate();
+function activate_wpadcenter($network_wide) {
+	global $wpdb;
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	if ( is_multisite() && $network_wide ) {
+		// Get all blogs in the network and activate plugin on each one
+		$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+		foreach ( $blog_ids as $blog_id ) {
+			switch_to_blog( $blog_id );
+			wpadcenter_install_table();
+			restore_current_blog();
+		}
+	} else {
+		wpadcenter_install_table();
+	}
+}
+
+function wpadcenter_install_table(){
+global $wpdb;
+$charset_collate = $wpdb->get_charset_collate();
+$table_name = $wpdb->prefix . 'ads_statistics';
+$sql = "CREATE TABLE $table_name (
+	ad_id int(11) NOT NULL,
+	ad_date DATE DEFAULT NULL,
+	ad_clicks int(11) DEFAULT 0,
+	ad_impressions int(11) DEFAULT 0
+	) $charset_collate;";
+dbDelta( $sql );
 }
 
 /**
