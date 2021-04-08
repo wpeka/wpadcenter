@@ -14,7 +14,7 @@
  * @wordpress-plugin
  * Plugin Name:       WPAdCenter
  * Plugin URI:        https://wpadcenter.com
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Advertising management plugin for WordPress.
  * Version:           2.0.0
  * Author:            WPEka Club
  * Author URI:        https://club.wpeka.com/

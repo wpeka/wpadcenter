@@ -146,7 +146,7 @@ class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 
 		$ad_id      = $settings['ad_id'];
 		$attributes = array(
-			'classes' => $settings['alignment'],
+			'align' => $settings['alignment'],
 
 		);
 

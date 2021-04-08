@@ -512,16 +512,41 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_ad_sizes() {
 		$sizes = array(
-			'none'    => __( 'Select Ad Size', 'wpadcenter' ),
-			'468x60'  => __( 'IAB Full Banner (468 x 60)', 'wpadcenter' ),
-			'120x600' => __( 'IAB Skyscraper (120 x 600)', 'wpadcenter' ),
-			'160x600' => __( 'IAB Wide Skyscraper (160 x 600)', 'wpadcenter' ),
-			'728x90'  => __( 'IAB Leaderboard (728 x 90)', 'wpadcenter' ),
-			'180x150' => __( 'IAB Rectangle (180 x 150)', 'wpadcenter' ),
-			'300x250' => __( 'IAB Medium Rectangle (300 x 250)', 'wpadcenter' ),
-			'120x90'  => __( 'IAB Button 1 (120 x 90)', 'wpadcenter' ),
-			'120x60'  => __( 'IAB Button 2 (120 x 60)', 'wpadcenter' ),
-			'125x125' => __( 'IAB Square Button (125 x 125)', 'wpadcenter' ),
+			'none'    => array( __( 'Select Ad Size', 'wpadcenter' ), 'ad-size' ),
+
+			'sub-heading-1' => array( __( 'Square and Rectangle', 'wpadcenter' ), 'sub-heading' ),
+			'200x200'       => array( __( 'Small square (200x200)', 'wpadcenter' ), 'ad-size' ),
+			'240x400'       => array( __( 'Vertical rectangle (240x400)', 'wpadcenter' ), 'ad-size' ),
+			'250x250'       => array( __( 'Square (250x250)', 'wpadcenter' ), 'ad-size' ),
+			'250x360'       => array( __( 'Triple widescreen (250x360)', 'wpadcenter' ), 'ad-size' ),
+			'300x250'       => array( __( 'Inline rectangle (300x250)', 'wpadcenter' ), 'ad-size' ),
+			'336x280'       => array( __( 'Large rectangle (336x280)', 'wpadcenter' ), 'ad-size' ),
+			'580x400'       => array( __( 'Netboard (580x400)', 'wpadcenter' ), 'ad-size' ),
+
+			'sub-heading-2' => array( __( 'Skyscraper', 'wpadcenter' ), 'sub-heading' ),
+			'120x600'       => array( __( 'Skyscraper (120x600)', 'wpadcenter' ), 'ad-size' ),
+			'160x600'       => array( __( 'Wide skyscraper (160x600)', 'wpadcenter' ), 'ad-size' ),
+			'300x600'       => array( __( 'Half-page ad (300x600)', 'wpadcenter' ), 'ad-size' ),
+			'300x1050'      => array( __( 'Portrait (300x1050)', 'wpadcenter' ), 'ad-size' ),
+
+			'sub-heading-3' => array( __( 'Leaderboard', 'wpadcenter' ), 'sub-heading' ),
+			'468x60'        => array( __( 'Banner (468x60)', 'wpadcenter' ), 'ad-size' ),
+			'728x90'        => array( __( 'Leaderboard (728x90)', 'wpadcenter' ), 'ad-size' ),
+			'930x180'       => array( __( 'Top banner (930x180)', 'wpadcenter' ), 'ad-size' ),
+			'970x90'        => array( __( 'Large leaderboard (970x90)', 'wpadcenter' ), 'ad-size' ),
+			'970x250'       => array( __( 'Billboard (970x250)', 'wpadcenter' ), 'ad-size' ),
+			'980x120'       => array( __( 'Panorama (980x120)', 'wpadcenter' ), 'ad-size' ),
+
+			'sub-heading-4' => array( __( 'Button', 'wpadcenter' ), 'sub-heading' ),
+			'120x60'        => array( __( 'Button 1 (120x60)', 'wpadcenter' ), 'ad-size' ),
+			'120x90'        => array( __( 'Button 2 (120x90)', 'wpadcenter' ), 'ad-size' ),
+			'125x125'       => array( __( 'Square button (125x125)', 'wpadcenter' ), 'ad-size' ),
+
+			'sub-heading-5' => array( __( 'Mobile', 'wpadcenter' ), 'sub-heading' ),
+			'300x50'        => array( __( 'Mobile banner 1 (300x50)', 'wpadcenter' ), 'ad-size' ),
+			'320x50'        => array( __( 'Mobile banner 2 (320x50)', 'wpadcenter' ), 'ad-size' ),
+			'320x100'       => array( __( 'Large mobile banner (320x100)', 'wpadcenter' ), 'ad-size' ),
+
 		);
 		return apply_filters( 'wpadcenter_get_default_ad_sizes', $sizes );
 	}
@@ -1169,7 +1194,8 @@ class Wpadcenter_Admin {
 			case 'ad-dimensions':
 				$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
 				if ( 'none' !== $ad_size ) {
-					echo esc_html( $sizes_list[ $ad_size ] );
+					$size_data = $sizes_list[ $ad_size ];
+					echo esc_html( $size_data[0] );
 				} else {
 					echo '-';
 				}
@@ -1418,15 +1444,20 @@ class Wpadcenter_Admin {
 
 		$size = get_post_meta( $post->ID, 'wpadcenter_ad_size', true );
 		echo '<select name="ad-size" id="size" size="1">';
-		foreach ( $sizes_list as $val => $name ) {
-
-			echo sprintf(
-				'<option value="%s" %s>%s</option>',
-				esc_attr( $val ),
-				( empty( $size ) && $val === $default_size ? 'selected="selected"' : selected( $size, $val ) ),
-				esc_html( $name )
-			);
-
+		foreach ( $sizes_list as $val => $data ) {
+			if ( 'sub-heading' === $data[1] ) {
+				echo sprintf(
+					'<optgroup label=%s>',
+					esc_html( $data[0] )
+				);
+			} else {
+				echo sprintf(
+					'<option value="%s" %s>%s</option>',
+					esc_attr( $val ),
+					( empty( $size ) && $val === $default_size ? 'selected="selected"' : selected( $size, $val ) ),
+					esc_html( $data[0] )
+				);
+			}
 		}
 		echo '</select>';
 	}
@@ -1983,6 +2014,7 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
+		wp_localize_script( 'wpadcenter-gutenberg-single-ad', 'wpadcenter_singlead_verify', array( 'singlead_nonce' => wp_create_nonce( 'singlead_nonce' ) ) );
 		if ( function_exists( 'register_block_type' ) ) {
 			register_block_type(
 				'wpadcenter/single-ad',
@@ -2060,7 +2092,7 @@ class Wpadcenter_Admin {
 		$ad_attributes = array();
 		if ( array_key_exists( 'ad_alignment', $attributes ) ) {
 			$ad_attributes = array(
-				'classes' => $attributes['ad_alignment'],
+				'align' => $attributes['ad_alignment'],
 			);
 		}
 
@@ -2386,6 +2418,31 @@ class Wpadcenter_Admin {
 				'num_columns' => $num_columns,
 			);
 			echo Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes ); //phpcs:ignore
+			wp_die();
+	}
+
+	/**
+	 * Provides singlead html for gutenberg preview.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_singlead_gutenberg_preview() {
+		if ( ! isset( $_POST['singlead_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['singlead_nonce'] ), 'singlead_nonce' ) ) {
+			wp_die();
+		}
+
+		$ad_id = 0;
+		if ( ! empty( $_POST['ad_id'] ) ) {
+			$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
+		}
+		$ad_alignment = 'alignnone';
+		if ( ! empty( $_POST['alignment'] ) ) {
+			$ad_alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ) );
+		}
+			$singlead_attributes = array(
+				'align' => $ad_alignment,
+			);
+			echo Wpadcenter_Public::display_single_ad( $ad_id,$singlead_attributes ); //phpcs:ignore
 			wp_die();
 	}
 }

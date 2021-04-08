@@ -2,96 +2,171 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+.wpadcenter-adgroup__row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  clear: both;
+}
 
-.wpadcenter-adgroup-row{
-	display:flex;
-	flex-direction:row;
-	flex-wrap:wrap;
-	align-items:center;	
+.wpadcenter-activebutton {
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 18px 9px;
 }
-.wpadcenter-activebutton{
-	border:1px solid ;
-	border-radius:3px;
-	padding: 18px 9px;
+
+.wpadcenter-align-container .dashicon {
+  padding-left: 3px;
 }
-.wpadcenter-align-container .dashicon{
-	padding-left:3px;
+
+.wpadcenter-async-select input[type=text]:focus {
+  box-shadow: none;
 }
-.wpadcenter-async-select input[type="text"]:focus{
-	box-shadow: none;
+
+.Wpadcenter-gutenberg-container .components-placeholder {
+  background-color: #F3F6FF;
 }
-.Wpadcenter-gutenberg-container .components-placeholder{
-	background-color:#F3F6FF;
+
+.Wpadcenter-gutenberg-container {
+  z-index: 20;
+  display: block;
+  clear: both;
 }
-.Wpadcenter-gutenberg-container{
-	z-index:20;
-	display:block;
-	clear:both;
+
+.wpadcenter-aligncenter.wpadcenter-adgroup__row {
+  display: flex;
+  justify-content: center;
 }
-.aligncenter .wpadcenter-adgroup-row div{
-	margin:5px auto;
+
+.wpadcenter-alignright.wpadcenter-adgroup__row {
+  justify-content: flex-end;
 }
-.alignright .wpadcenter-adgroup-row{
-	justify-content: flex-end;
+
+.wpadcenter-alignleft.wpadcenter-adgroup__row {
+  justify-content: flex-start;
 }
-.alignleft .wpadcenter-adgroup-row{
-	justify-content: flex-start;
-}
+
 #wpadcenter_ad {
-	display: block;
+  display: block;
 }
-.wpadcenter-adgroup-widget-container{
-	overflow:hidden;
+
+.wpadcenter-adgroup-widget-container {
+  overflow: hidden;
 }
-.wpadcenter-single-ad-default{
-	display:flex;
-	align-items:center;
-	overflow:hidden;
-	margin:5px;
+
+.wpadcenter-200x200, .wpadcenter-240x400, .wpadcenter-250x250, .wpadcenter-250x360, .wpadcenter-300x250, .wpadcenter-336x280, .wpadcenter-580x400, .wpadcenter-120x600, .wpadcenter-160x600, .wpadcenter-300x600, .wpadcenter-300x1050, .wpadcenter-468x60, .wpadcenter-728x90, .wpadcenter-930x180, .wpadcenter-970x90, .wpadcenter-970x250, .wpadcenter-980x120, .wpadcenter-120x60, .wpadcenter-120x90, .wpadcenter-125x125, .wpadcenter-300x50, .wpadcenter-320x50, .wpadcenter-320x100 {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  margin: 10px;
+  justify-content: center;
 }
-.wpadcenter-single-ad-default div{
-	margin:0 auto;
+
+.wpadcenter-alignright {
+  float: right;
+  margin-left: 10px;
 }
-.aligncenter.wpadcenter-single-ad-default{
-	margin:5px auto;
-	display:block;
+
+.wpadcenter-alignleft {
+  float: left;
+  margin-right: 10px;
 }
-.wpadcenter-300x250{
-	max-width:300px!important;
-	height:250px;
+
+.wpadcenter-aligncenter {
+  display: block;
+  margin: 10px auto;
 }
-.wpadcenter-468x60{
-	max-width:468px !important;
-	height:60px;
+
+.wpadcenter-200x200 {
+  max-width: 200px !important;
+  height: 200px;
 }
-.wpadcenter-120x600{
-	max-width:120px!important;
-	height:600px;
+.wpadcenter-240x400 {
+  max-width: 240px !important;
+  height: 400px;
 }
-.wpadcenter-160x600{
-	max-width:160px!important;
-	height:600px;
+.wpadcenter-250x250 {
+  max-width: 250px !important;
+  height: 250px;
 }
-.wpadcenter-728x90{
-	max-width:728px!important;
-	height:90px;
+.wpadcenter-250x360 {
+  max-width: 250px !important;
+  height: 360px;
 }
-.wpadcenter-180x150{
-	max-width:180px!important;
-	height:150px;
+.wpadcenter-300x250 {
+  max-width: 300px !important;
+  height: 250px;
 }
-.wpadcenter-120x90{
-	max-width:120px!important;
-	height:90px;
+.wpadcenter-336x280 {
+  max-width: 336px !important;
+  height: 280px;
 }
-.wpadcenter-120x60{
-	max-width:120px!important;
-	height:60px;
+.wpadcenter-580x400 {
+  max-width: 580px !important;
+  height: 400px;
 }
-.wpadcenter-125x125{
-	max-width:125px!important;
-	height:125px;
+.wpadcenter-120x600 {
+  max-width: 120px !important;
+  height: 600px;
 }
-.wpadcenter-clearfix::after { 
-	overflow:hidden;
- }
+.wpadcenter-160x600 {
+  max-width: 160px !important;
+  height: 600px;
+}
+.wpadcenter-300x600 {
+  max-width: 300px !important;
+  height: 600px;
+}
+.wpadcenter-300x1050 {
+  max-width: 300px !important;
+  height: 1050px;
+}
+.wpadcenter-468x60 {
+  max-width: 468px !important;
+  height: 60px;
+}
+.wpadcenter-728x90 {
+  max-width: 728px !important;
+  height: 90px;
+}
+.wpadcenter-930x180 {
+  max-width: 930px !important;
+  height: 180px;
+}
+.wpadcenter-970x90 {
+  max-width: 970px !important;
+  height: 90px;
+}
+.wpadcenter-970x250 {
+  max-width: 970px !important;
+  height: 250px;
+}
+.wpadcenter-980x120 {
+  max-width: 980px !important;
+  height: 120px;
+}
+.wpadcenter-120x60 {
+  max-width: 120px !important;
+  height: 60px;
+}
+.wpadcenter-120x90 {
+  max-width: 120px !important;
+  height: 90px;
+}
+.wpadcenter-125x125 {
+  max-width: 125px !important;
+  height: 125px;
+}
+.wpadcenter-300x50 {
+  max-width: 300px !important;
+  height: 50px;
+}
+.wpadcenter-320x50 {
+  max-width: 320px !important;
+  height: 50px;
+}
+.wpadcenter-320x100 {
+  max-width: 320px !important;
+  height: 100px;
+}
