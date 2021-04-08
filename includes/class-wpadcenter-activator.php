@@ -19,17 +19,19 @@
  * @subpackage Wpadcenter/includes
  * @author     WPEka <hello@wpeka.com>
  */
-class Wpadcenter_Activator {
+class Wpadcenter_Activator
+{
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since 1.0.0
-	 */
-	public static function activate() {
-		global $wpdb;
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since 1.0.0
+     */
+    public static function activate()
+    {
+        global $wpdb;
         include_once ABSPATH . 'wp-admin/includes/upgrade.php';
         if (is_multisite() ) {
             // Get all blogs in the network and activate plugin on each one
@@ -42,9 +44,9 @@ class Wpadcenter_Activator {
         } else {
             Wpadcenter_Activator::wpadcenter_install_table();
         }
-	}
+    }
 
-	public static function wpadcenter_install_table()
+    public static function wpadcenter_install_table()
     {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
