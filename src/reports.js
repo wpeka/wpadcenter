@@ -446,8 +446,7 @@ var reports = new Vue({
 			document.getElementById('post_csv').submit();
 		},
 		onAdvertiserSelection(data) {
-			if( data === null ) {
-				console.log(select_ad);
+			if( data === null ) ;
 				this.select_ad = select_ad;
 				return;
 			}
