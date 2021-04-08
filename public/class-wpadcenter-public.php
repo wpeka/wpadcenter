@@ -257,7 +257,7 @@ class Wpadcenter_Public {
 
 		$ad_id      = $atts['id'];
 		$attributes = array(
-			'classes' => 'align' . $atts['align'],
+			'align' => 'align' . $atts['align'],
 		);
 		return self::display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
 
@@ -293,14 +293,15 @@ class Wpadcenter_Public {
 			)
 		);
 		$default_attributes = array(
-			'classes' => '',
-
+			'align'           => 'alignnone',
+			'classes'         => '',
+			'max_width'       => '728px',
+			'display_adgroup' => false,
 		);
-		$attributes             = wp_parse_args( $attributes, $default_attributes );
-		$attributes['classes'] .= ' wpadcenter-single-ad-default ';
-		$current_time           = time();
-		$start_date             = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
-		$end_date               = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
+		$attributes         = wp_parse_args( $attributes, $default_attributes );
+		$current_time       = time();
+		$start_date         = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
+		$end_date           = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
@@ -319,19 +320,29 @@ class Wpadcenter_Public {
 			$ad_size                = explode( 'x', $ad_size );
 			$width                  = $ad_size[0];
 			$height                 = $ad_size[1];
+			$attributes['classes'] .= ' ad-' . $width . 'x' . $height;
 			$attributes['classes'] .= ' wpadcenter-' . $width . 'x' . $height;
 
 		}
 		$single_ad_html = '';
-		$single_ad_html = '<div class="wpadcenter-clearfix" >';
+
+		if ( ! $attributes['display_adgroup'] ) {
+			$attributes['classes'] .= ' wpadcenter-' . $attributes['align'] . ' ' . $attributes['align'];
+			$single_ad_html        .= '<!-- Ad space powered by WP AdCenter v2.0.0 -https://wpadcenter.com/ -->';
+		}
+		$single_ad_html .= '<div class="wpadcenter-ad-container">';
 
 		$single_ad_html .= '<div ';
+		$single_ad_html .= 'id="wpadcenter-ad-' . $ad_id . '" ';
+
 		if ( $attributes['classes'] ) {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
 		}
+		$single_ad_html .= 'style="max-width:' . $attributes['max_width'] . '" ';
+
 		$single_ad_html .= '>';
-		$single_ad_html .= '<div>';
-		$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
+		$single_ad_html .= '<div class="wpadcenter-ad-inner" >';
+		$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
 		if ( true === (bool) $nofollow ) {
 			$single_ad_html .= 'rel="nofollow"';
 		}
@@ -625,9 +636,9 @@ class Wpadcenter_Public {
 		if ( $ads->have_posts() ) {
 
 			$adgroup_html = '';
-			$adgroup_html = '<div class="wpadcenter-clearfix" >';
+			$adgroup_html = '<!-- Ad space powered by WP AdCenter v2.0.0 -https://wpadcenter.com/ -->';
 
-			$adgroup_html .= '<div class="' . $attributes['align'] . '" style="max-width:' . $attributes['max_width'] . '">';
+			$adgroup_html .= '<div class="wpadcenter-adgroup" >';
 
 			$col_count = 0;
 			$ad_count  = 0;
@@ -636,12 +647,12 @@ class Wpadcenter_Public {
 				$ads->the_post();
 
 				if ( 0 === $col_count || intval( $attributes['num_columns'] ) === $col_count ) {
-					$adgroup_html .= '<div class="wpadcenter-adgroup-row">';
+					$adgroup_html .= '<div class="wpadcenter-adgroup__row wpadcenter-' . $attributes['align'] . '">';
 				}
 
 				$ad_id                = get_the_ID();
 				$single_ad_attributes = array(
-					'classes' => 'wpadcenter-ad-spacing',
+					'display_adgroup' => true,
 				);
 				$adgroup_html        .= self::display_single_ad( $ad_id, $single_ad_attributes );
 				$ad_count++;
@@ -657,7 +668,6 @@ class Wpadcenter_Public {
 			}
 			wp_reset_postdata();
 
-			$adgroup_html .= '</div>';
 			$adgroup_html .= '</div>';
 
 			return $adgroup_html;

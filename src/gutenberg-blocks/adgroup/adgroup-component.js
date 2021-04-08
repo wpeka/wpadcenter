@@ -59,13 +59,12 @@ class AdGroup extends Component{
     let adAlignment = {
       zIndex:"20",
       position:"relative",
-      maxWidth:"728px",
   }; 
 
     return (
 
-        <div style={adAlignment} className={this.props.adgroupAlignment} dangerouslySetInnerHTML={ this.state.ad_html } ></div>
-        )
+      <div style={adAlignment} dangerouslySetInnerHTML={ this.state.ad_html } ></div>
+      )
 
   	}
     }
