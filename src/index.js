@@ -37,6 +37,7 @@ var vm = new Vue({
         setValues: function() {
             this.enable_scripts = this.$refs.enable_scripts.checked;
             this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
+            this.adblock_detector = this.$refs.hasOwnProperty('adblock_detector') ? this.$refs.adblock_detector.checked : false;
             this.$refs.ads_txt_tab.value = this.enable_ads_txt ? "1" : "0";
             this.enable_advertisers = this.$refs.hasOwnProperty('enable_advertisers') ? this.$refs.enable_advertisers.checked : false; 
             this.enable_notifications = this.$refs.hasOwnProperty('enable_notifications') ? this.$refs.enable_notifications.checked : false; 

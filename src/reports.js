@@ -224,7 +224,6 @@ var reports = new Vue({
 				}
 			}).done(data => {
 				data = JSON.parse(data);
-				console.log(data);
 				this.select_advertiser = data;
 			});
 		}
