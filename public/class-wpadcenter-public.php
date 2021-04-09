@@ -331,7 +331,7 @@ class Wpadcenter_Public {
 			$ad_size                = explode( 'x', $ad_size );
 			$width                  = $ad_size[0];
 			$height                 = $ad_size[1];
-			$attributes['classes'] .= ' ad-' . $width . 'x' . $height;
+			$attributes['classes'] .= 'ad-' . $width . 'x' . $height;
 			$attributes['classes'] .= ' wpadcenter-' . $width . 'x' . $height;
 
 		}
