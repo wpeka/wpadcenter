@@ -512,7 +512,7 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_ad_sizes() {
 		$sizes = array(
-			'none'    => array( __( 'Select Ad Size', 'wpadcenter' ), 'ad-size' ),
+			'none'          => array( __( 'Select Ad Size', 'wpadcenter' ), 'ad-size' ),
 
 			'sub-heading-1' => array( __( 'Square and Rectangle', 'wpadcenter' ), 'sub-heading' ),
 			'200x200'       => array( __( 'Small square (200x200)', 'wpadcenter' ), 'ad-size' ),
@@ -1850,7 +1850,7 @@ class Wpadcenter_Admin {
 							__( 'Disable tracking for Admin and other user roles.', 'wpadcenter' ),
 							__( 'Scripts', 'wpadcenter' ),
 							__( 'ads.txt', 'wpadcenter' ),
-							__( 'Integrate AdSense Account', 'wpadcenter' )
+							__( 'Integrate AdSense Account', 'wpadcenter' ),
 						)
 					),
 				),
@@ -2021,11 +2021,19 @@ class Wpadcenter_Admin {
 				array(
 					'editor_script'   => 'wpadcenter-gutenberg-single-ad',
 					'attributes'      => array(
-						'ad_id'        => array(
+						'ad_id'           => array(
 							'type' => 'number',
 						),
-						'ad_alignment' => array(
+						'ad_alignment'    => array(
 							'type' => 'string',
+						),
+						'max_width_check' => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+						'max_width_px'    => array(
+							'type'    => 'string',
+							'default' => '100',
 						),
 
 					),
@@ -2065,6 +2073,14 @@ class Wpadcenter_Admin {
 						'num_columns'       => array(
 							'type' => 'string',
 						),
+						'max_width_check'   => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+						'max_width_px'      => array(
+							'type'    => 'string',
+							'default' => '100',
+						),
 
 					),
 					'render_callback' => array( $this, 'gutenberg_display_adgroup_cb' ),
@@ -2090,11 +2106,25 @@ class Wpadcenter_Admin {
 		}
 
 		$ad_attributes = array();
+		$ad_alignment  = 'alignnone';
 		if ( array_key_exists( 'ad_alignment', $attributes ) ) {
-			$ad_attributes = array(
-				'align' => $attributes['ad_alignment'],
-			);
+			$ad_alignment = $attributes['ad_alignment'];
 		}
+		$max_width_check = false;
+		if ( array_key_exists( 'max_width_check', $attributes ) ) {
+
+			$max_width_check = boolval( $attributes['max_width_check'] );
+		}
+		$max_width_px = '100';
+		if ( array_key_exists( 'max_width_px', $attributes ) ) {
+			$max_width_px = $attributes['max_width_px'];
+		}
+
+		$ad_attributes = array(
+			'align'        => $ad_alignment,
+			'max_width'    => $max_width_check,
+			'max_width_px' => $max_width_px,
+		);
 
 		return Wpadcenter_Public::display_single_ad( $ad_id, $ad_attributes );
 	}
@@ -2123,11 +2153,22 @@ class Wpadcenter_Admin {
 		if ( array_key_exists( 'num_columns', $attributes ) ) {
 			$num_columns = $attributes['num_columns'];
 		}
+		$max_width_check = false;
+		if ( array_key_exists( 'max_width_check', $attributes ) ) {
+
+			$max_width_check = boolval( $attributes['max_width_check'] );
+		}
+		$max_width_px = '100';
+		if ( array_key_exists( 'max_width_px', $attributes ) ) {
+			$max_width_px = $attributes['max_width_px'];
+		}
 			$adgroup_attributes = array(
-				'adgroup_ids' => $adgroup_ids,
-				'align'       => $adgroup_alignment,
-				'num_ads'     => $num_ads,
-				'num_columns' => $num_columns,
+				'adgroup_ids'  => $adgroup_ids,
+				'align'        => $adgroup_alignment,
+				'num_ads'      => $num_ads,
+				'num_columns'  => $num_columns,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
 			);
 			return Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes );
 
@@ -2411,11 +2452,28 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['num_columns'] ) ) {
 			$num_columns = sanitize_text_field( wp_unslash( $_POST['num_columns'] ) );
 		}
+		$max_width_check = false;
+		if ( ! empty( $_POST['max_width_check'] ) ) {
+
+			$checked = sanitize_text_field( wp_unslash( $_POST['max_width_check'] ) );
+			if ( 'true' === $checked ) {
+				$max_width_check = true;
+			} else {
+				$max_width_check = false;
+			}
+		}
+		$max_width_px = '100';
+		if ( ! empty( $_POST['max_width_px'] ) ) {
+			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
+		}
 			$adgroup_attributes = array(
-				'adgroup_ids' => $adgroup_ids,
-				'align'       => $adgroup_alignment,
-				'num_ads'     => $num_ads,
-				'num_columns' => $num_columns,
+				'adgroup_ids'  => $adgroup_ids,
+				'align'        => $adgroup_alignment,
+				'num_ads'      => $num_ads,
+				'num_columns'  => $num_columns,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+
 			);
 			echo Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes ); //phpcs:ignore
 			wp_die();
@@ -2439,8 +2497,24 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['alignment'] ) ) {
 			$ad_alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ) );
 		}
+		$max_width_check = false;
+		if ( ! empty( $_POST['max_width_check'] ) ) {
+
+			$checked = sanitize_text_field( wp_unslash( $_POST['max_width_check'] ) );
+			if ( 'true' === $checked ) {
+				$max_width_check = true;
+			} else {
+				$max_width_check = false;
+			}
+		}
+		$max_width_px = '100';
+		if ( ! empty( $_POST['max_width_px'] ) ) {
+			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
+		}
 			$singlead_attributes = array(
-				'align' => $ad_alignment,
+				'align'        => $ad_alignment,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
 			);
 			echo Wpadcenter_Public::display_single_ad( $ad_id,$singlead_attributes ); //phpcs:ignore
 			wp_die();

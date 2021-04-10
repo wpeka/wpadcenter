@@ -122,6 +122,28 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'max_width',
+			array(
+				'label'        => __( 'Enable Max Width', 'plugin-domain' ),
+				'type'         => \Elementor\Controls_Manager::SWITCHER,
+				'label_on'     => __( 'On', 'wpadcenter' ),
+				'label_off'    => __( 'Off', 'wpadcenter' ),
+				'return_value' => 'on',
+				'default'      => 'off',
+			)
+		);
+		$this->add_control(
+			'max_width_px',
+			array(
+				'label'   => __( 'Max Width', 'wpadcenter' ),
+				'type'    => \Elementor\Controls_Manager::NUMBER,
+				'min'     => 1,
+				'step'    => 1,
+				'default' => 100,
+			)
+		);
+
 		$this->end_controls_section();
 	}
 
@@ -148,12 +170,19 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 	 */
 	protected function render() {
 				$settings = $this->get_settings_for_display();
+		if ( 'on' === $settings['max_width'] ) {
+					$settings['max_width'] = true;
+		} else {
+					$settings['max_width'] = false;
+		}
 
 		$attributes = array(
-			'adgroup_ids' => $settings['adgroup_ids'],
-			'align'       => $settings['alignment'],
-			'num_ads'     => $settings['num_ads'],
-			'num_columns' => $settings['num_columns'],
+			'adgroup_ids'  => $settings['adgroup_ids'],
+			'align'        => $settings['alignment'],
+			'num_ads'      => $settings['num_ads'],
+			'num_columns'  => $settings['num_columns'],
+			'max_width'    => $settings['max_width'],
+			'max_width_px' => $settings['max_width_px'],
 		);
 
 		echo Wpadcenter_Public::display_adgroup_ads( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

@@ -39,6 +39,8 @@ class AdGroup extends Component{
           alignment:this.props.adgroupAlignment, 
           num_ads:this.props.numAds,
           num_columns:this.props.numColumns,   
+          max_width_check:this.props.max_width_check,
+          max_width_px:this.props.max_width_px
       }
   }).done(adgroup_html => {
         this.setState( {

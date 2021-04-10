@@ -10,6 +10,8 @@ const { __, }       = wp.i18n;
 
 import AdGroup from  './adgroup-component';
 import AdAlignment from '../ad-alignment-component';
+import MaxWidth from '../maxwidth-component';
+
 
 
 
@@ -41,9 +43,17 @@ registerBlockType('wpadcenter/adgroup',{
      default:'1',
    },
    num_ads: {
-   type: 'text',
-  default:'1',
- },
+    type: 'text',
+    default:'1',
+    },
+    max_width_check:{
+      type: 'boolean',
+    default:false, 
+    },
+    max_width_px:{
+      type: 'text',
+    default:100, 
+    },
      align : {
       type:'string',
       default:'wide'
@@ -102,7 +112,18 @@ const customStyles = {
   })
 };
 
+const onMaxWidthControlChange=(value)=>{
+  props.setAttributes( {
+    max_width_check   : value,
 
+  } );
+}
+const onMaxWidthChange=(value)=>{
+  props.setAttributes( {
+    max_width_px   : value,
+
+  } );
+}
 
 const onAdSelection = ( selection ) => {
       let current_adgroup_ids=[];
@@ -187,7 +208,13 @@ const onAdSelection = ( selection ) => {
       <input type="number" min="1" onChange={setNumCol} value={props.attributes.num_columns}/>
 
       </div>
-</div>
+    </div>
+    <MaxWidth
+      maxWidthCheck={props.attributes.max_width_check}
+      maxWidthControlChange={onMaxWidthControlChange}
+      maxWidthChange={onMaxWidthChange}
+      maxWidth={props.attributes.max_width_px}
+      />
 
 
       </Placeholder>):(
@@ -197,6 +224,8 @@ const onAdSelection = ( selection ) => {
         adGroupIds={props.attributes.adgroup_ids}
         adIds={props.attributes.ad_ids}
         adgroupAlignment={props.attributes.adgroup_alignment}
+        max_width_check={props.attributes.max_width_check}
+        max_width_px={props.attributes.max_width_px}
         />
 
       )}
