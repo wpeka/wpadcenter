@@ -125,7 +125,7 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'max_width',
 			array(
-				'label'        => __( 'Enable Max Width', 'plugin-domain' ),
+				'label'        => __( 'Enable Max Width', 'wpadcenter' ),
 				'type'         => \Elementor\Controls_Manager::SWITCHER,
 				'label_on'     => __( 'On', 'wpadcenter' ),
 				'label_off'    => __( 'Off', 'wpadcenter' ),
