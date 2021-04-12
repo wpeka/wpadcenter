@@ -337,6 +337,7 @@ class Wpadcenter {
 
 			'geo_location'             => 'none',
 			'trim_stats'               => '0',
+			'days_to_send_before'      => 1,
 			'hide_ads_logged'          => false,
 			'roles_selected'           => '',
 		);
