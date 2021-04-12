@@ -635,7 +635,7 @@ class Wpadcenter_Admin {
 			'ad-group'        => __( 'Ad Group', 'wpadcenter' ),
 			'shortcode'       => __( 'Shortcode', 'wpadcenter' ),
 			'template-tag'    => __( 'Template Tag', 'wpadcenter' ),
-			'stats-for-today' => __( 'Stats for today', 'wpadcenter' ),
+			'stats-for-today' => __( 'Stats for Today', 'wpadcenter' ),
 			'start-date'      => __( 'Start Date', 'wpadcenter' ),
 			'end-date'        => __( 'End Date', 'wpadcenter' ),
 		);
