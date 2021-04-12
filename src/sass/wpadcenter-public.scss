@@ -113,95 +113,164 @@
   
   .wpadcenter-{
 	  &200x200{
-		max-width: 200px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 200px !important;
+		  }
+		  max-width: 200px;
 		height: 200px;
 	  }
 	  &240x400{
-		max-width: 240px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 240px !important;
+		  }
+		  max-width: 240px;
 		height: 400px;
 	  }
 	  &250x250{
-		max-width: 250px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 250px !important;
+		  }
+		  max-width: 250px;
 		height: 250px;
 	  }
 	  &250x360{
-		max-width: 250px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 250px !important;
+		  }
+		  max-width: 250px;
 		height: 360px;
 	  }
 	  &300x250{
-		max-width: 300px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 300px !important;
+		  }
+		  max-width: 300px;
 		height: 250px;
 	  }
 	  &336x280{
-		max-width: 336px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 336px !important;
+		  }
+		  max-width: 336px;
 		height: 280px;
 	  }
 	  &580x400{
-		max-width: 580px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 580px !important;
+		  }
+		  max-width: 580px;
 		height: 400px;
 	  }
 	  &120x600{
-		max-width: 120px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 120px !important;
+		  }
+		  max-width: 120px;
 		height: 600px;
 	  }
 	  &160x600{
-		max-width: 160px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 160px !important;
+		  }
+		  max-width: 160px;
 		height: 600px;
 	  }
 	  &300x600{
-		max-width: 300px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 300px !important;
+		  }
+		  max-width: 300px;
 		height: 600px;
 	  }
 	  &300x1050{
-		max-width: 300px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 300px !important;
+		  }
+		  max-width: 300px;
 		height: 1050px;
 	  }
 	  &468x60{
-		max-width: 468px !important;
+	  	&:not(.wpadcenter-maxwidth) {
+			max-width: 468px !important;
+	  	}
+	  	max-width: 468px;
 		height: 60px;
 	  }
 	  &728x90{
-		max-width: 728px !important;
-		height: 90px;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 728px !important;
+		  }
+		  max-width: 728px;
+		  height: 90px;
 	  }
 	  &930x180{
-		max-width: 930px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 930px !important;
+		  }
+		  max-width: 930px;
 		height: 180px;
 	  }
 	  &970x90{
-		max-width: 970px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 970px !important;
+		  }
+		  max-width: 970px;
 		height: 90px;
 	  }
 	  &970x250{
-		max-width: 970px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 970px !important;
+		  }
+		  max-width: 970px;
 		height: 250px;
 	  }
 	  &980x120{
-		max-width: 980px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 980px !important;
+		  }
+		  max-width: 980px;
 		height: 120px;
 	  }
 	  &120x60{
-		max-width: 120px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 120px !important;
+		  }
+		  max-width: 120px;
 		height: 60px;
 	  }
 	  &120x90{
-		max-width: 120px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 120px !important;
+		  }
+		  max-width: 120px;
 		height: 90px;
 	  }
 	  &125x125{
-		max-width: 125px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 125px !important;
+		  }
+		  max-width: 125px;
 		height: 125px;
 	  }
 	  &300x50{
-		max-width: 300px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 300px !important;
+		  }
+		  max-width: 300px;
 		height: 50px;
 	  }
 	  &320x50{
-		max-width: 320px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 320px !important;
+		  }
+		  max-width: 320px;
 		height: 50px;
 	  }
 	  &320x100{
-		max-width: 320px !important;
+		  &:not(.wpadcenter-maxwidth) {
+			  max-width: 320px !important;
+		  }
+		  max-width: 320px;
 		height: 100px;
 	  }
   }

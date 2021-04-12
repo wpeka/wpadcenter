@@ -46,7 +46,7 @@ class Wpadcenter_Public {
 	 * @access private
 	 * @var    string    $version    The current version of this plugin.
 	 */
-	private static $released_version;
+	public static $released_version;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -312,11 +312,12 @@ class Wpadcenter_Public {
 			)
 		);
 		$default_attributes = array(
-			'align'           => 'alignnone',
-			'classes'         => '',
-			'max_width'       => false,
-			'max_width_px'    => '100',
-			'display_adgroup' => false,
+			'align'               => 'alignnone',
+			'classes'             => '',
+			'max_width'           => false,
+			'max_width_px'        => '100',
+			'display_adgroup'     => false,
+			'display_rotating_ad' => false,
 		);
 		$attributes         = wp_parse_args( $attributes, $default_attributes );
 		$current_time       = time();
@@ -348,18 +349,22 @@ class Wpadcenter_Public {
 
 		if ( ! $attributes['display_adgroup'] ) {
 			$attributes['classes'] .= ' wpadcenter-' . $attributes['align'] . ' ' . $attributes['align'];
-			$single_ad_html        .= '<!-- Ad space powered by WP AdCenter v' . self::$released_version . ' - https://wpadcenter.com/ -->';
+			if ( ! $attributes['display_rotating_ad'] ) {
+				$single_ad_html .= '<!-- Ad space powered by WP AdCenter v' . self::$released_version . ' - https://wpadcenter.com/ -->';
+			}
 		}
 		$single_ad_html .= '<div class="wpadcenter-ad-container">';
 
 		$single_ad_html .= '<div ';
 		$single_ad_html .= 'id="wpadcenter-ad-' . $ad_id . '" ';
 
+		if ( $attributes['max_width'] ) {
+			$single_ad_html        .= 'style="max-width:' . $attributes['max_width_px'] . 'px" ';
+			$attributes['classes'] .= ' wpadcenter-maxwidth';
+		}
+
 		if ( $attributes['classes'] ) {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
-		}
-		if ( $attributes['max_width'] ) {
-			$single_ad_html .= 'style="max-width:' . $attributes['max_width_px'] . 'px" ';
 		}
 
 		$single_ad_html .= '>';
