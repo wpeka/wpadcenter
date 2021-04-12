@@ -147,6 +147,7 @@ class Wpadcenter_Elementor_Widgets {
 		// Add Plugin actions.
 		require_once plugin_dir_path( __DIR__ ) . 'elementor/class-wpadcenter-elementor-singlead-widget.php';
 		require_once plugin_dir_path( __DIR__ ) . 'elementor/class-wpadcenter-elementor-adgroup-widget.php';
+		require_once plugin_dir_path( __DIR__ ) . 'elementor/class-wpadcenter-elementor-randomad-widget.php';
 
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ) );
 
@@ -160,6 +161,7 @@ class Wpadcenter_Elementor_Widgets {
 	public function register_widgets() {
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Wpadcenter_Elementor_SingleAd_Widget() );
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Wpadcenter_Elementor_Adgroup_Widget() );
+		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Wpadcenter_Elementor_RandomAd_Widget() );
 
 	}
 
