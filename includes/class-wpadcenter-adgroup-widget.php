@@ -28,8 +28,19 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 		$name           = 'WPAdCenter Ad Group';
 		$widget_options = array( 'description' => __( 'Display Ads from Adgroup', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
+		add_action( 'admin_enqueue_scripts', array( $this, 'wpadcenter_adgroup_widget_enqueue_script' ) );
+
 	}
 
+	/**
+	 * Enqueues script.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_adgroup_widget_enqueue_script() {
+
+		wp_enqueue_script( 'wpadcenter' );
+	}
 
 	/**
 	 * Widget display functionality.
@@ -51,18 +62,28 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 		$num_ads     = empty( $instance['num_ads'] ) ? 1 : $instance['num_ads'];
 		$num_columns = empty( $instance['num_columns'] ) ? 1 : $instance['num_columns'];
 		$alignment   = empty( $instance['alignment'] ) ? 1 : $instance['alignment'];
+		$max_width   = empty( $instance['max_width'] ) ? 'off' : $instance['max_width'];
+
+		if ( 'on' === $max_width ) {
+			$max_width = true;
+		} else {
+			$max_width = false;
+		}
+		$max_width_px = empty( $instance['max_width_px'] ) ? 1 : $instance['max_width_px'];
 
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped		
 
 		$attributes = array(
-			'adgroup_ids' => $adgroup_ids,
-			'align'       => $alignment,
-			'num_ads'     => $num_ads,
-			'num_columns' => $num_columns,
+			'adgroup_ids'  => $adgroup_ids,
+			'align'        => $alignment,
+			'num_ads'      => $num_ads,
+			'num_columns'  => $num_columns,
+			'max_width'    => $max_width,
+			'max_width_px' => $max_width_px,
 		);
 		echo '<div class="wpadcenter-adgroup-widget-container">';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo Wpadcenter_Public::display_adgroup_ads( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -96,11 +117,13 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 	 * @return string|void
 	 */
 	public function form( $instance ) {
-		$adgroup_ids = empty( $instance['adgroup_ids'] ) ? array() : $instance['adgroup_ids'];
-		$title       = empty( $instance['title'] ) ? '' : $instance['title'];
-		$num_ads     = empty( $instance['num_ads'] ) ? 1 : $instance['num_ads'];
-		$num_columns = empty( $instance['num_columns'] ) ? 1 : $instance['num_columns'];
-		$alignment   = empty( $instance['alignment'] ) ? 'alignnone' : $instance['alignment'];
+		$adgroup_ids  = empty( $instance['adgroup_ids'] ) ? array() : $instance['adgroup_ids'];
+		$title        = empty( $instance['title'] ) ? '' : $instance['title'];
+		$num_ads      = empty( $instance['num_ads'] ) ? 1 : $instance['num_ads'];
+		$num_columns  = empty( $instance['num_columns'] ) ? 1 : $instance['num_columns'];
+		$alignment    = empty( $instance['alignment'] ) ? 'alignnone' : $instance['alignment'];
+		$max_width    = empty( $instance['max_width'] ) ? 'off' : $instance['max_width'];
+		$max_width_px = empty( $instance['max_width_px'] ) ? '100' : $instance['max_width_px'];
 
 		$single_ads = array();
 
@@ -178,7 +201,34 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 						<?php
 					}
 					?>
+				<p>
+				<label for="<?php echo esc_html( $this->get_field_id( 'max_width' ) ); ?>"><?php echo esc_html__( 'Enable Max Width', 'wpadcenter' ); ?></label>
+				<input
+					type="checkbox"
+					class="wpadcenter_adgroup_widget_max_width_check"
+					name="<?php echo esc_html( $this->get_field_name( 'max_width' ) ); ?>"
+					id="<?php echo esc_html( $this->get_field_id( 'max_width' ) ); ?>"
+					<?php checked( $max_width, 'on' ); ?>
+				>			
+			</p>		
+				<p class="wpadcenter_adgroup_widget_max_width_px" 
+				<?php
+				if ( 'on' !== $max_width ) {
+					?>
+				style="display:none"
 
+					<?php
+				}
+				?>
+				>
+				<label for="<?php echo esc_html( $this->get_field_id( 'max_width_px' ) ); ?>"><?php echo esc_html__( 'Max Width : ', 'wpadcenter' ); ?></label>
+				<input
+					type="number"
+					name="<?php echo esc_html( $this->get_field_name( 'max_width_px' ) ); ?>"
+					id="<?php echo esc_html( $this->get_field_id( 'max_width_px' ) ); ?>"
+					value="<?php echo esc_html( $max_width_px ); ?>"
+				>
+				</p>	
 
 
 			<?php
