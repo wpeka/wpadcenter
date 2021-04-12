@@ -2553,7 +2553,7 @@ class Wpadcenter_Admin {
 			$ad_types = $this->get_default_ad_types();
 			?>
 			<select name="ADMIN_FILTER_FIELD_AD_TYPE">
-			<option value=""><?php esc_html_e( 'All ad types', 'wpadenter' ); ?></option>
+			<option value=""><?php esc_html_e( 'All ad types', 'wpadcenter' ); ?></option>
 			<?php
 				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ) : ''; //phpcs:ignore
 			foreach ( $ad_types as $value => $label ) {
@@ -2570,7 +2570,7 @@ class Wpadcenter_Admin {
 			$ad_sizes = $this->get_default_ad_sizes();
 			?>
 			<select name="ADMIN_FILTER_FIELD_AD_SIZE">
-			<option value=""><?php esc_html_e( 'All ad dimensions', 'wpadenter' ); ?></option>
+			<option value=""><?php esc_html_e( 'All ad dimensions', 'wpadcenter' ); ?></option>
 			<?php
 				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ) : '';//phpcs:ignore
 			foreach ( $ad_sizes as $size => $data ) {
@@ -2602,7 +2602,7 @@ class Wpadcenter_Admin {
 			);
 			?>
 			<select name="ADMIN_FILTER_FIELD_AD_GROUP">
-			<option value=""><?php esc_html_e( 'All ad groups', 'wpadenter' ); ?></option>
+			<option value=""><?php esc_html_e( 'All ad groups', 'wpadcenter' ); ?></option>
 			<?php
 				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ) : '';//phpcs:ignore
 			foreach ( $terms as $term ) {
@@ -2610,7 +2610,7 @@ class Wpadcenter_Admin {
 					'<option value="%s"%s>%s</option>',
 					esc_attr( $term->term_id ),
 					$term->term_id === $current_v ? ' selected="selected"' : '',
-					esc_html( $term->name ),
+					esc_html( $term->name )
 				);
 			}
 
@@ -2626,7 +2626,7 @@ class Wpadcenter_Admin {
 
 				?>
 			<select name="ADMIN_FILTER_FIELD_ADVERTISER">
-			<option value=""><?php esc_html_e( 'All advertisers', 'wpadenter' ); ?></option>
+			<option value=""><?php esc_html_e( 'All advertisers', 'wpadcenter' ); ?></option>
 				<?php
 				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ) : '';//phpcs:ignore
 				foreach ( $advertisers as $advertiser ) {
@@ -2634,7 +2634,7 @@ class Wpadcenter_Admin {
 						'<option value="%s"%s>%s</option>',
 						esc_attr( $advertiser->data->ID ),
 						$advertiser->data->ID === $current_v ? ' selected="selected"' : '',
-						esc_html( $advertiser->data->display_name ),
+						esc_html( $advertiser->data->display_name )
 					);
 				}
 
