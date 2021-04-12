@@ -149,6 +149,11 @@ class Wpadcenter {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-adgroup-widget.php';
 
 		/**
+		 * The class responsible for defining random ad widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-random-ad-widget.php';
+
+		/**
 		 * The class responsible for defining single ad elementor widget.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
@@ -208,8 +213,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'admin_post_export_csv', $plugin_admin, 'wpadcenter_export_csv' );
 		$this->loader->add_filter( 'style_loader_src', $plugin_admin, 'wpadcanter_dequeue_styles' );
 		$this->loader->add_filter( 'print_styles_array', $plugin_admin, 'wpadcenter_remove_forms_style' );
-		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_single_ad_widget' );
-		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_adgroup_widget' );
+		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_widgets' );
 		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_gutenberg_blocks' );
 		$this->loader->add_filter( 'block_categories', $plugin_admin, 'wpadcenter_gutenberg_block_categories', 10, 1 );
 		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'wpadcenter_register_rest_fields' );
@@ -222,6 +226,8 @@ class Wpadcenter {
 		$this->loader->add_filter( 'post_row_actions', $plugin_admin, 'wpadcenter_remove_post_row_actions', 10, 1 );
 		$this->loader->add_action( 'restrict_manage_posts', $plugin_admin, 'wpadcenter_add_custom_filters' );
 		$this->loader->add_filter( 'parse_query', $plugin_admin, 'wpadcenter_custom_filters_query', 10, 1 );
+		$this->loader->add_action( 'wp_ajax_wpadcenter_random_ad_gutenberg_preview', $plugin_admin, 'wpadcenter_random_ad_gutenberg_preview' );
+
 	}
 
 	/**
@@ -319,7 +325,7 @@ class Wpadcenter {
 	public static function wpadcenter_get_default_settings( $key = '' ) {
 		$settings = array(
 			// General settings.
-			'enable_notifications'             => false,
+			'enable_notifications'     => false,
 
 			'auto_refresh'             => false,
 			'transition_effect'        => 'none',

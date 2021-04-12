@@ -1992,15 +1992,6 @@ class Wpadcenter_Admin {
 	}
 
 	/**
-	 * Registers single ads widget.
-	 *
-	 * @since 1.0.0
-	 */
-	public function wpadcenter_register_single_ad_widget() {
-		register_widget( 'Wpadcenter_Single_Ad_Widget' );
-	}
-
-	/**
 	 * Registers gutenberg block for single ads.
 	 *
 	 * @since 1.0.0
@@ -2088,6 +2079,44 @@ class Wpadcenter_Admin {
 			);
 		}
 
+		wp_register_script(
+			'wpadcenter-gutenberg-random-ad',
+			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-randomad.js',
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
+			$this->version,
+			false
+		);
+		wp_localize_script( 'wpadcenter-gutenberg-random-ad', 'wpadcenter_random_ad_verify', array( 'random_ad_nonce' => wp_create_nonce( 'random_ad_nonce' ) ) );
+		if ( function_exists( 'register_block_type' ) ) {
+			register_block_type(
+				'wpadcenter/random-ad',
+				array(
+					'editor_script'   => 'wpadcenter-gutenberg-random-ad',
+					'attributes'      => array(
+						'adgroup_ids'       => array(
+							'type' => 'array',
+						),
+						'adroups'           => array(
+							'type' => 'array',
+						),
+						'adgroup_alignment' => array(
+							'type' => 'string',
+						),
+						'max_width_check'   => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+						'max_width_px'      => array(
+							'type'    => 'string',
+							'default' => '100',
+						),
+
+					),
+					'render_callback' => array( $this, 'gutenberg_display_random_ad_cb' ),
+				)
+			);
+		}
+
 	}
 
 
@@ -2171,6 +2200,42 @@ class Wpadcenter_Admin {
 				'max_width_px' => $max_width_px,
 			);
 			return Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes );
+
+	}
+
+	/**
+	 * Renders gutenberg random ad on frontend.
+	 *
+	 * @param array $attributes contains attributes of the ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function gutenberg_display_random_ad_cb( $attributes ) {
+		$adgroup_ids = array();
+		if ( array_key_exists( 'adgroup_ids', $attributes ) ) {
+			$adgroup_ids = $attributes['adgroup_ids'];
+		}
+		$adgroup_alignment = 'alignnone';
+		if ( array_key_exists( 'adgroup_alignment', $attributes ) ) {
+			$adgroup_alignment = $attributes['adgroup_alignment'];
+		}
+
+		$max_width_check = false;
+		if ( array_key_exists( 'max_width_check', $attributes ) ) {
+
+			$max_width_check = boolval( $attributes['max_width_check'] );
+		}
+		$max_width_px = '100';
+		if ( array_key_exists( 'max_width_px', $attributes ) ) {
+			$max_width_px = $attributes['max_width_px'];
+		}
+			$random_ad_attributes = array(
+				'adgroup_ids'  => $adgroup_ids,
+				'align'        => $adgroup_alignment,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+			);
+			return Wpadcenter_Public::display_random_ad( $random_ad_attributes );
 
 	}
 
@@ -2404,12 +2469,15 @@ class Wpadcenter_Admin {
 	}
 
 	/**
-	 * Registers adgroups widget.
+	 * Registers wpadcenter widgets.
 	 *
 	 * @since 1.0.0
 	 */
-	public function wpadcenter_register_adgroup_widget() {
+	public function wpadcenter_register_widgets() {
+		register_widget( 'Wpadcenter_Single_Ad_Widget' );
 		register_widget( 'Wpadcenter_Adgroup_Widget' );
+		register_widget( 'Wpadcenter_Random_Ad_Widget' );
+
 	}
 
 	/**
@@ -2521,6 +2589,50 @@ class Wpadcenter_Admin {
 	}
 
 	/**
+	 * Provides random ad html for gutenberg preview.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_random_ad_gutenberg_preview() {
+
+		if ( ! isset( $_POST['random_ad_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['random_ad_nonce'] ), 'random_ad_nonce' ) ) {
+			wp_die();
+		}
+		$adgroup_ids = array();
+		if ( ! empty( $_POST['ad_groups'] ) ) {
+			$adgroup_ids = $_POST['ad_groups']; //phpcs:ignore
+		}
+		$adgroup_alignment = 'alignnone';
+		if ( ! empty( $_POST['alignment'] ) ) {
+			$adgroup_alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ) );
+		}
+
+		$max_width_check = false;
+		if ( ! empty( $_POST['max_width_check'] ) ) {
+
+			$checked = sanitize_text_field( wp_unslash( $_POST['max_width_check'] ) );
+			if ( 'true' === $checked ) {
+				$max_width_check = true;
+			} else {
+				$max_width_check = false;
+			}
+		}
+		$max_width_px = '100';
+		if ( ! empty( $_POST['max_width_px'] ) ) {
+			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
+		}
+			$random_ad_attributes = array(
+				'adgroup_ids'  => $adgroup_ids,
+				'align'        => $adgroup_alignment,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+
+			);
+			echo Wpadcenter_Public::display_random_ad( $random_ad_attributes ); //phpcs:ignore
+			wp_die();
+	}
+
+	/**
 	 * Removes quick edit and views option from the manage ads page.
 	 *
 	 * @param array $actions contains the post row actions.
@@ -2581,8 +2693,7 @@ class Wpadcenter_Admin {
 						$size === $current_v ? ' selected="selected"' : '',
 						esc_html( 'default' )
 					);
-				}
-				elseif ( 'ad-size' === $data[1] ) {
+				} elseif ( 'ad-size' === $data[1] ) {
 					printf(
 						'<option value="%s"%s>%s</option>',
 						esc_attr( $size ),
