@@ -219,6 +219,9 @@ class Wpadcenter {
 		$this->loader->add_action( 'wp_ajax_wpadcenter_adgroup_gutenberg_preview', $plugin_admin, 'wpadcenter_adgroup_gutenberg_preview' );
 		$this->loader->add_action( 'wp_ajax_save_settings', $plugin_admin, 'wpadcenter_settings' );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_singlead_gutenberg_preview', $plugin_admin, 'wpadcenter_singlead_gutenberg_preview' );
+		$this->loader->add_filter( 'post_row_actions', $plugin_admin, 'wpadcenter_remove_post_row_actions', 10, 1 );
+		$this->loader->add_action( 'restrict_manage_posts', $plugin_admin, 'wpadcenter_add_custom_filters' );
+		$this->loader->add_filter( 'parse_query', $plugin_admin, 'wpadcenter_custom_filters_query', 10, 1 );
 	}
 
 	/**

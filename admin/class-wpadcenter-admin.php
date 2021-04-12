@@ -1203,7 +1203,7 @@ class Wpadcenter_Admin {
 			case 'start-date':
 				$current_start_date = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
 				if ( $current_start_date ) {
-					echo esc_html( gmdate( 'm/d/Y H:i:s', $current_start_date ) );
+					echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_start_date ) );// get format from WordPress settings.
 				}
 				break;
 			case 'end-date':
@@ -1212,7 +1212,7 @@ class Wpadcenter_Admin {
 				if ( $current_end_date && $current_end_date === $expire_limit ) {
 					echo esc_html__( 'Forever', 'wpadcenter' );
 				} elseif ( $current_end_date ) {
-					echo esc_html( gmdate( 'm/d/Y H:i:s', $current_end_date ) );
+					echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_end_date ) );// get format from WordPress settings.
 				}
 				break;
 			case 'ad-group':
@@ -2519,4 +2519,194 @@ class Wpadcenter_Admin {
 			echo Wpadcenter_Public::display_single_ad( $ad_id,$singlead_attributes ); //phpcs:ignore
 			wp_die();
 	}
+
+	/**
+	 * Removes quick edit and views option from the manage ads page.
+	 *
+	 * @param array $actions contains the post row actions.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_remove_post_row_actions( $actions ) {
+		global $current_screen;
+		if ( 'wpadcenter-ads' === $current_screen->post_type ) {
+
+			unset( $actions['view'] );
+			unset( $actions['inline hide-if-no-js'] );
+		}
+		return $actions;
+	}
+
+	/**
+	 * Adds custom filter to manage ads page.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_add_custom_filters() {
+
+		global $current_screen;
+		$type = $current_screen->post_type;
+
+		if ( 'wpadcenter-ads' === $type ) {
+
+			wp_nonce_field( 'wpadcenter_add_custom_filter', 'wpadcenter_add_custom_filter_nonce' );
+			$ad_types = $this->get_default_ad_types();
+			?>
+			<select name="ADMIN_FILTER_FIELD_AD_TYPE">
+			<option value=""><?php esc_html_e( 'All ad types', 'wpadenter' ); ?></option>
+			<?php
+				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ) : ''; //phpcs:ignore
+			foreach ( $ad_types as $value => $label ) {
+				printf(
+					'<option value="%s"%s>%s</option>',
+					esc_attr( $value ),
+					$value === $current_v ? ' selected="selected"' : '',
+					esc_html( $label )
+				);
+			}
+			?>
+			</select>
+			<?php
+			$ad_sizes = $this->get_default_ad_sizes();
+			?>
+			<select name="ADMIN_FILTER_FIELD_AD_SIZE">
+			<option value=""><?php esc_html_e( 'All ad dimensions', 'wpadenter' ); ?></option>
+			<?php
+				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ) : '';//phpcs:ignore
+			foreach ( $ad_sizes as $size => $data ) {
+				if ( 'none' === $size ) {
+					printf(
+						'<option value="%s"%s>%s</option>',
+						esc_attr( $size ),
+						$size === $current_v ? ' selected="selected"' : '',
+						esc_html( 'default' )
+					);
+				}
+				elseif ( 'ad-size' === $data[1] ) {
+					printf(
+						'<option value="%s"%s>%s</option>',
+						esc_attr( $size ),
+						$size === $current_v ? ' selected="selected"' : '',
+						esc_html( $data[0] )
+					);
+				}
+			}
+
+			?>
+			</select>
+			<?php
+			$terms = get_terms(
+				array(
+					'taxonomy' => 'wpadcenter-adgroups',
+				)
+			);
+			?>
+			<select name="ADMIN_FILTER_FIELD_AD_GROUP">
+			<option value=""><?php esc_html_e( 'All ad groups', 'wpadenter' ); ?></option>
+			<?php
+				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ) : '';//phpcs:ignore
+			foreach ( $terms as $term ) {
+				printf(
+					'<option value="%s"%s>%s</option>',
+					esc_attr( $term->term_id ),
+					$term->term_id === $current_v ? ' selected="selected"' : '',
+					esc_html( $term->name ),
+				);
+			}
+
+			?>
+			</select>
+			<?php
+
+			$the_options = \Wpadcenter::wpadcenter_get_settings();
+
+			if ( get_option( 'wpadcenter_pro_active' ) && $the_options['enable_advertisers'] ) {
+
+				$advertisers = get_users( array( 'role' => 'advertiser' ) );
+
+				?>
+			<select name="ADMIN_FILTER_FIELD_ADVERTISER">
+			<option value=""><?php esc_html_e( 'All advertisers', 'wpadenter' ); ?></option>
+				<?php
+				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ) : '';//phpcs:ignore
+				foreach ( $advertisers as $advertiser ) {
+					printf(
+						'<option value="%s"%s>%s</option>',
+						esc_attr( $advertiser->data->ID ),
+						$advertiser->data->ID === $current_v ? ' selected="selected"' : '',
+						esc_html( $advertiser->data->display_name ),
+					);
+				}
+
+				?>
+			</select>
+				<?php
+			}
+		}
+	}
+
+	/**
+	 * Filters ads.
+	 *
+	 * @param object $query contains the query to be made for posts on manage ads page.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_custom_filters_query( $query ) {
+
+		if ( ! isset( $_GET['wpadcenter_add_custom_filter_nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( sanitize_key( $_GET['wpadcenter_add_custom_filter_nonce'] ), 'wpadcenter_add_custom_filter' ) ) {
+			return;
+		}
+
+		global $pagenow;
+		$type = 'post';
+		if ( isset( $_GET['post_type'] ) ) {
+			$type = sanitize_text_field( wp_unslash( $_GET['post_type'] ) );
+		}
+		if ( 'wpadcenter-ads' === $type && is_admin() && 'edit.php' === $pagenow ) {
+			if ( isset( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) && '' !== $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) {
+				$query->query_vars['meta_query'][] =
+				array(
+					'key'     => 'wpadcenter_ad_type',
+					'value'   => sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ),
+					'compare' => 'LIKE',
+				);
+
+			}
+			if ( isset( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) && '' !== $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) {
+
+				$query->query_vars['meta_query'][] = array(
+					'key'     => 'wpadcenter_ad_size',
+					'value'   => sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ),
+					'compare' => 'LIKE',
+				);
+
+			}
+			if ( isset( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) && '' !== $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) {
+				$query->query_vars['tax_query'][] =
+					array(
+						'taxonomy' => 'wpadcenter-adgroups',
+						'field'    => 'term_id',
+						'terms'    => sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ),
+					);
+
+			}
+
+			if ( isset( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) && '' !== $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) {
+
+				$query->query_vars['meta_query'][] = array(
+					'key'     => 'wpadcenter_advertiser',
+					'value'   => sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ),
+					'compare' => 'LIKE',
+				);
+
+			}
+		}
+
+	}
+
 }
