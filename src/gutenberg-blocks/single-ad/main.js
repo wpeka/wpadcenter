@@ -10,6 +10,8 @@ const { __, }       = wp.i18n;
 
 import SingleAd from  './single-ad-component';
 import AdAlignment from '../ad-alignment-component';
+import MaxWidth from '../maxwidth-component';
+
 
 
 
@@ -30,6 +32,14 @@ registerBlockType('wpadcenter/single-ad',{
      ad_alignment: {
        type: 'text',
      },
+     max_width_check:{
+      type: 'boolean',
+    default:false, 
+    },
+    max_width_px:{
+      type: 'text',
+    default:100, 
+    },
      align : {
       type:'string',
       default:'wide'
@@ -86,7 +96,18 @@ const customStyles = {
   })
 };
 
+const onMaxWidthControlChange=(value)=>{
+  props.setAttributes( {
+    max_width_check   : value,
 
+  } );
+}
+const onMaxWidthChange=(value)=>{
+  props.setAttributes( {
+    max_width_px   : value,
+
+  } );
+}
 
 const onAdSelection = ( selection ) => {
 
@@ -134,13 +155,20 @@ const onAdSelection = ( selection ) => {
       adAlignment={adAlignment}
       currentAdAlignment={props.attributes.ad_alignment}
       />
-
+       <MaxWidth
+      maxWidthCheck={props.attributes.max_width_check}
+      maxWidthControlChange={onMaxWidthControlChange}
+      maxWidthChange={onMaxWidthChange}
+      maxWidth={props.attributes.max_width_px}
+      />
      
 
       </Placeholder>):(
         <SingleAd
         adId={props.attributes.ad_id}
         adAlignment={props.attributes.ad_alignment}
+        max_width_check={props.attributes.max_width_check}
+        max_width_px={props.attributes.max_width_px}
         />
 
       )}

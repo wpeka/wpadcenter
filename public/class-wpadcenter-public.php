@@ -259,15 +259,24 @@ class Wpadcenter_Public {
 
 		$atts = shortcode_atts(
 			array(
-				'id'    => 0,
-				'align' => 'none',
+				'id'              => 0,
+				'align'           => 'none',
+				'max_width'       => 'off',
+				'max_width_value' => '100',
 			),
 			$atts
 		);
+		if ( 'on' === $atts['max_width'] ) {
+			$atts['max_width'] = true;
+		} else {
+			$atts['max_width'] = false;
+		}
 
 		$ad_id      = $atts['id'];
 		$attributes = array(
-			'align' => 'align' . $atts['align'],
+			'align'        => 'align' . $atts['align'],
+			'max_width'    => $atts['max_width'],
+			'max_width_px' => $atts['max_width_value'],
 		);
 		return self::display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
 
@@ -581,19 +590,35 @@ class Wpadcenter_Public {
 	 */
 	public function wpadcenter_adgroup_shortcode( $atts ) {
 
-		$atts                = shortcode_atts(
+		$atts = shortcode_atts(
 			array(
-				'adgroup_ids' => '',
-				'align'       => 'none',
-				'num_ads'     => 1,
-				'num_columns' => 1,
+				'adgroup_ids'     => '',
+				'align'           => 'none',
+				'num_ads'         => 1,
+				'num_columns'     => 1,
+				'max_width'       => 'off',
+				'max_width_value' => '100',
 			),
 			$atts
 		);
+		if ( 'on' === $atts['max_width'] ) {
+			$atts['max_width'] = true;
+		} else {
+			$atts['max_width'] = false;
+		}
 		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
 		$atts['align']       = 'align' . $atts['align'];
 
-		return self::display_adgroup_ads( $atts ); // phpcs:ignore
+		$adgroup_atts = array(
+			'adgroup_ids'  => $atts['adgroup_ids'],
+			'align'        => $atts['align'],
+			'num_ads'      => $atts['num_ads'],
+			'num_columns'  => $atts['num_columns'],
+			'max_width'    => $atts['max_width'],
+			'max_width_px' => $atts['max_width_value'],
+		);
+
+		return self::display_adgroup_ads( $adgroup_atts ); // phpcs:ignore
 	}
 
 	/**
@@ -610,11 +635,12 @@ class Wpadcenter_Public {
 		wp_enqueue_style( 'wpadcenter-frontend' );
 
 		$default_attributes = array(
-			'adgroup_ids' => array(),
-			'align'       => 'alignnone',
-			'num_ads'     => 1,
-			'num_columns' => 1,
-			'max_width'   => '728px',
+			'adgroup_ids'  => array(),
+			'align'        => 'alignnone',
+			'num_ads'      => 1,
+			'num_columns'  => 1,
+			'max_width'    => false,
+			'max_width_px' => '100',
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
@@ -670,6 +696,8 @@ class Wpadcenter_Public {
 				$ad_id                = get_the_ID();
 				$single_ad_attributes = array(
 					'display_adgroup' => true,
+					'max_width'       => $attributes['max_width'],
+					'max_width_px'    => $attributes['max_width_px'],
 				);
 				$adgroup_html        .= self::display_single_ad( $ad_id, $single_ad_attributes );
 				$ad_count++;
