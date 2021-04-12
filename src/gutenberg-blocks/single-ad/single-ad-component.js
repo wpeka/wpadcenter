@@ -39,7 +39,9 @@ class SingleAd extends Component{
           action:'wpadcenter_singlead_gutenberg_preview', 
           singlead_nonce:wpadcenter_singlead_verify.singlead_nonce,   
           ad_id:this.props.adId,
-          alignment:this.props.adAlignment, 
+          alignment:this.props.adAlignment,
+          max_width_check:this.props.max_width_check,
+          max_width_px:this.props.max_width_px
           
       }
   }).done(singlead_html => {
