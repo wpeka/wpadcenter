@@ -64,7 +64,7 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		if ( 'on' === $instance['max_width'] ) {
+		if ( ! empty( $instance['max_width'] ) && 'on' === $instance['max_width'] ) {
 			$instance['max_width'] = true;
 		} else {
 			$instance['max_width'] = false;

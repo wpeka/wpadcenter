@@ -68,6 +68,15 @@
   overflow: hidden;
   margin: 10px;
   justify-content: center;
+  width: 100%;
+}
+.wpadcenter-200x200 img, .wpadcenter-240x400 img, .wpadcenter-250x250 img, .wpadcenter-250x360 img, .wpadcenter-300x250 img, .wpadcenter-336x280 img, .wpadcenter-580x400 img, .wpadcenter-120x600 img, .wpadcenter-160x600 img, .wpadcenter-300x600 img, .wpadcenter-300x1050 img, .wpadcenter-468x60 img, .wpadcenter-728x90 img, .wpadcenter-930x180 img, .wpadcenter-970x90 img, .wpadcenter-970x250 img, .wpadcenter-980x120 img, .wpadcenter-120x60 img, .wpadcenter-120x90 img, .wpadcenter-125x125 img, .wpadcenter-300x50 img, .wpadcenter-320x50 img, .wpadcenter-320x100 img {
+  height: auto;
+  width: 100%;
+  max-width: 100% !important;
+}
+.wpadcenter-ad-inner {
+  width: 100%;
 }
 
 .wpadcenter-alignright {
