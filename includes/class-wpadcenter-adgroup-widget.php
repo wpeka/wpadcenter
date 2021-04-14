@@ -57,19 +57,19 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 		$before_title  = isset( $args['before_title'] ) ? $args['before_title'] : '';
 		$after_title   = isset( $args['after_title'] ) ? $args['after_title'] : '';
 
-		$adgroup_ids = empty( $instance['adgroup_ids'] ) ? '' : $instance['adgroup_ids'];
-		$title       = empty( $instance['title'] ) ? '' : $instance['title'];
-		$num_ads     = empty( $instance['num_ads'] ) ? 1 : $instance['num_ads'];
-		$num_columns = empty( $instance['num_columns'] ) ? 1 : $instance['num_columns'];
-		$alignment   = empty( $instance['alignment'] ) ? 1 : $instance['alignment'];
-		$max_width   = empty( $instance['max_width'] ) ? 'off' : $instance['max_width'];
+		$adgroup_ids = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : '';
+		$title       = isset( $instance['title'] ) ? $instance['title'] : '';
+		$num_ads     = isset( $instance['num_ads'] ) ? $instance['num_ads'] : 1;
+		$num_columns = isset( $instance['num_columns'] ) ? $instance['num_columns'] : 1;
+		$alignment   = isset( $instance['alignment'] ) ? $instance['alignment'] : 'alignnone';
+		$max_width   = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 
 		if ( 'on' === $max_width ) {
 			$max_width = true;
 		} else {
 			$max_width = false;
 		}
-		$max_width_px = empty( $instance['max_width_px'] ) ? 1 : $instance['max_width_px'];
+		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
 
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -117,13 +117,13 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 	 * @return string|void
 	 */
 	public function form( $instance ) {
-		$adgroup_ids  = empty( $instance['adgroup_ids'] ) ? array() : $instance['adgroup_ids'];
-		$title        = empty( $instance['title'] ) ? '' : $instance['title'];
-		$num_ads      = empty( $instance['num_ads'] ) ? 1 : $instance['num_ads'];
-		$num_columns  = empty( $instance['num_columns'] ) ? 1 : $instance['num_columns'];
-		$alignment    = empty( $instance['alignment'] ) ? 'alignnone' : $instance['alignment'];
-		$max_width    = empty( $instance['max_width'] ) ? 'off' : $instance['max_width'];
-		$max_width_px = empty( $instance['max_width_px'] ) ? '100' : $instance['max_width_px'];
+		$adgroup_ids  = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : array();
+		$title        = isset( $instance['title'] ) ? $instance['title'] : '';
+		$num_ads      = isset( $instance['num_ads'] ) ? $instance['num_ads'] : 1;
+		$num_columns  = isset( $instance['num_columns'] ) ?  $instance['num_columns'] : 1;
+		$alignment    = isset( $instance['alignment'] ) ? $instance['alignment'] : 'alignnone';
+		$max_width    = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
+		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
 
 		$single_ads = array();
 
