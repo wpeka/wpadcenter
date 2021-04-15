@@ -447,16 +447,20 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_metafields() {
 		$metafields = array(
-			'ad-type'             => array( 'wpadcenter_ad_type', 'string' ),
-			'ad-size'             => array( 'wpadcenter_ad_size', 'string' ),
-			'open-in-new-tab'     => array( 'wpadcenter_open_in_new_tab', 'bool' ),
-			'nofollow-on-link'    => array( 'wpadcenter_nofollow_on_link', 'bool' ),
-			'link-url'            => array( 'wpadcenter_link_url', 'url' ),
-			'ad-code'             => array( 'wpadcenter_ad_code', 'raw' ),
-			'external-image-link' => array( 'wpadcenter_external_image_link', 'url' ),
-			'ad-google-adsense'   => array( 'wpadcenter_ad_google_adsense', 'raw' ),
-			'start_date'          => array( 'wpadcenter_start_date', 'date' ),
-			'end_date'            => array( 'wpadcenter_end_date', 'date' ),
+			'ad-type'                  => array( 'wpadcenter_ad_type', 'string' ),
+			'ad-size'                  => array( 'wpadcenter_ad_size', 'string' ),
+			'open-in-new-tab'          => array( 'wpadcenter_open_in_new_tab', 'bool' ),
+			'nofollow-on-link'         => array( 'wpadcenter_nofollow_on_link', 'bool' ),
+			'link-url'                 => array( 'wpadcenter_link_url', 'url' ),
+			'ad-code'                  => array( 'wpadcenter_ad_code', 'raw' ),
+			'external-image-link'      => array( 'wpadcenter_external_image_link', 'url' ),
+			'ad-google-adsense'        => array( 'wpadcenter_ad_google_adsense', 'raw' ),
+			'start_date'               => array( 'wpadcenter_start_date', 'date' ),
+			'end_date'                 => array( 'wpadcenter_end_date', 'date' ),
+			'limit-ad-impressions-set' => array( 'wpadcenter_limit_impressions_set', 'bool' ),
+			'limit-ad-clicks-set'      => array( 'wpadcenter_limit_clicks_set', 'bool' ),
+			'limit-ad-impressions'     => array( 'wpadcenter_limit_impressions', 'number' ),
+			'limit-ad-clicks'          => array( 'wpadcenter_limit_clicks', 'number' ),
 		);
 
 		return apply_filters( 'wpadcenter_get_default_metafields', $metafields );
@@ -1395,9 +1399,17 @@ class Wpadcenter_Admin {
 				array( $this, 'wpadcenter_ad_statistics' ),
 				'wpadcenter-ads',
 				'normal',
-				'high'
+				'low'
 			);
 		}
+		add_meta_box(
+			'ad-limits',
+			__( 'Limit Impressions / Clicks', 'wpadcenter' ),
+			array( $this, 'wpadcenter_limit_impressions_clicks' ),
+			'wpadcenter-ads',
+			'normal',
+			'low'
+		);
 		do_action( 'wpadcenter_add_meta_boxes', $post );
 
 	}
@@ -1427,6 +1439,38 @@ class Wpadcenter_Admin {
 				<p>{{ totalClicks }} <?php esc_html_e( 'Total Clicks', 'wpadcenter' ); ?> | {{ totalViews }} <?php esc_html_e( 'Total Views', 'wpadcenter' ); ?> | {{ totalCTR }} <?php esc_html_e( 'Total CTR', 'wpadcenter' ); ?> </p>
 				<div class="chart-container">
 					<line-chart :chart-data="chartData" :options="chartOptions"></line-chart>
+				</div>
+			</div>
+		<?php
+	}
+
+	/**
+	 * Shows Ads Stats for last 7 days.
+	 *
+	 * @param WP_POST $post post object.
+	 */
+	public function wpadcenter_limit_impressions_clicks( $post ) {
+		$impressions_set = get_post_meta( $post->ID, 'wpadcenter_limit_impressions_set', true );
+		$clicks_set      = get_post_meta( $post->ID, 'wpadcenter_limit_clicks_set', true );
+		$impressions     = get_post_meta( $post->ID, 'wpadcenter_limit_impressions', true );
+		$clicks          = get_post_meta( $post->ID, 'wpadcenter_limit_clicks', true );
+		?>
+			<div class="wpadcenter_impressions">
+				<label for="limit-ad-impressions-set"><?php esc_html_e( 'Limit Impressions', 'wpadcenter' ); ?></label>
+				<input type="checkbox" style="margin-left:5px" name="limit-ad-impressions-set" id="limit-ad-impressions-set" <?php checked( '1', $impressions_set, true ); ?> value="1">
+				<p><?php esc_html_e( "Limit an ad's display to a set number of impressions all-time.", 'wpadcenter' ); ?></p>
+				<div id="impressions_number">
+					<label for="limit-ad-impressions-set"><?php esc_html_e( 'Impression Limit: ', 'wpadcenter' ); ?></label>
+					<input type="number" style="margin-left:5px" name="limit-ad-impressions" id="limit-ad-impressions" value="<?php echo esc_attr( $impressions ); ?>" min="0">
+				</div>
+			</div><br><br>
+			<div class="wpadcenter_clicks">
+				<label for="limit-ad-clicks-set"><?php esc_html_e( 'Limit Clicks', 'wpadcenter' ); ?></label>
+				<input type="checkbox" style="margin-left:5px" name="limit-ad-clicks-set" id="limit-ad-clicks-set" value="1" <?php checked( '1', $clicks_set, true ); ?>>
+				<p><?php esc_html_e( "Limit an ad's display to a set number of clicks all-time.", 'wpadcenter' ); ?></p>
+				<div id="clicks_number">
+					<label for="limit-ad-clicks-set"><?php esc_html_e( 'Clicks Limit: ', 'wpadcenter' ); ?></label>
+					<input type="number" style="margin-left:5px" name="limit-ad-clicks" id="limit-ad-clicks" value="<?php echo esc_attr( $clicks ); ?>" min="0">
 				</div>
 			</div>
 		<?php
@@ -1613,6 +1657,9 @@ class Wpadcenter_Admin {
 					$sanitized_data = esc_url_raw( $raw_data[ $meta_name ] );
 					break;
 				case 'date':
+					$sanitized_data = intval( $raw_data[ $meta_name ] );
+					break;
+				case 'number':
 					$sanitized_data = intval( $raw_data[ $meta_name ] );
 					break;
 			}
