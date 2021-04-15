@@ -1,6 +1,6 @@
 <?php
 /**
- * The widget-specific functionality of the plugin for adgroups.
+ * The widget-specific functionality of the plugin for random ads.
  *
  * @link  https://club.wpeka.com/
  * @since 1.0.0
@@ -16,7 +16,7 @@
  * @subpackage Wpadcenter/includes
  * @author     WPEka Club <support@wpeka.com>
  */
-class Wpadcenter_Adgroup_Widget extends \WP_Widget {
+class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 
 	/**
 	 * Wpadcenter_Widget constructor.
@@ -24,9 +24,9 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$id_base        = 'Wpadcenter_Adgroup_Widget';
-		$name           = 'WPAdCenter Ad Group';
-		$widget_options = array( 'description' => __( 'Display Ads from Adgroup', 'wpadcenter' ) );
+		$id_base        = 'Wpadcenter_Random_Ad_Widget';
+		$name           = 'WPAdCenter Random Ad';
+		$widget_options = array( 'description' => __( 'Display Random Ad from Adgroups', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
 
 	}
@@ -46,10 +46,8 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 		$before_title  = isset( $args['before_title'] ) ? $args['before_title'] : '';
 		$after_title   = isset( $args['after_title'] ) ? $args['after_title'] : '';
 
-		$adgroup_ids = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : '';
+		$adgroup_ids = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : array();
 		$title       = isset( $instance['title'] ) ? $instance['title'] : '';
-		$num_ads     = isset( $instance['num_ads'] ) ? $instance['num_ads'] : 1;
-		$num_columns = isset( $instance['num_columns'] ) ? $instance['num_columns'] : 1;
 		$alignment   = isset( $instance['alignment'] ) ? $instance['alignment'] : 'alignnone';
 		$max_width   = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 
@@ -69,14 +67,10 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 		$attributes = array(
 			'adgroup_ids'  => $adgroup_ids,
 			'align'        => $alignment,
-			'num_ads'      => $num_ads,
-			'num_columns'  => $num_columns,
 			'max_width'    => $max_width,
 			'max_width_px' => $max_width_px,
 		);
-		echo '<div class="wpadcenter-adgroup-widget-container">';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo Wpadcenter_Public::display_adgroup_ads( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '</div>';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo Wpadcenter_Public::display_random_ad( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
@@ -108,8 +102,6 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 	public function form( $instance ) {
 		$adgroup_ids  = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : array();
 		$title        = isset( $instance['title'] ) ? $instance['title'] : '';
-		$num_ads      = isset( $instance['num_ads'] ) ? $instance['num_ads'] : 1;
-		$num_columns  = isset( $instance['num_columns'] ) ?  $instance['num_columns'] : 1;
 		$alignment    = isset( $instance['alignment'] ) ? $instance['alignment'] : 'alignnone';
 		$max_width    = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
@@ -158,18 +150,6 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 
 				?>
 			</p>
-			<p>
-				<label for="<?php echo esc_attr( $this->get_field_id( 'num_ads' ) ); ?>"><?php echo esc_html__( 'Number of Ads : ', 'wpadcenter' ); ?></label>
-				<input type="number" class="widefat" min="1" 
-				name="<?php echo esc_attr( $this->get_field_name( 'num_ads' ) ); ?>"
-				value="<?php echo esc_attr( $num_ads ); ?>">
-			</p>
-			<p>
-				<label for="<?php echo esc_attr( $this->get_field_id( 'num_columns' ) ); ?>"><?php echo esc_html__( 'Number of Columns : ', 'wpadcenter' ); ?></label>
-				<input type="number" class="widefat" min="1" 
-				name="<?php echo esc_attr( $this->get_field_name( 'num_columns' ) ); ?>"
-				value="<?php echo esc_attr( $num_columns ); ?>">
-			</p>
 				<label><?php echo esc_html__( 'Alignment : ', 'wpadcenter' ); ?> </label><br/>
 					<?php
 					$alignments = array(
@@ -194,13 +174,13 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 				<label for="<?php echo esc_html( $this->get_field_id( 'max_width' ) ); ?>"><?php echo esc_html__( 'Enable Max Width', 'wpadcenter' ); ?></label>
 				<input
 					type="checkbox"
-					class="wpadcenter_adgroup_widget_max_width_check"
+					class="wpadcenter_random_ad_widget_max_width_check"
 					name="<?php echo esc_html( $this->get_field_name( 'max_width' ) ); ?>"
 					id="<?php echo esc_html( $this->get_field_id( 'max_width' ) ); ?>"
 					<?php checked( $max_width, 'on' ); ?>
 				>			
 			</p>		
-				<p class="wpadcenter_adgroup_widget_max_width_px" 
+				<p class="wpadcenter_random_ad_widget_max_width_px" 
 				<?php
 				if ( 'on' !== $max_width ) {
 					?>
@@ -221,12 +201,11 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 			<script>
 			(function ($) {
 			'use strict';
-			$('.wpadcenter_adgroup_widget_max_width_check').change(function(){
-				$('.wpadcenter_adgroup_widget_max_width_px').toggle();
+			$('.wpadcenter_random_ad_widget_max_width_check').change(function(){
+				$('.wpadcenter_random_ad_widget_max_width_px').toggle();
 			});
 			})( jQuery );
 			</script>
-
 
 			<?php
 

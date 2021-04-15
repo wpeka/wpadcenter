@@ -67,6 +67,9 @@ class Wpadcenter_Public {
 		if ( ! shortcode_exists( 'wpadcenter_adgroup' ) ) {
 			add_shortcode( 'wpadcenter_adgroup', array( $this, 'wpadcenter_adgroup_shortcode' ) );
 		}
+		if ( ! shortcode_exists( 'wpadcenter_random_ad' ) ) {
+			add_shortcode( 'wpadcenter_random_ad', array( $this, 'wpadcenter_random_ad_shortcode' ) );
+		}
 	}
 
 	/**
@@ -736,6 +739,122 @@ class Wpadcenter_Public {
 			$this->version,
 			'all'
 		);
+
+	}
+
+	/**
+	 * Shortcode for random ad.
+	 *
+	 * @param int $atts attributes.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_random_ad_shortcode( $atts ) {
+
+		$atts = shortcode_atts(
+			array(
+				'adgroup_ids'     => '',
+				'align'           => 'none',
+				'max_width'       => 'off',
+				'max_width_value' => '100',
+			),
+			$atts
+		);
+		if ( 'on' === $atts['max_width'] ) {
+			$atts['max_width'] = true;
+		} else {
+			$atts['max_width'] = false;
+		}
+		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
+		$atts['align']       = 'align' . $atts['align'];
+
+		$random_ad_atts = array(
+			'adgroup_ids'  => $atts['adgroup_ids'],
+			'align'        => $atts['align'],
+			'max_width'    => $atts['max_width'],
+			'max_width_px' => $atts['max_width_value'],
+		);
+
+		return self::display_random_ad( $random_ad_atts ); // phpcs:ignore
+	}
+
+	/**
+	 * Get html for displaying random ads.
+	 *
+	 * @param array $attributes contains attributes for display function.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string $random_ads_html html for the ads to be displayed.
+	 */
+	public static function display_random_ad( $attributes = array() ) {
+
+		wp_enqueue_style( 'wpadcenter-frontend' );
+
+		$default_attributes = array(
+			'adgroup_ids'  => array(),
+			'align'        => 'alignnone',
+			'max_width'    => false,
+			'max_width_px' => '100',
+		);
+
+		$attributes = wp_parse_args( $attributes, $default_attributes );
+
+		$current_time = time();
+
+		$args = array(
+			'post_type'      => 'wpadcenter-ads',
+			'posts_per_page' => 1,
+			'tax_query'      => array( //phpcs:ignore
+				array(
+					'taxonomy' => 'wpadcenter-adgroups',
+					'field'    => 'id',
+					'terms'    => $attributes['adgroup_ids'],
+				),
+			),
+			'meta_query'     => array( //phpcs:ignore
+				array(
+					'key'     => 'wpadcenter_start_date',
+					'value'   => $current_time,
+					'type'    => 'numeric',
+					'compare' => '<=',
+				),
+				array(
+					'key'     => 'wpadcenter_end_date',
+					'value'   => $current_time,
+					'type'    => 'numeric',
+					'compare' => '>=',
+				),
+			),
+
+			'no_found_rows'  => true,
+			'orderby'        => 'rand',
+		);
+
+		$ads = new WP_Query( $args );
+
+		if ( $ads->have_posts() ) {
+
+			while ( $ads->have_posts() ) {
+
+				$ads->the_post();
+
+				$ad_id                = get_the_ID();
+				$single_ad_attributes = array(
+					'align'        => $attributes['align'],
+					'max_width'    => $attributes['max_width'],
+					'max_width_px' => $attributes['max_width_px'],
+				);
+
+				$random_ad_html = self::display_single_ad( $ad_id, $single_ad_attributes );
+
+			}
+			wp_reset_postdata();
+			return $random_ad_html;
+		} else {
+			return;
+
+		}
 
 	}
 }

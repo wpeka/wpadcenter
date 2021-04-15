@@ -127,6 +127,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 			</c-card>
 			<?php do_action( 'wpadcenter_after_adsense_settings' ); ?>
 		</c-tab>
+		<?php do_action( 'wpadcenter_after_adsense_tab' ); ?>
 	</c-tabs>
 	<?php
 	require 'admin-display-save-button.php';
