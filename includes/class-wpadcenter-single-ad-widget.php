@@ -28,19 +28,9 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		$name           = 'WPAdCenter Single Ads';
 		$widget_options = array( 'description' => __( 'Display single ads in a Widget', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
-		add_action( 'admin_enqueue_scripts', array( $this, 'wpadcenter_singlead_widget_enqueue_script' ) );
 
 	}
 
-	/**
-	 * Enqueues script.
-	 *
-	 * @since 1.0.0
-	 */
-	public function wpadcenter_singlead_widget_enqueue_script() {
-
-		wp_enqueue_script( 'wpadcenter' );
-	}
 
 	/**
 	 * Widget display functionality.
@@ -178,6 +168,14 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 					value="<?php echo esc_html( $max_width_px ); ?>"
 				>
 				</p>	
+			<script>
+			(function ($) {
+			'use strict';
+			$('.wpadcenter_singlead_widget_max_width_check').change(function(){
+				$('.wpadcenter_singlead_widget_max_width_px').toggle();
+			});
+			})( jQuery );
+			</script>
 			<?php
 
 		} else {

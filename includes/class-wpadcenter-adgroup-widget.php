@@ -28,18 +28,7 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 		$name           = 'WPAdCenter Ad Group';
 		$widget_options = array( 'description' => __( 'Display Ads from Adgroup', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
-		add_action( 'admin_enqueue_scripts', array( $this, 'wpadcenter_adgroup_widget_enqueue_script' ) );
 
-	}
-
-	/**
-	 * Enqueues script.
-	 *
-	 * @since 1.0.0
-	 */
-	public function wpadcenter_adgroup_widget_enqueue_script() {
-
-		wp_enqueue_script( 'wpadcenter' );
 	}
 
 	/**
@@ -229,6 +218,14 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 					value="<?php echo esc_html( $max_width_px ); ?>"
 				>
 				</p>	
+			<script>
+			(function ($) {
+			'use strict';
+			$('.wpadcenter_adgroup_widget_max_width_check').change(function(){
+				$('.wpadcenter_adgroup_widget_max_width_px').toggle();
+			});
+			})( jQuery );
+			</script>
 
 
 			<?php
