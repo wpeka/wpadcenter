@@ -57,18 +57,21 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		$before_title  = isset( $args['before_title'] ) ? $args['before_title'] : '';
 		$after_title   = isset( $args['after_title'] ) ? $args['after_title'] : '';
 
-		$title = empty( $instance['title'] ) ? '' : $instance['title'];
+		$title = isset( $instance['title'] ) ? $instance['title'] : '';
 
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		if ( 'on' === $instance['max_width'] ) {
+		if ( isset( $instance['max_width'] ) && 'on' === $instance['max_width'] ) {
 			$instance['max_width'] = true;
 		} else {
 			$instance['max_width'] = false;
 		}
+		$instance['max_width_px'] = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
+		$instance['ad_id']        = isset( $instance['ad_id'] ) ? $instance['ad_id'] : '0';
+
 		$attributes = array(
 			'max_width'    => $instance['max_width'],
 			'max_width_px' => $instance['max_width_px'],
@@ -103,10 +106,10 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 	 * @return string|void
 	 */
 	public function form( $instance ) {
-		$ad_id        = empty( $instance['ad_id'] ) ? '' : $instance['ad_id'];
-		$title        = empty( $instance['title'] ) ? '' : $instance['title'];
-		$max_width    = empty( $instance['max_width'] ) ? 'off' : $instance['max_width'];
-		$max_width_px = empty( $instance['max_width_px'] ) ? '100' : $instance['max_width_px'];
+		$ad_id        = isset( $instance['ad_id'] ) ? $instance['ad_id'] : '';
+		$title        = isset( $instance['title'] ) ? $instance['title'] : '';
+		$max_width    = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
+		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
 
 		$single_ads = array();
 
