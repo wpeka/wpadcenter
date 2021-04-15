@@ -97,7 +97,6 @@
 .wpadcenter-200x200 {
   max-width: 200px;
   height: 200px;
-  width: 200px;
 }
 .wpadcenter-200x200:not(.wpadcenter-maxwidth) {
   max-width: 200px !important;
@@ -105,7 +104,6 @@
 .wpadcenter-240x400 {
   max-width: 240px;
   height: 400px;
-  width: 240px;
 }
 .wpadcenter-240x400:not(.wpadcenter-maxwidth) {
   max-width: 240px !important;
@@ -113,7 +111,6 @@
 .wpadcenter-250x250 {
   max-width: 250px;
   height: 250px;
-  width: 250px;
 }
 .wpadcenter-250x250:not(.wpadcenter-maxwidth) {
   max-width: 250px !important;
@@ -121,7 +118,6 @@
 .wpadcenter-250x360 {
   max-width: 250px;
   height: 360px;
-  width: 250px;
 }
 .wpadcenter-250x360:not(.wpadcenter-maxwidth) {
   max-width: 250px !important;
@@ -129,7 +125,6 @@
 .wpadcenter-300x250 {
   max-width: 300px;
   height: 250px;
-  width: 300px;
 }
 .wpadcenter-300x250:not(.wpadcenter-maxwidth) {
   max-width: 300px !important;
@@ -137,7 +132,6 @@
 .wpadcenter-336x280 {
   max-width: 336px;
   height: 280px;
-  width: 336px;
 }
 .wpadcenter-336x280:not(.wpadcenter-maxwidth) {
   max-width: 336px !important;
@@ -145,7 +139,6 @@
 .wpadcenter-580x400 {
   max-width: 580px;
   height: 400px;
-  width: 580px;
 }
 .wpadcenter-580x400:not(.wpadcenter-maxwidth) {
   max-width: 580px !important;
@@ -153,7 +146,6 @@
 .wpadcenter-120x600 {
   max-width: 120px;
   height: 600px;
-  width: 120px;
 }
 .wpadcenter-120x600:not(.wpadcenter-maxwidth) {
   max-width: 120px !important;
@@ -161,7 +153,6 @@
 .wpadcenter-160x600 {
   max-width: 160px;
   height: 600px;
-  width: 160px;
 }
 .wpadcenter-160x600:not(.wpadcenter-maxwidth) {
   max-width: 160px !important;
@@ -169,7 +160,6 @@
 .wpadcenter-300x600 {
   max-width: 300px;
   height: 600px;
-  width: 300px;
 }
 .wpadcenter-300x600:not(.wpadcenter-maxwidth) {
   max-width: 300px !important;
@@ -177,7 +167,6 @@
 .wpadcenter-300x1050 {
   max-width: 300px;
   height: 1050px;
-  width: 300px;
 }
 .wpadcenter-300x1050:not(.wpadcenter-maxwidth) {
   max-width: 300px !important;
@@ -185,7 +174,6 @@
 .wpadcenter-468x60 {
   max-width: 468px;
   height: 60px;
-  width: 468px;
 }
 .wpadcenter-468x60:not(.wpadcenter-maxwidth) {
   max-width: 468px !important;
@@ -193,7 +181,6 @@
 .wpadcenter-728x90 {
   max-width: 728px;
   height: 90px;
-  width: 728px;
 }
 .wpadcenter-728x90:not(.wpadcenter-maxwidth) {
   max-width: 728px !important;
@@ -201,7 +188,6 @@
 .wpadcenter-930x180 {
   max-width: 930px;
   height: 180px;
-  width: 930px;
 }
 .wpadcenter-930x180:not(.wpadcenter-maxwidth) {
   max-width: 930px !important;
@@ -209,7 +195,6 @@
 .wpadcenter-970x90 {
   max-width: 970px;
   height: 90px;
-  width: 970px;
 }
 .wpadcenter-970x90:not(.wpadcenter-maxwidth) {
   max-width: 970px !important;
@@ -217,7 +202,6 @@
 .wpadcenter-970x250 {
   max-width: 970px;
   height: 250px;
-  width: 970px;
 }
 .wpadcenter-970x250:not(.wpadcenter-maxwidth) {
   max-width: 970px !important;
@@ -225,7 +209,6 @@
 .wpadcenter-980x120 {
   max-width: 980px;
   height: 120px;
-  width: 980px;
 }
 .wpadcenter-980x120:not(.wpadcenter-maxwidth) {
   max-width: 980px !important;
@@ -233,7 +216,6 @@
 .wpadcenter-120x60 {
   max-width: 120px;
   height: 60px;
-  width: 120px;
 }
 .wpadcenter-120x60:not(.wpadcenter-maxwidth) {
   max-width: 120px !important;
@@ -241,7 +223,6 @@
 .wpadcenter-120x90 {
   max-width: 120px;
   height: 90px;
-  width: 120px;
 }
 .wpadcenter-120x90:not(.wpadcenter-maxwidth) {
   max-width: 120px !important;
@@ -249,7 +230,6 @@
 .wpadcenter-125x125 {
   max-width: 125px;
   height: 125px;
-  width: 125px;
 }
 .wpadcenter-125x125:not(.wpadcenter-maxwidth) {
   max-width: 125px !important;
@@ -257,7 +237,6 @@
 .wpadcenter-300x50 {
   max-width: 300px;
   height: 50px;
-  width: 300px;
 }
 .wpadcenter-300x50:not(.wpadcenter-maxwidth) {
   max-width: 300px !important;
@@ -265,7 +244,6 @@
 .wpadcenter-320x50 {
   max-width: 320px;
   height: 50px;
-  width: 320px;
 }
 .wpadcenter-320x50:not(.wpadcenter-maxwidth) {
   max-width: 320px !important;
@@ -273,7 +251,6 @@
 .wpadcenter-320x100 {
   max-width: 320px;
   height: 100px;
-  width: 320px;
 }
 .wpadcenter-320x100:not(.wpadcenter-maxwidth) {
   max-width: 320px !important;

@@ -1189,11 +1189,15 @@ class Wpadcenter_Admin {
 		switch ( $column ) {
 			case 'ad-type':
 				$ad_type = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-				echo esc_html( $ad_types_list[ $ad_type ] );
+				if ( $ad_type ) {
+					echo esc_html( $ad_types_list[ $ad_type ] );
+				} else {
+					echo '-';
+				}
 				break;
 			case 'ad-dimensions':
 				$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-				if ( 'none' !== $ad_size ) {
+				if ( $ad_size && 'none' !== $ad_size ) {
 					$size_data = $sizes_list[ $ad_size ];
 					echo esc_html( $size_data[0] );
 				} else {

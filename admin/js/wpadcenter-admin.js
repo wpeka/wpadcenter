@@ -89,15 +89,7 @@
 				}
 
 			}
-			$('.wpadcenter_singlead_widget_max_width_check').change(function(){
-				$('.wpadcenter_singlead_widget_max_width_px').toggle();
-			});
-			$('.wpadcenter_adgroup_widget_max_width_check').change(function(){
-				$('.wpadcenter_adgroup_widget_max_width_px').toggle();
-			});
-			$('.wpadcenter_random_ad_widget_max_width_check').change(function(){
-				$('.wpadcenter_random_ad_widget_max_width_px').toggle();
-			});
+
 		}
 	);
 
