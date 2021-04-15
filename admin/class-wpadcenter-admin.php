@@ -1404,7 +1404,7 @@ class Wpadcenter_Admin {
 		}
 		add_meta_box(
 			'ad-limits',
-			__( 'Limit Impressions / Clicks' ),
+			__( 'Limit Impressions / Clicks', 'wpadcenter' ),
 			array( $this, 'wpadcenter_limit_impressions_clicks' ),
 			'wpadcenter-ads',
 			'normal',
