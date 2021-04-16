@@ -48,7 +48,6 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 
 		$adgroup_ids = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : array();
 		$title       = isset( $instance['title'] ) ? $instance['title'] : '';
-		$alignment   = isset( $instance['alignment'] ) ? $instance['alignment'] : 'alignnone';
 		$max_width   = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 
 		if ( 'on' === $max_width ) {
@@ -66,7 +65,6 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 
 		$attributes = array(
 			'adgroup_ids'  => $adgroup_ids,
-			'align'        => $alignment,
 			'max_width'    => $max_width,
 			'max_width_px' => $max_width_px,
 		);
