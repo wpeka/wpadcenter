@@ -1457,7 +1457,7 @@ class Wpadcenter_Admin {
 		?>
 			<div class="wpadcenter_impressions">
 				<label for="limit-ad-impressions-set"><?php esc_html_e( 'Limit Impressions', 'wpadcenter' ); ?></label>
-				<input type="checkbox" style="margin-left:5px" name="limit-ad-impressions-set" id="limit-ad-impressions-set" <?php checked( '1', $impressions_set, true ); ?> value="1">
+				<input type="checkbox" style="margin-left:5px" name="limit-ad-impressions-set" id="limit-ad-impressions-set" <?php checked( '1', $impressions_set, true ); ?> value="1" class="make_radio">
 				<p><?php esc_html_e( "Limit an ad's display to a set number of impressions all-time.", 'wpadcenter' ); ?></p>
 				<div id="impressions_number">
 					<label for="limit-ad-impressions-set"><?php esc_html_e( 'Impression Limit: ', 'wpadcenter' ); ?></label>
@@ -1466,7 +1466,7 @@ class Wpadcenter_Admin {
 			</div><br><br>
 			<div class="wpadcenter_clicks">
 				<label for="limit-ad-clicks-set"><?php esc_html_e( 'Limit Clicks', 'wpadcenter' ); ?></label>
-				<input type="checkbox" style="margin-left:5px" name="limit-ad-clicks-set" id="limit-ad-clicks-set" value="1" <?php checked( '1', $clicks_set, true ); ?>>
+				<input type="checkbox" style="margin-left:5px" name="limit-ad-clicks-set" id="limit-ad-clicks-set" value="1" <?php checked( '1', $clicks_set, true ); ?> class="make_radio">
 				<p><?php esc_html_e( "Limit an ad's display to a set number of clicks all-time.", 'wpadcenter' ); ?></p>
 				<div id="clicks_number">
 					<label for="limit-ad-clicks-set"><?php esc_html_e( 'Clicks Limit: ', 'wpadcenter' ); ?></label>

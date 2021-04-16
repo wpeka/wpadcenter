@@ -55,11 +55,25 @@
 			}
 
 			$('#limit-ad-impressions-set').change(function() {
-				$('#impressions_number').toggle();
+				if ($('#limit-ad-impressions-set').prop('checked')) {
+					$('#impressions_number').show();
+				}
+				else {
+					$('#impressions_number').hide();
+				}
 			});
 
 			$('#limit-ad-clicks-set').change(function() {
-				$('#clicks_number').toggle();
+				if ($('#limit-ad-clicks-set').prop('checked')) {
+					$('#clicks_number').show();
+				}
+				else {
+					$('#clicks_number').hide();
+				}
+			});
+
+			$(".make_radio").click(function(){
+				$(".make_radio").not(this).prop("checked",false).trigger('change'); 
 			});
 
 			if ( 'undefined' !== typeof wpadcenter_render_metaboxes ) {
