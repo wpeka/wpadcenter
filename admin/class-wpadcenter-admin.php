@@ -685,7 +685,7 @@ class Wpadcenter_Admin {
 				$the_query->the_post();
 				$temp_array             = array();
 				$temp_array['ad_id']    = get_the_ID();
-				$temp_array['ad_title'] = get_the_title();
+				$temp_array['ad_title'] = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
 				$temp_array['ad_meta']  = get_post_meta( get_the_ID(), 'wpadcenter_ads_stats', true );
 				if ( is_array( $temp_array['ad_meta'] ) ) :
 					array_push( $return_array, $temp_array );
@@ -1938,7 +1938,7 @@ class Wpadcenter_Admin {
 				while ( $the_query->have_posts() ) {
 					$the_query->the_post();
 					$ad_id    = get_the_ID();
-					$ad_title = get_the_title();
+					$ad_title = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
 					$ad_meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
 					$temp     = array(
 						'ad_id'    => $ad_id,
@@ -1983,7 +1983,7 @@ class Wpadcenter_Admin {
 			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs:ignore
 			if ( is_array( $records ) ) {
 				foreach ( $records as $record ) {
-					$record->ad_title = get_the_title( intval( $record->ad_id ) );
+					$record->ad_title = ! empty( get_the_title( intval( $record->ad_id ) ) ) ? get_the_title( intval( $record->ad_id ) ) : __( '(no title)', 'wpadcenter' );
 				}
 				echo wp_json_encode( $records );
 			}
