@@ -308,7 +308,7 @@ class Wpadcenter {
 			case 'cron':
 				return defined( 'DOING_CRON' );
 			case 'frontend':
-				return ( ! is_admin() || defined( 'DOING_AJAX' ) ) && ! defined( 'DOING_CRON' ) && ! defined( 'REST_REQUEST' );
+				return ! is_admin() && ! defined( 'DOING_AJAX' ) && ! defined( 'DOING_CRON' ) && ! defined( 'REST_REQUEST' );
 		}
 	}
 
