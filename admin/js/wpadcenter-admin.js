@@ -40,6 +40,27 @@
 
 	$( document ).ready(
 		function(){
+			if ($('#limit-ad-impressions-set').prop('checked')) {
+				$('#impressions_number').show();
+			}
+			else {
+				$('#impressions_number').hide();
+			}
+
+			if ($('#limit-ad-clicks-set').prop('checked')) {
+				$('#clicks_number').show();
+			}
+			else {
+				$('#clicks_number').hide();
+			}
+
+			$('#limit-ad-impressions-set').change(function() {
+				$('#impressions_number').toggle();
+			});
+
+			$('#limit-ad-clicks-set').change(function() {
+				$('#clicks_number').toggle();
+			});
 
 			if ( 'undefined' !== typeof wpadcenter_render_metaboxes ) {
 
@@ -89,15 +110,7 @@
 				}
 
 			}
-			$('.wpadcenter_singlead_widget_max_width_check').change(function(){
-				$('.wpadcenter_singlead_widget_max_width_px').toggle();
-			});
-			$('.wpadcenter_adgroup_widget_max_width_check').change(function(){
-				$('.wpadcenter_adgroup_widget_max_width_px').toggle();
-			});
-			$('.wpadcenter_random_ad_widget_max_width_check').change(function(){
-				$('.wpadcenter_random_ad_widget_max_width_px').toggle();
-			});
+
 		}
 	);
 
