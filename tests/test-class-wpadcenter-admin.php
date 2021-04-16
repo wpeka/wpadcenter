@@ -127,8 +127,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'template-tag', $value, "Array doesn't contains 'template-tag'" );
 		$this->assertArrayHasKey( 'number-of-ads', $value, "Array doesn't contains 'number-of-ads'" );
 		$this->assertArrayHasKey( 'number-of-active-ads', $value, "Array doesn't contains 'number-of-active-ads'" );
-
-	}
+    }
 
 	/**
 	 * Test for wpadcenter_manage_edit_ads_columns function
