@@ -685,7 +685,7 @@ class Wpadcenter_Admin {
 				$the_query->the_post();
 				$temp_array             = array();
 				$temp_array['ad_id']    = get_the_ID();
-				$temp_array['ad_title'] = get_the_title();
+				$temp_array['ad_title'] = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
 				$temp_array['ad_meta']  = get_post_meta( get_the_ID(), 'wpadcenter_ads_stats', true );
 				if ( is_array( $temp_array['ad_meta'] ) ) :
 					array_push( $return_array, $temp_array );
@@ -1457,7 +1457,7 @@ class Wpadcenter_Admin {
 		?>
 			<div class="wpadcenter_impressions">
 				<label for="limit-ad-impressions-set"><?php esc_html_e( 'Limit Impressions', 'wpadcenter' ); ?></label>
-				<input type="checkbox" style="margin-left:5px" name="limit-ad-impressions-set" id="limit-ad-impressions-set" <?php checked( '1', $impressions_set, true ); ?> value="1">
+				<input type="checkbox" style="margin-left:5px" name="limit-ad-impressions-set" id="limit-ad-impressions-set" <?php checked( '1', $impressions_set, true ); ?> value="1" class="make_radio">
 				<p><?php esc_html_e( "Limit an ad's display to a set number of impressions all-time.", 'wpadcenter' ); ?></p>
 				<div id="impressions_number">
 					<label for="limit-ad-impressions-set"><?php esc_html_e( 'Impression Limit: ', 'wpadcenter' ); ?></label>
@@ -1466,7 +1466,7 @@ class Wpadcenter_Admin {
 			</div><br><br>
 			<div class="wpadcenter_clicks">
 				<label for="limit-ad-clicks-set"><?php esc_html_e( 'Limit Clicks', 'wpadcenter' ); ?></label>
-				<input type="checkbox" style="margin-left:5px" name="limit-ad-clicks-set" id="limit-ad-clicks-set" value="1" <?php checked( '1', $clicks_set, true ); ?>>
+				<input type="checkbox" style="margin-left:5px" name="limit-ad-clicks-set" id="limit-ad-clicks-set" value="1" <?php checked( '1', $clicks_set, true ); ?> class="make_radio">
 				<p><?php esc_html_e( "Limit an ad's display to a set number of clicks all-time.", 'wpadcenter' ); ?></p>
 				<div id="clicks_number">
 					<label for="limit-ad-clicks-set"><?php esc_html_e( 'Clicks Limit: ', 'wpadcenter' ); ?></label>
@@ -1938,7 +1938,7 @@ class Wpadcenter_Admin {
 				while ( $the_query->have_posts() ) {
 					$the_query->the_post();
 					$ad_id    = get_the_ID();
-					$ad_title = get_the_title();
+					$ad_title = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
 					$ad_meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
 					$temp     = array(
 						'ad_id'    => $ad_id,
@@ -1983,7 +1983,7 @@ class Wpadcenter_Admin {
 			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs:ignore
 			if ( is_array( $records ) ) {
 				foreach ( $records as $record ) {
-					$record->ad_title = get_the_title( intval( $record->ad_id ) );
+					$record->ad_title = ! empty( get_the_title( intval( $record->ad_id ) ) ) ? get_the_title( intval( $record->ad_id ) ) : __( '(no title)', 'wpadcenter' );
 				}
 				echo wp_json_encode( $records );
 			}
