@@ -115,4 +115,41 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	}
 
 
+	/**
+	 * Test for wpadcenter_manage_edit_adgroups_columns function
+	 */
+	public function test_wpadcenter_manage_edit_adgroups_columns() {
+		$value = self::$wpadcenter_admin->wpadcenter_manage_edit_adgroups_columns();
+
+		$this->assertArrayHasKey( 'cb', $value, "Array doesn't contains 'cb'" );
+		$this->assertArrayHasKey( 'name', $value, "Array doesn't contains 'name'" );
+		$this->assertArrayHasKey( 'shortcode', $value, "Array doesn't contains 'shortcode'" );
+		$this->assertArrayHasKey( 'template-tag', $value, "Array doesn't contains 'template-tag'" );
+		$this->assertArrayHasKey( 'number-of-ads', $value, "Array doesn't contains 'number-of-ads'" );
+		$this->assertArrayHasKey( 'number-of-active-ads', $value, "Array doesn't contains 'number-of-active-ads'" );
+
+	}
+
+	/**
+	 * Test for wpadcenter_manage_edit_ads_columns function
+	 */
+	public function test_wpadcenter_manage_edit_ads_columns() {
+		$value = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
+
+		global $current_screen;
+		if ( 'wpadcenter-ads' !== $current_screen->post_type ) {
+			$this->assertTrue( true );
+		} else {
+			$this->assertArrayHasKey( 'cb', $value, "Array doesn't contains 'cb'" );
+			$this->assertArrayHasKey( 'title', $value, "Array doesn't contains 'title'" );
+			$this->assertArrayHasKey( 'ad-type', $value, "Array doesn't contains 'ad-type'" );
+			$this->assertArrayHasKey( 'ad-dimensions', $value, "Array doesn't contains 'ad-dimensions'" );
+			$this->assertArrayHasKey( 'ad-group', $value, "Array doesn't contains 'ad-group'" );
+			$this->assertArrayHasKey( 'shortcode', $value, "Array doesn't contains 'shortcode'" );
+			$this->assertArrayHasKey( 'template-tag', $value, "Array doesn't contains 'template-tag'" );
+			$this->assertArrayHasKey( 'stats-for-today', $value, "Array doesn't contains 'stats-for-today'" );
+			$this->assertArrayHasKey( 'start-date', $value, "Array doesn't contains 'start-date'" );
+			$this->assertArrayHasKey( 'end-date', $value, "Array doesn't contains 'end-date'" );
+		}
+	}
 }
