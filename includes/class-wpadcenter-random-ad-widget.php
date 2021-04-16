@@ -70,7 +70,9 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 			'max_width'    => $max_width,
 			'max_width_px' => $max_width_px,
 		);
+		echo '<div class="wpadcenter-randomad-widget-container">';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo Wpadcenter_Public::display_random_ad( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</div>';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}

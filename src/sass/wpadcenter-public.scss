@@ -51,9 +51,10 @@
 	display: block;
   }
   
-  .wpadcenter-adgroup-widget-container {
+  .wpadcenter-adgroup-widget-container, .wpadcenter-randomad-widget-container {
 	overflow: hidden;
   }
+
 
 /*Gutenberg block css*/
 .wpadcenter-maxwidth-top,.wpadcenter-maxwidth-bottom,.wpadcenter-order-container{
