@@ -727,7 +727,7 @@ class Wpadcenter_Admin {
 					}
 				}
 				$the_options = apply_filters( 'wpadcenter_after_save_settings', $the_options );
-				update_option( WPADCENTER_SETTINGS_FIELD, $the_options );
+                update_option( WPADCENTER_SETTINGS_FIELD, $the_options );
 				echo '<div class="updated"><p><strong>' . esc_attr__(
 					'Settings Updated.',
 					'wpadcenter'
