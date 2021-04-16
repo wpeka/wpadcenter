@@ -51,7 +51,7 @@
   display: block;
 }
 
-.wpadcenter-adgroup-widget-container, .wpadcenter-randomad-widget-container {
+.wpadcenter-adgroup-widget-container {
   overflow: hidden;
 }
 
