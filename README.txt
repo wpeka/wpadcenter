@@ -205,7 +205,7 @@ You can also use template tags to display ads within the theme template by click
 Similarly, you can display ads present in ad groups by clicking on ‘Manage Ad Groups’, from the table of ad groups, you can click on the ‘Template Tag’ of your desired ad group and the PHP code will get copied. Now, you can place that code in your template file to directly display the ads from the ad group.
 
 = What is Ads.txt?
-Ads.txt or “Authorized Digital Sellers” is a technical specification developed by the IAB to combat ad frauĀd.
+Ads.txt or “Authorized Digital Sellers” is a technical specification developed by the IAB to combat ad fraud.
 
 == Screenshots ==
 
