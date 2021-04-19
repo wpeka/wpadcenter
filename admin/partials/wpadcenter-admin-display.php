@@ -36,7 +36,7 @@
 				}
 				wp_enqueue_script( $this->plugin_name . '-main' );
 				require_once plugin_dir_path( WPADCENTER_PLUGIN_FILENAME ) . 'admin/views/admin-display.php';
-				do_action( 'wpadcenter_settings_form' );
+				do_action( 'wp_adcenter_settings_form' );
 				?>
 			</form>
 		</div>

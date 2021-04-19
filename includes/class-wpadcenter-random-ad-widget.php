@@ -48,7 +48,6 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 
 		$adgroup_ids = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : array();
 		$title       = isset( $instance['title'] ) ? $instance['title'] : '';
-		$alignment   = isset( $instance['alignment'] ) ? $instance['alignment'] : 'alignnone';
 		$max_width   = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 
 		if ( 'on' === $max_width ) {
@@ -66,7 +65,6 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 
 		$attributes = array(
 			'adgroup_ids'  => $adgroup_ids,
-			'align'        => $alignment,
 			'max_width'    => $max_width,
 			'max_width_px' => $max_width_px,
 		);
@@ -102,7 +100,6 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 	public function form( $instance ) {
 		$adgroup_ids  = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : array();
 		$title        = isset( $instance['title'] ) ? $instance['title'] : '';
-		$alignment    = isset( $instance['alignment'] ) ? $instance['alignment'] : 'alignnone';
 		$max_width    = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
 
@@ -150,26 +147,7 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 
 				?>
 			</p>
-				<label><?php echo esc_html__( 'Alignment : ', 'wpadcenter' ); ?> </label><br/>
-					<?php
-					$alignments = array(
-						'alignnone'   => __( 'None', 'wpadcenter' ),
-						'alignleft'   => __( 'Left', 'wpadcenter' ),
-						'aligncenter' => __( 'Center', 'wpadcenter' ),
-						'alignright'  => __( 'Right', 'wpadcenter' ),
-					);
-					foreach ( $alignments as $value => $name ) {
-						?>
-						<label>
-						<input type="radio" id="<?php echo esc_attr( $this->get_field_id( 'alignment' ) ); ?>" 
-						name="<?php echo esc_attr( $this->get_field_name( 'alignment' ) ); ?>"
-						value="<?php echo esc_attr( $value ); ?>"
-						<?php checked( $value === $alignment, true ); ?>  />
-						<?php echo esc_html( $name ); ?>
-						</label>
-						<?php
-					}
-					?>
+
 				<p>
 				<label for="<?php echo esc_html( $this->get_field_id( 'max_width' ) ); ?>"><?php echo esc_html__( 'Enable Max Width', 'wpadcenter' ); ?></label>
 				<input
