@@ -443,7 +443,7 @@ class Wpadcenter_Public {
 						$record = $records[0];
 						$clicks = $record->ad_clicks + 1;
 						$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'ads_statistics SET ad_clicks = %d WHERE ad_date = %s and ad_id = %d', array( $clicks, $today, $ad_id ) ) ); // db call ok; no-cache ok.
-						do_action( 'wpadcenter_after_set_impressions', $clicks );
+						do_action( 'wp_adcenter_after_set_impressions', $clicks );
 					} else {
 						$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'ads_statistics` (`ad_clicks`, `ad_date`, `ad_id`) VALUES (%d,%s,%d)', array( 1, $today, $ad_id ) ) ); // db call ok; no-cache ok.
 					}

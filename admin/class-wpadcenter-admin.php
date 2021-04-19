@@ -343,10 +343,10 @@ class Wpadcenter_Admin {
 
 		$cpt_args        = array();
 		$cpt_args['ads'] = apply_filters(
-			'wpadcenter_cpt_args_ads',
+			'wp_adcenter_cpt_args_ads',
 			array(
 				'labels'              => apply_filters(
-					'wpadcenter_cpt_args_labels_ads',
+					'wp_adcenter_cpt_args_labels_ads',
 					array(
 						'name'                  => __( 'WPAdCenter: Ads', 'wpadcenter' ),
 						'singular_name'         => __( 'Ad', 'wpadcenter' ),
@@ -386,7 +386,7 @@ class Wpadcenter_Admin {
 			)
 		);
 
-		return apply_filters( 'wpadcenter_cpt_args', $cpt_args );
+		return apply_filters( 'wp_adcenter_cpt_args', $cpt_args );
 
 	}
 
@@ -463,7 +463,7 @@ class Wpadcenter_Admin {
 			'limit-ad-clicks'          => array( 'wpadcenter_limit_clicks', 'number' ),
 		);
 
-		return apply_filters( 'wpadcenter_get_default_metafields', $metafields );
+		return apply_filters( 'wp_adcenter_get_default_metafields', $metafields );
 	}
 
 	/**
@@ -503,7 +503,7 @@ class Wpadcenter_Admin {
 
 		);
 
-		return apply_filters( 'wpadcenter_get_ad_meta_relation', $ad_meta_relation );
+		return apply_filters( 'wp_adcenter_get_ad_meta_relation', $ad_meta_relation );
 
 	}
 
@@ -552,7 +552,7 @@ class Wpadcenter_Admin {
 			'320x100'       => array( __( 'Large mobile banner (320x100)', 'wpadcenter' ), 'ad-size' ),
 
 		);
-		return apply_filters( 'wpadcenter_get_default_ad_sizes', $sizes );
+		return apply_filters( 'wp_adcenter_get_default_ad_sizes', $sizes );
 	}
 
 	/**
@@ -571,7 +571,7 @@ class Wpadcenter_Admin {
 
 		);
 
-		return apply_filters( 'wpadcenter_get_default_ad_types', $ad_types );
+		return apply_filters( 'wp_adcenter_get_default_ad_types', $ad_types );
 	}
 
 	/**
@@ -607,7 +607,7 @@ class Wpadcenter_Admin {
 			'wpadcenter-getting-started',
 			array( $this, 'wpadcenter_getting_started' )
 		);
-		do_action( 'wpadcenter_admin_menu', 'edit.php?post_type=wpadcenter-ads', 'manage_options' ); // action to add submenu pages for pro versions
+		do_action( 'wp_adcenter_admin_menu', 'edit.php?post_type=wpadcenter-ads', 'manage_options' ); // action to add submenu pages for pro versions
 		// Getting Started - submenu.
 		if ( ! get_option( 'wpadcenter_pro_active' ) ) {
 			add_submenu_page(
@@ -644,7 +644,7 @@ class Wpadcenter_Admin {
 			'end-date'        => __( 'End Date', 'wpadcenter' ),
 		);
 
-		return apply_filters( 'wpadcenter_manage_edit_ads_columns', $columns );
+		return apply_filters( 'wp_adcenter_manage_edit_ads_columns', $columns );
 	}
 
 	/**
@@ -1250,7 +1250,7 @@ class Wpadcenter_Admin {
 				}
 				break;
 		}
-		do_action( 'wpadcenter_manage_ads_column_values', $column, $ad_id );
+		do_action( 'wp_adcenter_manage_ads_column_values', $column, $ad_id );
 	}
 
 
@@ -1410,7 +1410,7 @@ class Wpadcenter_Admin {
 			'normal',
 			'low'
 		);
-		do_action( 'wpadcenter_add_meta_boxes', $post );
+		do_action( 'wp_adcenter_add_meta_boxes', $post );
 
 	}
 	/**
@@ -1682,7 +1682,7 @@ class Wpadcenter_Admin {
 			}
 		}
 
-		do_action( 'wpadcenter_save_ad_meta', $raw_data, $post_id );
+		do_action( 'wp_adcenter_save_ad_meta', $raw_data, $post_id );
 
 	}
 
