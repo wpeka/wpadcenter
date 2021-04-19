@@ -15,7 +15,7 @@ WPAdCenter is an ads manager plugin that helps you create, manage and monetize y
 
 WPAdCenter is a powerful and advanced WordPress ads plugin that can display both Google AdSense and banner ads on your website.
 
-This ad rotation plugin is an ideal Google AdSense alternative because you get complete control over how ads are created, displayed and rotated on your WordPress website.
+This ad rotation plugin is an ideal Google AdSense ads operator and management plugin, where you get complete control over how ads are created, displayed and rotated on your WordPress website.
 
 You can rotate ads or place multiple banners in any ad groups and schedule ads with this complete WordPress advertising plugin.
 
