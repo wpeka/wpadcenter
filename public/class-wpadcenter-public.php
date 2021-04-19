@@ -329,12 +329,29 @@ class Wpadcenter_Public {
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
-		$ad_size         = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-		$ad_type         = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-		$link_url        = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
-		$open_in_new_tab = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
-		$nofollow        = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
-		$link_target     = '_self';
+		$ad_size           = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
+		$ad_type           = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		$link_url          = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
+		$open_in_new_tab   = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
+		$nofollow          = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
+		$ads_stats         = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+		$limit_impressions = get_post_meta( $ad_id, 'wpadcenter_limit_impressions_set', true );
+		$limit_clicks      = get_post_meta( $ad_id, 'wpadcenter_limit_clicks_set', true );
+
+		if ( $limit_impressions ) {
+			$limit = get_post_meta( $ad_id, 'wpadcenter_limit_impressions', true );
+			if ( intval( $ads_stats['total_impressions'] ) > intval( $limit ) ) {
+				return;
+			}
+		}
+
+		if ( $limit_clicks ) {
+			$limit = get_post_meta( $ad_id, 'wpadcenter_limit_clicks', true );
+			if ( intval( $ads_stats['total_clicks'] ) > intval( $limit ) ) {
+				return;
+			}
+		}
+		$link_target = '_self';
 		if ( true === (bool) $open_in_new_tab ) {
 			$link_target = '_blank';
 		}
@@ -426,7 +443,7 @@ class Wpadcenter_Public {
 						$record = $records[0];
 						$clicks = $record->ad_clicks + 1;
 						$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'ads_statistics SET ad_clicks = %d WHERE ad_date = %s and ad_id = %d', array( $clicks, $today, $ad_id ) ) ); // db call ok; no-cache ok.
-						do_action( 'wpadcenter_after_set_impressions', $clicks );
+						do_action( 'wp_adcenter_after_set_impressions', $clicks );
 					} else {
 						$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'ads_statistics` (`ad_clicks`, `ad_date`, `ad_id`) VALUES (%d,%s,%d)', array( 1, $today, $ad_id ) ) ); // db call ok; no-cache ok.
 					}

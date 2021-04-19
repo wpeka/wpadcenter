@@ -28,18 +28,7 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 		$name           = 'WPAdCenter Random Ad';
 		$widget_options = array( 'description' => __( 'Display Random Ad from Adgroups', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
-		add_action( 'admin_enqueue_scripts', array( $this, 'wpadcenter_random_ad_widget_enqueue_script' ) );
 
-	}
-
-	/**
-	 * Enqueues script.
-	 *
-	 * @since 1.0.0
-	 */
-	public function wpadcenter_random_ad_widget_enqueue_script() {
-
-		wp_enqueue_script( 'wpadcenter' );
 	}
 
 	/**
@@ -57,17 +46,16 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 		$before_title  = isset( $args['before_title'] ) ? $args['before_title'] : '';
 		$after_title   = isset( $args['after_title'] ) ? $args['after_title'] : '';
 
-		$adgroup_ids = empty( $instance['adgroup_ids'] ) ? '' : $instance['adgroup_ids'];
-		$title       = empty( $instance['title'] ) ? '' : $instance['title'];
-		$alignment   = empty( $instance['alignment'] ) ? 1 : $instance['alignment'];
-		$max_width   = empty( $instance['max_width'] ) ? 'off' : $instance['max_width'];
+		$adgroup_ids = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : array();
+		$title       = isset( $instance['title'] ) ? $instance['title'] : '';
+		$max_width   = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 
 		if ( 'on' === $max_width ) {
 			$max_width = true;
 		} else {
 			$max_width = false;
 		}
-		$max_width_px = empty( $instance['max_width_px'] ) ? 1 : $instance['max_width_px'];
+		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
 
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -77,7 +65,6 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 
 		$attributes = array(
 			'adgroup_ids'  => $adgroup_ids,
-			'align'        => $alignment,
 			'max_width'    => $max_width,
 			'max_width_px' => $max_width_px,
 		);
@@ -111,11 +98,10 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 	 * @return string|void
 	 */
 	public function form( $instance ) {
-		$adgroup_ids  = empty( $instance['adgroup_ids'] ) ? array() : $instance['adgroup_ids'];
-		$title        = empty( $instance['title'] ) ? '' : $instance['title'];
-		$alignment    = empty( $instance['alignment'] ) ? 'alignnone' : $instance['alignment'];
-		$max_width    = empty( $instance['max_width'] ) ? 'off' : $instance['max_width'];
-		$max_width_px = empty( $instance['max_width_px'] ) ? '100' : $instance['max_width_px'];
+		$adgroup_ids  = isset( $instance['adgroup_ids'] ) ? $instance['adgroup_ids'] : array();
+		$title        = isset( $instance['title'] ) ? $instance['title'] : '';
+		$max_width    = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
+		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
 
 		$single_ads = array();
 
@@ -161,26 +147,7 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 
 				?>
 			</p>
-				<label><?php echo esc_html__( 'Alignment : ', 'wpadcenter' ); ?> </label><br/>
-					<?php
-					$alignments = array(
-						'alignnone'   => __( 'None', 'wpadcenter' ),
-						'alignleft'   => __( 'Left', 'wpadcenter' ),
-						'aligncenter' => __( 'Center', 'wpadcenter' ),
-						'alignright'  => __( 'Right', 'wpadcenter' ),
-					);
-					foreach ( $alignments as $value => $name ) {
-						?>
-						<label>
-						<input type="radio" id="<?php echo esc_attr( $this->get_field_id( 'alignment' ) ); ?>" 
-						name="<?php echo esc_attr( $this->get_field_name( 'alignment' ) ); ?>"
-						value="<?php echo esc_attr( $value ); ?>"
-						<?php checked( $value === $alignment, true ); ?>  />
-						<?php echo esc_html( $name ); ?>
-						</label>
-						<?php
-					}
-					?>
+
 				<p>
 				<label for="<?php echo esc_html( $this->get_field_id( 'max_width' ) ); ?>"><?php echo esc_html__( 'Enable Max Width', 'wpadcenter' ); ?></label>
 				<input
@@ -209,7 +176,14 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 					value="<?php echo esc_html( $max_width_px ); ?>"
 				>
 				</p>	
-
+			<script>
+			(function ($) {
+			'use strict';
+			$('.wpadcenter_random_ad_widget_max_width_check').change(function(){
+				$('.wpadcenter_random_ad_widget_max_width_px').toggle();
+			});
+			})( jQuery );
+			</script>
 
 			<?php
 

@@ -23,9 +23,9 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 </style>
 <div id="app" v-cloak>
 	<c-tabs ref="active_tab">
-		<?php do_action( 'wpadcenter_before_general_tab' ); ?>
+		<?php do_action( 'wp_adcenter_before_general_tab' ); ?>
 		<c-tab title="General" active href="#general">
-		<?php do_action( 'wpadcenter_before_general_settings' ); ?>
+		<?php do_action( 'wp_adcenter_before_general_settings' ); ?>
 			<c-card>
 				<c-card-header><?php esc_html_e( 'Tracking Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
@@ -47,11 +47,11 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 					<c-input type="number" min="0" name="trim_stats_field" value="<?php echo esc_html( stripslashes( $the_options['trim_stats'] ) ); ?>" />
 				</c-card-body>
 			</c-card>
-			<?php do_action( 'wpadcenter_after_general_settings' ); ?>
+			<?php do_action( 'wp_adcenter_after_general_settings' ); ?>
 		</c-tab>
-		<?php do_action( 'wpadcenter_before_scripts_tab' ); ?>
+		<?php do_action( 'wp_adcenter_before_scripts_tab' ); ?>
 		<c-tab title="Scripts" href="#scripts">
-		<?php do_action( 'wpadcenter_before_scripts_settings' ); ?>
+		<?php do_action( 'wp_adcenter_before_scripts_settings' ); ?>
 			<c-card>
 				<c-card-header><?php esc_html_e( 'Scripts Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
@@ -70,12 +70,12 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 					</div>
 				</c-card-body>
 			</c-card>
-			<?php do_action( 'wpadcenter_after_scripts_settings' ); ?>
+			<?php do_action( 'wp_adcenter_after_scripts_settings' ); ?>
 		</c-tab>
-		<?php do_action( 'wpadcenter_before_ads_txt_tab' ); ?>
+		<?php do_action( 'wp_adcenter_before_ads_txt_tab' ); ?>
 		<c-tab title="ads.txt" href="#adstxt">
 			<c-card>
-				<?php do_action( 'wpadcenter_before_ads_txt_settings' ); ?>
+				<?php do_action( 'wp_adcenter_before_ads_txt_settings' ); ?>
 				<c-card-header><?php esc_html_e( 'Ads.txt Settings', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
 				<div class="ad-toggle">
@@ -94,12 +94,12 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 					<input type="button" class="button" name="check_ads_txt_problems" value="Check for Problems" id="check_ads_txt_problems" />
 				</div>
 				</c-card-body>
-				<?php do_action( 'wpadcenter_after_ads_txt_settings' ); ?>
+				<?php do_action( 'wp_adcenter_after_ads_txt_settings' ); ?>
 			</c-card>
 		</c-tab>
-		<?php do_action( 'wpadcenter_before_adsense_tab' ); ?>
+		<?php do_action( 'wp_adcenter_before_adsense_tab' ); ?>
 		<c-tab title="Import From AdSense" href="#adsense">
-		<?php do_action( 'wpadcenter_before_adsense_settings' ); ?>
+		<?php do_action( 'wp_adcenter_before_adsense_settings' ); ?>
 			<c-card>
 				<c-card-header><?php esc_html_e( 'Connect to AdSense', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
@@ -125,9 +125,9 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 					<?php endif; ?>
 				</c-card-body>
 			</c-card>
-			<?php do_action( 'wpadcenter_after_adsense_settings' ); ?>
+			<?php do_action( 'wp_adcenter_after_adsense_settings' ); ?>
 		</c-tab>
-		<?php do_action( 'wpadcenter_after_adsense_tab' ); ?>
+		<?php do_action( 'wp_adcenter_after_adsense_tab' ); ?>
 	</c-tabs>
 	<?php
 	require 'admin-display-save-button.php';

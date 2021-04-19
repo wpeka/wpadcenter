@@ -343,10 +343,10 @@ class Wpadcenter_Admin {
 
 		$cpt_args        = array();
 		$cpt_args['ads'] = apply_filters(
-			'wpadcenter_cpt_args_ads',
+			'wp_adcenter_cpt_args_ads',
 			array(
 				'labels'              => apply_filters(
-					'wpadcenter_cpt_args_labels_ads',
+					'wp_adcenter_cpt_args_labels_ads',
 					array(
 						'name'                  => __( 'WPAdCenter: Ads', 'wpadcenter' ),
 						'singular_name'         => __( 'Ad', 'wpadcenter' ),
@@ -386,7 +386,7 @@ class Wpadcenter_Admin {
 			)
 		);
 
-		return apply_filters( 'wpadcenter_cpt_args', $cpt_args );
+		return apply_filters( 'wp_adcenter_cpt_args', $cpt_args );
 
 	}
 
@@ -447,19 +447,23 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_metafields() {
 		$metafields = array(
-			'ad-type'             => array( 'wpadcenter_ad_type', 'string' ),
-			'ad-size'             => array( 'wpadcenter_ad_size', 'string' ),
-			'open-in-new-tab'     => array( 'wpadcenter_open_in_new_tab', 'bool' ),
-			'nofollow-on-link'    => array( 'wpadcenter_nofollow_on_link', 'bool' ),
-			'link-url'            => array( 'wpadcenter_link_url', 'url' ),
-			'ad-code'             => array( 'wpadcenter_ad_code', 'raw' ),
-			'external-image-link' => array( 'wpadcenter_external_image_link', 'url' ),
-			'ad-google-adsense'   => array( 'wpadcenter_ad_google_adsense', 'raw' ),
-			'start_date'          => array( 'wpadcenter_start_date', 'date' ),
-			'end_date'            => array( 'wpadcenter_end_date', 'date' ),
+			'ad-type'                  => array( 'wpadcenter_ad_type', 'string' ),
+			'ad-size'                  => array( 'wpadcenter_ad_size', 'string' ),
+			'open-in-new-tab'          => array( 'wpadcenter_open_in_new_tab', 'bool' ),
+			'nofollow-on-link'         => array( 'wpadcenter_nofollow_on_link', 'bool' ),
+			'link-url'                 => array( 'wpadcenter_link_url', 'url' ),
+			'ad-code'                  => array( 'wpadcenter_ad_code', 'raw' ),
+			'external-image-link'      => array( 'wpadcenter_external_image_link', 'url' ),
+			'ad-google-adsense'        => array( 'wpadcenter_ad_google_adsense', 'raw' ),
+			'start_date'               => array( 'wpadcenter_start_date', 'date' ),
+			'end_date'                 => array( 'wpadcenter_end_date', 'date' ),
+			'limit-ad-impressions-set' => array( 'wpadcenter_limit_impressions_set', 'bool' ),
+			'limit-ad-clicks-set'      => array( 'wpadcenter_limit_clicks_set', 'bool' ),
+			'limit-ad-impressions'     => array( 'wpadcenter_limit_impressions', 'number' ),
+			'limit-ad-clicks'          => array( 'wpadcenter_limit_clicks', 'number' ),
 		);
 
-		return apply_filters( 'wpadcenter_get_default_metafields', $metafields );
+		return apply_filters( 'wp_adcenter_get_default_metafields', $metafields );
 	}
 
 	/**
@@ -499,7 +503,7 @@ class Wpadcenter_Admin {
 
 		);
 
-		return apply_filters( 'wpadcenter_get_ad_meta_relation', $ad_meta_relation );
+		return apply_filters( 'wp_adcenter_get_ad_meta_relation', $ad_meta_relation );
 
 	}
 
@@ -548,7 +552,7 @@ class Wpadcenter_Admin {
 			'320x100'       => array( __( 'Large mobile banner (320x100)', 'wpadcenter' ), 'ad-size' ),
 
 		);
-		return apply_filters( 'wpadcenter_get_default_ad_sizes', $sizes );
+		return apply_filters( 'wp_adcenter_get_default_ad_sizes', $sizes );
 	}
 
 	/**
@@ -567,7 +571,7 @@ class Wpadcenter_Admin {
 
 		);
 
-		return apply_filters( 'wpadcenter_get_default_ad_types', $ad_types );
+		return apply_filters( 'wp_adcenter_get_default_ad_types', $ad_types );
 	}
 
 	/**
@@ -603,7 +607,7 @@ class Wpadcenter_Admin {
 			'wpadcenter-getting-started',
 			array( $this, 'wpadcenter_getting_started' )
 		);
-		do_action( 'wpadcenter_admin_menu', 'edit.php?post_type=wpadcenter-ads', 'manage_options' ); // action to add submenu pages for pro versions
+		do_action( 'wp_adcenter_admin_menu', 'edit.php?post_type=wpadcenter-ads', 'manage_options' ); // action to add submenu pages for pro versions
 		// Getting Started - submenu.
 		if ( ! get_option( 'wpadcenter_pro_active' ) ) {
 			add_submenu_page(
@@ -640,7 +644,7 @@ class Wpadcenter_Admin {
 			'end-date'        => __( 'End Date', 'wpadcenter' ),
 		);
 
-		return apply_filters( 'wpadcenter_manage_edit_ads_columns', $columns );
+		return apply_filters( 'wp_adcenter_manage_edit_ads_columns', $columns );
 	}
 
 	/**
@@ -681,7 +685,7 @@ class Wpadcenter_Admin {
 				$the_query->the_post();
 				$temp_array             = array();
 				$temp_array['ad_id']    = get_the_ID();
-				$temp_array['ad_title'] = get_the_title();
+				$temp_array['ad_title'] = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
 				$temp_array['ad_meta']  = get_post_meta( get_the_ID(), 'wpadcenter_ads_stats', true );
 				if ( is_array( $temp_array['ad_meta'] ) ) :
 					array_push( $return_array, $temp_array );
@@ -1189,11 +1193,15 @@ class Wpadcenter_Admin {
 		switch ( $column ) {
 			case 'ad-type':
 				$ad_type = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-				echo esc_html( $ad_types_list[ $ad_type ] );
+				if ( $ad_type ) {
+					echo esc_html( $ad_types_list[ $ad_type ] );
+				} else {
+					echo '-';
+				}
 				break;
 			case 'ad-dimensions':
 				$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-				if ( 'none' !== $ad_size ) {
+				if ( $ad_size && 'none' !== $ad_size ) {
 					$size_data = $sizes_list[ $ad_size ];
 					echo esc_html( $size_data[0] );
 				} else {
@@ -1242,7 +1250,7 @@ class Wpadcenter_Admin {
 				}
 				break;
 		}
-		do_action( 'wpadcenter_manage_ads_column_values', $column, $ad_id );
+		do_action( 'wp_adcenter_manage_ads_column_values', $column, $ad_id );
 	}
 
 
@@ -1391,10 +1399,18 @@ class Wpadcenter_Admin {
 				array( $this, 'wpadcenter_ad_statistics' ),
 				'wpadcenter-ads',
 				'normal',
-				'high'
+				'low'
 			);
 		}
-		do_action( 'wpadcenter_add_meta_boxes', $post );
+		add_meta_box(
+			'ad-limits',
+			__( 'Limit Impressions / Clicks', 'wpadcenter' ),
+			array( $this, 'wpadcenter_limit_impressions_clicks' ),
+			'wpadcenter-ads',
+			'normal',
+			'low'
+		);
+		do_action( 'wp_adcenter_add_meta_boxes', $post );
 
 	}
 	/**
@@ -1423,6 +1439,38 @@ class Wpadcenter_Admin {
 				<p>{{ totalClicks }} <?php esc_html_e( 'Total Clicks', 'wpadcenter' ); ?> | {{ totalViews }} <?php esc_html_e( 'Total Views', 'wpadcenter' ); ?> | {{ totalCTR }} <?php esc_html_e( 'Total CTR', 'wpadcenter' ); ?> </p>
 				<div class="chart-container">
 					<line-chart :chart-data="chartData" :options="chartOptions"></line-chart>
+				</div>
+			</div>
+		<?php
+	}
+
+	/**
+	 * Shows Ads Stats for last 7 days.
+	 *
+	 * @param WP_POST $post post object.
+	 */
+	public function wpadcenter_limit_impressions_clicks( $post ) {
+		$impressions_set = get_post_meta( $post->ID, 'wpadcenter_limit_impressions_set', true );
+		$clicks_set      = get_post_meta( $post->ID, 'wpadcenter_limit_clicks_set', true );
+		$impressions     = get_post_meta( $post->ID, 'wpadcenter_limit_impressions', true );
+		$clicks          = get_post_meta( $post->ID, 'wpadcenter_limit_clicks', true );
+		?>
+			<div class="wpadcenter_impressions">
+				<label for="limit-ad-impressions-set"><?php esc_html_e( 'Limit Impressions', 'wpadcenter' ); ?></label>
+				<input type="checkbox" style="margin-left:5px" name="limit-ad-impressions-set" id="limit-ad-impressions-set" <?php checked( '1', $impressions_set, true ); ?> value="1" class="make_radio">
+				<p><?php esc_html_e( "Limit an ad's display to a set number of impressions all-time.", 'wpadcenter' ); ?></p>
+				<div id="impressions_number">
+					<label for="limit-ad-impressions-set"><?php esc_html_e( 'Impression Limit: ', 'wpadcenter' ); ?></label>
+					<input type="number" style="margin-left:5px" name="limit-ad-impressions" id="limit-ad-impressions" value="<?php echo esc_attr( $impressions ); ?>" min="0">
+				</div>
+			</div><br><br>
+			<div class="wpadcenter_clicks">
+				<label for="limit-ad-clicks-set"><?php esc_html_e( 'Limit Clicks', 'wpadcenter' ); ?></label>
+				<input type="checkbox" style="margin-left:5px" name="limit-ad-clicks-set" id="limit-ad-clicks-set" value="1" <?php checked( '1', $clicks_set, true ); ?> class="make_radio">
+				<p><?php esc_html_e( "Limit an ad's display to a set number of clicks all-time.", 'wpadcenter' ); ?></p>
+				<div id="clicks_number">
+					<label for="limit-ad-clicks-set"><?php esc_html_e( 'Clicks Limit: ', 'wpadcenter' ); ?></label>
+					<input type="number" style="margin-left:5px" name="limit-ad-clicks" id="limit-ad-clicks" value="<?php echo esc_attr( $clicks ); ?>" min="0">
 				</div>
 			</div>
 		<?php
@@ -1611,6 +1659,9 @@ class Wpadcenter_Admin {
 				case 'date':
 					$sanitized_data = intval( $raw_data[ $meta_name ] );
 					break;
+				case 'number':
+					$sanitized_data = intval( $raw_data[ $meta_name ] );
+					break;
 			}
 
 			if ( true === (bool) $sanitized_data || empty( $sanitized_data ) ) {
@@ -1631,7 +1682,7 @@ class Wpadcenter_Admin {
 			}
 		}
 
-		do_action( 'wpadcenter_save_ad_meta', $raw_data, $post_id );
+		do_action( 'wp_adcenter_save_ad_meta', $raw_data, $post_id );
 
 	}
 
@@ -1887,7 +1938,7 @@ class Wpadcenter_Admin {
 				while ( $the_query->have_posts() ) {
 					$the_query->the_post();
 					$ad_id    = get_the_ID();
-					$ad_title = get_the_title();
+					$ad_title = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
 					$ad_meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
 					$temp     = array(
 						'ad_id'    => $ad_id,
@@ -1932,7 +1983,7 @@ class Wpadcenter_Admin {
 			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs:ignore
 			if ( is_array( $records ) ) {
 				foreach ( $records as $record ) {
-					$record->ad_title = get_the_title( intval( $record->ad_id ) );
+					$record->ad_title = ! empty( get_the_title( intval( $record->ad_id ) ) ) ? get_the_title( intval( $record->ad_id ) ) : __( '(no title)', 'wpadcenter' );
 				}
 				echo wp_json_encode( $records );
 			}
