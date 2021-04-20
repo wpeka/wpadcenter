@@ -155,7 +155,7 @@
 <h2></h2>
 <div id="reports" v-cloak>
 	<c-tabs>
-		<c-tab title="Dashboard" active>
+		<c-tab title="<?php esc_attr_e( 'Dashboard', 'wpadcenter' ); ?>" active>
 			<c-card>
 				<c-card-header>
 					<c-card-title tag="h5"><?php esc_html_e( 'All-Time Summary', 'wpadcenter' ); ?></c-card-title>
@@ -220,7 +220,7 @@
 							<input type="hidden" ref="adgroups_security" name="adgroups_security" value="<?php echo esc_attr( wp_create_nonce( 'adgroups_security' ) ); ?>">
 							<c-row>
 								<c-col lg="12" md="12" sm="12" xs="12">
-								<v-select placeholder="Select Ad Group" :options="select_adgroup" label="name" @input="onSelectAdGroupChange" class="wpadcenter-select-adgroup"></v-select>
+								<v-select placeholder="<?php esc_attr_e( 'Select Ad Group', 'wpadcenter' ); ?>" :options="select_adgroup" label="name" @input="onSelectAdGroupChange" class="wpadcenter-select-adgroup"></v-select>
 								</c-col>
 							</c-row>
 						</c-card-header>
@@ -252,7 +252,7 @@
 				</c-col>
 			</c-row>
 		</c-tab>
-		<c-tab title="Custom Reports">
+		<c-tab title="<?php esc_attr_e( 'Custom Reports', 'wpadcenter' ); ?>">
 			<c-card>
 				<c-card-header>
 					<c-card-title tag="h5"><?php esc_html_e( 'Custom Reports', 'wpadcenter' ); ?></c-card-title>
@@ -294,7 +294,7 @@
 							<?php do_action( 'wpadcenter_before_select_ad' ); ?>
 							<div class="wpadcenter-select-ad wpadcenter-select">
 								<label for="wpadcenter-select-ads"><?php esc_html_e( 'Choose ad ', 'wpadcenter' ); ?></label>
-								<v-select placeholder="Select ad" id="wpadcenter-select-ads" label="ad_title" :options="select_ad" taggable multiple ref="wpadcenter_select_ads"  @input="onAdSelection">
+								<v-select placeholder="<?php esc_attr_e( 'Select ad', 'wpadcenter' ); ?>" id="wpadcenter-select-ads" label="ad_title" :options="select_ad" taggable multiple ref="wpadcenter_select_ads"  @input="onAdSelection">
 								</v-select>
 								<input type="hidden" ref="selectad_security" name="selectad_security" value="<?php echo esc_attr( wp_create_nonce( 'selectad_security' ) ); ?>">
 							</div>
@@ -313,7 +313,7 @@
 						<c-card-title tag="h5"><?php esc_html_e( 'Detailed Reports', 'wpadcenter' ); ?></c-card-title>
 						<c-card-subtitle tag="p"><?php esc_html_e( 'Generated custom reports will be displayed below', 'wpadcenter' ); ?></c-card-subtitle>
 					</div>
-					<c-button color="info" @click="onExportCSV" :disabled="detailedReportsOptions.length === 0">Export CSV</c-button>
+					<c-button color="info" @click="onExportCSV" :disabled="detailedReportsOptions.length === 0"><?php esc_html_e( 'Export CSV', 'wpadcenter' ); ?></c-button>
 				</c-card-header>
 				<c-card-body>
 					<c-data-table :fields="detailedReportsField" :items="detailedReportsOptions" sorter :items-per-page="5" pagination></c-data-table>
