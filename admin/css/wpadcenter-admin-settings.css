@@ -66,8 +66,12 @@ label {
 .form-control {
 	width: 100%;
 }
-.enable_ads_txt_enabled, .enable_adblock_detector {
+.enable_ads_txt_enabled, .enable_adblock_detector, .enable_geo_targeting {
 	margin-top: 20px;
+}
+.enable_geo_targeting .maxmind_key_errors > p {
+	padding: 0;
+	margin: 0;
 }
 .ads-txt-label {
 	margin-bottom: 7px;
@@ -78,6 +82,10 @@ label {
 	margin-bottom: 1em;
 }
 .ads_txt_spinner {
+	display:block;
+	margin: 10px 0px;
+}
+.geo_targeting_spinner {
 	display:block;
 	margin: 10px 0px;
 }

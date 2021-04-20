@@ -334,6 +334,10 @@ class Wpadcenter {
 
 			'adblock_detector'         => false,
 			'adblock_detected_message' => 'We have noticed that you have an adblocker enabled which restricts ads served on the site.',
+			'geo_targeting'             => false,
+			'maxmind_license_key'      => '',
+			'maxmind_db_prefix'       => wp_generate_password( 32, false ),
+			'maxmind_db_path'         => '',
 
 			'enable_ads_txt'           => false,
 			'ads_txt_content'          => '',
@@ -370,6 +374,7 @@ class Wpadcenter {
 			case 'enable_notifications':
 			case 'auto_refresh':
 			case 'adblock_detector':
+            case 'geo_targeting':
 			case 'enable_scripts':
 			case 'enable_advertisers':
 			case 'enable_ads_txt':
