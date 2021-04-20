@@ -40,41 +40,56 @@
 
 	$( document ).ready(
 		function(){
-			if ($('#limit-ad-impressions-set').prop('checked')) {
-				$('#impressions_number').show();
-			}
-			else {
-				$('#impressions_number').hide();
+			$( '#geo_countries select.geo_countries' ).select2();
+			$( 'input[name="target-ads-by"]' ).click(
+				function() {
+					var target_ads_by = $( this ).attr( 'value' );
+					if (target_ads_by == 'countries') {
+						$( '#geo_cities' ).hide();
+						$( '#geo_countries' ).show();
+					} else if (target_ads_by == 'cities') {
+						$( '#geo_countries' ).hide();
+						$( '#geo_cities' ).show();
+					}
+				}
+			);
+			if ($( '#limit-ad-impressions-set' ).prop( 'checked' )) {
+				$( '#impressions_number' ).show();
+			} else {
+				$( '#impressions_number' ).hide();
 			}
 
-			if ($('#limit-ad-clicks-set').prop('checked')) {
-				$('#clicks_number').show();
+			if ($( '#limit-ad-clicks-set' ).prop( 'checked' )) {
+				$( '#clicks_number' ).show();
+			} else {
+				$( '#clicks_number' ).hide();
 			}
-			else {
-				$('#clicks_number').hide();
-			}
 
-			$('#limit-ad-impressions-set').change(function() {
-				if ($('#limit-ad-impressions-set').prop('checked')) {
-					$('#impressions_number').show();
+			$( '#limit-ad-impressions-set' ).change(
+				function() {
+					if ($( '#limit-ad-impressions-set' ).prop( 'checked' )) {
+						$( '#impressions_number' ).show();
+					} else {
+						$( '#impressions_number' ).hide();
+					}
 				}
-				else {
-					$('#impressions_number').hide();
-				}
-			});
+			);
 
-			$('#limit-ad-clicks-set').change(function() {
-				if ($('#limit-ad-clicks-set').prop('checked')) {
-					$('#clicks_number').show();
+			$( '#limit-ad-clicks-set' ).change(
+				function() {
+					if ($( '#limit-ad-clicks-set' ).prop( 'checked' )) {
+						$( '#clicks_number' ).show();
+					} else {
+						$( '#clicks_number' ).hide();
+					}
 				}
-				else {
-					$('#clicks_number').hide();
-				}
-			});
+			);
 
-			$(".make_radio").click(function(){
-				$(".make_radio").not(this).prop("checked",false).trigger('change'); 
-			});
+			$( ".make_radio" ).click(
+				function(){
+					$( ".make_radio" ).not( this ).prop( "checked",false ).trigger( 'change' );
+				}
+			);
 
 			if ( 'undefined' !== typeof wpadcenter_render_metaboxes ) {
 
@@ -127,7 +142,5 @@
 
 		}
 	);
-
-	
 
 })( jQuery );
