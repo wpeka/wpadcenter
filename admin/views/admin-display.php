@@ -89,7 +89,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 				<c-switch ref="enable_ads_txt" v-model="enable_ads_txt" id="inline-form-enable_ads_txt" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_ads_txt'] ); ?> v-on:update:checked="onChangeEnableAdsTxt"></c-switch>
 				<div class="enable_ads_txt_enabled" v-show="enable_ads_txt">
 					<label for="ads_txt_content" class="ads-txt-label"><?php esc_html_e( 'Content', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Additional records to add to the file, one record per line.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-					<textarea id="ads_txt_content" name="ads_txt_content_field" class="form-control" rows="6" placeholder="<?php esc_attr_e( 'google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0', 'wpadcenter' ); ?>"><?php echo esc_html( stripslashes( $the_options['ads_txt_content'] ) ); ?></textarea>
+					<textarea id="ads_txt_content" name="ads_txt_content_field" class="form-control" rows="6" placeholder="google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0"><?php echo esc_html( stripslashes( $the_options['ads_txt_content'] ) ); ?></textarea>
 					<c-spinner class="ads_txt_spinner" color="dark" grow></c-spinner><span class="ads_txt_problems"></span></td>
 					<input type="button" class="button" name="check_ads_txt_problems" value="<?php esc_attr_e( 'Check for Problems', 'wpadcenter' ); ?>" id="check_ads_txt_problems" />
 				</div>

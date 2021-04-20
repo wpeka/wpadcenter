@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-20T07:45:29+02:00\n"
+"POT-Creation-Date: 2021-04-20T10:53:01+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: wpadcenter\n"
@@ -871,10 +871,6 @@ msgstr ""
 
 #: admin/views/admin-display.php:91
 msgid "Additional records to add to the file, one record per line."
-msgstr ""
-
-#: admin/views/admin-display.php:92
-msgid "google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0"
 msgstr ""
 
 #: admin/views/admin-display.php:94
