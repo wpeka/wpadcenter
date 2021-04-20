@@ -564,10 +564,10 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_ad_types() {
 		$ad_types = array(
-			'banner_image'        => 'Banner Image',
-			'external_image_link' => 'External Image Link',
-			'ad_code'             => 'Ad Code',
-			'import_from_adsense' => 'Import from Adsense',
+			'banner_image'        => __( 'Banner Image', 'wpadcenter' ),
+			'external_image_link' => __( 'External Image Link', 'wpadcenter' ),
+			'ad_code'             => __( 'Ad Code', 'wpadcenter' ),
+			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),
 
 		);
 
@@ -2757,7 +2757,7 @@ class Wpadcenter_Admin {
 						'<option value="%s"%s>%s</option>',
 						esc_attr( $size ),
 						$size === $current_v ? ' selected="selected"' : '',
-						esc_html( 'default' )
+						esc_html_e( 'default', 'wpadcenter' )
 					);
 				} elseif ( 'ad-size' === $data[1] ) {
 					printf(
