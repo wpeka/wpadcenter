@@ -5,7 +5,7 @@ Tags: ads, adsense, ad rotation, ads manager, amazon,wordpress ads, wordpress ad
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.7
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +23,7 @@ You can rotate interactive ads with pre-defined time duration or place multiple 
 
 The plugin is intentionally designed to be simple, elegant, and easy to operate. It takes just a couple of minutes to install and get started, needing only a minimal of your attention to set it up.
 
-Click on the download button on your right or click here [download](https://downloads.wordpress.org/plugin/wpadcenter.2.0.0.zip) to download the plugin now.
+Click on the download button on your right or [click here](https://downloads.wordpress.org/plugin/wpadcenter.2.0.0.zip) to download the plugin now.
 
 == About this Plugin ==
 
@@ -228,6 +228,9 @@ Ads.txt or "Authorized Digital Sellers" is a technical specification developed b
 6. Reports - Custom Reports.
 
 == Changelog ==
+= 2.0.1 =
+* Feature: Enable geo targeting to display ads in specific countries and/or cities.
+
 = 2.0.0 =
 * Feature: Plugin rewrite
 
@@ -277,6 +280,9 @@ Ads.txt or "Authorized Digital Sellers" is a technical specification developed b
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.0.1 =
+* Feature: Enable geo targeting to display ads in specific countries and/or cities.
+
 = 2.0.0 =
 * Feature: Plugin rewrite
 
