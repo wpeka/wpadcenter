@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-20T10:53:01+02:00\n"
+"POT-Creation-Date: 2021-04-20T13:32:39+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: wpadcenter\n"
@@ -369,7 +369,6 @@ msgstr ""
 
 #: admin/class-wpadcenter-admin.php:662
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:83
-#: src/gutenberg-blocks/adgroup/adgroup-main.js:203
 msgid "Number of Ads"
 msgstr ""
 
@@ -961,7 +960,6 @@ msgstr ""
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:128
 #: includes/elementor/class-wpadcenter-elementor-randomad-widget.php:106
 #: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:105
-#: src/gutenberg-blocks/maxwidth-component.js:35
 msgid "Enable Max Width"
 msgstr ""
 
@@ -1066,20 +1064,16 @@ msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:72
 #: includes/elementor/class-wpadcenter-elementor-randomad-widget.php:72
-#: src/gutenberg-blocks/adgroup/adgroup-main.js:181
-#: src/gutenberg-blocks/random-ad/random-ad-main.js:152
 msgid "Select Ad Groups"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:94
-#: src/gutenberg-blocks/adgroup/adgroup-main.js:207
 msgid "Number of Columns"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:105
 #: includes/elementor/class-wpadcenter-elementor-randomad-widget.php:83
 #: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:82
-#: src/gutenberg-blocks/ad-alignment-component.js:35
 msgid "Alignment"
 msgstr ""
 
@@ -1102,49 +1096,19 @@ msgid "Max Width"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-randomad-widget.php:63
-#: src/gutenberg-blocks/random-ad/random-ad-main.js:20
 msgid "WPAdCenter Random Ad"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:63
-#: src/gutenberg-blocks/single-ad/main.js:20
 msgid "WPAdCenter Single Ad"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:72
-#: src/gutenberg-blocks/single-ad/main.js:140
 msgid "Select Ad"
 msgstr ""
 
 #: admin/js/gutenberg-blocks/wpadcenter-gutenberg-adgroup.js:1
 #: admin/js/gutenberg-blocks/wpadcenter-gutenberg-randomad.js:1
 #: admin/js/gutenberg-blocks/wpadcenter-gutenberg-singlead.js:1
-#: src/gutenberg-blocks/adgroup/adgroup-component.js:22
-#: src/gutenberg-blocks/random-ad/random-ad-component.js:21
-#: src/gutenberg-blocks/single-ad/single-ad-component.js:23
 msgid "Loading Ad"
-msgstr ""
-
-#: src/gutenberg-blocks/adgroup/adgroup-main.js:20
-msgid "WPAdCenter Ad Group"
-msgstr ""
-
-#: src/gutenberg-blocks/adgroup/adgroup-main.js:21
-msgid "Block to generate WPAdCenter Ads from Adgroups"
-msgstr ""
-
-#: src/gutenberg-blocks/maxwidth-component.js:38
-msgid "Set maximum width for this ad"
-msgstr ""
-
-#: src/gutenberg-blocks/maxwidth-component.js:47
-msgid "Max width:"
-msgstr ""
-
-#: src/gutenberg-blocks/random-ad/random-ad-main.js:21
-msgid "Block to generate random WPAdCenter Ad from Adgroups"
-msgstr ""
-
-#: src/gutenberg-blocks/single-ad/main.js:21
-msgid "Block to generate WPAdCenter single ad"
 msgstr ""
