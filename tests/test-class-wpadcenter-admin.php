@@ -43,15 +43,24 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	public static $first_dummy_post;
 
 	/**
+	 * Created ad group associated with created ad.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string $ad_group  ad group.
+	 */
+	public static $ad_group;
+
+	/**
 	 * Set up function.
 	 *
 	 * @param class WP_UnitTest_Factory $factory class instance.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
+		self::$ad_group         = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.1' );
 		self::$first_dummy_post = get_post( self::$ad_ids[0] );
-
 	}
 
 	/**
@@ -127,7 +136,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'template-tag', $value, "Array doesn't contains 'template-tag'" );
 		$this->assertArrayHasKey( 'number-of-ads', $value, "Array doesn't contains 'number-of-ads'" );
 		$this->assertArrayHasKey( 'number-of-active-ads', $value, "Array doesn't contains 'number-of-active-ads'" );
-    }
+	}
 
 	/**
 	 * Test for wpadcenter_manage_edit_ads_columns function
@@ -150,5 +159,37 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 			$this->assertArrayHasKey( 'start-date', $value, "Array doesn't contains 'start-date'" );
 			$this->assertArrayHasKey( 'end-date', $value, "Array doesn't contains 'end-date'" );
 		}
+	}
+
+	/**
+	 * Tests for wpadcenter_manage_ad_groups_column_values function()
+	 */
+	public function test_wpadcenter_manage_ad_groups_column_values() {
+		$post_id  = self::$ad_ids[0];
+		$tag      = array( self::$ad_group );
+		$taxonomy = 'wpadcenter-adgroups';
+		wp_set_post_terms( $post_id, $tag, $taxonomy );
+
+		$columns = array( 'shortcode', 'template-tag', 'number-of-ads', 'number-of-active-ads' );
+		foreach ( $columns as $col ) {
+			switch ( $col ) {
+				case 'shortcode':
+					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( $value = '', $column = $col, $term_id = $tag );
+					$this->assertTrue( is_string( $value ) );
+					break;
+				case 'template-tag':
+					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( $value = '', $column = $col, $term_id = $tag );
+					$this->assertTrue( is_string( $value ) );
+					break;
+				case 'number-of-ads':
+					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( $value = '', $column = $col, $term_id = $tag );
+					$this->assertEquals( 1, $value, $col . ' returns wrong value.' );
+					break;
+				case 'number-of-active-ads':
+					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( $value = '', $column = $col, $term_id = $tag );
+					$this->assertEquals( 0, $value, $col . ' returns wrong value.' );
+					break;
+			}
+		};
 	}
 }
