@@ -15,6 +15,8 @@
 	<filter>
 		<whitelist addUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">./includes</directory>
+			<directory suffix=".php">./admin</directory>
+			<directory suffix=".php">./public</directory>
 			<file>wpadcenter.php</file>
 			<file>uninstall.php</file>
 		</whitelist>
