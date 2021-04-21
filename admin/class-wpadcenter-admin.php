@@ -564,10 +564,10 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_ad_types() {
 		$ad_types = array(
-			'banner_image'        => 'Banner Image',
-			'external_image_link' => 'External Image Link',
-			'ad_code'             => 'Ad Code',
-			'import_from_adsense' => 'Import from Adsense',
+			'banner_image'        => __( 'Banner Image', 'wpadcenter' ),
+			'external_image_link' => __( 'External Image Link', 'wpadcenter' ),
+			'ad_code'             => __( 'Ad Code', 'wpadcenter' ),
+			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),
 
 		);
 
@@ -1701,6 +1701,21 @@ class Wpadcenter_Admin {
 		$current_ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
 		$current_ad_type = ! empty( $current_ad_type ) ? $current_ad_type : 'banner_image';
 
+		wp_enqueue_style(
+			$this->plugin_name . '-select2',
+			WPADCENTER_PLUGIN_URL . 'vendor/select2/select2/dist/css/select2.min.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_enqueue_script(
+			$this->plugin_name . '-select2',
+			WPADCENTER_PLUGIN_URL . 'vendor/select2/select2/dist/js/select2.min.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
+
 		wp_localize_script( $this->plugin_name, 'wpadcenter_render_metaboxes', array( $ad_meta_relation, $current_ad_type ) );
 		wp_enqueue_script( $this->plugin_name );
 
@@ -2742,7 +2757,7 @@ class Wpadcenter_Admin {
 						'<option value="%s"%s>%s</option>',
 						esc_attr( $size ),
 						$size === $current_v ? ' selected="selected"' : '',
-						esc_html( 'default' )
+						esc_html_e( 'default', 'wpadcenter' )
 					);
 				} elseif ( 'ad-size' === $data[1] ) {
 					printf(

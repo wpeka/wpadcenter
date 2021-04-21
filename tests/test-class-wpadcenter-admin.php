@@ -49,7 +49,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.0' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.1' );
 		self::$first_dummy_post = get_post( self::$ad_ids[0] );
 
 	}
