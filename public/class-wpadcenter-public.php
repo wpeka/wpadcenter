@@ -304,6 +304,13 @@ class Wpadcenter_Public {
 		if ( 'publish' !== get_post_status( $ad_id ) ) {
 			return;
 		}
+		$display_ad = true;
+		$display_ad = apply_filters( 'wpadcenter_display_single_ad', $ad_id );
+
+		if ( ! $display_ad ) {
+			return;
+		}
+
 		wp_enqueue_style( 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
@@ -329,28 +336,12 @@ class Wpadcenter_Public {
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
-		$ad_size           = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-		$ad_type           = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-		$link_url          = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
-		$open_in_new_tab   = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
-		$nofollow          = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
-		$ads_stats         = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
-		$limit_impressions = get_post_meta( $ad_id, 'wpadcenter_limit_impressions_set', true );
-		$limit_clicks      = get_post_meta( $ad_id, 'wpadcenter_limit_clicks_set', true );
+		$ad_size         = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
+		$ad_type         = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		$link_url        = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
+		$open_in_new_tab = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
+		$nofollow        = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
 
-		if ( $limit_impressions ) {
-			$limit = get_post_meta( $ad_id, 'wpadcenter_limit_impressions', true );
-			if ( intval( $ads_stats['total_impressions'] ) > intval( $limit ) ) {
-				return;
-			}
-		}
-
-		if ( $limit_clicks ) {
-			$limit = get_post_meta( $ad_id, 'wpadcenter_limit_clicks', true );
-			if ( intval( $ads_stats['total_clicks'] ) > intval( $limit ) ) {
-				return;
-			}
-		}
 		$link_target = '_self';
 		if ( true === (bool) $open_in_new_tab ) {
 			$link_target = '_blank';
