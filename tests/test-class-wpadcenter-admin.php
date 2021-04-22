@@ -304,7 +304,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests for get_transition_effect_options
+	 * Tests for get_transition_effect_options function
 	 */
 	public function test_get_transition_effect_options() {
 		$received_transition_effect_options = self::$wpadcenter_admin->get_transition_effect_options();
