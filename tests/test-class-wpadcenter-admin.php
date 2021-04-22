@@ -56,11 +56,50 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 *
 	 * @param class WP_UnitTest_Factory $factory class instance.
 	 */
+
+
+	 /**
+	  * Current time.
+	  *
+	  * @access public
+	  * @var int $current_time current time
+	  */
+	public static $current_time;
+
+	  /**
+	   * Term id for taxonomy wpadcenter-adgroups for created dummy post
+	   *
+	   * @access public
+	   * @var int $term_id term id
+	   */
+	public static $term_id;
+
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group         = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.1' );
 		self::$first_dummy_post = get_post( self::$ad_ids[0] );
+		self::$current_time     = time();
+		foreach ( self::$ad_ids as $ad_id ) {
+			update_post_meta( $ad_id, 'wpadcenter_ad_type', 'ad_code' );
+			update_post_meta( $ad_id, 'wpadcenter_start_date', self::$current_time );
+			update_post_meta( $ad_id, 'wpadcenter_end_date', '1924905600' );
+			update_post_meta( $ad_id, 'wpadcenter_ad_code', '<h1>testad</h1>' );
+			update_post_meta( $ad_id, 'wpadcenter_ad_size', '468x60' );
+			update_post_meta(
+				$ad_id,
+				'wpadcenter_ads_stats',
+				array(
+					'total_impressions' => 0,
+					'total_clicks'      => 0,
+				)
+			);
+
+		}
+		$post_id       = self::$ad_ids[0];
+		self::$term_id = array( self::$ad_group );
+		$taxonomy      = 'wpadcenter-adgroups';
+		wp_set_post_terms( $post_id, self::$term_id, $taxonomy );
 	}
 
 	/**
@@ -165,31 +204,87 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Tests for wpadcenter_manage_ad_groups_column_values function()
 	 */
 	public function test_wpadcenter_manage_ad_groups_column_values() {
-		$post_id  = self::$ad_ids[0];
-		$tag      = array( self::$ad_group );
-		$taxonomy = 'wpadcenter-adgroups';
-		wp_set_post_terms( $post_id, $tag, $taxonomy );
 
 		$columns = array( 'shortcode', 'template-tag', 'number-of-ads', 'number-of-active-ads' );
 		foreach ( $columns as $col ) {
 			switch ( $col ) {
 				case 'shortcode':
-					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( $value = '', $column = $col, $term_id = $tag );
+					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( '', $col, self::$term_id );
 					$this->assertTrue( is_string( $value ) );
 					break;
 				case 'template-tag':
-					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( $value = '', $column = $col, $term_id = $tag );
+					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( '', $col, self::$term_id );
 					$this->assertTrue( is_string( $value ) );
 					break;
 				case 'number-of-ads':
-					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( $value = '', $column = $col, $term_id = $tag );
+					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( '', $col, self::$term_id );
 					$this->assertEquals( 1, $value, $col . ' returns wrong value.' );
 					break;
 				case 'number-of-active-ads':
-					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( $value = '', $column = $col, $term_id = $tag );
-					$this->assertEquals( 0, $value, $col . ' returns wrong value.' );
+					$value = self::$wpadcenter_admin->wpadcenter_manage_ad_groups_column_values( '', $col, self::$term_id );
+					$this->assertEquals( 1, $value, $col . ' returns wrong value.' );
 					break;
 			}
 		};
+	}
+
+	/**
+	 * Tests for wpadcenter_manage_ads_column_values function
+	 */
+	public function test_wpadcenter_manage_ads_column_values() {
+		$columns = array(
+			'ad-type',
+			'ad-dimensions',
+			'start-date',
+			'end-date',
+			'ad-group',
+			'shortcode',
+			'template-tag',
+			'stats-for-today',
+		);
+		foreach ( $columns as $column ) {
+			switch ( $column ) {
+				case 'ad-type':
+					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', true );
+					$this->assertEquals( 'ad_code', $value );
+					break;
+
+				case 'ad-dimensions':
+					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_size', true );
+					$this->assertEquals( '468x60', $value );
+					break;
+
+				case 'start-date':
+					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_start_date', true );
+					$this->assertEquals( self::$current_time, $value );
+					break;
+
+				case 'end-date':
+					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_end_date', true );
+					$this->assertEquals( '1924905600', $value );
+					break;
+
+				case 'ad-group':
+					$value = wp_get_post_terms( self::$ad_ids[0], 'wpadcenter-adgroups', array( 'fields' => 'ids' ) );
+					$this->assertEquals( self::$term_id, $value );
+					break;
+
+				case 'shortcode':
+				case 'template-tag':
+					$this->assertTrue( true );
+					break;
+
+				case 'stats-for-today':
+					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_ads_stats', true );
+					$this->assertEquals(
+						array(
+							'total_impressions' => 0,
+							'total_clicks'      => 0,
+						),
+						$value
+					);
+					break;
+			}
+		}
 	}
 }
