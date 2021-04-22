@@ -73,7 +73,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	   * @var int $term_id term id
 	   */
 	public static $term_id;
-
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group         = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
@@ -286,5 +285,29 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 					break;
 			}
 		}
+	}
+
+	/**
+	 * Tests for default_ad_sizes function
+	 */
+	public function test_default_ad_sizes() {
+		$received_default_ad_sizes = self::$wpadcenter_admin->get_default_ad_sizes();
+		$this->assertTrue( is_array( $received_default_ad_sizes ) && ! empty( $received_default_ad_sizes ) );
+	}
+
+	/**
+	 * Tests for wpadcenter_register_taxonomy function
+	 */
+	public function test_wpadcenter_register_taxonomy() {
+		$taxonomies = get_object_taxonomies( array( 'wpadcenter-ads' ) );
+		$this->assertTrue( in_array( 'wpadcenter-adgroups', $taxonomies ) );
+	}
+
+	/**
+	 * Tests for get_transition_effect_options
+	 */
+	public function test_get_transition_effect_options() {
+		$received_transition_effect_options = self::$wpadcenter_admin->get_transition_effect_options();
+		$this->assertTrue( is_array( $received_transition_effect_options ) && ! empty( $received_transition_effect_options ) );
 	}
 }
