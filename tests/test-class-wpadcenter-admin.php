@@ -270,13 +270,13 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 
 				case 'end-date':
 					$end_date  = get_post_meta( self::$ad_ids[0], 'wpadcenter_end_date', true );
-					$expected .= 'Forever';
+					$expected .= ( $end_date === '1924905600' ) ? esc_html__( 'Forever', 'wpadcenter' ) : esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $end_date ) );
 					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
 					$this->assertTrue( true );
 					break;
 
 				case 'ad-group':
-					$expected .= 'Term 0000046';
+					$expected .= wp_get_post_terms( self::$ad_ids[0], 'wpadcenter-adgroups', array( 'fields' => 'names' ) )[0];
 					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
 					$this->assertTrue( true );
 					break;
