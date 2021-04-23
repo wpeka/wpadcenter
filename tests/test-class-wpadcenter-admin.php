@@ -282,13 +282,13 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 					break;
 
 				case 'shortcode':
-					$expected .= '<a href="#" class="wpadcenter_copy_text" data-attr="[wpadcenter_ad id=6 align=\'none\']">[shortcode]</a>';
+					$expected .= sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="[wpadcenter_ad id=%d align=\'none\']">[shortcode]</a>', intval( self::$ad_ids[0] ) );
 					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
 					$this->assertTrue( true );
 					break;
 
 				case 'template-tag':
-					$expected .= '<a href="#" class="wpadcenter_copy_text" data-attr="wpadcenter_display_ad( array( \'id\' => 6, \'align\' => \'none\' ) );">&lt;?php</a>';
+					$expected .= sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="wpadcenter_display_ad( array( \'id\' => %d, \'align\' => \'none\' ) );">&lt;?php</a>', intval( self::$ad_ids[0] ) );
 					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
 					$this->assertTrue( true );
 					break;
