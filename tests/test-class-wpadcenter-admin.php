@@ -323,5 +323,44 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$this->assertTrue( post_type_exists( 'wpadcenter-ads' ) );
 	}
 
+	/**
+	 * Tests for enqueue_scripts function
+	 */
+	public function test_enqueue_scripts() {
+		self::$wpadcenter_admin->enqueue_scripts();
+		global $wp_scripts;
+		$all_enqueued_scripts = $wp_scripts->queue;
+		$this->assertTrue( in_array( 'wpadcenter-gapi-settings', $all_enqueued_scripts ) );
 
+		$all_registered_scripts = $wp_scripts->registered;
+		$this->assertArrayHasKey( 'wpadcenter-settings', $all_registered_scripts, 'Failed to register script: wpadcenter-settings' );
+		$this->assertArrayHasKey( 'wpadcenter-main', $all_registered_scripts, 'Failed to register script: wpadcenter-main' );
+		$this->assertArrayHasKey( 'wpadcenter', $all_registered_scripts, 'Failed to register script: wpadcenter' );
+		$this->assertArrayHasKey( 'wpadcenteradscheduler', $all_registered_scripts, 'Failed to register script: wpadcenteradscheduler' );
+		$this->assertArrayHasKey( 'wpadcenter-gettingstarted', $all_registered_scripts, 'Failed to register script: wpadcenter-gettingstarted' );
+		$this->assertArrayHasKey( 'wpadcenter-reports', $all_registered_scripts, 'Failed to register script: wpadcenter-reports' );
+		$this->assertArrayHasKey( 'wpadcenter-weekly-stats', $all_registered_scripts, 'Failed to register script: wpadcenter--weekly-stats' );
+	}
+
+	/**
+	 * Tests for enqueue_styles function
+	 */
+
+	public function test_enqueue_styles() {
+		self::$wpadcenter_admin->enqueue_styles();
+		global $wp_styles;
+		$all_registered_styles = $wp_styles->registered;
+		$this->assertArrayHasKey( 'wpadcenter-settings', $all_registered_styles, 'Failed to register style: ' );
+		$this->assertArrayHasKey( 'wpadcenter', $all_registered_styles, 'Failed to register style: ' );
+		$this->assertArrayHasKey( 'wpadcenterjquery-ui', $all_registered_styles, 'Failed to register style: ' );
+		$this->assertArrayHasKey( 'wpadcenter-gettingstarted-css', $all_registered_styles, 'Failed to register style: ' );
+	}
+
+	/**
+	 * Tests for wpadcenter_plugin_action_links function
+	 */
+	public function test_wpadcenter_plugin_action_links() {
+		$value = self::$wpadcenter_admin->wpadcenter_plugin_action_links( array() );
+		$this->assertTrue( is_array( $value ) );
+	}
 }

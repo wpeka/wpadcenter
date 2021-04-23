@@ -227,6 +227,8 @@ class Wpadcenter {
 		$this->loader->add_action( 'restrict_manage_posts', $plugin_admin, 'wpadcenter_add_custom_filters' );
 		$this->loader->add_filter( 'parse_query', $plugin_admin, 'wpadcenter_custom_filters_query', 10, 1 );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_random_ad_gutenberg_preview', $plugin_admin, 'wpadcenter_random_ad_gutenberg_preview' );
+		$this->loader->add_action( 'wp_print_styles', $plugin_public, 'test_enqueue_scripts' );
+
 	}
 
 	/**
