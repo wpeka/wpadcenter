@@ -248,7 +248,7 @@ class Wpadcenter {
 			$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
 		}
 		$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_public, 'wpadcenter_register_gutenberg_scripts' );
-		$this->loader->add_action( 'wp_print_styles', $plugin_public, 'test_wpadcenter_register_gutenberg_scripts' );
+		$this->loader->add_action( 'wp_print_styles', $plugin_public, 'wpadcenter_register_gutenberg_scripts' );
 	}
 
 	/**

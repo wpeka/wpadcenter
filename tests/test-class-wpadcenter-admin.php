@@ -181,11 +181,12 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_wpadcenter_manage_edit_ads_columns() {
 		$value = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
+		$this->assertEquals( null, $value );
 
 		global $current_screen;
-		if ( 'wpadcenter-ads' !== $current_screen->post_type ) {
-			$this->assertTrue( true );
-		} else {
+		$current_screen->post_type = 'wpadcenter-ads';
+
+		$value = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
 			$this->assertArrayHasKey( 'cb', $value, "Array doesn't contains 'cb'" );
 			$this->assertArrayHasKey( 'title', $value, "Array doesn't contains 'title'" );
 			$this->assertArrayHasKey( 'ad-type', $value, "Array doesn't contains 'ad-type'" );
@@ -196,7 +197,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 			$this->assertArrayHasKey( 'stats-for-today', $value, "Array doesn't contains 'stats-for-today'" );
 			$this->assertArrayHasKey( 'start-date', $value, "Array doesn't contains 'start-date'" );
 			$this->assertArrayHasKey( 'end-date', $value, "Array doesn't contains 'end-date'" );
-		}
 	}
 
 	/**
@@ -299,8 +299,10 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Tests for wpadcenter_register_taxonomy function
 	 */
 	public function test_wpadcenter_register_taxonomy() {
-		$taxonomies = get_object_taxonomies( array( 'wpadcenter-ads' ) );
-		$this->assertTrue( in_array( 'wpadcenter-adgroups', $taxonomies ) );
+		unregister_taxonomy( 'wpadcenter-adgroups' );
+		$this->assertFalse( taxonomy_exists( 'wpadcenter-adgroups' ) );
+		self::$wpadcenter_admin->wpadcenter_register_taxonomy();
+		$this->assertTrue( taxonomy_exists( 'wpadcenter-adgroups' ) );
 	}
 
 	/**
@@ -310,4 +312,16 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$received_transition_effect_options = self::$wpadcenter_admin->get_transition_effect_options();
 		$this->assertTrue( is_array( $received_transition_effect_options ) && ! empty( $received_transition_effect_options ) );
 	}
+
+	/**
+	 * Tests for wpadcenter_register_cpt function
+	 */
+	public function test_wpadcenter_register_cpt() {
+		unregister_post_type( 'wpadcenter-ads' );
+		$this->assertFalse( post_type_exists( 'wpadcenter-ads' ) );
+		self::$wpadcenter_admin->wpadcenter_register_cpt();
+		$this->assertTrue( post_type_exists( 'wpadcenter-ads' ) );
+	}
+
+
 }
