@@ -231,7 +231,10 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Tests for wpadcenter_manage_ads_column_values function
 	 */
 	public function test_wpadcenter_manage_ads_column_values() {
-		$columns = array(
+
+		$sizes_list    = self::$wpadcenter_admin->get_default_ad_sizes();
+		$ad_types_list = self::$wpadcenter_admin->get_default_ad_types();
+		$columns       = array(
 			'ad-type',
 			'ad-dimensions',
 			'start-date',
@@ -241,47 +244,60 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 			'template-tag',
 			'stats-for-today',
 		);
+		$expected      = '';
 		foreach ( $columns as $column ) {
 			switch ( $column ) {
 				case 'ad-type':
-					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', true );
-					$this->assertEquals( 'ad_code', $value );
+					$ad_type   = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', true );
+					$expected .= $ad_types_list[ $ad_type ];
+					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
+					$this->assertTrue( true );
 					break;
 
 				case 'ad-dimensions':
-					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_size', true );
-					$this->assertEquals( '468x60', $value );
+					$ad_size   = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_size', true );
+					$expected .= strval( $sizes_list[ $ad_size ][0] );
+					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
+					$this->assertTrue( true );
 					break;
 
 				case 'start-date':
-					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_start_date', true );
-					$this->assertEquals( self::$current_time, $value );
+					$start_date = get_post_meta( self::$ad_ids[0], 'wpadcenter_start_date', true );
+					$expected  .= date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $start_date );
+					$value      = self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
+					$this->assertTrue( true );
 					break;
 
 				case 'end-date':
-					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_end_date', true );
-					$this->assertEquals( '1924905600', $value );
+					$end_date  = get_post_meta( self::$ad_ids[0], 'wpadcenter_end_date', true );
+					$expected .= 'Forever';
+					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
+					$this->assertTrue( true );
 					break;
 
 				case 'ad-group':
-					$value = wp_get_post_terms( self::$ad_ids[0], 'wpadcenter-adgroups', array( 'fields' => 'ids' ) );
-					$this->assertEquals( self::$term_id, $value );
+					$expected .= 'Term 0000046';
+					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
+					$this->assertTrue( true );
 					break;
 
 				case 'shortcode':
+					$expected .= '<a href="#" class="wpadcenter_copy_text" data-attr="[wpadcenter_ad id=6 align=\'none\']">[shortcode]</a>';
+					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
+					$this->assertTrue( true );
+					break;
+
 				case 'template-tag':
+					$expected .= '<a href="#" class="wpadcenter_copy_text" data-attr="wpadcenter_display_ad( array( \'id\' => 6, \'align\' => \'none\' ) );">&lt;?php</a>';
+					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
 					$this->assertTrue( true );
 					break;
 
 				case 'stats-for-today':
-					$value = get_post_meta( self::$ad_ids[0], 'wpadcenter_ads_stats', true );
-					$this->assertEquals(
-						array(
-							'total_impressions' => 0,
-							'total_clicks'      => 0,
-						),
-						$value
-					);
+					$expected .= '0 clicks / 0 views / 0.00% CTR';
+					$this->expectOutputString( $expected );
+					self::$wpadcenter_admin->wpadcenter_manage_ads_column_values( $column, self::$ad_ids[0] );
+					$this->assertTrue( true );
 					break;
 			}
 		}
