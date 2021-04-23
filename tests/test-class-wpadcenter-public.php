@@ -145,4 +145,13 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$this->assertTrue( is_string( $received_output ) );
 	}
 
+	/**
+	 * Test for wpadcenter_register_gutenberg_scripts function
+	 */
+	public function test_wpadcenter_register_gutenberg_scripts() {
+		self::$wpadcenter_public->wpadcenter_register_gutenberg_scripts();
+		global $wp_styles;
+		$all_registered_styles = $wp_styles->queue;
+		$this->assertTrue( in_array( 'wpadcenter-frontend', $all_registered_styles ) );
+	}
 }
