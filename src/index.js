@@ -32,6 +32,7 @@ var vm = new Vue({
             scriptInfo: '<script type="text/javascript">console.log( "hello world" );</script>',
             enable_advertisers: null,
             enable_notifications: null,
+            roles_selected_visibility: [],
         }
     },
     methods: {
@@ -68,10 +69,14 @@ var vm = new Vue({
             }).done(data => {
                 data = JSON.parse(data);
                 if( Array.isArray( data ) ) {
+                    let roles_selected_visibility = data.pop();
                     let roles_selected = data.pop();
                     this.roles = [ ...data];
                     if( roles_selected !== '' ) {
                         this.roles_selected = roles_selected.split(',');
+                    }
+                    if( roles_selected_visibility !== '' ) {
+                        this.roles_selected_visibility = roles_selected_visibility.split(',');
                     }
                 }
             });

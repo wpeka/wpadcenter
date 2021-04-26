@@ -326,34 +326,35 @@ class Wpadcenter {
 	public static function wpadcenter_get_default_settings( $key = '' ) {
 		$settings = array(
 			// General settings.
-			'enable_notifications'     => false,
+			'enable_notifications'      => false,
 
-			'auto_refresh'             => false,
-			'transition_effect'        => 'none',
-			'transition_speed'         => '500',
-			'transition_delay'         => '1000',
+			'auto_refresh'              => false,
+			'transition_effect'         => 'none',
+			'transition_speed'          => '500',
+			'transition_delay'          => '1000',
 
-			'adblock_detector'         => false,
-			'adblock_detected_message' => 'We have noticed that you have an adblocker enabled which restricts ads served on the site.',
-			'geo_targeting'            => false,
-			'maxmind_license_key'      => '',
-			'maxmind_db_prefix'        => wp_generate_password( 32, false ),
-			'maxmind_db_path'          => '',
+			'adblock_detector'          => false,
+			'adblock_detected_message'  => 'We have noticed that you have an adblocker enabled which restricts ads served on the site.',
+			'geo_targeting'             => false,
+			'maxmind_license_key'       => '',
+			'maxmind_db_prefix'         => wp_generate_password( 32, false ),
+			'maxmind_db_path'           => '',
 
-			'enable_ads_txt'           => false,
-			'ads_txt_content'          => '',
-			'enable_scripts'           => false,
-			'header_scripts'           => '',
-			'body_scripts'             => '',
-			'footer_scripts'           => '',
+			'enable_ads_txt'            => false,
+			'ads_txt_content'           => '',
+			'enable_scripts'            => false,
+			'header_scripts'            => '',
+			'body_scripts'              => '',
+			'footer_scripts'            => '',
 
-			'enable_advertisers'       => false,
+			'enable_advertisers'        => false,
 
-			'geo_location'             => 'none',
-			'trim_stats'               => '0',
-			'days_to_send_before'      => 1,
-			'hide_ads_logged'          => false,
-			'roles_selected'           => '',
+			'geo_location'              => 'none',
+			'trim_stats'                => '0',
+			'days_to_send_before'       => 1,
+			'hide_ads_logged'           => false,
+			'roles_selected'            => '',
+			'roles_selected_visibility' => '',
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -392,6 +393,7 @@ class Wpadcenter {
 				}
 				break;
 			case 'roles_selected':
+			case 'roles_selected_visibility':
 			case 'header_scripts':
 			case 'body_scripts':
 			case 'footer_scripts':

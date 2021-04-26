@@ -2431,6 +2431,7 @@ class Wpadcenter_Admin {
 		}
 		$the_options = Wpadcenter::wpadcenter_get_settings();
 		array_push( $return_array, $the_options['roles_selected'] );
+		array_push( $return_array, $the_options['roles_selected_visibility'] );
 		echo wp_json_encode( $return_array );
 		wp_die();
 	}
