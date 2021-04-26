@@ -1,7 +1,7 @@
-=== Banner Ads management plugin for WordPress by WPAdCenter ===
+=== Banner Ads Management Plugin for WordPress by WP AdCenter ===
 Contributors: WPEka Club
 Donate link: https://club.wpeka.com/
-Tags: ads, adsense, ad rotation, ads manager, amazon,wordpress ads, wordpress ads plugin, wordpress advertising plugin, wordpress ad rotator, banners, adverts, ads shortcode
+Tags: ads, adsense, ad rotation, ads manager, wordpress ads, wordpress ads plugin, wordpress advertising plugin, wordpress ad rotator, banners, adverts, ads shortcode, amazon
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.7
@@ -13,19 +13,21 @@ WPAdCenter is a WordPress ads manager plugin that helps you create, manage and m
 
 == Description ==
 
-WP AdCenter is a simple to use and advanced WordPress ads manager plugin that can display unlimited ads from popular networks like Google AdSense, Amazon Ads Network, Media.net Network, etc, and custom ads like banner ads on your website.
+WP AdCenter is a simple to use and advanced WordPress ads manager plugin that can display unlimited ads from popular networks like Google AdSense, Amazon Ads Network, Media.net Network, etc, and custom ads like banner ads on your website. Now you can easily make money with Google Adsense or any other network.
 
 With powerful features and an interactive interface, now manage your ads and ad networks elegantly, requiring the least of your efforts. This gives you the peace of mind to focus on other aspects of your website while WP AdCenter takes care of your ads, ad networks, 3rd party advertisers, and many more.
 
 WP AdCenter also works as a simple ad rotation plugin that can integrate with Google AdSense to import ads and manage them right from your WordPress dashboard. Here, you get complete control over how ads are created, displayed, and rotated on your WordPress website.
 
-You can rotate interactive ads with pre-defined time duration or place multiple banner ads across your WordPress website, giving a customized look and feel to your ads. It is also possible to group multiple ads under a single ad group, making placement of ads and tracking even easier.
+WP AdCenter is the best ad rotator plugin WordPress can support. You can rotate interactive ads with pre-defined time duration or place multiple banner ads across your WordPress website, giving a customized look and feel to your ads. It is also possible to group multiple ads under a single ad group, making placement of ads and tracking even more accessible.
 
 The plugin is intentionally designed to be simple, elegant, and easy to operate. It takes just a couple of minutes to install and get started, needing only a minimal of your attention to set it up.
 
-Click on the download button on your right or [click here](https://downloads.wordpress.org/plugin/wpadcenter.2.0.0.zip) to download the plugin now.
+Deliver ad experiences that are tailor-made for your website, keep your visitors engaged, and earn more.
 
-== About this Plugin ==
+Click on the download button on your right or click [here](https://downloads.wordpress.org/plugin/wpadcenter.2.0.0.zip) to download the plugin now.
+
+== About the Plugin ==
 
 WPAdcenter ads management plugin allows you to easily create custom ads with Javascript code or display banner ads from ad networks like Google AdSense, Media.net, and Amazon Native Ads like Amazon Shopping Ads.
 
