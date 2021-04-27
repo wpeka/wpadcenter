@@ -1701,6 +1701,21 @@ class Wpadcenter_Admin {
 		$current_ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
 		$current_ad_type = ! empty( $current_ad_type ) ? $current_ad_type : 'banner_image';
 
+		wp_enqueue_style(
+			$this->plugin_name . '-select2',
+			WPADCENTER_PLUGIN_URL . 'vendor/select2/select2/dist/css/select2.min.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_enqueue_script(
+			$this->plugin_name . '-select2',
+			WPADCENTER_PLUGIN_URL . 'vendor/select2/select2/dist/js/select2.min.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
+
 		wp_localize_script( $this->plugin_name, 'wpadcenter_render_metaboxes', array( $ad_meta_relation, $current_ad_type ) );
 		wp_enqueue_script( $this->plugin_name );
 
@@ -2416,6 +2431,7 @@ class Wpadcenter_Admin {
 		}
 		$the_options = Wpadcenter::wpadcenter_get_settings();
 		array_push( $return_array, $the_options['roles_selected'] );
+		array_push( $return_array, $the_options['roles_selected_visibility'] );
 		echo wp_json_encode( $return_array );
 		wp_die();
 	}

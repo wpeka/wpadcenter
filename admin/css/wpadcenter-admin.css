@@ -73,3 +73,11 @@
 .edit-post-meta-boxes-area {
   margin: 0 !important;
 }
+#geo_countries, #geo_cities {
+	margin-top: 10px;
+}
+#geo_countries .geo_countries,
+#geo_countries .select2-container,
+#geo_cities .geo_cities {
+	width: 100% !important;
+}

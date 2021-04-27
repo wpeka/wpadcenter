@@ -48,12 +48,10 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 	 * @param class WP_UnitTest_Factory $factory class instance.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$ad_ids   = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
-		self::$ad_group = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
-
-		self::$wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.0.0' );
-
-		$current_time = time();
+		self::$ad_ids            = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
+		self::$ad_group          = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
+		self::$wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.0.1' );
+		$current_time            = time();
 		foreach ( self::$ad_ids as $ad_id ) {
 			update_post_meta( $ad_id, 'wpadcenter_ad_type', 'ad_code' );
 			update_post_meta( $ad_id, 'wpadcenter_start_date', $current_time );
@@ -75,6 +73,25 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$taxonomy = 'wpadcenter-adgroups';
 		wp_set_post_terms( $post_id, $tag, $taxonomy );
 
+	}
+
+	/**
+	 * Test for Wpadcenter_Public constructor
+	 */
+	public function test_public_constructor() {
+		remove_shortcode( 'wpadcenter_ad' );
+		remove_shortcode( 'wpadcenter_adgroup' );
+		remove_shortcode( 'wpadcenter_random_ad' );
+		$this->assertFalse( shortcode_exists( 'wpadcenter_ad' ) );
+		$this->assertFalse( shortcode_exists( 'wpadcenter_adgroup' ) );
+		$this->assertFalse( shortcode_exists( 'wpadcenter_random_ad' ) );
+
+		$wpadcenter_public_obj = new Wpadcenter_Public( 'wpadcenter', '2.0.1' );
+		$this->assertTrue( $wpadcenter_public_obj instanceof Wpadcenter_Public );
+
+		$this->assertTrue( shortcode_exists( 'wpadcenter_ad' ) );
+		$this->assertTrue( shortcode_exists( 'wpadcenter_adgroup' ) );
+		$this->assertTrue( shortcode_exists( 'wpadcenter_random_ad' ) );
 	}
 
 	/**
@@ -143,6 +160,69 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 
 		$received_output = self::$wpadcenter_public->display_random_ad( $atts );
 		$this->assertTrue( is_string( $received_output ) );
+	}
+
+	/**
+	 * Test for wpadcenter_register_gutenberg_scripts function
+	 */
+	public function test_wpadcenter_register_gutenberg_scripts() {
+		self::$wpadcenter_public->wpadcenter_register_gutenberg_scripts();
+		do_action( 'wp_enqueue_scripts' );
+		global $wp_styles;
+		$all_registered_styles = $wp_styles->queue;
+		$this->assertTrue( in_array( 'wpadcenter-frontend', $all_registered_styles ) );
+	}
+
+	/**
+	 * Test for enqueue_styles function
+	 */
+	public function test_enqueue_styles() {
+		global $wp_styles;
+		wp_styles()->remove( 'wpadcenter-frontend' );
+		$this->assertArrayNotHasKey( 'wpadcenter-frontend', $wp_styles->registered, 'wpadcenter-frontend style is registered.' );
+		self::$wpadcenter_public->enqueue_styles();
+		$this->assertArrayHasKey( 'wpadcenter-frontend', $wp_styles->registered, 'wpadcenter-frontend style is not registered.' );
+	}
+
+	/**
+	 * Test for enqueue_scripts function
+	 */
+	public function test_enqueue_scripts() {
+		global $wp_scripts;
+		wp_scripts()->remove( 'wpadcenter-frontend' );
+		$this->assertArrayNotHasKey( 'wpadcenter-frontend', $wp_scripts->registered, 'wpadcenter-frontend script is registered.' );
+		self::$wpadcenter_public->enqueue_scripts();
+		$this->assertArrayHasKey( 'wpadcenter-frontend', $wp_scripts->registered, 'wpadcenter-frontend script is not registered.' );
+	}
+
+	/**
+	 * Test wp_ajax_set_clicks.
+	 */
+	public function test_wpadcenter_set_clicks() {
+		global $wpdb;
+		$args  = array(
+			'post_type' => 'wpadcenter-ads',
+		);
+		$ad_id = wp_insert_post( $args );
+		$array = array(
+			'total_clicks'      => 0,
+			'total_impressions' => 0,
+		);
+		update_post_meta( $ad_id, 'wpadcenter_ads_stats', $array );
+
+		// Set up a default request.
+		$_POST['security'] = wp_create_nonce( 'wpadcenter_set_clicks' );
+		$_POST['action']   = 'set_clicks';
+		$_POST['ad_id']    = $ad_id;
+
+		self::$wpadcenter_public->wpadcenter_set_clicks();
+
+		$today  = gmdate( 'Y-m-d' );
+		$clicks = $wpdb->get_var( $wpdb->prepare( 'SELECT ad_clicks FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date = %s and ad_id = %d LIMIT 1', array( $today, $ad_id ) ) ); // db call ok; no-cache ok.
+		 $this->assertEquals( '1', $clicks );
+		 self::$wpadcenter_public->wpadcenter_set_clicks();
+		 $clicks = $wpdb->get_var( $wpdb->prepare( 'SELECT ad_clicks FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date = %s and ad_id = %d LIMIT 1', array( $today, $ad_id ) ) ); // db call ok; no-cache ok.
+		 $this->assertEquals( '2', $clicks );
 	}
 
 }
