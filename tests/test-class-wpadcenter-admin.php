@@ -76,7 +76,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group         = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.1' );
 		self::$first_dummy_post = get_post( self::$ad_ids[0] );
 		self::$current_time     = time();
 		foreach ( self::$ad_ids as $ad_id ) {
@@ -102,8 +101,16 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test for get_default_metafields function.
+	 * Test for admin constructor()
 	 */
+	public function test_admin_constructor() {
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.1' );
+		$this->assertTrue( self::$wpadcenter_admin instanceof Wpadcenter_Admin );
+	}
+
+	 /**
+	  * Test for get_default_metafields function.
+	  */
 	public function test_get_default_metafields() {
 
 		$received_metafields = self::$wpadcenter_admin->get_default_metafields();
@@ -344,6 +351,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_enqueue_scripts() {
 		self::$wpadcenter_admin->enqueue_scripts();
+		do_action( 'admin_enqueue_scripts' );
 		global $wp_scripts;
 		$all_enqueued_scripts = $wp_scripts->queue;
 		$this->assertTrue( in_array( 'wpadcenter-gapi-settings', $all_enqueued_scripts ) );
