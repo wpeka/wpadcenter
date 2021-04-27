@@ -387,4 +387,27 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$value = self::$wpadcenter_admin->wpadcenter_plugin_action_links( array() );
 		$this->assertTrue( is_array( $value ) );
 	}
+
+
+	/**
+	 * Test for wpadcenter_reports function
+	 */
+	public function test_wpadcenter_reports() {
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_reports();
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_statistics function
+	 */
+	public function test_wpadcenter_ad_statistics() {
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_ad_statistics( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
 }
