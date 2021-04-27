@@ -410,4 +410,64 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
 	}
+
+	/**
+	 * Tests for wpadcenter_limit_impressions_clicks
+	 */
+	public function test_wpadcenter_limit_impressions_clicks() {
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_limit_impressions_clicks( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Tests for wpadcenter_edit_form_after_title
+	 */
+	public function test_wpadcenter_edit_form_after_title() {
+		self::$wpadcenter_admin->wpadcenter_edit_form_after_title( self::$first_dummy_post );
+		global $wp_scripts, $wp_styles;
+		$all_enqueued_scripts = $wp_scripts->queue;
+		$this->assertTrue( in_array( 'wpadcenter-select2', $all_enqueued_scripts ) );
+		$this->assertTrue( in_array( 'wpadcenter', $all_enqueued_scripts ) );
+
+		$all_enqueued_styles = $wp_styles->queue;
+		$this->assertTrue( in_array( 'wpadcenter-select2', $all_enqueued_styles ) );
+	}
+
+	/**
+	 * Test for wpadcenter_admin_menu function
+	 */
+	public function test_wpadcenter_admin_menu() {
+		$current_user = wp_get_current_user();
+		$current_user->add_cap( 'manage_options' );
+
+		self::$wpadcenter_admin->wpadcenter_admin_menu();
+		global $submenu;
+		$submenu_array = wp_list_pluck( $submenu['edit.php?post_type=wpadcenter-ads'], 2 );
+		$this->assertTrue( isset( $submenu['edit.php?post_type=wpadcenter-ads'] ) );
+		$this->assertTrue( in_array( 'wpadcenter-reports', $submenu_array ) );
+		$this->assertTrue( in_array( 'wpadcenter-settings', $submenu_array ) );
+		$this->assertTrue( in_array( 'wpadcenter-getting-started', $submenu_array ) );
+		$this->assertTrue( in_array( 'https://club.wpeka.com/product/wpadcenter', $submenu_array ) );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_size_metabox function
+	 */
+	public function test_wpadcenter_ad_size_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_ad_size_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for wpadcenter_collect_locations function
+	 */
+	public function test_wpadcenter_collect_locations() {
+		self::$wpadcenter_admin->wpadcenter_collect_locations( 'https://wpadcenter.com/' );
+		$this->assertTrue( true );
+	}
 }
