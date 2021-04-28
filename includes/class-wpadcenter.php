@@ -239,14 +239,12 @@ class Wpadcenter {
 	private function define_public_hooks() {
 
 		$plugin_public = new Wpadcenter_Public( $this->get_plugin_name(), $this->get_version() );
-		if ( self::is_request( 'frontend' ) ) {
-			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-			$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
-			$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
-			$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
-			$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
-		}
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
+		$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
+		$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
+		$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
 		$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_public, 'wpadcenter_register_gutenberg_scripts' );
 	}
 
