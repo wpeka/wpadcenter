@@ -567,4 +567,63 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
 	}
+
+	/**
+	 * Tests for wpadcenter_getting_started function
+	 */
+	public function test_wpadcenter_getting_started() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_getting_started();
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+
+		global $wp_scripts;
+		$all_enqueued_scripts = $wp_scripts->queue;
+		$this->assertTrue( in_array( 'wpadcenter-gettingstarted', $all_enqueued_scripts ) );
+
+		global $wp_styles;
+		$all_enqueued_styles = $wp_styles->queue;
+		$this->assertTrue( in_array( 'wpadcenter-gettingstarted-css', $all_enqueued_styles ) );
+
+		$current_user = wp_get_current_user();
+		$current_user->remove_cap( 'manage_options' );
+		$this->expectException( 'WPDieException' );
+		self::$wpadcenter_admin->wpadcenter_getting_started();
+	}
+
+	/**
+	 * Test for wpadcenter_page_posts_scripts function
+	 */
+	public function test_wpadcenter_page_posts_scripts() {
+		global $wp_meta_boxes;
+		$this->assertFalse( isset( $wp_meta_boxes['post'] ) );
+		$this->assertFalse( isset( $wp_meta_boxes['page'] ) );
+		self::$wpadcenter_admin->wpadcenter_page_posts_scripts();
+		$this->assertTrue( isset( $wp_meta_boxes['post'] ) );
+		$this->assertTrue( isset( $wp_meta_boxes['page'] ) );
+	}
+
+	/**
+	 * Test for wpadcenter_page_posts_metabox_render function
+	 */
+	public function test_wpadcenter_page_posts_metabox_render() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_page_posts_metabox_render( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for wpadcenter_remove_permalink function
+	 */
+	public function test_wpadcenter_remove_permalink() {
+		$url = get_permalink( self::$ad_ids[0] );
+		$this->go_to( $url );
+		global $post_type;
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_remove_permalink();
+		$output  = ob_get_clean();
+		$expcted = '<style>#edit-slug-box {display:none;}</style>';
+		$this->assertEquals( $expcted, $output );
+	}
 }
