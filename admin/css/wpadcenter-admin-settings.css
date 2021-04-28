@@ -216,3 +216,77 @@ label {
 	box-shadow: 0px 2px 2px #ccc;
 	border-radius: 5px;
 }
+
+.contentAdsRules {
+	padding: 20px;
+	background: #e9f5f8;
+	margin: 10px 0px;
+}
+.content-ads-alignment {
+	display: flex;
+	overflow: hidden;
+}
+  
+.content-ads-alignment input {
+	position: absolute !important;
+	clip: rect(0, 0, 0, 0);
+	height: 1px;
+	width: 1px;
+	border: 0;
+	overflow: hidden;
+}
+  
+.content-ads-alignment label {
+	background-color: #e4e4e4;
+	color: rgba(0, 0, 0, 0.6);
+	font-size: 14px;
+	line-height: 1;
+	text-align: center;
+	padding: 8px 16px;
+	margin-right: -1px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	transition: all 0.1s ease-in-out;
+}
+  
+.content-ads-alignment label:hover {
+	cursor: pointer;
+}
+  
+.content-ads-alignment input:checked + label {
+	background-color: #4682B4;
+	box-shadow: none;
+	color: white;
+}
+  
+.content-ads-alignment label:first-of-type {
+	border-radius: 4px 0 0 4px;
+}
+  
+.content-ads-alignment label:last-of-type {
+	border-radius: 0 4px 4px 0;
+}
+
+.contentAdsRules .vs__dropdown-toggle {
+	background: white;
+}
+
+.postition-content {
+	display: grid;
+	grid-template-columns: 1fr 1fr 2.3fr;
+	grid-gap: 20px;
+	margin-bottom: 5px;
+}
+
+.postition-content input[type="number"] {
+	border: 1px solid rgba(60,60,60,.26);
+}
+
+.contentAdsRules label {
+	margin-bottom: 5px;
+}
+
+.rule {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
