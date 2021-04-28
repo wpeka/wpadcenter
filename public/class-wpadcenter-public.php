@@ -385,6 +385,20 @@ class Wpadcenter_Public {
 			$single_ad_html .= 'rel="nofollow"';
 		}
 		$single_ad_html .= '>';
+
+		$single_ad_html = apply_filters( 'wp_adcenter_single_ad_display_case', $ad_id, $ad_type, $single_ad_html );
+
+		$amp_page = false;
+
+		if ( function_exists( 'is_amp_endpoint' ) ) {
+			$amp_page = is_amp_endpoint();
+
+		}
+		$amp_preference = get_post_meta( $ad_id, 'wpadcenter_amp_preference', true );
+
+		$amp_preference = ! empty( $amp_preference ) ? boolval( $amp_preference ) : false;
+
+
 		switch ( $ad_type ) {
 			case 'banner_image':
 				$banner_img      = get_the_post_thumbnail( $ad_id );
@@ -399,7 +413,12 @@ class Wpadcenter_Public {
 				$single_ad_html .= '<span class="wpadcenter-ad-code">' . $ad_code . '</span>';
 				break;
 			case 'import_from_adsense':
-				$adsense_code    = get_post_meta( $ad_id, 'wpadcenter_ad_google_adsense', true );
+				if ( $amp_page && $amp_preference ) {
+					$adsense_code = get_post_meta( $ad_id, 'wpadcenter_adsense_amp_code', true );
+				} else {
+					$adsense_code = get_post_meta( $ad_id, 'wpadcenter_ad_google_adsense', true );
+				}
+
 				$single_ad_html .= '<div style="min-height:200px;min-width: 200px" class="wpadcenter-ad-code">' . $adsense_code . '</div>';
 				break;
 		}
