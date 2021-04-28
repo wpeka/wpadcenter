@@ -42,7 +42,7 @@ var vm = new Vue({
             this.adblock_detector = this.$refs.hasOwnProperty('adblock_detector') ? this.$refs.adblock_detector.checked : false;
             this.geo_targeting = this.$refs.hasOwnProperty('geo_targeting') ? this.$refs.geo_targeting.checked : false;
             this.$refs.ads_txt_tab.value = this.enable_ads_txt ? "1" : "0";
-            if ( this.$refs?.geo_targeting_tab ) {
+            if ( this.$refs.hasOwnProperty( 'geo_targeting_tab' ) ) {
                 this.$refs.geo_targeting_tab.value = this.geo_targeting ? "1" : "0";
             }
             this.enable_advertisers = this.$refs.hasOwnProperty('enable_advertisers') ? this.$refs.enable_advertisers.checked : false; 
