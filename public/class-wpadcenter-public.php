@@ -402,7 +402,9 @@ class Wpadcenter_Public {
 		}
 		$single_ad_html .= '>';
 
+
 		do_action( 'wp_adcenter_single_ad_display_case', $ad_id, $ad_type, $single_ad_html );
+
 
 		switch ( $ad_type ) {
 			case 'banner_image':
