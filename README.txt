@@ -325,6 +325,7 @@ Ads.txt or "Authorized Digital Sellers" is a technical specification developed b
 = 2.0.1 =
 * Feature: Enable geo targeting to display ads in specific countries and/or cities.
 * Feature: Display ads as per user roles.
+* Feature: Multilingual Support.
 
 = 2.0.0 =
 * Feature: Plugin rewrite
@@ -378,6 +379,7 @@ Ads.txt or "Authorized Digital Sellers" is a technical specification developed b
 = 2.0.1 =
 * Feature: Enable geo targeting to display ads in specific countries and/or cities.
 * Feature: Display ads as per user roles.
+* Feature: Multilingual Support.
 
 = 2.0.0 =
 * Feature: Plugin rewrite
