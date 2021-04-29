@@ -2758,7 +2758,7 @@ class Wpadcenter_Admin {
 						'<option value="%s"%s>%s</option>',
 						esc_attr( $size ),
 						$size === $current_v ? ' selected="selected"' : '',
-						esc_html_e( 'default', 'wpadcenter' )
+						esc_html__( 'default', 'wpadcenter' )
 					);
 				} elseif ( 'ad-size' === $data[1] ) {
 					printf(
