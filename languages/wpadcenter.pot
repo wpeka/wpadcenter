@@ -2,21 +2,21 @@
 # This file is distributed under the same license as the WPAdCenter plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPAdCenter 2.0.0\n"
+"Project-Id-Version: WPAdCenter 2.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpadcenter\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-20T13:32:39+02:00\n"
+"POT-Creation-Date: 2021-04-29T12:55:04+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: wpadcenter\n"
 
 #. Plugin Name of the plugin
 #: admin/class-wpadcenter-admin.php:353
-#: admin/class-wpadcenter-admin.php:2309
+#: admin/class-wpadcenter-admin.php:2324
 msgid "WPAdCenter"
 msgstr ""
 
@@ -369,6 +369,7 @@ msgstr ""
 
 #: admin/class-wpadcenter-admin.php:662
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:83
+#: src/gutenberg-blocks/adgroup/adgroup-main.js:203
 msgid "Number of Ads"
 msgstr ""
 
@@ -377,15 +378,15 @@ msgid "Number of Active Ads"
 msgstr ""
 
 #: admin/class-wpadcenter-admin.php:688
-#: admin/class-wpadcenter-admin.php:1941
-#: admin/class-wpadcenter-admin.php:1986
+#: admin/class-wpadcenter-admin.php:1956
+#: admin/class-wpadcenter-admin.php:2001
 msgid "(no title)"
 msgstr ""
 
 #: admin/class-wpadcenter-admin.php:709
 #: admin/class-wpadcenter-admin.php:813
 #: admin/class-wpadcenter-admin.php:828
-#: admin/class-wpadcenter-admin.php:1859
+#: admin/class-wpadcenter-admin.php:1874
 msgid "You do not have sufficient permission to perform this operation"
 msgstr ""
 
@@ -486,6 +487,7 @@ msgid "If your site is located on a subdomain, you need to add the following lin
 msgstr ""
 
 #: admin/class-wpadcenter-admin.php:1221
+#: tests/test-class-wpadcenter-admin.php:280
 msgid "Forever"
 msgstr ""
 
@@ -566,144 +568,144 @@ msgstr ""
 msgid "Link URL"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1726
+#: admin/class-wpadcenter-admin.php:1741
 msgid "Ad Expires on"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1729
+#: admin/class-wpadcenter-admin.php:1744
 msgid "Publish"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1730
+#: admin/class-wpadcenter-admin.php:1745
 msgid "forever"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1758
+#: admin/class-wpadcenter-admin.php:1773
 msgid "Starts From"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1800
+#: admin/class-wpadcenter-admin.php:1815
 msgid "Expires On"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1875
+#: admin/class-wpadcenter-admin.php:1890
 msgid "Support"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1877
+#: admin/class-wpadcenter-admin.php:1892
 msgid "Documentation"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1879
+#: admin/class-wpadcenter-admin.php:1894
 msgid "FAQ"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1881
+#: admin/class-wpadcenter-admin.php:1896
 msgid "Upgrade to Pro &raquo;"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1888
+#: admin/class-wpadcenter-admin.php:1903
 msgid "Welcome to WP AdCenter!"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1889
+#: admin/class-wpadcenter-admin.php:1904
 msgid "Complete Ad Management Plugin."
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1890
+#: admin/class-wpadcenter-admin.php:1905
 msgid "Thank you for choosing WP AdCenter plugin - the powerful WordPress ads plugin."
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1891
+#: admin/class-wpadcenter-admin.php:1906
 msgid "You can control every aspect of ads on your website. Place ads or Ad scripts anywhere on your website. Compatible with Gutenberg & Popular Page Builders."
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1892
+#: admin/class-wpadcenter-admin.php:1907
 msgid "See Quick Links"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1893
+#: admin/class-wpadcenter-admin.php:1908
 msgid "--- OR ---"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1895
+#: admin/class-wpadcenter-admin.php:1910
 msgid "Configure WP AdCenter Settings including:"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1896
+#: admin/class-wpadcenter-admin.php:1911
 msgid "Configure WP AdCenter"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1901
+#: admin/class-wpadcenter-admin.php:1916
 msgid "Disable tracking for Admin and other user roles."
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1902
+#: admin/class-wpadcenter-admin.php:1917
 #: admin/views/admin-display.php:53
 msgid "Scripts"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1903
+#: admin/class-wpadcenter-admin.php:1918
 #: admin/views/admin-display.php:76
 msgid "ads.txt"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:1904
+#: admin/class-wpadcenter-admin.php:1919
 msgid "Integrate AdSense Account"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2445
+#: admin/class-wpadcenter-admin.php:2461
 msgid "WPAdCenter Scripts"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2466
+#: admin/class-wpadcenter-admin.php:2482
 msgid "Disable Global Scripts"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2470
+#: admin/class-wpadcenter-admin.php:2486
 #: admin/views/admin-display.php:64
 msgid "Header Scripts"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2473
+#: admin/class-wpadcenter-admin.php:2489
 msgid "These scripts will be printed in head section."
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2477
+#: admin/class-wpadcenter-admin.php:2493
 #: admin/views/admin-display.php:66
 msgid "Body Scripts"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2480
+#: admin/class-wpadcenter-admin.php:2496
 msgid "These scripts will be printed in body section."
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2484
+#: admin/class-wpadcenter-admin.php:2500
 #: admin/views/admin-display.php:68
 msgid "Footer Scripts"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2487
+#: admin/class-wpadcenter-admin.php:2503
 msgid "These scripts will be printed in footer section."
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2719
+#: admin/class-wpadcenter-admin.php:2735
 msgid "All ad types"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2736
+#: admin/class-wpadcenter-admin.php:2752
 msgid "All ad dimensions"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2745
+#: admin/class-wpadcenter-admin.php:2761
 msgid "default"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2767
+#: admin/class-wpadcenter-admin.php:2783
 msgid "All ad groups"
 msgstr ""
 
-#: admin/class-wpadcenter-admin.php:2791
+#: admin/class-wpadcenter-admin.php:2807
 msgid "All advertisers"
 msgstr ""
 
@@ -960,6 +962,7 @@ msgstr ""
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:128
 #: includes/elementor/class-wpadcenter-elementor-randomad-widget.php:106
 #: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:105
+#: src/gutenberg-blocks/maxwidth-component.js:35
 msgid "Enable Max Width"
 msgstr ""
 
@@ -1037,24 +1040,28 @@ msgstr ""
 msgid "Select Ad : "
 msgstr ""
 
-#: includes/class-wpadcenter.php:499
+#: includes/class-wpadcenter.php:334
+msgid "We have noticed that you have an adblocker enabled which restricts ads served on the site."
+msgstr ""
+
+#: includes/class-wpadcenter.php:504
 msgid "Could not access filesystem."
 msgstr ""
 
-#: includes/class-wpadcenter.php:503
+#: includes/class-wpadcenter.php:508
 msgid "Filesystem error."
 msgstr ""
 
-#: includes/class-wpadcenter.php:510
+#: includes/class-wpadcenter.php:515
 msgid "Unable to locate WordPress root directory."
 msgstr ""
 
-#: includes/class-wpadcenter.php:515
+#: includes/class-wpadcenter.php:520
 msgid "Unable to locate WordPress content directory (wp-content)."
 msgstr ""
 
 #. translators: %s folder name
-#: includes/class-wpadcenter.php:524
+#: includes/class-wpadcenter.php:529
 msgid "Unable to locate needed folder (%s)."
 msgstr ""
 
@@ -1064,16 +1071,20 @@ msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:72
 #: includes/elementor/class-wpadcenter-elementor-randomad-widget.php:72
+#: src/gutenberg-blocks/adgroup/adgroup-main.js:181
+#: src/gutenberg-blocks/random-ad/random-ad-main.js:152
 msgid "Select Ad Groups"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:94
+#: src/gutenberg-blocks/adgroup/adgroup-main.js:207
 msgid "Number of Columns"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-adgroup-widget.php:105
 #: includes/elementor/class-wpadcenter-elementor-randomad-widget.php:83
 #: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:82
+#: src/gutenberg-blocks/ad-alignment-component.js:35
 msgid "Alignment"
 msgstr ""
 
@@ -1096,19 +1107,49 @@ msgid "Max Width"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-randomad-widget.php:63
+#: src/gutenberg-blocks/random-ad/random-ad-main.js:20
 msgid "WPAdCenter Random Ad"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:63
+#: src/gutenberg-blocks/single-ad/main.js:20
 msgid "WPAdCenter Single Ad"
 msgstr ""
 
 #: includes/elementor/class-wpadcenter-elementor-singlead-widget.php:72
+#: src/gutenberg-blocks/single-ad/main.js:140
 msgid "Select Ad"
 msgstr ""
 
 #: admin/js/gutenberg-blocks/wpadcenter-gutenberg-adgroup.js:1
 #: admin/js/gutenberg-blocks/wpadcenter-gutenberg-randomad.js:1
 #: admin/js/gutenberg-blocks/wpadcenter-gutenberg-singlead.js:1
+#: src/gutenberg-blocks/adgroup/adgroup-component.js:22
+#: src/gutenberg-blocks/random-ad/random-ad-component.js:21
+#: src/gutenberg-blocks/single-ad/single-ad-component.js:23
 msgid "Loading Ad"
+msgstr ""
+
+#: src/gutenberg-blocks/adgroup/adgroup-main.js:20
+msgid "WPAdCenter Ad Group"
+msgstr ""
+
+#: src/gutenberg-blocks/adgroup/adgroup-main.js:21
+msgid "Block to generate WPAdCenter Ads from Adgroups"
+msgstr ""
+
+#: src/gutenberg-blocks/maxwidth-component.js:38
+msgid "Set maximum width for this ad"
+msgstr ""
+
+#: src/gutenberg-blocks/maxwidth-component.js:47
+msgid "Max width:"
+msgstr ""
+
+#: src/gutenberg-blocks/random-ad/random-ad-main.js:21
+msgid "Block to generate random WPAdCenter Ad from Adgroups"
+msgstr ""
+
+#: src/gutenberg-blocks/single-ad/main.js:21
+msgid "Block to generate WPAdCenter single ad"
 msgstr ""

@@ -244,7 +244,7 @@ class Wpadcenter {
 			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 			$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
 			$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
-		}	
+		}
 		$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
 		$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
 		$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_public, 'wpadcenter_register_gutenberg_scripts' );
@@ -331,7 +331,7 @@ class Wpadcenter {
 			'transition_delay'          => '1000',
 
 			'adblock_detector'          => false,
-			'adblock_detected_message'  => 'We have noticed that you have an adblocker enabled which restricts ads served on the site.',
+			'adblock_detected_message'  => __( 'We have noticed that you have an adblocker enabled which restricts ads served on the site.', 'wpadcenter' ),
 			'geo_targeting'             => false,
 			'maxmind_license_key'       => '',
 			'maxmind_db_prefix'         => wp_generate_password( 32, false ),
