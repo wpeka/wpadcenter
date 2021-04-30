@@ -626,4 +626,16 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$expcted = '<style>#edit-slug-box {display:none;}</style>';
 		$this->assertEquals( $expcted, $output );
 	}
+
+	/**
+	 * Test for wpadcenter_check_ads_txt_replace function
+	 */
+	public function test_wpadcenter_get_root_domain_info() {
+		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://one.net.two/three/four/five' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://one.com.au/three/four/five' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
+		$this->assertTrue( $value );
+	}
 }
