@@ -46,6 +46,12 @@
   .wpadcenter-alignleft.wpadcenter-adgroup__row {
 	  justify-content:flex-start;
   }
+  .wpadcenter-aligncenter {
+	  .wpadcenter-ad-code {
+		  display:flex;
+		  justify-content:center;
+	  }
+  }
   
   #wpadcenter_ad {
 	display: block;
