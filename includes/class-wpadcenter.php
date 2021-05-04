@@ -379,6 +379,7 @@ class Wpadcenter {
 			case 'enable_ads_txt':
 			case 'hide_ads_logged':
 			case 'trim_statistics':
+			case 'content_ads':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {
