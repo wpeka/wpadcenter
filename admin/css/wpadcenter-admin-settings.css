@@ -2,6 +2,7 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+@import url('https://fonts.googleapis.com/css?family=Lato');
 #wpadcenter_settings_form {
 	width: 100%;
 	display: flex;
@@ -56,9 +57,6 @@ label {
 	margin-left: -5px;
 }
 
-#app {
-	width: 750px;
-}
 .enable_scripts_enabled {
 	margin-top: 20px;
 }
@@ -99,112 +97,7 @@ label {
 #wpcontent {
 	background: #F3F6FF;
 }
-.wpadcenter-tab-head {
-	margin-right: 0px;
-}
-.wpadcenter-tab-head .nav-tab-active {
-	background: #F3F6FF;
-	border-bottom: solid 1px #fff;
-}
-.wpadcenter-tab-head .nav-tab:focus {
-	box-shadow: none;
-}
-.wpadcenter_settings_left {
-	width: 100%;
-	margin-bottom: 25px;
-	float: left;
-}
-.wpadcenter_settings_right {
-	width: 25%;
-	float: right;
-}
-@media screen and (max-width:1210px) {
-	.wpadcenter_settings_left {
-		width:100%;
-	}
-	.wpadcenter_settings_right {
-		padding-left:0px;
-		width:100%;
-	}
-}
-.wpadcenter-tab-container {
-	background: #F3F6FF;
-	box-sizing: border-box;
-	width: 100%;
-	height: auto;
-}
-.wpadcenter-tab-container .button-primary {
-	height: 34px;
-	font-size: 14px;
-	font-weight: 400;
-}
-.wpadcenter-tab-content {
-	display: none;
-	width: 100%;
-	height: auto;
-}
-.wpadcenter-tab-content .vvv_combobox {
-	width: 50%;
-}
-.wpadcenter-tab-content .vvv_textbox {
-	height: 150px;
-	width: 75%;
-}
-.wpadcenter-tab-content .form-table {
-	border-bottom: 1px solid #ccc;
-}
-.wpadcenter-tab-content .form-table input[type="text"],
-.wpadcenter-tab-content .form-table input[type="select"],
-.wpadcenter-tab-content .form-table input[type="email"],
-.wpadcenter-tab-content .form-table input[type="password"],
-.wpadcenter_sub_tab_content .vvv_textfield {
-	width: 50%;
-	margin-bottom: 5px;
-}
-.wpadcenter-tab-content .wpadcenter_form_help {
-	color: #aaa;
-	font-style: italic;
-	font-weight: 250;
-	font-size: 12px;
-	display: inline-block;
-	width: 100%;
-}
-.wpadcenter-tab-content .wpadcenter-plugin-toolbar {
-	height: 40px;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-}
-.wpadcenter-tab-content .wpadcenter-plugin-toolbar .left {
-	float: left;
-	margin: 0;
-	padding: 0;
-}
-.wpadcenter-tab-content .wpadcenter-plugin-toolbar .left img {
-	vertical-align: text-bottom;
-	margin-right: 10px;
-}
-.wpadcenter-tab-content .wpadcenter-plugin-toolbar .right {
-	float: right;
-	margin: 0 10px 0 0;
-	padding: 0;
-}
-.wpadcenter-tab-content .wpadcenter-plugin-toolbar.top {
-	margin-bottom: -5px;
-}
-.wpadcenter-tab-content .wpadcenter-plugin-toolbar.bottom {
-	margin-top: 12px;
-}
-.wpadcenter-plugin-toolbar.top {
-	margin-top:-15px;
-	background: #f5f5f5;
-	border-bottom: 1px solid #ddd;
-	border-top: 1px solid #ddd;
-	margin-left: -15px;
-	margin-right: -15px;
-	margin-bottom: -15px;
-	padding:15px;
-}
+
 .notify_msg {
 	position: fixed;
 	width: 300px;
@@ -216,7 +109,171 @@ label {
 	box-shadow: 0px 2px 2px #ccc;
 	border-radius: 5px;
 }
+.c-icon {
+	align-self: baseline;
+}
 
+#app {
+	width: 100%;
+}
+#wpadcenter_tabs > div:nth-child(1) {
+	background: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 1.5rem;
+	border-top: 1px solid #d5e2ed;
+	border-bottom: 1px solid #d5e2ed;
+	
+}
+
+#wpadcenter_save {
+	border-radius: 0.25rem;
+}
+#wpadcenter_tabs > div:nth-child(2) {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#wpadcenter_tabs > div:nth-child(2) > .tab-content {
+	width: 750px;
+}
+#wpadcenter_tabs > div:nth-child(1) > ul {
+	width: 750px;	
+}
+
+.nav-tabs {
+	border: none;
+}
+.nav-link {
+	padding: 0;
+	padding-top: 17px;
+	padding-bottom: 15px;
+}
+.nav-item {
+	margin-right: 25px;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+	border: none;
+	background: none;
+	border-bottom: 2px solid #39f;
+	color: #39f;
+	font-weight: 500;
+}
+
+.nav-tabs .nav-link {
+	border: none;
+}
+
+.nav-link:hover {
+	border: none;
+	border-bottom: 2px solid #39f !important;
+	color: #39f;
+}
+.nav-link {
+	color: #3c434a;
+	font-family: 'Lato', sans-serif;
+	font-size: 14px;
+}
+#app {
+	font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	color: #3c434a;
+}
+
+#app path {
+	opacity: 0.7;
+}
+
+a {
+	transition: none;
+	transition-property: none;
+}
+
+a:focus {
+	box-shadow: none;
+}
+
+.adc-nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+.adc-nav-inner {
+	width: 750px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.wpadcenter_save {
+	padding: 10px 20px;
+	position: relative;
+}
+.card {
+	border-color: #d5e2ed;
+}
+
+.wpadcenter-notice-floating-bar {
+	width: 100%;
+	background: #4e5c66;
+	color: #fff;
+	padding: 10px;
+	font-size: 13px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.floating-bar-close {
+	color: white;
+	transform: rotate(45deg);
+}
+
+.floating-bar-close:hover {
+	fill: #fff;
+}
+
+.card-header, .vs__dropdown-toggle, .form-control {
+	border-color: #d5e2ed;
+}
+
+.wrap {
+	margin: 0;
+}
+#wpcontent {
+	padding: 0;
+}
+
+.button--loading .wpadcenter_save-text {
+	visibility: hidden;
+}
+.button--loading::after {
+    content: "";
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+	vertical-align: text-bottom;
+	background-color: currentColor;
+	border-radius: 50%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+	opacity: 0.1;
+    animation: spinner-grow 0.75s linear infinite;
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
+}
 .contentAdsRules {
 	padding: 20px;
 	background: #e9f5f8;

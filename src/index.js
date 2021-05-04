@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import CoreuiVue from '@coreui/vue';
 import CoreuiVueCharts from '@coreui/vue-chartjs';
-import { cilPencil, cilSettings, cilInfo, cibGoogleKeep, cilArrowCircleBottom } from '@coreui/icons';
+import { cilPencil, cilSettings, cilInfo, cibGoogleKeep, cilMedicalCross } from '@coreui/icons';
 import vSelect from 'vue-select';
 import componentContentAds from './contentads';
 Vue.component('v-select', vSelect);
@@ -51,7 +51,7 @@ var vm = new Vue({
                 this.$refs.geo_targeting_tab.value = this.geo_targeting ? "1" : "0";
             }
             this.enable_advertisers = this.$refs.hasOwnProperty('enable_advertisers') ? this.$refs.enable_advertisers.checked : false; 
-            this.enable_notifications = this.$refs.hasOwnProperty('enable_notifications') ? this.$refs.enable_notifications.checked : false; 
+            this.enable_notifications = this.$refs.hasOwnProperty('enable_notifications') ? this.$refs.enable_notifications.checked : false;
             this.content_ads = this.$refs?.content_ads ? this.$refs.content_ads.checked : false;
             this.adgroups_security = this.$refs?.adgroups_security ? this.$refs.adgroups_security.value : '';
             this.count = this.$refs?.count ? this.$refs.count.value : 0;

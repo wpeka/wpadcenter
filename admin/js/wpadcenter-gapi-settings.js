@@ -33,10 +33,12 @@
 			$( '#mapi-confirm-code' ).click(
 				function(e){
 					e.preventDefault();
+					
 					var spinner = $( '#mapi-confirm-code' ).parent().find( '.spinner' );
 					spinner.addClass( 'is-active' );
 					var code = $( '#mapi-code' ).val();
 					if ( '' == code ) {
+						spinner.removeClass( 'is-active' );
 						return;
 					}
 

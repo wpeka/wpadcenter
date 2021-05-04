@@ -42,6 +42,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./node_modules/@coreui/icons/js/free/cil-medical-cross.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/@coreui/icons/js/free/cil-medical-cross.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"cilMedicalCross\": () => (/* binding */ cilMedicalCross)\n/* harmony export */ });\nconst cilMedicalCross = [\"512 512\",\"<path fill='var(--ci-primary-color, currentColor)' d='M344,16H168V168H16V344H168V496H344V344H496V168H344ZM464,200V312H312V464H200V312H48V200H200V48H312V200Z' class='ci-primary'/>\"]\n\n//# sourceURL=webpack://wpadcenter/./node_modules/@coreui/icons/js/free/cil-medical-cross.js?");
+
+/***/ }),
+
 /***/ "./node_modules/@coreui/icons/js/free/cil-pencil.js":
 /*!**********************************************************!*\
   !*** ./node_modules/@coreui/icons/js/free/cil-pencil.js ***!
