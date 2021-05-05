@@ -402,8 +402,7 @@ class Wpadcenter_Public {
 		}
 		$single_ad_html .= '>';
 
-
-		do_action( 'wp_adcenter_single_ad_display_case', $ad_id, $ad_type, $single_ad_html );
+		$single_ad_html = apply_filters( 'wp_adcenter_single_ad_display_case', $ad_id, $ad_type, $single_ad_html, $amp_page );
 
 
 		switch ( $ad_type ) {
@@ -430,21 +429,8 @@ class Wpadcenter_Public {
 				break;
 		}
 
-
 		$single_ad_html .= '</a>';
-		if ( $amp_page ) {
 
-			$single_ad_html .= '</amp-script>
-				<script id="set-clicks" type="text/plain" target="amp-script">
-					const targetLink = document.querySelector("a");
-							targetLink.addEventListener("click", () => {
-	  					fetch("' . admin_url( 'admin-ajax.php' ) . '?action=set_clicks&security=' . $security . '&ad_id=' . $ad_id . '", {
-		  				method: "POST",
-		  				credentials: "same-origin",
-						});
-					});
-  				</script>';
-		}
 
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
