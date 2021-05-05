@@ -391,9 +391,6 @@ class Wpadcenter_Public {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
 		}
 		$single_ad_html .= '>';
-		if ( $amp_page ) {
-			$single_ad_html .= '<amp-script script="set-clicks">';
-		}
 		$single_ad_html .= '<div class="wpadcenter-ad-inner" >';
 
 		$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
@@ -402,9 +399,7 @@ class Wpadcenter_Public {
 		}
 		$single_ad_html .= '>';
 
-
-		do_action( 'wp_adcenter_single_ad_display_case', $ad_id, $ad_type, $single_ad_html );
-
+		$single_ad_html = apply_filters( 'wp_adcenter_single_ad_display_case', $ad_id, $ad_type, $single_ad_html, $amp_page );
 
 		switch ( $ad_type ) {
 			case 'banner_image':
@@ -430,21 +425,7 @@ class Wpadcenter_Public {
 				break;
 		}
 
-
 		$single_ad_html .= '</a>';
-		if ( $amp_page ) {
-
-			$single_ad_html .= '</amp-script>
-				<script id="set-clicks" type="text/plain" target="amp-script">
-					const targetLink = document.querySelector("a");
-							targetLink.addEventListener("click", () => {
-	  					fetch("' . admin_url( 'admin-ajax.php' ) . '?action=set_clicks&security=' . $security . '&ad_id=' . $ad_id . '", {
-		  				method: "POST",
-		  				credentials: "same-origin",
-						});
-					});
-  				</script>';
-		}
 
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
