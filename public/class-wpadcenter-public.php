@@ -445,24 +445,11 @@ class Wpadcenter_Public {
 	 */
 	public static function wpadcenter_set_clicks() {
 		global $wpdb;
-
-		if ( ( isset( $_POST['action'] ) || isset( $_GET['action'] ) ) && self::wpadcenter_check_exclude_roles() ) {
-
-			if ( isset( $_POST['security'] ) ) {
-				$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
-			}
-			if ( isset( $_GET['security'] ) ) {
-				$security = isset( $_GET['security'] ) ? sanitize_text_field( wp_unslash( $_GET['security'] ) ) : '';
-			}
-
+		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() ) {
+			$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
 			if ( wp_verify_nonce( $security, 'wpadcenter_set_clicks' ) ) {
-				if ( ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) || ( isset( $_GET['ad_id'] ) && ! empty( $_GET['ad_id'] ) ) ) {
-					if ( isset( $_GET['ad_id'] ) ) {
-						$ad_id = sanitize_text_field( wp_unslash( $_GET['ad_id'] ) );
-					}
-					if ( isset( $_POST['ad_id'] ) ) {
-						$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
-					}
+				if ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) {
+					$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
 					$meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
 					$today = gmdate( 'Y-m-d' );
 					$meta['total_clicks']++;
