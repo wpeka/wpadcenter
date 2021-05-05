@@ -498,6 +498,7 @@ class Wpadcenter_Admin {
 			'import_from_adsense' => array(
 				'active_meta_box' => array(
 					'ad-google-adsense',
+					'amp-preference',
 				),
 			),
 
@@ -1663,6 +1664,9 @@ class Wpadcenter_Admin {
 				case 'number':
 					$sanitized_data = intval( $raw_data[ $meta_name ] );
 					break;
+				case 'array':
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) && is_array( $raw_data[ $meta_name ] ) && ! empty( $raw_data[ $meta_name ] ) ? $raw_data[ $meta_name ] : array();
+					break;
 			}
 
 			if ( true === (bool) $sanitized_data || empty( $sanitized_data ) ) {
@@ -1766,7 +1770,7 @@ class Wpadcenter_Admin {
 		</span>
 		<a href="#" id="edit-ad-schedule">Edit</a>
 
-		
+
 		</div>';
 
 			echo '<div id="ad-schedule-show" class="ad-schedule-box" style="display:none">';
