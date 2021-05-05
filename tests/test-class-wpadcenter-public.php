@@ -43,6 +43,14 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 	public static $ad_group;
 
 	/**
+	 * Created scripts .
+	 *
+	 * @access public
+	 * @var    string $scripts scripts associated with created ad.
+	 */
+	public static $scripts;
+
+	/**
 	 * Set up function.
 	 *
 	 * @param class WP_UnitTest_Factory $factory class instance.
@@ -72,7 +80,14 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$tag      = array( self::$ad_group );
 		$taxonomy = 'wpadcenter-adgroups';
 		wp_set_post_terms( $post_id, $tag, $taxonomy );
+		// This is ok
+		self::$scripts = array(
+			'header_scripts' => '<script type="text/javascript">console.log("hello world in head");</script>',
+			'body_scripts'   => '<script type="text/javascript">console.log("hello world in body");</script>',
+			'footer_scripts' => '<script type="text/javascript">console.log("hello world in footer");</script>',
+		);
 
+		update_post_meta( self::$ad_ids[0], 'scripts', self::$scripts );
 	}
 
 	/**
@@ -225,4 +240,36 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		 $this->assertEquals( '2', $clicks );
 	}
 
+	/**
+	 * Test for wpadcenter_output_header_post function
+	 */
+	public function test_wpadcenter_output_header_post() {
+		$url = get_permalink( self::$ad_ids[0] );
+		$this->go_to( $url );
+		$expected = "\r\n" . self::$scripts['header_scripts'] . "\r\n";
+		$this->expectOutputString( $expected );
+		self::$wpadcenter_public->wpadcenter_output_header_post();
+	}
+
+	/**
+	 * Test for wpadcenter_output_body_post function
+	 */
+	public function test_wpadcenter_output_body_post() {
+		$url = get_permalink( self::$ad_ids[0] );
+		$this->go_to( $url );
+		$expected = "\r\n" . self::$scripts['body_scripts'] . "\r\n";
+		$this->expectOutputString( $expected );
+		self::$wpadcenter_public->wpadcenter_output_body_post();
+	}
+
+	/**
+	 * Test for wpadcenter_output_footer_post function
+	 */
+	public function test_wpadcenter_output_footer_post() {
+		$url = get_permalink( self::$ad_ids[0] );
+		$this->go_to( $url );
+		$expected = "\r\n" . self::$scripts['footer_scripts'] . "\r\n";
+		$this->expectOutputString( $expected );
+		self::$wpadcenter_public->wpadcenter_output_footer_post();
+	}
 }

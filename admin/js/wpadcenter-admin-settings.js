@@ -281,9 +281,9 @@
 					e.preventDefault();
 					var data       = $( this ).serialize();
 					var url        = $( this ).attr( 'action' );
-					var spinner    = $( this ).find( '.spinner' );
 					var submit_btn = $( this ).find( 'input[type="submit"]' );
-					spinner.css( {'visibility':'visible'} );
+					var wpadcenter_save = $ ( this ).find('.wpadcenter_save');
+					wpadcenter_save.addClass('button--loading');
 					submit_btn.css( {'opacity':'.5','cursor':'default'} ).prop( 'disabled',true );
 					$.ajax(
 						{
@@ -291,7 +291,7 @@
 							type:'POST',
 							data:data + '&wpadcenter_settings_ajax_update=' + submit_action,
 							success:function(data) {
-								spinner.css( {'visibility':'hidden'} );
+								wpadcenter_save.removeClass('button--loading');
 								submit_btn.css( {'opacity':'1','cursor':'pointer'} ).prop( 'disabled',false );
 								wpadcenter_notify_msg.success( wpadcenter_settings_success_message );
 								var ads_txt_tab = $( 'input[name="ads_txt_tab"]' ).val();
@@ -304,7 +304,7 @@
                                 }
 							},
 							error:function () {
-								spinner.css( {'visibility':'hidden'} );
+								wpadcenter_save.removeClass('button--loading');
 								submit_btn.css( {'opacity':'1','cursor':'pointer'} ).prop( 'disabled',false );
 
 								wpadcenter_notify_msg.error( wpadcenter_settings_error_message );

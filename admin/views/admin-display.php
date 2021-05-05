@@ -22,7 +22,16 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 	}
 </style>
 <div id="app" v-cloak>
-	<c-tabs ref="active_tab">
+<div class="adc-nav">
+	<div class="adc-nav-inner">
+		<div class="adc-logo"></div>
+		<div class="adc-save">
+			<c-button color="info" class="wpadcenter_save" onClick="return wpadcenter_settings_btn_click(this.name)" name="update_admin_settings_form" type="submit">
+				<span class="wpadcenter_save-text"><?php esc_html_e( 'Save Changes', 'wpadcenter' ); ?></span>
+			</c-button>
+		</div>
+	</div></div>
+	<c-tabs ref="active_tab" id="wpadcenter_tabs">
 		<?php do_action( 'wp_adcenter_before_general_tab' ); ?>
 		<c-tab title="<?php esc_attr_e( 'General', 'wpadcenter' ); ?>" active href="#general">
 		<?php do_action( 'wp_adcenter_before_general_settings' ); ?>
@@ -45,6 +54,27 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 
 					<label for="inline-form-trim_stats" class="wpadcenter-margin-mod"><?php esc_html_e( 'Trim statistics older than (in months)', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="{content:'<?php esc_html_e( 'Automatically clean the statistics database records older than a set point. Setting this to 0 will disable it.', 'wpadcenter' ); ?>',placement:'top'}" color="primary" name="cib-google-keep"></c-icon>
 					<c-input type="number" min="0" name="trim_stats_field" value="<?php echo esc_html( stripslashes( $the_options['trim_stats'] ) ); ?>" />
+				</c-card-body>
+			</c-card>
+			<c-card>
+				<?php do_action( 'wp_adcenter_before_ads_txt_settings' ); ?>
+				<c-card-header><?php esc_html_e( 'Ads.txt Settings', 'wpadcenter' ); ?></c-card-header>
+				<c-card-body>
+				<div class="ad-toggle">
+					<input type="hidden" name="ads_txt_tab" value="0" ref="ads_txt_tab">
+					<input type="hidden" name="ads_txt_security" value="<?php echo esc_attr( wp_create_nonce( 'check_ads_txt_problems' ) ); ?>">
+					<input type="hidden" name="ads_txt_replace_security" value="<?php echo esc_attr( wp_create_nonce( 'check_ads_txt_replace' ) ); ?>">
+					<input type="hidden" name="ads_txt_ajaxurl" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+					<label for="inline-form-enable_ads_txt"><?php esc_html_e( 'Enable ads.txt', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Ads.txt or “Authorized Digital Sellers” is a technical specification developed by the IAB to combat ad fraud. Enable this option to create/update ads.txt file.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+					<input type="hidden" name="enable_ads_txt_field" v-model="enable_ads_txt">
+				</div>
+				<c-switch ref="enable_ads_txt" v-model="enable_ads_txt" id="inline-form-enable_ads_txt" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_ads_txt'] ); ?> v-on:update:checked="onChangeEnableAdsTxt"></c-switch>
+				<div class="enable_ads_txt_enabled" v-show="enable_ads_txt">
+					<label for="ads_txt_content" class="ads-txt-label"><?php esc_html_e( 'Content', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Additional records to add to the file, one record per line.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+					<textarea id="ads_txt_content" name="ads_txt_content_field" class="form-control" rows="6" placeholder="google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0"><?php echo esc_html( stripslashes( $the_options['ads_txt_content'] ) ); ?></textarea>
+					<c-spinner class="ads_txt_spinner" color="dark" grow></c-spinner><span class="ads_txt_problems"></span></td>
+					<input type="button" class="button" name="check_ads_txt_problems" value="<?php esc_attr_e( 'Check for Problems', 'wpadcenter' ); ?>" id="check_ads_txt_problems" />
+				</div>
 				</c-card-body>
 			</c-card>
 			<?php do_action( 'wp_adcenter_after_general_settings' ); ?>
@@ -72,34 +102,9 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 			</c-card>
 			<?php do_action( 'wp_adcenter_after_scripts_settings' ); ?>
 		</c-tab>
-		<?php do_action( 'wp_adcenter_before_ads_txt_tab' ); ?>
-		<c-tab title="<?php esc_attr_e( 'ads.txt', 'wpadcenter' ); ?>" href="#adstxt">
-			<c-card>
-				<?php do_action( 'wp_adcenter_before_ads_txt_settings' ); ?>
-				<c-card-header><?php esc_html_e( 'Ads.txt Settings', 'wpadcenter' ); ?></c-card-header>
-				<c-card-body>
-				<div class="ad-toggle">
-					<input type="hidden" name="ads_txt_tab" value="0" ref="ads_txt_tab">
-					<input type="hidden" name="ads_txt_security" value="<?php echo esc_attr( wp_create_nonce( 'check_ads_txt_problems' ) ); ?>">
-					<input type="hidden" name="ads_txt_replace_security" value="<?php echo esc_attr( wp_create_nonce( 'check_ads_txt_replace' ) ); ?>">
-					<input type="hidden" name="ads_txt_ajaxurl" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
-					<label for="inline-form-enable_ads_txt"><?php esc_html_e( 'Enable ads.txt', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Ads.txt or “Authorized Digital Sellers” is a technical specification developed by the IAB to combat ad fraud. Enable this option to create/update ads.txt file.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-					<input type="hidden" name="enable_ads_txt_field" v-model="enable_ads_txt">
-				</div>
-				<c-switch ref="enable_ads_txt" v-model="enable_ads_txt" id="inline-form-enable_ads_txt" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_ads_txt'] ); ?> v-on:update:checked="onChangeEnableAdsTxt"></c-switch>
-				<div class="enable_ads_txt_enabled" v-show="enable_ads_txt">
-					<label for="ads_txt_content" class="ads-txt-label"><?php esc_html_e( 'Content', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Additional records to add to the file, one record per line.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-					<textarea id="ads_txt_content" name="ads_txt_content_field" class="form-control" rows="6" placeholder="google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0"><?php echo esc_html( stripslashes( $the_options['ads_txt_content'] ) ); ?></textarea>
-					<c-spinner class="ads_txt_spinner" color="dark" grow></c-spinner><span class="ads_txt_problems"></span></td>
-					<input type="button" class="button" name="check_ads_txt_problems" value="<?php esc_attr_e( 'Check for Problems', 'wpadcenter' ); ?>" id="check_ads_txt_problems" />
-				</div>
-				</c-card-body>
-				<?php do_action( 'wp_adcenter_after_ads_txt_settings' ); ?>
-			</c-card>
-		</c-tab>
-		<?php do_action( 'wp_adcenter_before_adsense_tab' ); ?>
-		<c-tab title="<?php esc_attr_e( 'Import From AdSense', 'wpadcenter' ); ?>" href="#adsense">
-		<?php do_action( 'wp_adcenter_before_adsense_settings' ); ?>
+		<?php do_action( 'wp_adcenter_before_integrations_tab' ); ?>
+		<c-tab title="<?php esc_attr_e( 'Integrations', 'wpadcenter' ); ?>" href="#adsense">
+		<?php do_action( 'wp_adcenter_before_integrations_settings' ); ?>
 			<c-card>
 				<c-card-header><?php esc_html_e( 'Connect to AdSense', 'wpadcenter' ); ?></c-card-header>
 				<c-card-body>
@@ -115,8 +120,8 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 						<c-input type="text" id="mapi-code" value="" placeholder="<?php esc_html_e( 'Copy and paste the token after you have clicked connect to AdSense', 'wpadcenter' ); ?>"></c-input>
 						<p class="wpadcenter-p-margin-mod"></p>
 						<div class="token-submit">
-							<button class="button init-gauthentication"><?php esc_html_e( 'Connect to AdSense', 'wpadcenter' ); ?></button>
-								<button id="mapi-confirm-code" class="button">
+							<button type="button" class="button init-gauthentication"><?php esc_html_e( 'Connect to AdSense', 'wpadcenter' ); ?></button>
+								<button type="button" id="mapi-confirm-code" class="button">
 									<?php esc_html_e( 'Submit Token', 'wpadcenter' ); ?>
 								</button>
 							<span class="spinner"></span>
@@ -125,13 +130,10 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 					<?php endif; ?>
 				</c-card-body>
 			</c-card>
-			<?php do_action( 'wp_adcenter_after_adsense_settings' ); ?>
+			<?php do_action( 'wp_adcenter_after_integrations_settings' ); ?>
 		</c-tab>
-		<?php do_action( 'wp_adcenter_after_adsense_tab' ); ?>
+		<?php do_action( 'wp_adcenter_after_integrations_tab' ); ?>
 	</c-tabs>
-	<?php
-	require 'admin-display-save-button.php';
-	?>
 </div>
 
 <script type="text/javascript">

@@ -1,6 +1,25 @@
 <?php
 require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
+
+/**
+ * Require Wpadcenter_Public class.
+ */
+require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wpadcenter-public.php';
+
 class SettingsTest extends WP_Ajax_UnitTestCase {
+
+	/**
+	 * The Wpadcenter_Public clas instance .
+	 *
+	 * @access public
+	 * @var    string    $wpadcenter_public  class instance.
+	 */
+	public $wpadcenter_public;
+
+	public function setup() {
+		parent::setup();
+		$this->wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.0.1' );
+	}
 
 	/**
 	 * Test for exlude roles on save
@@ -94,11 +113,22 @@ class SettingsTest extends WP_Ajax_UnitTestCase {
 		} catch ( WPAjaxDieContinueException $e ) {
 			unset( $e );
 		}
-		// get response.
-		$options = get_option( WPADCENTER_SETTINGS_FIELD );
-		$this->assertEquals( $options['header_scripts'], $header_scripts, 'header scripts error' );
-		$this->assertEquals( $options['body_scripts'], $body_scripts, 'body scripts error' );
-		$this->assertEquals( $options['footer_scripts'], $footer_scripts, 'footer scripts error' );
+
+		// Test for public class wpadcenter_output_header_global function
+		$expected = "\r\n" . $header_scripts . "\r\n";
+		$this->wpadcenter_public->wpadcenter_output_header_global();
+		$this->assertTrue( true );
+
+		// Test for public class wpadcenter_output_body_global function
+		$expected .= "\r\n" . $body_scripts . "\r\n";
+		$this->wpadcenter_public->wpadcenter_output_body_global();
+		$this->assertTrue( true );
+
+		// Test for public class wpadcenter_output_footer_global function
+		$expected .= "\r\n" . $footer_scripts . "\r\n";
+		$this->expectOutputString( $expected );
+		$this->wpadcenter_public->wpadcenter_output_footer_global();
+		$this->assertTrue( true );
 	}
 
 	/**
