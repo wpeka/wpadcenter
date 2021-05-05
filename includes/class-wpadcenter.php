@@ -352,6 +352,7 @@ class Wpadcenter {
 			'hide_ads_logged'           => false,
 			'roles_selected'            => '',
 			'roles_selected_visibility' => '',
+			'content_ads'               => false,
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
