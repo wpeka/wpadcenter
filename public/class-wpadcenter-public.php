@@ -391,6 +391,9 @@ class Wpadcenter_Public {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
 		}
 		$single_ad_html .= '>';
+		if ( $amp_page ) {
+			$single_ad_html .= '<amp-script script="set-clicks">';
+		}
 		$single_ad_html .= '<div class="wpadcenter-ad-inner" >';
 
 		$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
@@ -400,6 +403,7 @@ class Wpadcenter_Public {
 		$single_ad_html .= '>';
 
 		$single_ad_html = apply_filters( 'wp_adcenter_single_ad_display_case', $ad_id, $ad_type, $single_ad_html, $amp_page );
+
 
 		switch ( $ad_type ) {
 			case 'banner_image':
@@ -427,6 +431,7 @@ class Wpadcenter_Public {
 
 		$single_ad_html .= '</a>';
 
+
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
@@ -445,11 +450,24 @@ class Wpadcenter_Public {
 	 */
 	public static function wpadcenter_set_clicks() {
 		global $wpdb;
-		if ( isset( $_POST['action'] ) && self::wpadcenter_check_exclude_roles() ) {
-			$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
+
+		if ( ( isset( $_POST['action'] ) || isset( $_GET['action'] ) ) && self::wpadcenter_check_exclude_roles() ) {
+
+			if ( isset( $_POST['security'] ) ) {
+				$security = isset( $_POST['security'] ) ? sanitize_text_field( wp_unslash( $_POST['security'] ) ) : '';
+			}
+			if ( isset( $_GET['security'] ) ) {
+				$security = isset( $_GET['security'] ) ? sanitize_text_field( wp_unslash( $_GET['security'] ) ) : '';
+			}
+
 			if ( wp_verify_nonce( $security, 'wpadcenter_set_clicks' ) ) {
-				if ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) {
-					$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
+				if ( ( isset( $_POST['ad_id'] ) && ! empty( $_POST['ad_id'] ) ) || ( isset( $_GET['ad_id'] ) && ! empty( $_GET['ad_id'] ) ) ) {
+					if ( isset( $_GET['ad_id'] ) ) {
+						$ad_id = sanitize_text_field( wp_unslash( $_GET['ad_id'] ) );
+					}
+					if ( isset( $_POST['ad_id'] ) ) {
+						$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
+					}
 					$meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
 					$today = gmdate( 'Y-m-d' );
 					$meta['total_clicks']++;
