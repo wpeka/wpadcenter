@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import CoreuiVue from '@coreui/vue';
 import CoreuiVueCharts from '@coreui/vue-chartjs';
-import { cilPencil, cilSettings, cilInfo, cibGoogleKeep, cilMedicalCross } from '@coreui/icons';
+import { cilPencil, cilSettings, cilInfo, cibGoogleKeep } from '@coreui/icons';
 import vSelect from 'vue-select';
 import componentContentAds from './contentads';
 Vue.component('v-select', vSelect);
@@ -55,17 +55,15 @@ var vm = new Vue({
             this.content_ads = this.$refs?.content_ads ? this.$refs.content_ads.checked : false;
             this.adgroups_security = this.$refs?.adgroups_security ? this.$refs.adgroups_security.value : '';
             this.count = this.$refs?.count ? this.$refs.count.value : 0;
-            
-            if( window.location.href.match(/#adsense/g) ) {
-                this.$refs.active_tab.activeTabIndex=3;
-            }else if( window.location.href.match(/#adstxt/g) ) {
-                this.$refs.active_tab.activeTabIndex=2;
-            }
-            else if(window.location.href.match(/#scripts/g) ) {
-                this.$refs.active_tab.activeTabIndex=1;
-            }
-            else {
-                this.$refs.active_tab.activeTabIndex=0;
+            let navLinks = j('.nav-link').map(function() {
+                return this.getAttribute('href');
+            });
+            for(let i = 0 ; i < navLinks.length ;i++) {
+                let re = new RegExp(navLinks[i]);
+                if( window.location.href.match(re) ) {
+                    this.$refs.active_tab.activeTabIndex = i;
+                    break;
+                }
             }
             this.ajax_url = this.$refs.roles_ajaxurl.value;
             this.roles_security = this.$refs.roles_security.value;
@@ -125,7 +123,7 @@ var vm = new Vue({
     mounted() {
         this.setValues();
     },
-    icons: { cilPencil, cilSettings, cilInfo, cibGoogleKeep, cilArrowCircleBottom },
+    icons: { cilPencil, cilSettings, cilInfo, cibGoogleKeep },
     components: {
         'component-content-ads': componentContentAds,
     }
