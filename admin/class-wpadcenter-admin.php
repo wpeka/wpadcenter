@@ -2572,7 +2572,6 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_adgroup_gutenberg_preview() {
-
 		if ( ! isset( $_POST['adgroup_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['adgroup_nonce'] ), 'adgroup_nonce' ) ) {
 			wp_die();
 		}
@@ -2713,8 +2712,8 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_remove_post_row_actions( $actions ) {
 		global $current_screen;
-		if ( 'wpadcenter-ads' === $current_screen->post_type ) {
 
+		if ( 'wpadcenter-ads' === $current_screen->post_type ) {
 			unset( $actions['view'] );
 			unset( $actions['inline hide-if-no-js'] );
 		}
@@ -2727,8 +2726,8 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_add_custom_filters() {
-
 		global $current_screen;
+
 		$type = $current_screen->post_type;
 
 		if ( 'wpadcenter-ads' === $type ) {
