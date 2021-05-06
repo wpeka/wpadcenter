@@ -141,16 +141,16 @@ Creating ads with the WP AdCenter WordPress ads manager plugin is interactive an
 - <strong>Schedule ads</strong> using the start and end date
 - <strong>Insert ads</strong> into posts and pages automatically without coding
 - Use <strong>Geo-targeting</strong> feature to target ad viewers from any location in the world (Pro)
-- <strong>WooCommerce Payment Integration<strong> to collect money from your advertisers(Pro)
-- <strong>Adblock Detection<strong> to increase CTR and ad revenue(Pro)
-- <strong>Ordered Ads<strong> to control your ad display sequence(Pro)
+- <strong>WooCommerce Payment Integration</strong> to collect money from your advertisers(Pro)
+- <strong>Adblock Detection</strong> to increase CTR and ad revenue(Pro)
+- <strong>Ordered Ads</strong> to control your ad display sequence(Pro)
 
 == Which ad types are supported? ==
 
 Here a list of supported ad types -
 
 - <strong>Network ads - </strong>Google AdSense, Media.net, Amazon Advertising, BuySellAds, Google Ad Manager, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more.
-- <strong>Customer Javascript - </strong>Ads using custom javascript code
+- <strong>Custom Javascript - </strong>Ads using custom javascript code
 - <strong>Amazon ads - </strong>Contextual Amazon Native Shopping Ads
 
 == Displaying Ads on WordPress ==
