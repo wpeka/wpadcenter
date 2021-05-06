@@ -347,3 +347,15 @@ a:focus {
 	align-items: center;
 	justify-content: space-between;
 }
+
+.enable_notifications_enabled {
+	margin-top: 10px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 20px;
+}
+
+.enable_notifications_enabled label {
+	display: initial;
+	margin-right: 5px;
+}
