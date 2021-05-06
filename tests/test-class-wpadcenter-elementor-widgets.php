@@ -40,10 +40,15 @@ class Wpadcenter_Elementor_Widgets_Test extends WP_UnitTestCase {
 	 * Test for on_plugins_loaded function.
 	 */
 	public function test_on_plugins_loaded() {
-		self::$wpadcenter_elementor_widgets->on_plugins_loaded();
-		$all_widget_types = \Elementor\Plugin::instance()->widgets_manager->get_widget_types();
-		$this->assertArrayHasKey( 'wpadcenter-single-ad', $all_widget_types, 'Failed to register wpadcenter-single-ad widget' );
-		$this->assertArrayHasKey( 'wpadcenter-adgroup', $all_widget_types, 'Failed to register wpadcenter-adgroup widget' );
-		$this->assertArrayHasKey( 'wpadcenter-random-ad', $all_widget_types, 'Failed to register wpadcenter-random-ad widget' );
+		if ( self::$wpadcenter_elementor_widgets->is_compatible() ) {
+			self::$wpadcenter_elementor_widgets->on_plugins_loaded();
+			$all_widget_types = \Elementor\Plugin::instance()->widgets_manager->get_widget_types();
+			$this->assertArrayHasKey( 'wpadcenter-single-ad', $all_widget_types, 'Failed to register wpadcenter-single-ad widget' );
+			$this->assertArrayHasKey( 'wpadcenter-adgroup', $all_widget_types, 'Failed to register wpadcenter-adgroup widget' );
+			$this->assertArrayHasKey( 'wpadcenter-random-ad', $all_widget_types, 'Failed to register wpadcenter-random-ad widget' );
+		} else {
+			$this->assertTrue( true );
+		}
+
 	}
 }

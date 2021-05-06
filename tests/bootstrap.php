@@ -30,7 +30,7 @@ function _manually_load_plugin() {
 	do_action( 'activate_' . trim( $string, '/' ) ); //phpcs:ignore
 
 	$elementor = dirname( dirname( dirname( __FILE__ ) ) ) . '/elementor/elementor.php';
-	require $elementor;
+	include $elementor;
 	// activate the plugin to get elementor widget on activation for testing.
 	do_action( 'activate_' . trim( $elementor, '/' ) ); //phpcs:ignore
 }
