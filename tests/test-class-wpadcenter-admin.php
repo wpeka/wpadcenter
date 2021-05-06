@@ -401,6 +401,107 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$this->assertTrue( is_array( $value ) );
 	}
 
+	/**
+	 * Tests for wpadcenter_register_gutenberg_blocks function
+	 */
+	public function test_wpadcenter_register_gutenberg_blocks() {
+
+		$registered_blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
+		$this->assertArrayHasKey( 'wpadcenter/single-ad', $registered_blocks, 'Failed to register single ad gutenberg block' );
+		$this->assertArrayHasKey( 'wpadcenter/adgroup', $registered_blocks, 'Failed to register adgroup gutenberg block' );
+		$this->assertArrayHasKey( 'wpadcenter/random-ad', $registered_blocks, 'Failed to register random ad gutenberg block' );
+
+	}
+
+	/**
+	 * Tests for gutenberg_display_single_ad_cb function
+	 */
+	public function test_gutenberg_display_single_ad_cb() {
+		$attributes     = array(
+			'ad_id'           => self::$ad_ids[0],
+			'ad_alignment'    => 'aligncenter',
+			'max_width_check' => false,
+			'max_width_px'    => '100',
+		);
+		$single_ad_html = self::$wpadcenter_admin->gutenberg_display_single_ad_cb( $attributes );
+		$this->assertTrue( is_string( $single_ad_html ) );
+
+	}
+
+	/**
+	 * Tests for gutenberg_display_adgroup_cb function
+	 */
+	public function test_gutenberg_display_adgroup_cb() {
+		$attributes   = array(
+			'adgroup_ids'       => self::$ad_group ,
+			'adgroup_alignment' => 'aligncenter',
+			'num_ads'           => '1',
+			'num_columns'       => '1',
+			'max_width_check'   => false,
+			'max_width_px'      => '100',
+		);
+		$adgroup_html = self::$wpadcenter_admin->gutenberg_display_adgroup_cb( $attributes );
+		$this->assertTrue( is_string( $adgroup_html ) );
+
+	}
+
+	/**
+	 * Tests for gutenberg_display_random_ad_cb function
+	 */
+	public function test_gutenberg_display_random_ad_cb() {
+		$attributes     = array(
+			'adgroup_ids'       => self::$ad_group ,
+			'adgroup_alignment' => 'aligncenter',
+			'max_width_check'   => false,
+			'max_width_px'      => '100',
+		);
+		$random_ad_html = self::$wpadcenter_admin->gutenberg_display_random_ad_cb( $attributes );
+		$this->assertTrue( is_string( $random_ad_html ) );
+
+	}
+
+	/**
+	 * Tests for wpadcenter_register_rest_fields function
+	 */
+	public function test_wpadcenter_register_rest_fields() {
+		// test for wpadcenter-ads rest fields
+		$request = new WP_REST_Request( 'GET', '/wp/v2/wpadcenter-ads' );
+		$request->set_query_params( array( 'per_page' => 1 ) );
+		$response                   = rest_do_request( $request );
+		$server                     = rest_get_server();
+		$wpadcenter_ads_rest_fields = $server->response_to_data( $response, false );
+		$this->assertArrayHasKey( 'ad_html', $wpadcenter_ads_rest_fields[0], 'Failed to register ad html rest field' );
+
+		// test for wpadcenter-adgroups rest fields.
+		$request = new WP_REST_Request( 'GET', '/wp/v2/wpadcenter-adgroups' );
+		$request->set_query_params( array( 'per_page' => 1 ) );
+		$response                        = rest_do_request( $request );
+		$server                          = rest_get_server();
+		$wpadcenter_adgroups_rest_fields = $server->response_to_data( $response, false );
+		$this->assertArrayHasKey( 'ad_ids', $wpadcenter_adgroups_rest_fields[0], 'Failed to register ad ids rest field' );
+
+	}
+
+	/**
+	 * Tests for wpadcenter_ad_html_rest_field_cb function
+	 */
+	public function test_wpadcenter_ad_html_rest_field_cb() {
+		$object['id'] = self::$ad_ids[0];
+		$ad_html      = self::$wpadcenter_admin->wpadcenter_ad_html_rest_field_cb( $object );
+		$this->assertTrue( is_string( $ad_html ) );
+
+	}
+
+	/**
+	 * Tests for wpadcenter_ad_ids_rest_field_cb function
+	 */
+	public function test_wpadcenter_ad_ids_rest_field_cb() {
+		$object['id'] = self::$ad_group;
+		$ad_html      = self::$wpadcenter_admin->wpadcenter_ad_ids_rest_field_cb( $object );
+		$this->assertTrue( is_array( $ad_html ) );
+
+	}
+
 
 	/**
 	 * Test for wpadcenter_reports function

@@ -3,6 +3,7 @@ import CoreuiVue from '@coreui/vue';
 import CoreuiVueCharts from '@coreui/vue-chartjs';
 import { cilPencil, cilSettings, cilInfo, cibGoogleKeep } from '@coreui/icons';
 import vSelect from 'vue-select';
+import componentContentAds from './contentads';
 Vue.component('v-select', vSelect);
 
 import '@coreui/coreui/dist/css/coreui.min.css';
@@ -33,6 +34,10 @@ var vm = new Vue({
             enable_advertisers: null,
             enable_notifications: null,
             roles_selected_visibility: [],
+            content_ads: null,
+            adGroups: [],
+            adgroups_security: null,
+            count: 0,
         }
     },
     methods: {
@@ -46,18 +51,19 @@ var vm = new Vue({
                 this.$refs.geo_targeting_tab.value = this.geo_targeting ? "1" : "0";
             }
             this.enable_advertisers = this.$refs.hasOwnProperty('enable_advertisers') ? this.$refs.enable_advertisers.checked : false; 
-            this.enable_notifications = this.$refs.hasOwnProperty('enable_notifications') ? this.$refs.enable_notifications.checked : false; 
-            
-            if( window.location.href.match(/#adsense/g) ) {
-                this.$refs.active_tab.activeTabIndex=3;
-            }else if( window.location.href.match(/#adstxt/g) ) {
-                this.$refs.active_tab.activeTabIndex=2;
-            }
-            else if(window.location.href.match(/#scripts/g) ) {
-                this.$refs.active_tab.activeTabIndex=1;
-            }
-            else {
-                this.$refs.active_tab.activeTabIndex=0;
+            this.enable_notifications = this.$refs.hasOwnProperty('enable_notifications') ? this.$refs.enable_notifications.checked : false;
+            this.content_ads = this.$refs?.content_ads ? this.$refs.content_ads.checked : false;
+            this.adgroups_security = this.$refs?.adgroups_security ? this.$refs.adgroups_security.value : '';
+            this.count = this.$refs?.count ? this.$refs.count.value : 0;
+            let navLinks = j('.nav-link').map(function() {
+                return this.getAttribute('href');
+            });
+            for(let i = 0 ; i < navLinks.length ;i++) {
+                let re = new RegExp(navLinks[i]);
+                if( window.location.href.match(re) ) {
+                    this.$refs.active_tab.activeTabIndex = i;
+                    break;
+                }
             }
             this.ajax_url = this.$refs.roles_ajaxurl.value;
             this.roles_security = this.$refs.roles_security.value;
@@ -92,10 +98,33 @@ var vm = new Vue({
             this.geo_targeting = !this.geo_targeting;
             this.$refs.geo_targeting_tab.value = this.geo_targeting ? "1" : "0";
             j('#check_maxmind_license_key').click();
+        },
+        onAddRuleContentAds(event) {
+            let contentAds = Vue.extend(componentContentAds);
+            let component = new contentAds({
+                propsData: {
+                    position: 'before-content',
+                    alignment: 'none',
+                    adgroup_selected: [],
+                    post_selected: '',
+                    position_selected: '',
+                    element_selected: '',
+                    count: this.count,
+                    adgroups_security: this.adgroups_security,
+                    number: 1,
+                    position_reverse: false,
+                    show: true,
+                }
+            }).$mount();
+            this.count++;
+            this.$refs.content_ads_enabled.appendChild(component.$el);
         }
     },
     mounted() {
         this.setValues();
     },
-    icons: { cilPencil, cilSettings, cilInfo, cibGoogleKeep }
+    icons: { cilPencil, cilSettings, cilInfo, cibGoogleKeep },
+    components: {
+        'component-content-ads': componentContentAds,
+    }
 });

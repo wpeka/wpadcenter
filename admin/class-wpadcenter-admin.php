@@ -498,6 +498,7 @@ class Wpadcenter_Admin {
 			'import_from_adsense' => array(
 				'active_meta_box' => array(
 					'ad-google-adsense',
+					'amp-preference',
 				),
 			),
 
@@ -715,6 +716,7 @@ class Wpadcenter_Admin {
 		if ( isset( $_POST['update_admin_settings_form'] ) || ( isset( $_POST['wpadcenter_settings_ajax_update'] ) ) ) {
 			// Check nonce.
 			check_admin_referer( 'wpadcenter-update-' . WPADCENTER_SETTINGS_FIELD );
+			do_action( 'wp_adcenter_save_settings', $_POST );
 			if ( 'update_admin_settings_form' === $_POST['wpadcenter_settings_ajax_update'] ) {
 				foreach ( $the_options as $key => $value ) {
 					if ( 'ads_txt_content' === $key ) {
@@ -1662,6 +1664,9 @@ class Wpadcenter_Admin {
 				case 'number':
 					$sanitized_data = intval( $raw_data[ $meta_name ] );
 					break;
+				case 'array':
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) && is_array( $raw_data[ $meta_name ] ) && ! empty( $raw_data[ $meta_name ] ) ? $raw_data[ $meta_name ] : array();
+					break;
 			}
 
 			if ( true === (bool) $sanitized_data || empty( $sanitized_data ) ) {
@@ -1765,7 +1770,7 @@ class Wpadcenter_Admin {
 		</span>
 		<a href="#" id="edit-ad-schedule">Edit</a>
 
-		
+
 		</div>';
 
 			echo '<div id="ad-schedule-show" class="ad-schedule-box" style="display:none">';
@@ -2567,7 +2572,6 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_adgroup_gutenberg_preview() {
-
 		if ( ! isset( $_POST['adgroup_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['adgroup_nonce'] ), 'adgroup_nonce' ) ) {
 			wp_die();
 		}
@@ -2708,8 +2712,8 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_remove_post_row_actions( $actions ) {
 		global $current_screen;
-		if ( 'wpadcenter-ads' === $current_screen->post_type ) {
 
+		if ( 'wpadcenter-ads' === $current_screen->post_type ) {
 			unset( $actions['view'] );
 			unset( $actions['inline hide-if-no-js'] );
 		}
@@ -2722,8 +2726,8 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_add_custom_filters() {
-
 		global $current_screen;
+
 		$type = $current_screen->post_type;
 
 		if ( 'wpadcenter-ads' === $type ) {
