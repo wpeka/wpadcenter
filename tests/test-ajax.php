@@ -123,7 +123,6 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$this->assertEquals( $response[0]->ad_clicks, $ad_clicks );
 	}
 
-
 	/**
 	 * Test wp_ajax_check_ads_txt_problems when content is not entered.
 	 */
