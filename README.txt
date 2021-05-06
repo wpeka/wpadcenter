@@ -150,7 +150,7 @@ Creating ads with the WP AdCenter WordPress ads manager plugin is interactive an
 Here a list of supported ad types -
 
 - <strong>Network ads - </strong>Google AdSense, Media.net, Amazon Advertising, BuySellAds, Google Ad Manager, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more.
-- <strong>Customer Javascript - </strong>Ads using custom javascript code
+- <strong>Custom Javascript - </strong>Ads using custom javascript code
 - <strong>Amazon ads - </strong>Contextual Amazon Native Shopping Ads
 
 == Displaying Ads on WordPress ==
