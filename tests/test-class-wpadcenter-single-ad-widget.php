@@ -35,12 +35,32 @@ class Wpadcenter_Single_Ad_Widget_Test extends WP_UnitTestCase {
 	public static $ad_ids;
 
 	/**
+	 * Dummy post .
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string $first_dummy_post dummy post.
+	 */
+	public static $first_dummy_post;
+
+	/**
+	 * Dummy post .
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string $second_dummy_post dummy post.
+	 */
+	public static $second_dummy_post;
+
+	/**
 	 * Set up function.
 	 *
 	 * @param class WP_UnitTest_Factory $factory class instance.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids                      = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
+		self::$first_dummy_post            = get_post( self::$ad_ids[0] );
+		self::$second_dummy_post           = get_post( self::$ad_ids[1] );
 		self::$wpadcenter_single_ad_widget = new Wpadcenter_Single_Ad_Widget();
 	}
 
@@ -88,5 +108,25 @@ class Wpadcenter_Single_Ad_Widget_Test extends WP_UnitTestCase {
 		);
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( $output !== strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for print_combobox_options function
+	 */
+	public function test_print_combobox_options() {
+		$args = array(
+			'post_type' => 'wpadcenter-ads',
+		);
+
+		$ads        = get_posts( $args );
+		$single_ads = array();
+		foreach ( $ads as $ad ) {
+			$single_ads[ $ad->ID ] = $ad->post_title;
+		}
+		ob_start();
+		self::$wpadcenter_single_ad_widget->print_combobox_options( $single_ads, self::$first_dummy_post->ID );
+		$output   = ob_get_clean();
+		$expected = '<option value="' . self::$second_dummy_post->ID . '">' . self::$second_dummy_post->post_title . '</option><option value="' . self::$first_dummy_post->ID . '" selected="selected">' . self::$first_dummy_post->post_title . '</option>';
+		$this->assertEquals( $expected, $output );
 	}
 }
