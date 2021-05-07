@@ -357,3 +357,16 @@ a:focus {
 	display: initial;
 	margin-right: 5px;
 }
+
+.contentAdsRules .rule_label label {
+	margin: 0;
+	margin-left: 10px;
+}
+
+.vs__close-indicator-wp {
+	transform: rotate(180deg) scale(1);
+}
+
+.rule:hover:not(.delete_rule) svg {
+	fill: black;
+}

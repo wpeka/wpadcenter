@@ -391,9 +391,6 @@ class Wpadcenter_Public {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
 		}
 		$single_ad_html .= '>';
-		if ( $amp_page ) {
-			$single_ad_html .= '<amp-script script="set-clicks">';
-		}
 		$single_ad_html .= '<div class="wpadcenter-ad-inner" >';
 
 		$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
@@ -401,9 +398,6 @@ class Wpadcenter_Public {
 			$single_ad_html .= 'rel="nofollow"';
 		}
 		$single_ad_html .= '>';
-
-		$single_ad_html = apply_filters( 'wp_adcenter_single_ad_display_case', $ad_id, $ad_type, $single_ad_html, $amp_page );
-
 
 		switch ( $ad_type ) {
 			case 'banner_image':
@@ -427,15 +421,42 @@ class Wpadcenter_Public {
 
 				$single_ad_html .= '<div style="min-height:200px;min-width: 200px" class="wpadcenter-ad-code">' . $adsense_code . '</div>';
 				break;
+			case 'amp_ad':
+				$amp_ad_attributes  = get_post_meta( $ad_id, 'wpadcenter_amp_attributes', true );
+				$amp_ad_values      = get_post_meta( $ad_id, 'wpadcenter_amp_values', true );
+				$amp_ad_placeholder = get_post_meta( $ad_id, 'wpadcenter_amp_placeholder', true );
+				$amp_ad_fallback    = get_post_meta( $ad_id, 'wpadcenter_amp_fallback', true );
+
+				$amp_ad_code = '<span class="wpadcenter-ad-code">';
+
+				if ( ! empty( $amp_ad_attributes ) ) {
+
+					$amp_ad_code .= '<amp-ad ';
+					$index        = 0;
+					foreach ( $amp_ad_attributes as $attribute ) {
+						$amp_ad_code .= $attribute . '="' . $amp_ad_values[ $index ] . '" ';
+						$index++;
+					}
+					$amp_ad_code .= '>';
+					if ( $amp_page ) {
+						$amp_ad_code .= '  <div placeholder>' . $amp_ad_placeholder . '</div>';
+						$amp_ad_code .= '  <div fallback>' . $amp_ad_fallback . '</div>';
+					}
+
+					$amp_ad_code .= '</amp-ad>';
+				}
+				$amp_ad_code .= '</span>';
+
+				$single_ad_html .= $amp_ad_code;
+
+				break;
 		}
 
 		$single_ad_html .= '</a>';
 
-
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
-
 
 		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			Wpadcenter::wpadcenter_set_impressions( $ad_id );
