@@ -56,9 +56,10 @@ const getOptions=(value,callback)=>{
   } )
   .then( ( ads ) => {
     ads = ads.map( ( ad ) => {
+      let adLabel = ad.title.rendered + ' ( ' + ad.ad_type + ' - ' + ad.ad_size + ' )';
       return {
   							value: ad.id,
-  							label: ad.title.rendered,
+  							label: adLabel,
   						};
     } );
     callback(ads);
