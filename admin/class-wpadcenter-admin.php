@@ -1677,9 +1677,9 @@ class Wpadcenter_Admin {
 		</div>
 		';
 		echo '<div class="wpadcenterAmpCustomizeSettings" >
-		<br><label for="wpadcenterAdsenseAmpCode">AMP Code Preview:</label>
+		<br><label for="wpadcenterAdsenseAmpCode"><strong>AMP Code Preview: </strong></label>
 
-		<textarea id="wpadcenterAdsenseAmpCode" name="wpadcenter-adsense-amp-code" style="width:100%;height:200px">' . $amp_adsense_code . '</textarea></div> '; //phpcs:ignore
+		<textarea id="wpadcenterAdsenseAmpCode" name="wpadcenter-adsense-amp-code" style="width:100%;height:100px">' . $amp_adsense_code . '</textarea></div> '; //phpcs:ignore
 	}
 
 	/**
