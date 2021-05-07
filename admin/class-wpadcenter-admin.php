@@ -1770,22 +1770,22 @@ class Wpadcenter_Admin {
 			switch ( $meta_data[1] ) {
 
 				case 'string':
-					$sanitized_data = sanitize_text_field( $raw_data[ $meta_name ] );
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) ? sanitize_text_field( $raw_data[ $meta_name ] ) : false;
 					break;
 				case 'bool':
 					$sanitized_data = isset( $raw_data[ $meta_name ] ) ? (bool) $raw_data[ $meta_name ] : 0;
 					break;
 				case 'raw':
-					$sanitized_data = $raw_data[ $meta_name ];
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) ? $raw_data[ $meta_name ] : false;
 					break;
 				case 'url':
-					$sanitized_data = esc_url_raw( $raw_data[ $meta_name ] );
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) ? esc_url_raw( $raw_data[ $meta_name ] ) : false;
 					break;
 				case 'date':
-					$sanitized_data = intval( $raw_data[ $meta_name ] );
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) ? intval( $raw_data[ $meta_name ] ) : false;
 					break;
 				case 'number':
-					$sanitized_data = intval( $raw_data[ $meta_name ] );
+					$sanitized_data = isset( $raw_data[ $meta_name ] ) ? intval( $raw_data[ $meta_name ] ) : false;
 					break;
 				case 'array':
 					$sanitized_data = isset( $raw_data[ $meta_name ] ) && is_array( $raw_data[ $meta_name ] ) && ! empty( $raw_data[ $meta_name ] ) ? $raw_data[ $meta_name ] : array();
