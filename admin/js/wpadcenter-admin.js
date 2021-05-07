@@ -150,10 +150,9 @@
    
 		$(add_button).click(function(e) {
 			e.preventDefault();
+			var ampInputFields = '<div><label>Attribute : </label><input  name="amp-attributes[]" />'+ ' = ' + '<label>Value : </label><input  name="amp-values[]" />' + ' <button class="wpadcenter-amp-delete-attr-button">Remove</button><br><br></div>';
    
-				$(wrapper).append(`<div><label>Attribute : </label><input  name="amp-attributes[]" /> =
-				<label>Value : </label><input  name="amp-values[]" />
-				<button class="wpadcenter-amp-delete-attr-button">Remove</button><br><br></div>`);
+				$(wrapper).append( ampInputFields );
    
 		});
    
@@ -196,58 +195,52 @@
    
    
 		function convertAdsenseToAmp(){
-			let rawCode=$('#wpadcenter-google-adsense-code').val();
+			var rawCode=$('#wpadcenter-google-adsense-code').val();
 			if(rawCode){
 				   rawCode = $('<div />').html(rawCode);
-						let rawCode_html = rawCode.find( 'ins' );
-						let clientId = rawCode_html.attr( 'data-ad-client' );
+						var rawCode_html = rawCode.find( 'ins' );
+						var clientId = rawCode_html.attr( 'data-ad-client' );
 						if(!clientId){
 						   $('#wpadcenterAdsenseAmpCode').text("Please provide Client ID");
 						   return;
 					   }
-						let slotId = rawCode_html.attr( 'data-ad-slot' );
+						var slotId = rawCode_html.attr( 'data-ad-slot' );
 						if(!slotId){
 							$('#wpadcenterAdsenseAmpCode').text("Please provide slot ID");
 							return;
 						}
    
-			let ampAdCode=`
-						<amp-ad
-						type="adsense"
-						data-ad-client="${clientId}"
-						data-ad-slot="${slotId}"`;
+			var ampAdCode='<amp-ad type="adsense" data-ad-client=" ' + clientId + ' " data-ad-slot=" ' + slotId + ' " ';
+						
+						
+						
+						
    
 						   if ($('#wpadcenterAmpCustomizeAuto').prop("checked")) {
    
-						ampAdCode += `
-						layout="fixed"
-						   width="300"
-						   height="250" `;
+						ampAdCode += ' layout="fixed" width="300" height="250" ';
+						
 						   }
    
 						   if ($('#wpadcenterAmpCustomizeDynamic').prop("checked")) {
-							   let dynamicWidth= $('#wpadcenterAmpCustomizeDynamicWidth').val();
-							   let dynamicHeight=$('#wpadcenterAmpCustomizeDynamicHeight').val();
+							   var dynamicWidth= $('#wpadcenterAmpCustomizeDynamicWidth').val();
+							   var dynamicHeight=$('#wpadcenterAmpCustomizeDynamicHeight').val();
    
-							   ampAdCode += `
-							   layout="responsive"
-							   width="${dynamicWidth}vw"
-							   height="${dynamicHeight}vw" `;
+							   ampAdCode += ' layout="responsive" width=" ' + dynamicWidth + 'vw" height=" ' + dynamicHeight + 'vw"  ';
+							
 						   }
    
 						   if ($('#wpadcenterAmpCustomizeStatic').prop("checked")) {
-							   let staticHeight =$('#wpadcenterAmpCustomizeStaticHeight').val();
-							   ampAdCode += `
-							   layout="fixed-height"
-							   width="auto"
-							   height="${staticHeight}" `;
+							   var staticHeight =$('#wpadcenterAmpCustomizeStaticHeight').val();
+							   ampAdCode += ' layout="fixed-height" width="auto" height=" ' + staticHeight + ' "';
+
 						   }
    
-						   ampAdCode += `>`;
+						   ampAdCode += '>';
    
    
    
-						ampAdCode += `</amp-ad>`;
+						ampAdCode += '</amp-ad>';
 						$('#wpadcenterAdsenseAmpCode').text(ampAdCode);
    
 				}
@@ -256,7 +249,7 @@
 
 		   function displayAmpWarning() {
 			$('#wpadcenter_amp_warning').remove();
-			const selected_ad = $( "#ad-type :selected" ).val();
+			var selected_ad = $( "#ad-type :selected" ).val();
 			if ( selected_ad === 'amp_ad'){
 			var j = jQuery.noConflict();
 			j.ajax({
@@ -265,7 +258,7 @@
 				  data: {
 				 action:'wpadcenter_pro_display_amp_warning'    
 			  }
-			  }).done(success => {
+			  }).done( function(success){
 				jQuery('.wp-header-end').after(success);  });
 			}
 		}
