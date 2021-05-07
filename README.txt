@@ -1,7 +1,7 @@
 === WP AdCenter - AdSense Ad Inserter & Banner Ad Manager ===
 Contributors: WPEka Club
 Donate link: https://club.wpeka.com/
-Tags: ads, adsense, ad rotation, ads manager,wordpress ads, wordpress ads plugin, wordpress advertising plugin, wordpress ad rotator, banners, adverts, ads shortcode, amazon, wordpress ads manager plugin
+Tags: ads, adsense, ad rotation, ads manager,wordpress ads, wordpress ads plugin, wordpress advertising plugin, wordpress ad rotator, banners, adverts, ads shortcode, amazon, wordpress ads manager plugin, dfp
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.7
@@ -9,54 +9,51 @@ Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Insert and manage Google AdSense, Amazon Ads, Media.net, banner ads, location specific ads, rotating ads, widget ads, and a lot more.
+Insert and manage Google AdSense, Amazon Ads, Media.net, banner ads, location specific ads, random ads & rotating ads.
 
 == Description ==
 
-WP AdCenter is a simple to use AdSense ad inserter and WordPress ads manager plugin. The plugin can display unlimited ads from popular networks like Google AdSense, Amazon Ads, Media.net, and more. You can host custom ads like banner ads on your website too.
-
-With powerful features and an interactive interface, now manage your ads and ad networks , requiring the least of your efforts.
-
-This gives you the peace of mind to focus on other aspects of your website while the WP AdCenter WordPress advertising plugin takes care of :
-
-- your ads
-- ad networks
-- 3rd party advertisers
-- and more.
-
-WP AdCenter ad manager plugin lets you integrate with Google AdSense to import ads and manage them right from your WordPress dashboard. You get complete control over how ads are created, displayed, and rotated on your WordPress website.
-
-With WP AdCenter WordPress ads plugin you can rotate interactive ads with pre-defined time duration or place multiple banner ads across your WordPress website, giving a customized look and feel to your ads. You can group multiple ads under a single ad group, making the placement of ads and tracking easy.
-
-The plugin is designed to be simple, elegant, and easy to operate. It takes a couple of minutes to install and get started, needing only a minimal of your attention to set it up.
-
 WP AdCenter ad manager plugin is perfect for any WordPress website owner who wants to monetize their website by showing ads.
+
+WP AdCenter is a simple to use AdSense ad inserter and WordPress ads manager plugin. The plugin can display unlimited ads from popular networks like Google AdSense, Amazon Ads, Media.net, and more. You can also host custom banner ads on your website. The plugin also supports 3rd party advertiser accounts.
+
+WP AdCenter takes care of all dimensions of Wordpress Ad Management:
+
+- <strong>Ad Placement -</strong> Place your ads using widgets, shortcodes or template tags, anywhere on your website.
+- <strong>Ad Network Integration -</strong> Integrate with Google AdSense, Amazon Ads,  Media.net, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more.
+- <strong>3rd Party Advertisers -</strong> Sign up 3rd party advertisers to display ads on your website, let them manage their accounts and banners.
+- <strong>Location specific ads -</strong> Show or restrict ads based on the location of your website visitor, use this feature to further improve CTR and earnings.
+- <strong>In-built reports and stats -</strong> In-built reports and stats show you the vital information required to analyze and optimize your ad placements.
+
+WP AdCenter lets you integrate with your Google AdSense account to import ads and manage them right from your WordPress dashboard. You get complete control over how ads are created, displayed, and rotated on your WordPress website.
+
+You can rotate ads with pre-defined time duration or place multiple banner ads across your WordPress website. This combats ad blindness and increases CTR. You can group multiple ads under a single ad group, making the placement and tracking of ads easy.
+
+WP AdCenter WordPress ads plugin is designed to be simple, elegant, and easy to operate. It takes only a few minutes to install and get started.
 
 Deliver ad experiences that are tailor-made for your website, keep your visitors engaged.
 
-Click on the download button on the top or [click here](https://downloads.wordpress.org/plugin/wpadcenter.2.0.0.zip) to download the plugin now.
+Click on the download button or [click here](https://downloads.wordpress.org/plugin/wpadcenter.2.0.0.zip) to download the plugin now.
 
-== How to get started with WP AdCenter ==
+== How to get started with WPAdCenter ==
 
 [youtube https://youtu.be/M7zx2z6ttcU]
 
-WP AdCenter ads management plugin allows you to easily create custom ads with Javascript code or display banner ads from Google AdSense and other popular ad networks like Media.net, and Amazon Native Ads like Amazon Shopping Ads.
+WPAdcenter ads management plugin allows you to easily create custom ads with Javascript code or display banner ads from Google AdSense and other popular ad networks like Media.net, and Amazon Native Ads like Amazon Shopping Ads.
 
-You can install, set up, and configure the plugin in very easy steps to create your first custom banner ad within minutes! All this right from your WordPress dashboard.
+You can install, set up, and configure the plugin in easy steps to create your first ad within minutes. All this right from within your WordPress dashboard.
 
 Create unlimited custom ads and place them anywhere on your website using shortcodes, widgets, or by directly editing your theme template.
 
-WP AdCenter has a built-in graphical statistics and reporting section where you can view impressions and clicks for each of your ads individually and as ad groups.
-
-This serves as a one-stop place to gather insights into the performance of your ads. Third-party advertisers can also access the statistics area to view the performance of their ads.
+WP Adcenter WordPress advertising plugin has a built-in graphical statistics and reporting section. You can view impressions and clicks for each of your ads individually or at the ad group level. Analyze and gather insights on the performance of your ads. Third-party advertisers can also access the statistics area to view the performance of their ads.
 
 The Google Adsense Importer feature allows you to automatically insert Google Adsense code to your WordPress website without any manual coding. This way, you can showcase your custom banner ads to different custom sections of your website and increase the visibility of your ad.
 
-The script inserter feature allows you to add custom scripts like Facebook Pixel, Google Analytics Code, Javascript, CSS, HTML, PHP, or advert code anywhere on the page. Insert code in header, footer, or body easily using this fantastic WordPress banner ad management plugin.
+The script inserter feature allows you to add custom scripts like a Facebook Pixel, Google Analytics Code, Javascript, CSS, HTML, PHP, or advert code anywhere on the page. Insert code in header, footer, or body easily using this fantastic WordPress banner ad management plugin.
 
-WP AdCenter WordPress advertising plugin is compatible with Gutenberg Blocks and other popular Page Builders.
+WPAdCenter WordPress advertising plugin is compatible with Gutenberg Blocks and other popular Page Builders.
 
-Using the plugin is easy and intuitive; this feature-rich WordPress ads plugin was designed to help you monetize your website and grow your online business.
+Using the plugin is easy and intuitive. This feature-rich WordPress ads plugin was designed to help you monetize your website and grow your online business.
 
 ***See what Oli has to say about WP AdCenter:***
 > "WP AdCenter will take care of all aspects of advertising on your WordPress powered websites. Whether you want to run your own advertising in the form of affiliate banners, Google Adsense, or any other advertising network you can think of, or you would like to offer advertising spots for sale on your site – it's all possible with WP AdCenter."
@@ -65,65 +62,60 @@ Using the plugin is easy and intuitive; this feature-rich WordPress ads plugin w
 
 <strong>Have idle space on your website? Why not Monetize it?</strong>
 
-Yes, you can give out advertising space on your WordPress site and turn your visitors into third-party advertisers. Host third-party advertisers and allow them to post approved ads in exchange of a decided monetary benefit. Now earn money not just by displaying ads but also by renting advertising space on your website.
+Yes, you can give out advertising space on your WordPress site and turn your visitors into third-party advertisers. Host third-party advertisers and allow them to post approved ads for a fee. Now earn money not just by displaying ads but also by renting advertising space on your website.
 
 [Click here](https://downloads.wordpress.org/plugin/wpadcenter.2.0.0.zip) to download the plugin now.
 
 == Features ==
 
-The WP AdCenter WordPress ad management plugin is loaded with features; the plugin comes with many features that complement any display advertising campaign.
+The WP AdCenter WordPress ad management plugin is loaded with features -
 
-- <strong>Fast and easy setup</strong>.
-- <strong>Simple and interactive interface,</strong> requires no prior coding knowledge.
-- <strong>Copy and paste your media</strong> or code blocks, and the plugin will do the rest for you.
-- <strong>Display ads anywhere</strong> on your WordPress website using Gutenberg block or shortcodes.
-- <strong>Insert ads anywhere</strong>, before or after images, paragraphs, posts, custom hook positions, etc.
-- <strong>Display banner image ads</strong>.
-- <strong>Connect to your Google AdSense Account</strong> and load ads directly from your AdSense account.
-- <strong>Display ads from any ad network</strong> including Amazon Shopping Ads, Media.net, and more.
-- <strong>Create unlimited ads</strong> to display single or multiple banner ads.
-- <strong>Automatically start and stop ads</strong> by scheduling ads.
-- <strong>Ad rotations</strong> based on predetermined intervals.
-- <strong>Comprehensive statistics and reports</strong> for ads.
-- <strong>Generates ads.txt</strong> with custom content.
-- <strong>Insert custom code</strong> in the header, body, or footer section.
-- <strong>Generate Google AdSense code.</strong>
-- <strong>Custom alignments</strong> and style.
-- <strong>Insert PHP code using template tag</strong> in your theme files to place ads anywhere on your site
-- <strong>Compliant with IAB specifications</strong> (Ads.txt) for detection of ad fraud.
-- <strong>Protect your ads from ad-blockers</strong> that save your ads from getting blocked.
-- <strong>Request visitors to disable ad-blockers.</strong>
-- <strong>Export statistics and custom reports</strong> to downloadable CSV files.
-- <strong>Customizable banner sizes</strong> supported (Pro feature).
-- <strong>Unlimited</strong> advertiser accounts (Pro feature).
-- <strong>Geo-targeted ads displayed</strong> to audiences at specific locations (Pro feature).
-- <strong>Allow advertisers to signup on your website</strong> using a signup form (Pro feature).
-- <strong>WooCommerce integration</strong> to accept payments online from advertisers (Pro feature).
-- <strong>Insert ad codes on AMP pages</strong> (Coming Soon)
+- <strong>Fast and easy setup -</strong> Get started within minutes.
+- <strong>Simple and interactive interface -</strong> Requires no prior coding knowledge. Copy and paste your media or code blocks, and the plugin will do the rest for you.
+- <strong>Flexible Ads Placement -</strong> Display ads on your WordPress website using Gutenberg blocks or shortcodes or widgets. Insert ads anywhere - before or after images, paragraphs, posts, custom hook positions, etc.
+- <strong>Display banner image ads -</strong> Manage custom banner image ads.
+- <strong>Google AdSense Account integration -</strong> Connect and load ads directly from your Google AdSense account
+- <strong>Display ads from any ad network -</strong> Amazon Shopping Ads, Media.net, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more
+- <strong>Create unlimited ads -</strong> Create and manage unlimited ads.
+- <strong>Schedule Ads -</strong> Automatically start and stop ads by using an ad scheduler.
+- <strong>Manage Ad Rotation -</strong> Configure Ad Rotation frequency.
+- <strong>Detailed Statistics and Reporting -</strong> Get detailed statistics and custom reports for ads and export to CSV.
+- <strong>Script Inserter -</strong> Insert custom code in the header, body, or footer section.
+- <strong>Custom Alignments -</strong> Create ads with custom alignment and style.
+- <strong>Place ads in Template File -</strong> Insert PHP code using template tag in your theme files to place ads anywhere on your site
+- <strong>Ads.txt -</strong> Compliant with IAB specifications for detection of ad fraud.
+- <strong>Adblock Detection -</strong> Detect ad blockers, and request users to disable them.
+- <strong>Random Ads -</strong> Display random ads from selected ad groups on every refresh.
+- <strong>Ordered Ads (PRO) -</strong> Select multiple ads and display them in a set order.
+- <strong>Banner Sizes (PRO) -</strong> Customizable banner sizes supported.
+- <strong>Signup 3rd Party Advertisers (PRO) -</strong> Unlimited advertiser accounts.
+- <strong>Location Based Ads (PRO) -</strong> Geo-targeted ads displayed to audiences at specific locations.
+- <strong>Receive Payments (PRO) -</strong> WooCommerce integration to accept payments online from advertisers. Integrate with Stripe, Paypal and any other payment gateway supported by your WooCommerce.
+- <strong>AMP Ads (Coming Soon) -</strong> Insert ad codes on AMP pages.
 
 == Complete Ad Management ==
 
-Manage all aspects of your display advertising right from your WordPress dashboard. Create, schedule, and automate your ad management easily. This will give you the ease of growing your business without worrying about ad monetization.
+Manage all aspects of your display advertising right from your WordPress dashboard. Create, schedule, and automate your ad management easily. Advanced users can also directly add code into theme files using template tags.
 
 == Unlimited Ads & Ad Groups ==
 
-WP AdCenter gives you the power to create unlimited ads and unlimited ad groups. Unlimited Ad Sizes & Positions. Create as many ad groups around your site as you like. Advanced users can also directly add code into theme files.
+WP AdCenterWordPress advertising plugin gives you the power to create unlimited ads, unlimited ad groups, unlimited ad Sizes & Unlimited ad Positions. Create as many ad groups as you require to manage your campaigns.
 
 == Page Builder Integration ==
 
-WP AdCenter WordPress ads manager integrates with Gutenberg & other popular page builders like Elementor, Beaver Builder, and others. This ensures ease of use across page builders, making it a very versatile plugin.
+WP AdCenter WordPress ads manager integrates with Gutenberg, Elementor, Beaver Builder, and others.
 
 == Signup Advertisers ==
 
-Earn advertising income on auto-pilot by allowing third-party advertisers to sign up directly on your website and pay for advert space. You can choose whether to charge for impressions or for a period of time.
+Earn advertising income on auto-pilot by allowing third-party advertisers to sign up directly on your website and pay for advert space. You can choose whether to charge for ad impressions or to charge for the period of time for which your ads are displayed.
 
 == WooCommerce Payment Integration ==
 
-Connect to your favorite payment processors like PayPal or Stripe easily with the WooCommerce Payment Integration. Advertisers can pay online; you will receive an email notification when an order is received, and you can choose whether to accept or deny it. This gives you complete control over your ad space.
+Advertisers can pay online using your favorite payment processors like PayPal or Stripe. WooCommerce Payment Integration makes it easy to collect money from your advertisers.
 
 == Reporting and Statistics ==
 
-WP AdCenter banner ad management plugin has an in-built section to provide Real-time, Intuitive reports for you and your advertisers to view Ad Performance. You can view a graph for the statistics for every campaign you create; the graph shows impressions and clicks on the same chart to compare.
+WP AdCenter ad management plugin provides real-time and intuitive reports for you and your advertiser. You can view impressions and clicks for every ad group you create. You can export custom reports in CSV format for offline analysis.
 
 == Adblock Detection ==
 
@@ -131,57 +123,48 @@ This feature lets you detect visitors with an ad-blocker on their browser; this 
 
 == Rotating Ad Group ==
 
-The rotating ad group feature gives you the ability to schedule on-time rotations of your ads for your custom Ad Groups.
+Rotate ad groups as per a predefined schedule, to combat ad blindness.
 
-You can display rotating ad groups using the following methods:
-
-- Display Rotating Ads using Gutenberg block
-- Displaying Rotating Ads using shortcode
-- Displaying Rotating Ads using Elementor
-- Displaying Rotating Ads using Widget
-
-== Script Inserter ==
-
-Insert code snippets for Facebook Pixel, Google Analytics, Google Tag Manager, or custom CSS directly to your header, footer, or body. This negates the need to install a separate code inserter plugin for code insertion jobs.
+You can display rotating ad groups using Gutenberg Blocks, Shortcodes, Elementor, or WordPress Widgets.
 
 == Customer Support ==
 
-Expert Customer support from the plugin developers, prompt support is provided through email, and our support staff is on-hand to help with any questions you may have.
+Passionate customer support from the plugin developers, prompt support is provided through email.
 
 == Creating and Managing Ads ==
 
-Creating ads with the WP AdCenter ads manager plugin is interactive and easy. You can create many ads and pair them into ad groups to display in custom locations on your WordPress website. Managing ads has never been simpler; with WP Adcenter WordPress ad management plugin, you can:
+Creating ads with the WP AdCenter WordPress ads manager plugin is interactive and easy. You can create many ads and combine them into ad groups to display in custom locations on your WordPress website. Managing ads has never been simpler; with WP Adcenter WordPress ad management plugin, you can:
 
-- Create unlimited ads to display on your WordPress website
-- Support all types of Ads code, not restricted to Google Adsense code only
-- Use ad rotation to display timely rotated ads
-- Use Geo-targeting feature to target ad viewers from any location in the world (Pro)
-- Monetize your website using the Pro features to display advertisers ads on your website (Pro)
-- WooCommerce Payment Integration (Pro)
-- Adblock Detection (Pro)
-- Schedule ads using the start and end date
-- Insert ads into posts and pages automatically without coding
+- <strong>Create unlimited ads</strong> to display on your WordPress website
+- Support all popular <strong>Ad Networks</strong>
+- Use <strong>AD Rotation</strong> to combat ad blindness
+- <strong>Schedule ads</strong> using the start and end date
+- <strong>Insert ads</strong> into posts and pages automatically without coding
+- Use <strong>Geo-targeting</strong> feature to target ad viewers from any location in the world (Pro)
+- <strong>WooCommerce Payment Integration</strong> to collect money from your advertisers(Pro)
+- <strong>Adblock Detection</strong> to increase CTR and ad revenue(Pro)
+- <strong>Ordered Ads</strong> to control your ad display sequence(Pro)
 
-== What are the different Ad types ==
+== Which ad types are supported? ==
 
-With WP AdCenter you can create and manage different types of ads like:
+Here a list of supported ad types -
 
-- Google AdSense, Media.net, Amazon Advertising, BuySellAds, Google Ad Manager, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more.
-- Ads using custom javascript code
-- Use ads shortcodes to place ads at any desired location across your website
-- Create and display banner ads of various sizes
-- Contextual Amazon Native Shopping Ads
+- <strong>Network ads - </strong>Google AdSense, Media.net, Amazon Advertising, BuySellAds, Google Ad Manager, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more.
+- <strong>Custom Javascript - </strong>Ads using custom javascript code
+- <strong>Amazon ads - </strong>Contextual Amazon Native Shopping Ads
 
 == Displaying Ads on WordPress ==
 
-Displaying ads on your WordPress website is easy with the WP AdCenter WordPress banner ad plugin, you can place ads using your favorite page builder like Elementor or Beaver Builder or and classic Gutenberg blocks, you have the flexibility to:
+Displaying ads on your WordPress website is easy with the WP AdCenter banner ad plugin, you can place ads using your favorite page builder like Elementor or Beaver Builder or and classic Gutenberg blocks, you have the flexibility to:
 
 - Display ads in template files
 - Use shortcodes to place ads in post content
 - Show ads on individual pages or posts
 - Display ads on the sidebar and in widgets
 - Display rotating ads
-- Display multiple ads (Ad Groups)
+- Display random ads
+- Display ordered ads
+- Display multiple ads and Ad Groups
 - and a lot more
 
 ***See what WP Mayor founder has to say about WP AdCenter:***
@@ -189,9 +172,9 @@ Displaying ads on your WordPress website is easy with the WP AdCenter WordPress 
 >
 > <cite>– WP Mayor</cite>
 
-== Looking for more features? ==
+== Looking for more features?==
 
-Get more from your WP AdCenter. Upgrade to the [Pro version](https://club.wpeka.com/product/wpadcenter/?utm_source=wporg&utm_medium=wpadcenter&utm_campaign=wpadcenter).
+Get more from your WPAdCenter. Upgrade to the [Pro version](https://club.wpeka.com/product/wpadcenter/?utm_source=wporg&utm_medium=wpadcenter&utm_campaign=wpadcenter).
 
 == Our Awesome Projects ==
 
@@ -201,7 +184,11 @@ If you like this plugin, then consider checking out our other projects:
 
 - [WP Cookie Consent](https://wplegalpages.com/cookie-consent-banner-on-your-website/?utm_source=wporg&utm_medium=referral&utm_campaign=wpadcenter): Display a customized cookie consent notice (for GDPR), and "Do Not Sell" opt-out notice (for CCPA). Get granular consent and record a consent log.
 
-- [WPeka Woo Auction Software](https://wpauctionsoftware.com/?utm_source=wporg&utm_medium=referral&utm_campaign=wpadcenter): Host eBay like auctions or Simple / Reverse / Penny Auctions on your WooCommerce website
+- [WPeka Woo Auction Software](https://wpauctionsoftware.com/?utm_source=wporg&utm_medium=referral&utm_campaign=wpadcenter): Host eBay like auctions or Simple / Reverse / Penny Auctions on your WooCommerce website.
+
+- [Responsive Gutenberg Blocks – Addons for Gutenberg Editor](https://wordpress.org/plugins/responsive-block-editor-addons/): With the Responsive Gutenberg Blocks, you can create modern responsive designs, use reusable block page templates to kickstart your website in no time.
+
+- [Elementor & Gutenberg Website Templates For Responsive](https://wordpress.org/plugins/responsive-add-ons/): These are ready-to-use websites built for the Elementor page builder and the new WordPress blocks editor (Gutenberg).
 
 == Installation ==
 
@@ -214,37 +201,20 @@ Installation is done in few easy steps mentioned below:
 
 == Frequently Asked Questions ==
 
-= How can I insert ads anywhere on my WordPress website? =
-You can easily insert ads anywhere on your website. There are widgets available.
+= Can I insert ads anywhere on my WordPress website? =
+Yes, you can easily insert ads anywhere on your website using widgets, shortcodes or blocks.
 
-There are also Gutenberg blocks available to select to add it anywhere within your content as well.
-
-= Can I use any other hosted ad networks? =
-Yes. You can choose to use your own hosted ads or use ads from any other ad networks (like Google AdSense).
+= Which ad networks are supported? =
+WPAdCenter WordPress ads plugin works with all ad networks that support ads via Banner Images, Videos & Javascript code. It is compatible with popular ad networks like Google AdSense, Media.net, Amazon Advertising, BuySellAds, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more.
 
 = Can I schedule Ads? =
-Yes, You can schedule Ads.
+Yes, You can schedule Ads. Create your ads with a start date in the future and an appropriate end date.
 
-Create your ads with a start date in the future and an appropriate end date.
+= Can I add Google Adsense Auto Ads using this plugin? =
+Yes, you can insert the Auto Ads script either across the site or on a specific page/post where you want the ads to appear.
 
-When an ad is created with a start date in the future and when the start date is reached, those ads will be displayed automatically.
-
-To know more about creating banners, visit [documentation](https://docs.wpeka.com/wp-adcenter/banners)
-
-= How to add Google Adsense Auto Ads in the plugin? =
-You can insert the Auto Ads script either across the site or on a specific page/post where you want the ads to appear.
-
-To display ads from external sources like Google Adsense, you can create banners with Ad Code from Google Adsense.
-
-- Navigate to **WordPress Dashboard > WP AdCenter > Ads.**
-- In **Ad Type** - Select type of the ad as **Ad Code.**
-- With Ad type selected as Ad Code, you can provide code from Google Adsense instead of Banner image.
-
-To know more about creating banners, visit [documentation](https://docs.wpeka.com/wp-adcenter/banners)
-
-To display ads on a specific page/post, create one or more ads and add them to a particular page/post.
-
-= What banner sizes are supported? =
+= What banner sizes are supported by WP AdCenter ad plugin? =
+WP AdCenter supports all standard ad sizes, and also allows you to customize the size of banners as per your requirements. The standard ad sizes supported are:
 
 **Square and Rectangle**
 - 200x200 - Small square
@@ -279,38 +249,20 @@ To display ads on a specific page/post, create one or more ads and add them to a
 - 320x50 - Mobile banner 2
 - 320x100 - Large mobile banner
 
-You can also customize the size of banners according to your requirements.
+= Do ads posted using WPAdCenter comply with GDPR and ePrivacy? =
+Yes, WP AdCenter is GDPR and ePrivacy compliant. You can get explicit users consent before showing ads. The plugin does not capture or save any personal information.
 
-= How to add Ads in WordPress? =
-You can use WP Adcenter to create ads and group them into ad groups and display on your WordPress site wherever you want.
+= Can I show ads to targeted geo-locations? =
+Yes, WP AdCenter ad plugin allows you to show ads based on the geo location of your visitors. The plugin integrates with MaxMind to identify the geo location of your visitors.
 
-= How does WP AdCenter manage GDPR and ePrivacy? =
-For EU visitors, you can show ads only if you have user consent.
+= Can I embed ads using PHP shortcodes or code directly in my theme? =
+Yes, if you are an advanced user, and understand shortcodes and PHP code, you can place ads in your template or theme using shortcodes or PHP code.
 
-You can use the [GDPR Cookie Consent Plugin](https://club.wpeka.com/product/wp-gdpr-cookie-consent/) which manages this. The Ads will be displayed only after the user consent is given.
+= Does this plugin support Ads.txt?
+Yes, WP AdCenter ad plugin fully supports Ads.txt to combat ad fraud.
 
-WP Adcenter doesn't capture or save personal information (e.g., an IP address). It also doesn't store any cookies in the visitor's browser.
-
-= Which ad networks are supported? =
-WP AdCenter works with ad networks that support ads via Banner Images, Videos, Javascript code.
-
-It's compatible with popular ad networks like Google AdSense, Amazon, Chitika, Clickbank, Buy Sell Ads, Google Ad Manager (Google Double Click, DFP), media.net.
-
-You can also add advertisement scripts to header/footer on specific pages or across your website without coding.
-
-= Is there PHP code or shortcodes I can embed in my theme? =
-You can also place an Ads in your template or theme via the PHP command "do_shortcode()". Just pass the ID of the Ads you want to render.
-
-For example:
-“< ? php echo do_shortcode( "[wpadcenter_ad id=2803]" ); ? >“
-Where 2803 is the Ads ID.
-
-You can also use template tags to display ads within the theme template by clicking on ‘Manage Ads’, from the table of ads, you can click on the ‘Template Tag’ of your desired ad and the PHP code will get copied.  Now, you can place that code in your template file to directly display the ad.
-
-Similarly, you can display ads present in ad groups by clicking on ‘Manage Ad Groups’, from the table of ad groups, you can click on the ‘Template Tag’ of your desired ad group and the PHP code will get copied. Now, you can place that code in your template file to directly display the ads from the ad group.
-
-= What is Ads.txt?
-Ads.txt or "Authorized Digital Sellers" is a technical specification developed by the IAB to combat ad fraud.
+= Does this plugin have documentation?
+Yes, WP AdCenter has extensive developer and user documentation. Here is a link to the documentation: [WP AdCenter Documentation](https://docs.wpeka.com/wp-adcenter)
 
 == Screenshots ==
 
@@ -325,6 +277,7 @@ Ads.txt or "Authorized Digital Sellers" is a technical specification developed b
 = 2.0.1 =
 * Feature: Enable geo targeting to display ads in specific countries and/or cities.
 * Feature: Display ads as per user roles.
+* Feature: Multilingual Support.
 
 = 2.0.0 =
 * Feature: Plugin rewrite
@@ -378,6 +331,7 @@ Ads.txt or "Authorized Digital Sellers" is a technical specification developed b
 = 2.0.1 =
 * Feature: Enable geo targeting to display ads in specific countries and/or cities.
 * Feature: Display ads as per user roles.
+* Feature: Multilingual Support.
 
 = 2.0.0 =
 * Feature: Plugin rewrite

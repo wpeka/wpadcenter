@@ -716,6 +716,7 @@ class Wpadcenter_Admin {
 		if ( isset( $_POST['update_admin_settings_form'] ) || ( isset( $_POST['wpadcenter_settings_ajax_update'] ) ) ) {
 			// Check nonce.
 			check_admin_referer( 'wpadcenter-update-' . WPADCENTER_SETTINGS_FIELD );
+			do_action( 'wp_adcenter_save_settings', $_POST );
 			if ( 'update_admin_settings_form' === $_POST['wpadcenter_settings_ajax_update'] ) {
 				foreach ( $the_options as $key => $value ) {
 					if ( 'ads_txt_content' === $key ) {
@@ -2571,7 +2572,6 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_adgroup_gutenberg_preview() {
-
 		if ( ! isset( $_POST['adgroup_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['adgroup_nonce'] ), 'adgroup_nonce' ) ) {
 			wp_die();
 		}
@@ -2712,8 +2712,8 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_remove_post_row_actions( $actions ) {
 		global $current_screen;
-		if ( 'wpadcenter-ads' === $current_screen->post_type ) {
 
+		if ( 'wpadcenter-ads' === $current_screen->post_type ) {
 			unset( $actions['view'] );
 			unset( $actions['inline hide-if-no-js'] );
 		}
@@ -2726,8 +2726,8 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_add_custom_filters() {
-
 		global $current_screen;
+
 		$type = $current_screen->post_type;
 
 		if ( 'wpadcenter-ads' === $type ) {
@@ -2762,7 +2762,7 @@ class Wpadcenter_Admin {
 						'<option value="%s"%s>%s</option>',
 						esc_attr( $size ),
 						$size === $current_v ? ' selected="selected"' : '',
-						esc_html_e( 'default', 'wpadcenter' )
+						esc_html__( 'default', 'wpadcenter' )
 					);
 				} elseif ( 'ad-size' === $data[1] ) {
 					printf(

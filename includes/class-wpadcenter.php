@@ -244,7 +244,7 @@ class Wpadcenter {
 			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 			$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
 			$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
-		}	
+		}
 		$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
 		$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
 		$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_public, 'wpadcenter_register_gutenberg_scripts' );
@@ -331,7 +331,7 @@ class Wpadcenter {
 			'transition_delay'          => '1000',
 
 			'adblock_detector'          => false,
-			'adblock_detected_message'  => 'We have noticed that you have an adblocker enabled which restricts ads served on the site.',
+			'adblock_detected_message'  => __( 'We have noticed that you have an adblocker enabled which restricts ads served on the site.', 'wpadcenter' ),
 			'geo_targeting'             => false,
 			'maxmind_license_key'       => '',
 			'maxmind_db_prefix'         => wp_generate_password( 32, false ),
@@ -349,9 +349,12 @@ class Wpadcenter {
 			'geo_location'              => 'none',
 			'trim_stats'                => '0',
 			'days_to_send_before'       => 1,
+			'clicks_to_send_before'     => 100,
+			'views_to_send_before'      => 100,
 			'hide_ads_logged'           => false,
 			'roles_selected'            => '',
 			'roles_selected_visibility' => '',
+			'content_ads'               => false,
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -379,6 +382,7 @@ class Wpadcenter {
 			case 'enable_ads_txt':
 			case 'hide_ads_logged':
 			case 'trim_statistics':
+			case 'content_ads':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {

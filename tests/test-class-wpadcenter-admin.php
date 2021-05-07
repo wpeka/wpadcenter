@@ -43,6 +43,15 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	public static $first_dummy_post;
 
 	/**
+	 * Dummy post .
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string $second_dummy_post dummy post.
+	 */
+	public static $second_dummy_post;
+
+	/**
 	 * Created ad group associated with created ad.
 	 *
 	 * @since  1.0.0
@@ -74,10 +83,11 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	   */
 	public static $term_id;
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
-		self::$ad_group         = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
-		self::$first_dummy_post = get_post( self::$ad_ids[0] );
-		self::$current_time     = time();
+		self::$ad_ids            = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
+		self::$ad_group          = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
+		self::$first_dummy_post  = get_post( self::$ad_ids[0] );
+		self::$second_dummy_post = get_post( self::$ad_ids[1] );
+		self::$current_time      = time();
 		foreach ( self::$ad_ids as $ad_id ) {
 			update_post_meta( $ad_id, 'wpadcenter_ad_type', 'ad_code' );
 			update_post_meta( $ad_id, 'wpadcenter_start_date', self::$current_time );
@@ -98,6 +108,9 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		self::$term_id = array( self::$ad_group );
 		$taxonomy      = 'wpadcenter-adgroups';
 		wp_set_post_terms( $post_id, self::$term_id, $taxonomy );
+		update_post_meta( self::$first_dummy_post->ID, 'wpadcenter_open_in_new_tab', true );
+		update_post_meta( self::$first_dummy_post->ID, 'wpadcenter_nofollow_on_link', true );
+		update_post_meta( self::$first_dummy_post->ID, 'wpadcenter_link_url', 'https://wpadcenter.com' );
 	}
 
 	/**
@@ -386,5 +399,344 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	public function test_wpadcenter_plugin_action_links() {
 		$value = self::$wpadcenter_admin->wpadcenter_plugin_action_links( array() );
 		$this->assertTrue( is_array( $value ) );
+	}
+
+	/**
+	 * Tests for wpadcenter_register_gutenberg_blocks function
+	 */
+	public function test_wpadcenter_register_gutenberg_blocks() {
+
+		$registered_blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
+		$this->assertArrayHasKey( 'wpadcenter/single-ad', $registered_blocks, 'Failed to register single ad gutenberg block' );
+		$this->assertArrayHasKey( 'wpadcenter/adgroup', $registered_blocks, 'Failed to register adgroup gutenberg block' );
+		$this->assertArrayHasKey( 'wpadcenter/random-ad', $registered_blocks, 'Failed to register random ad gutenberg block' );
+
+	}
+
+	/**
+	 * Tests for gutenberg_display_single_ad_cb function
+	 */
+	public function test_gutenberg_display_single_ad_cb() {
+		$attributes     = array(
+			'ad_id'           => self::$ad_ids[0],
+			'ad_alignment'    => 'aligncenter',
+			'max_width_check' => false,
+			'max_width_px'    => '100',
+		);
+		$single_ad_html = self::$wpadcenter_admin->gutenberg_display_single_ad_cb( $attributes );
+		$this->assertTrue( is_string( $single_ad_html ) );
+
+	}
+
+	/**
+	 * Tests for gutenberg_display_adgroup_cb function
+	 */
+	public function test_gutenberg_display_adgroup_cb() {
+		$attributes   = array(
+			'adgroup_ids'       => self::$ad_group ,
+			'adgroup_alignment' => 'aligncenter',
+			'num_ads'           => '1',
+			'num_columns'       => '1',
+			'max_width_check'   => false,
+			'max_width_px'      => '100',
+		);
+		$adgroup_html = self::$wpadcenter_admin->gutenberg_display_adgroup_cb( $attributes );
+		$this->assertTrue( is_string( $adgroup_html ) );
+
+	}
+
+	/**
+	 * Tests for gutenberg_display_random_ad_cb function
+	 */
+	public function test_gutenberg_display_random_ad_cb() {
+		$attributes     = array(
+			'adgroup_ids'       => self::$ad_group ,
+			'adgroup_alignment' => 'aligncenter',
+			'max_width_check'   => false,
+			'max_width_px'      => '100',
+		);
+		$random_ad_html = self::$wpadcenter_admin->gutenberg_display_random_ad_cb( $attributes );
+		$this->assertTrue( is_string( $random_ad_html ) );
+
+	}
+
+	/**
+	 * Tests for wpadcenter_register_rest_fields function
+	 */
+	public function test_wpadcenter_register_rest_fields() {
+		// test for wpadcenter-ads rest fields
+		$request = new WP_REST_Request( 'GET', '/wp/v2/wpadcenter-ads' );
+		$request->set_query_params( array( 'per_page' => 1 ) );
+		$response                   = rest_do_request( $request );
+		$server                     = rest_get_server();
+		$wpadcenter_ads_rest_fields = $server->response_to_data( $response, false );
+		$this->assertArrayHasKey( 'ad_html', $wpadcenter_ads_rest_fields[0], 'Failed to register ad html rest field' );
+
+		// test for wpadcenter-adgroups rest fields.
+		$request = new WP_REST_Request( 'GET', '/wp/v2/wpadcenter-adgroups' );
+		$request->set_query_params( array( 'per_page' => 1 ) );
+		$response                        = rest_do_request( $request );
+		$server                          = rest_get_server();
+		$wpadcenter_adgroups_rest_fields = $server->response_to_data( $response, false );
+		$this->assertArrayHasKey( 'ad_ids', $wpadcenter_adgroups_rest_fields[0], 'Failed to register ad ids rest field' );
+
+	}
+
+	/**
+	 * Tests for wpadcenter_ad_html_rest_field_cb function
+	 */
+	public function test_wpadcenter_ad_html_rest_field_cb() {
+		$object['id'] = self::$ad_ids[0];
+		$ad_html      = self::$wpadcenter_admin->wpadcenter_ad_html_rest_field_cb( $object );
+		$this->assertTrue( is_string( $ad_html ) );
+
+	}
+
+	/**
+	 * Tests for wpadcenter_ad_ids_rest_field_cb function
+	 */
+	public function test_wpadcenter_ad_ids_rest_field_cb() {
+		$object['id'] = self::$ad_group;
+		$ad_html      = self::$wpadcenter_admin->wpadcenter_ad_ids_rest_field_cb( $object );
+		$this->assertTrue( is_array( $ad_html ) );
+
+	}
+
+
+	/**
+	 * Test for wpadcenter_reports function
+	 */
+	public function test_wpadcenter_reports() {
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_reports();
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_statistics function
+	 */
+	public function test_wpadcenter_ad_statistics() {
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_ad_statistics( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Tests for wpadcenter_limit_impressions_clicks
+	 */
+	public function test_wpadcenter_limit_impressions_clicks() {
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_limit_impressions_clicks( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Tests for wpadcenter_edit_form_after_title
+	 */
+	public function test_wpadcenter_edit_form_after_title() {
+		self::$wpadcenter_admin->wpadcenter_edit_form_after_title( self::$first_dummy_post );
+		global $wp_scripts, $wp_styles;
+		$all_enqueued_scripts = $wp_scripts->queue;
+		$this->assertTrue( in_array( 'wpadcenter-select2', $all_enqueued_scripts ) );
+		$this->assertTrue( in_array( 'wpadcenter', $all_enqueued_scripts ) );
+
+		$all_enqueued_styles = $wp_styles->queue;
+		$this->assertTrue( in_array( 'wpadcenter-select2', $all_enqueued_styles ) );
+	}
+
+	/**
+	 * Test for wpadcenter_admin_menu function
+	 */
+	public function test_wpadcenter_admin_menu() {
+		$current_user = wp_get_current_user();
+		$current_user->add_cap( 'manage_options' );
+
+		self::$wpadcenter_admin->wpadcenter_admin_menu();
+		global $submenu;
+		$submenu_array = wp_list_pluck( $submenu['edit.php?post_type=wpadcenter-ads'], 2 );
+		$this->assertTrue( isset( $submenu['edit.php?post_type=wpadcenter-ads'] ) );
+		$this->assertTrue( in_array( 'wpadcenter-reports', $submenu_array ) );
+		$this->assertTrue( in_array( 'wpadcenter-settings', $submenu_array ) );
+		$this->assertTrue( in_array( 'wpadcenter-getting-started', $submenu_array ) );
+		$this->assertTrue( in_array( 'https://club.wpeka.com/product/wpadcenter', $submenu_array ) );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_size_metabox function
+	 */
+	public function test_wpadcenter_ad_size_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_ad_size_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for wpadcenter_collect_locations function
+	 */
+	public function test_wpadcenter_collect_locations() {
+		self::$wpadcenter_admin->wpadcenter_collect_locations( 'https://wpadcenter.com/' );
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * Test for print_combobox_options
+	 */
+	public function test_print_combobox_options() {
+		$args = array(
+			'post_type' => 'wpadcenter-ads',
+		);
+
+		$ads        = get_posts( $args );
+		$single_ads = array();
+		foreach ( $ads as $ad ) {
+			$single_ads[ $ad->ID ] = $ad->post_title;
+		}
+		ob_start();
+		self::$wpadcenter_admin->print_combobox_options( $single_ads, self::$first_dummy_post->post_title );
+		$output   = ob_get_clean();
+		$expected = '<option value="' . self::$second_dummy_post->post_title . '">' . self::$second_dummy_post->ID . '</option><option value="' . self::$first_dummy_post->post_title . '" selected="selected">' . self::$first_dummy_post->ID . '</option>';
+		$this->assertSame( $expected, $output );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_detail_metabox function
+	 */
+	public function test_wpadcenter_ad_detail_metabox() {
+		$open_in_new_tab  = get_post_meta( self::$first_dummy_post->ID, 'wpadcenter_open_in_new_tab', true );
+		$nofollow_on_link = get_post_meta( self::$first_dummy_post->ID, 'wpadcenter_nofollow_on_link', true );
+		$url              = get_post_meta( self::$first_dummy_post->ID, 'wpadcenter_link_url', true );
+
+		$this->assertEquals( 1, $open_in_new_tab );
+		$this->assertEquals( 1, $nofollow_on_link );
+		$this->assertEquals( 'https://wpadcenter.com', $url );
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_ad_detail_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_code_metabox function
+	 */
+	public function test_wpadcenter_ad_code_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_ad_code_metabox( self::$first_dummy_post );
+		$output   = ob_get_clean();
+		$expected = '<textarea name="ad-code" style="width:100%;height:200px" >' . esc_textarea( get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_code', true ) ) . '</textarea>';
+		$this->assertEquals( $expected, $output );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_google_adsense function
+	 */
+	public function test_wpadcenter_ad_google_adsense() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_ad_google_adsense( self::$first_dummy_post );
+		$output   = ob_get_clean();
+		$expected = '<textarea name="ad-google-adsense" id="wpadcenter-google-adsense-code" style="width:100%;height:200px" >' . esc_textarea( get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_google_adsense', true ) ) . '</textarea>';
+		ob_start();
+		self::$wpadcenter_admin->render_adsense_selection();
+		$expected .= ob_get_clean();
+		$this->assertEquals( $expected, $output );
+	}
+
+	/**
+	 * Test for wpadcenter_external_image_link_metabox function
+	 */
+	public function test_wpadcenter_external_image_link_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_external_image_link_metabox( self::$first_dummy_post );
+		$output   = ob_get_clean();
+		$expected = '<input name="external-image-link" type="text" value="' . esc_textarea( get_post_meta( self::$ad_ids[0], 'wpadcenter_external_image_link', true ) ) . '" style="width:100%">';
+		$this->assertEquals( $expected, $output );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_type function
+	 */
+	public function test_wpadcenter_ad_type() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_ad_type( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Tests for wpadcenter_getting_started function
+	 */
+	public function test_wpadcenter_getting_started() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_getting_started();
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+
+		global $wp_scripts;
+		$all_enqueued_scripts = $wp_scripts->queue;
+		$this->assertTrue( in_array( 'wpadcenter-gettingstarted', $all_enqueued_scripts ) );
+
+		global $wp_styles;
+		$all_enqueued_styles = $wp_styles->queue;
+		$this->assertTrue( in_array( 'wpadcenter-gettingstarted-css', $all_enqueued_styles ) );
+
+		$current_user = wp_get_current_user();
+		$current_user->remove_cap( 'manage_options' );
+		$this->expectException( 'WPDieException' );
+		self::$wpadcenter_admin->wpadcenter_getting_started();
+	}
+
+	/**
+	 * Test for wpadcenter_page_posts_scripts function
+	 */
+	public function test_wpadcenter_page_posts_scripts() {
+		global $wp_meta_boxes;
+		$this->assertFalse( isset( $wp_meta_boxes['post'] ) );
+		$this->assertFalse( isset( $wp_meta_boxes['page'] ) );
+		self::$wpadcenter_admin->wpadcenter_page_posts_scripts();
+		$this->assertTrue( isset( $wp_meta_boxes['post'] ) );
+		$this->assertTrue( isset( $wp_meta_boxes['page'] ) );
+	}
+
+	/**
+	 * Test for wpadcenter_page_posts_metabox_render function
+	 */
+	public function test_wpadcenter_page_posts_metabox_render() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_page_posts_metabox_render( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for wpadcenter_remove_permalink function
+	 */
+	public function test_wpadcenter_remove_permalink() {
+		$url = get_permalink( self::$ad_ids[0] );
+		$this->go_to( $url );
+		global $post_type;
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_remove_permalink();
+		$output  = ob_get_clean();
+		$expcted = '<style>#edit-slug-box {display:none;}</style>';
+		$this->assertEquals( $expcted, $output );
+	}
+
+	/**
+	 * Test for wpadcenter_check_ads_txt_replace function
+	 */
+	public function test_wpadcenter_get_root_domain_info() {
+		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://one.net.two/three/four/five' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://one.com.au/three/four/five' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
+		$this->assertTrue( $value );
 	}
 }
