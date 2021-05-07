@@ -3,15 +3,18 @@ const j = jQuery.noConflict();
 const componentContentAds = {
     template:
         `<div class="contentAdsRules" v-if="active">
-            <div class="rule" @click="contentAdsRulesShow = !contentAdsRulesShow">
-                <label>{{ position_ }}  |  {{ alignment_ }}</label>
-                <c-button color="danger" @click="onDeleteRule">Delete Rule</c-button>
+            <div class="rule" @click="onCollapseClick">
+                <div class="rule_label">
+                    <svg ref="wpadcenter_arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator"><path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path></svg>
+                    <label>{{ post_ }} | {{ position_ }} | {{ alignment_ }} | {{ adgroup_ }}</label>
+                </div>
+                <c-button class="delete_rule" color="danger" @click="onDeleteRule">Delete Rule</c-button>
             </div>
             <c-collapse :show="contentAdsRulesShow">
                 <hr />
                 <label>Post Types: </label>
                 <input type="hidden" ref="Post_Selected" :name="getPlacementName('[post]')" v-model="post_selected_" />
-                <v-select :clearable="false" placeholder='Select Post And/or Pages' :options="PostOptions" multiple v-model="post_selected_"></v-select>
+                <v-select :clearable="false" placeholder='Select Post And/or Pages' :options="PostOptions" multiple v-model="post_selected_" @input="onPostChange"></v-select>
                 <hr />
 
                 <label>Placement type: </label>
@@ -33,8 +36,7 @@ const componentContentAds = {
 				    <input type="hidden" :name="getPlacementName('[content][after-before]')" v-bind:value="position_selected_.value" />
                     <input type="number" :name="getPlacementName('[content][number]')" v-model="number_"/>
                     <v-select :clearable="false" placeholder="Select Element" :options="elementOptions" v-model="element_selected_" label="key"></v-select>
-                    <input type="hidden" :name="getPlacementName('[content][element]')" v-bind:value="element_selected_.value" />
-                    
+                    <input type="hidden" :name="getPlacementName('[content][element]')" v-bind:value="element_selected_.value" />                   
                 </div>
                 <input :id="getPlacementId('position-reverse')" type="checkbox" ref="position_reverse" v-model="position_reverse_" v-show="position_ === 'content'" />
                 <label :for="getPlacementId('position-reverse')" v-show="position_ === 'content'">Start counting from bottom</label>
@@ -58,7 +60,7 @@ const componentContentAds = {
                 <hr />
                 <div class="content-ads-adgroup">
                     <label>Select Adgroup: </label>
-                    <v-select :clearable="false" placeholder="Select Adgroup" :options="adGroups" label="name" v-model="adgroup_selected_"></v-select>
+                    <v-select :clearable="false" placeholder="Select Adgroup" :options="adGroups" label="name" v-model="adgroup_selected_" @input="onAdgroupChange"></v-select>
                     <input type="hidden" :name="getPlacementName('[adgroup]')" v-bind:value="adgroup_selected_.term_id" />
                 </div>
             </c-collapse>
@@ -97,7 +99,9 @@ const componentContentAds = {
             count_: this.count,
             adgroups_security_: this.adgroups_security,
             number_: this.number,
-            position_reverse_: this.position_reverse
+            position_reverse_: this.position_reverse,
+            post_: '-',
+            adgroup_: '-',
         }
     },
     props: [
@@ -122,6 +126,29 @@ const componentContentAds = {
         },
         getPlacementId: function(id) {
             return id + '-' + this.count;
+        },
+        onPostChange: function() {
+            this.post_ = this.post_selected_.join(',');
+            if( this.post_ === '' ) {
+                this.post_ = '-';
+            }
+        },
+        onAdgroupChange: function() {
+            console.log(this.adgroup_selected_);
+            this.adgroup_ = this.adgroup_selected_.name;
+        },
+        onCollapseClick: function() {
+            this.contentAdsRulesShow = !this.contentAdsRulesShow;
+            if( ! this.contentAdsRulesShow ) {
+                if( this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp') ) {
+                    this.$refs.wpadcenter_arrow.classList.remove('vs__close-indicator-wp');
+                }
+            }
+            else {
+                if( ! this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp') ) {
+                    this.$refs.wpadcenter_arrow.classList.add('vs__close-indicator-wp');
+                }
+            }
         }
     },
     mounted() {
@@ -137,6 +164,7 @@ const componentContentAds = {
             this.adGroups.forEach((item) => {
                 if( item.term_id === parseInt(this.adgroup_selected_) ) {
                     this.adgroup_selected_ = item;
+                    this.adgroup_ = item.name;
                     return;
                 }
             });
@@ -158,6 +186,7 @@ const componentContentAds = {
             this.post_selected_ = [];
         }
         else {
+            this.post_ = this.post_selected_;
             this.post_selected_ = this.post_selected_.split(',');
         }
         if ( this.show !== true ) {
@@ -165,6 +194,16 @@ const componentContentAds = {
         }
         if ( this.position_reverse_ === 'false' ) {
             this.$refs.position_reverse.checked = false;
+        }
+        if( ! this.contentAdsRulesShow ) {
+            if( this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp') ) {
+                this.$refs.wpadcenter_arrow.classList.remove('vs__close-indicator-wp');
+            }
+        }
+        else {
+            if( ! this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp') ) {
+                this.$refs.wpadcenter_arrow.classList.add('vs__close-indicator-wp');
+            }
         }
     }
 };
