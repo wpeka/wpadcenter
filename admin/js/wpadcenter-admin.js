@@ -111,11 +111,15 @@
 
 				change_active_metaboxes( current_ad_type );
 
+				if( $( "#ad-type :selected" ).val() === 'amp_ad' ) {
+					displayAmpWarning();
+			   	}
+
 				$( '#ad-type' ).change(
 					function () {
 						const selected_ad = $( "#ad-type :selected" ).val();
 						change_active_metaboxes( selected_ad );
-
+						displayAmpWarning();
 					}
 				);
 
@@ -139,6 +143,132 @@
 				}
 
 			}
+
+		//  create AMP ad page functions
+		var wrapper = $("#wpadcenter-amp-attributes-container");
+		var add_button = $("#wpadcenter-amp-add-attr-button");
+   
+		$(add_button).click(function(e) {
+			e.preventDefault();
+   
+				$(wrapper).append(`<div><label>Attribute : </label><input  name="amp-attributes[]" /> =
+				<label>Value : </label><input  name="amp-values[]" />
+				<button class="wpadcenter-amp-delete-attr-button">Remove</button><br><br></div>`);
+   
+		});
+   
+		$(wrapper).on("click", ".wpadcenter-amp-delete-attr-button", function(e) {
+			e.preventDefault();
+			$(this).parent('div').remove();
+		});
+   
+		// adsense amp preference functions
+		if ($('#ampPreference').prop("checked")) {
+			$('.wpadcenterAmpCustomizeSettings').show();
+		}
+		else{
+			$('.wpadcenterAmpCustomizeSettings').hide();
+   
+		}
+   
+		$('#ampPreference').change(function(){
+   
+			if ($(this).prop("checked")) {
+   
+						convertAdsenseToAmp();
+						$('.wpadcenterAmpCustomizeSettings').show();
+   
+			}
+			else{
+				$('#wpadcenterAdsenseAmpCode').text('');
+				$('.wpadcenterAmpCustomizeSettings').hide();
+   
+			}
+		});
+   
+		$('.wpadcenterAmpCustomize').change(function(){
+			convertAdsenseToAmp();
+		});
+		$('#wpadcenter-google-adsense-code').change(function(){
+			convertAdsenseToAmp();
+   
+		});
+   
+   
+		function convertAdsenseToAmp(){
+			let rawCode=$('#wpadcenter-google-adsense-code').val();
+			if(rawCode){
+				   rawCode = $('<div />').html(rawCode);
+						let rawCode_html = rawCode.find( 'ins' );
+						let clientId = rawCode_html.attr( 'data-ad-client' );
+						if(!clientId){
+						   $('#wpadcenterAdsenseAmpCode').text("Please provide Client ID");
+						   return;
+					   }
+						let slotId = rawCode_html.attr( 'data-ad-slot' );
+						if(!slotId){
+							$('#wpadcenterAdsenseAmpCode').text("Please provide slot ID");
+							return;
+						}
+   
+			let ampAdCode=`
+						<amp-ad
+						type="adsense"
+						data-ad-client="${clientId}"
+						data-ad-slot="${slotId}"`;
+   
+						   if ($('#wpadcenterAmpCustomizeAuto').prop("checked")) {
+   
+						ampAdCode += `
+						layout="fixed"
+						   width="300"
+						   height="250" `;
+						   }
+   
+						   if ($('#wpadcenterAmpCustomizeDynamic').prop("checked")) {
+							   let dynamicWidth= $('#wpadcenterAmpCustomizeDynamicWidth').val();
+							   let dynamicHeight=$('#wpadcenterAmpCustomizeDynamicHeight').val();
+   
+							   ampAdCode += `
+							   layout="responsive"
+							   width="${dynamicWidth}vw"
+							   height="${dynamicHeight}vw" `;
+						   }
+   
+						   if ($('#wpadcenterAmpCustomizeStatic').prop("checked")) {
+							   let staticHeight =$('#wpadcenterAmpCustomizeStaticHeight').val();
+							   ampAdCode += `
+							   layout="fixed-height"
+							   width="auto"
+							   height="${staticHeight}" `;
+						   }
+   
+						   ampAdCode += `>`;
+   
+   
+   
+						ampAdCode += `</amp-ad>`;
+						$('#wpadcenterAdsenseAmpCode').text(ampAdCode);
+   
+				}
+		   }
+
+
+		   function displayAmpWarning() {
+			$('#wpadcenter_amp_warning').remove();
+			const selected_ad = $( "#ad-type :selected" ).val();
+			if ( selected_ad === 'amp_ad'){
+			var j = jQuery.noConflict();
+			j.ajax({
+				  type:"POST",
+				  url: "./admin-ajax.php",
+				  data: {
+				 action:'wpadcenter_pro_display_amp_warning'    
+			  }
+			  }).done(success => {
+				jQuery('.wp-header-end').after(success);  });
+			}
+		}
 
 		}
 	);

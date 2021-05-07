@@ -447,20 +447,30 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_metafields() {
 		$metafields = array(
-			'ad-type'                  => array( 'wpadcenter_ad_type', 'string' ),
-			'ad-size'                  => array( 'wpadcenter_ad_size', 'string' ),
-			'open-in-new-tab'          => array( 'wpadcenter_open_in_new_tab', 'bool' ),
-			'nofollow-on-link'         => array( 'wpadcenter_nofollow_on_link', 'bool' ),
-			'link-url'                 => array( 'wpadcenter_link_url', 'url' ),
-			'ad-code'                  => array( 'wpadcenter_ad_code', 'raw' ),
-			'external-image-link'      => array( 'wpadcenter_external_image_link', 'url' ),
-			'ad-google-adsense'        => array( 'wpadcenter_ad_google_adsense', 'raw' ),
-			'start_date'               => array( 'wpadcenter_start_date', 'date' ),
-			'end_date'                 => array( 'wpadcenter_end_date', 'date' ),
-			'limit-ad-impressions-set' => array( 'wpadcenter_limit_impressions_set', 'bool' ),
-			'limit-ad-clicks-set'      => array( 'wpadcenter_limit_clicks_set', 'bool' ),
-			'limit-ad-impressions'     => array( 'wpadcenter_limit_impressions', 'number' ),
-			'limit-ad-clicks'          => array( 'wpadcenter_limit_clicks', 'number' ),
+			'ad-type'                               => array( 'wpadcenter_ad_type', 'string' ),
+			'ad-size'                               => array( 'wpadcenter_ad_size', 'string' ),
+			'open-in-new-tab'                       => array( 'wpadcenter_open_in_new_tab', 'bool' ),
+			'nofollow-on-link'                      => array( 'wpadcenter_nofollow_on_link', 'bool' ),
+			'link-url'                              => array( 'wpadcenter_link_url', 'url' ),
+			'ad-code'                               => array( 'wpadcenter_ad_code', 'raw' ),
+			'external-image-link'                   => array( 'wpadcenter_external_image_link', 'url' ),
+			'ad-google-adsense'                     => array( 'wpadcenter_ad_google_adsense', 'raw' ),
+			'start_date'                            => array( 'wpadcenter_start_date', 'date' ),
+			'end_date'                              => array( 'wpadcenter_end_date', 'date' ),
+			'limit-ad-impressions-set'              => array( 'wpadcenter_limit_impressions_set', 'bool' ),
+			'limit-ad-clicks-set'                   => array( 'wpadcenter_limit_clicks_set', 'bool' ),
+			'limit-ad-impressions'                  => array( 'wpadcenter_limit_impressions', 'number' ),
+			'limit-ad-clicks'                       => array( 'wpadcenter_limit_clicks', 'number' ),
+			'amp-preference'                        => array( 'wpadcenter_amp_preference', 'bool' ),
+			'wpadcenter-adsense-amp-code'           => array( 'wpadcenter_adsense_amp_code', 'raw' ),
+			'wpadcenter-adsense-amp-dynamic-width'  => array( 'wpadcenter_adsense_amp_dynamic_width', 'number' ),
+			'wpadcenter-adsense-amp-dynamic-height' => array( 'wpadcenter_adsense_amp_dynamic_height', 'number' ),
+			'wpadcenter-adsense-amp-static-height'  => array( 'wpadcenter_adsense_amp_static_height', 'number' ),
+			'wpadcenter-amp-adsense-customize'      => array( 'wpadcenter_amp_adsense_customize', 'string' ),
+			'amp-attributes'                        => array( 'wpadcenter_amp_attributes', 'array' ),
+			'amp-values'                            => array( 'wpadcenter_amp_values', 'array' ),
+			'amp-placeholder'                       => array( 'wpadcenter_amp_placeholder', 'string' ),
+			'amp-fallback'                          => array( 'wpadcenter_amp_fallback', 'string' ),
 		);
 
 		return apply_filters( 'wp_adcenter_get_default_metafields', $metafields );
@@ -499,6 +509,12 @@ class Wpadcenter_Admin {
 				'active_meta_box' => array(
 					'ad-google-adsense',
 					'amp-preference',
+				),
+			),
+			'amp_ad'              => array(
+				'active_meta_box' => array(
+					'amp-attributes',
+					'ad-size',
 				),
 			),
 
@@ -568,8 +584,8 @@ class Wpadcenter_Admin {
 			'banner_image'        => __( 'Banner Image', 'wpadcenter' ),
 			'external_image_link' => __( 'External Image Link', 'wpadcenter' ),
 			'ad_code'             => __( 'Ad Code', 'wpadcenter' ),
-			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),
-
+			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),			
+			'amp_ad'              => __( 'AMP', 'wpadcenter' ),
 		);
 
 		return apply_filters( 'wp_adcenter_get_default_ad_types', $ad_types );
@@ -1336,7 +1352,7 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_add_meta_boxes( $post ) {
-
+		$wpadcenter_api_key = get_option( 'wc_am_client_wpadcenter_pro_activated' );
 		add_meta_box(
 			'ad-type',
 			__( 'Ad Type', 'wpadcenter' ),
@@ -1404,13 +1420,31 @@ class Wpadcenter_Admin {
 				'low'
 			);
 		}
+		if ( get_option( 'wpadcenter_pro_active' ) && 'Activated' === $wpadcenter_api_key ) {
+			add_meta_box(
+				'ad-limits',
+				__( 'Limit Impressions / Clicks', 'wpadcenter' ),
+				array( $this, 'wpadcenter_limit_impressions_clicks' ),
+				'wpadcenter-ads',
+				'normal',
+				'low'
+			);
+		}
 		add_meta_box(
-			'ad-limits',
-			__( 'Limit Impressions / Clicks', 'wpadcenter' ),
-			array( $this, 'wpadcenter_limit_impressions_clicks' ),
+			'amp-preference',
+			__( 'Amp Preference', 'wpadcenter' ),
+			array( $this, 'wpadcenter_pro_amp_preference_metabox' ),
 			'wpadcenter-ads',
 			'normal',
-			'low'
+			'core'
+		);
+		add_meta_box(
+			'amp-attributes',
+			__( 'Amp Ad Parameters', 'wpadcenter' ),
+			array( $this, 'wpadcenter_pro_amp_attributes_metabox' ),
+			'wpadcenter-ads',
+			'normal',
+			'high'
 		);
 		do_action( 'wp_adcenter_add_meta_boxes', $post );
 
@@ -1605,6 +1639,95 @@ class Wpadcenter_Admin {
 
 		echo '</select>';
 
+	}
+
+	/**
+	 * Call back function for the amp preference metabox.
+	 *
+	 * @param WP_POST $post Post object.
+	 */
+	public function wpadcenter_pro_amp_preference_metabox( $post ) {
+
+		$amp_preference             = get_post_meta( $post->ID, 'wpadcenter_amp_preference', true );
+		$amp_adsense_code           = get_post_meta( $post->ID, 'wpadcenter_adsense_amp_code', true );
+		$amp_adsense_dynamic_width  = get_post_meta( $post->ID, 'wpadcenter_adsense_amp_dynamic_width', true );
+		$amp_adsense_dynamic_height = get_post_meta( $post->ID, 'wpadcenter_adsense_amp_dynamic_height', true );
+		$amp_adsense_static_height  = get_post_meta( $post->ID, 'wpadcenter_adsense_amp_static_height', true );
+		$amp_adsense_customize      = get_post_meta( $post->ID, 'wpadcenter_amp_adsense_customize', true );
+
+		$amp_adsense_customize      = $amp_adsense_customize ? $amp_adsense_customize : 'auto';
+		$amp_adsense_dynamic_width  = $amp_adsense_dynamic_width ? $amp_adsense_dynamic_width : '300';
+		$amp_adsense_dynamic_height = $amp_adsense_dynamic_height ? $amp_adsense_dynamic_height : '250';
+		$amp_adsense_static_height  = $amp_adsense_static_height ? $amp_adsense_static_height : '100';
+
+		echo '<div>
+		<label for="ampPreference"><input name="amp-preference" type="checkbox" value="1" id="ampPreference" ' . checked( '1', $amp_preference, false ) . '> ' . esc_html__( 'Enable AMP support', 'wpadcenter' ) . ' <span style="color:grey">( ' . esc_html__( 'If enabled, automatically converts to AMP ad on AMP websites.','wpadcenter' ) . ' )</span></label>
+		</div>';
+
+		echo '<div class="wpadcenterAmpCustomizeSettings" >
+		<br><label>
+		<input id="wpadcenterAmpCustomizeAuto" name="wpadcenter-amp-adsense-customize" class="wpadcenterAmpCustomize" type="radio" value="auto" ' . checked( $amp_adsense_customize, 'auto', false ) . ' />' . esc_html__( 'Automatically convert to AMP', 'wpadcenter' ) . '
+		</label><br><br>
+		<label>
+		<input id="wpadcenterAmpCustomizeDynamic" name="wpadcenter-amp-adsense-customize" class="wpadcenterAmpCustomize" type="radio" value="dynamic" ' . checked( $amp_adsense_customize, 'dynamic', false ) . ' />' . esc_html__( 'Use dynamic size corresponding to ratio', 'wpadcenter' ) . ' <input id="wpadcenterAmpCustomizeDynamicWidth" class="wpadcenterAmpCustomize" name="wpadcenter-adsense-amp-dynamic-width" type="number" min=1 value="' . esc_attr( $amp_adsense_dynamic_width ) . '" > X <input id="wpadcenterAmpCustomizeDynamicHeight" name="wpadcenter-adsense-amp-dynamic-height" class="wpadcenterAmpCustomize" type="number" min=1 value="' . esc_attr( $amp_adsense_dynamic_height ) . '" >
+		</label><br><br>
+		<label>
+		<input id="wpadcenterAmpCustomizeStatic" name="wpadcenter-amp-adsense-customize" class="wpadcenterAmpCustomize" type="radio" value="static" ' . checked( $amp_adsense_customize, 'static', false ) . ' />' . esc_html__( 'Use responsive width and static height of', 'wpadcenter' ) . ' <input id="wpadcenterAmpCustomizeStaticHeight" name="wpadcenter-adsense-amp-static-height" class="wpadcenterAmpCustomize" type="number" min=1 value="' . esc_attr( $amp_adsense_static_height ) . '" >
+		</label><br><br>
+		</div>
+		';
+		echo '<div class="wpadcenterAmpCustomizeSettings" >
+		<br><label for="wpadcenterAdsenseAmpCode">AMP Code Preview:</label>
+
+		<textarea id="wpadcenterAdsenseAmpCode" name="wpadcenter-adsense-amp-code" style="width:100%;height:200px">' . $amp_adsense_code . '</textarea></div> '; //phpcs:ignore
+	}
+
+	/**
+	 * Callback function for the Amp attributes metabox.
+	 *
+	 * @param WP_POST $post Post object.
+	 */
+	public function wpadcenter_pro_amp_attributes_metabox( $post ) {
+		wp_enqueue_style( $this->plugin_name );
+
+		echo '<div id="wpadcenter-amp-attributes-container">';
+
+		$saved_amp_attributes  = get_post_meta( $post->ID, 'wpadcenter_amp_attributes', true );
+		$saved_amp_values      = get_post_meta( $post->ID, 'wpadcenter_amp_values', true );
+		$saved_amp_placeholder = get_post_meta( $post->ID, 'wpadcenter_amp_placeholder', true );
+		$saved_amp_fallback    = get_post_meta( $post->ID, 'wpadcenter_amp_fallback', true );
+
+		if ( ! empty( $saved_amp_attributes ) ) {
+			$index = 0;
+			foreach ( $saved_amp_attributes as $attribute ) {
+				echo '<div>
+						<label >Attribute : </label><input  name="amp-attributes[] " value="' . esc_attr( $attribute ) . '" /> =
+						<label >Value : </label><input  name="amp-values[] " value="' . esc_attr( $saved_amp_values[ $index ] ) . '" />
+						<button class="wpadcenter-amp-delete-attr-button">' . esc_html__( 'Remove', 'wpadcenter' ) . '</button>
+
+						<br><br></div>';
+				$index++;
+			}
+		} else {
+			$default_attributes = array(
+				'type',
+				'width',
+				'height',
+			);
+			foreach ( $default_attributes as $attribute ) {
+				echo '<div>
+						<label >' . esc_html__( 'Attribute :', 'wpadcenter' ) . '</label><input name="amp-attributes[] " value="' . esc_attr( $attribute ) . '"/> =
+						<label >' . esc_html__( 'Value :', 'wpadcenter' ) . '</label><input name="amp-values[] " />
+						<button class="wpadcenter-amp-delete-attr-button">' . esc_html__( 'Remove', 'wpadcenter' ) . '</button>
+
+					<br><br>
+					</div>';
+			}
+		}
+
+		echo '</div><br><button class="button-secondary" id="wpadcenter-amp-add-attr-button">' . esc_html__( 'Add Attribute', 'wpadcenter' ) . '</button><br><br><hr>';
+		echo '<br><label style="display:block" ><strong>' . esc_html__( 'Placeholder :     ', 'wpadcenter' ) . '</strong></label><input name="amp-placeholder" class="wpadcenter-amp-parameter-input" value="' . esc_attr( $saved_amp_placeholder ) . '" size="50" /><br><span style="color:grey">( ' . esc_html__( 'If supported by the ad network, this text is shown until the ad is available for viewing.', 'wpadcenter' ) . ' )</span><br><br><hr>';
+		echo '<br><label style="display:block" ><strong>' . esc_html__( 'Fallback :     ', 'wpadcenter' ) . '</strong></label><input name="amp-fallback" class="wpadcenter-amp-parameter-input" value="' . esc_attr( $saved_amp_fallback ) . '" size="50" /><br><span style="color:grey">( ' . esc_html__( 'If supported by the ad network, this text is shown if no ad is available for the ad slot.', 'wpadcenter' ) . ' )</span>';
 	}
 
 	/**
@@ -2889,6 +3012,22 @@ class Wpadcenter_Admin {
 			}
 		}
 
+	}
+
+	/**
+	 * Adds amp admin notice in the front end.
+	 *
+	 * @since 4.0.0
+	 */
+	public function wpadcenter_pro_display_amp_warning() {
+		$amp_plugin_installed = function_exists( 'is_amp_endpoint' ) || function_exists( 'is_wp_amp' ) || function_exists( 'ampforwp_is_amp_endpoint' );
+
+		if ( ! $amp_plugin_installed ) {
+				echo '<div id="wpadcenter_amp_warning" class="notice notice-warning">
+						<p>Please activate an AMP plugin. AMP ads are only visible on AMP pages.</p>
+					</div>';
+		}
+			wp_die();
 	}
 
 }
