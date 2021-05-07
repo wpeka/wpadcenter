@@ -2477,6 +2477,22 @@ class Wpadcenter_Admin {
 				'schema'       => null,
 			)
 		);
+		register_rest_field(
+			'wpadcenter-ads',
+			'ad_type',
+			array(
+				'get_callback' => array( $this, 'wpadcenter_ad_type_rest_field_cb' ),
+				'schema'       => null,
+			)
+		);
+		register_rest_field(
+			'wpadcenter-ads',
+			'ad_size',
+			array(
+				'get_callback' => array( $this, 'wpadcenter_ad_size_rest_field_cb' ),
+				'schema'       => null,
+			)
+		);
 	}
 
 	/**
@@ -2541,6 +2557,33 @@ class Wpadcenter_Admin {
 			return;
 		}
 
+	}
+
+	/**
+	 * Assigns value to the rest api filed ad_type.
+	 *
+	 * @param object $object contains the post inforamtion.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_type_rest_field_cb( $object ) {
+		$ad_id          = $object['id'];
+		$ad_type        = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		$ad_types_array = self::get_default_ad_types();
+		return $ad_types_array[ $ad_type ];
+	}
+
+	/**
+	 * Assigns value to the rest api filed ad_size.
+	 *
+	 * @param object $object contains the post inforamtion.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_ad_size_rest_field_cb( $object ) {
+		$ad_id   = $object['id'];
+		$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );	
+		return $ad_size;
 	}
 
 	/**
