@@ -40,6 +40,56 @@
 
 	$( document ).ready(
 		function(){
+			$( '#geo_countries select.geo_countries' ).select2();
+			$( 'input[name="target-ads-by"]' ).click(
+				function() {
+					var target_ads_by = $( this ).attr( 'value' );
+					if (target_ads_by == 'countries') {
+						$( '#geo_cities' ).hide();
+						$( '#geo_countries' ).show();
+					} else if (target_ads_by == 'cities') {
+						$( '#geo_countries' ).hide();
+						$( '#geo_cities' ).show();
+					}
+				}
+			);
+			if ($( '#limit-ad-impressions-set' ).prop( 'checked' )) {
+				$( '#impressions_number' ).show();
+			} else {
+				$( '#impressions_number' ).hide();
+			}
+
+			if ($( '#limit-ad-clicks-set' ).prop( 'checked' )) {
+				$( '#clicks_number' ).show();
+			} else {
+				$( '#clicks_number' ).hide();
+			}
+
+			$( '#limit-ad-impressions-set' ).change(
+				function() {
+					if ($( '#limit-ad-impressions-set' ).prop( 'checked' )) {
+						$( '#impressions_number' ).show();
+					} else {
+						$( '#impressions_number' ).hide();
+					}
+				}
+			);
+
+			$( '#limit-ad-clicks-set' ).change(
+				function() {
+					if ($( '#limit-ad-clicks-set' ).prop( 'checked' )) {
+						$( '#clicks_number' ).show();
+					} else {
+						$( '#clicks_number' ).hide();
+					}
+				}
+			);
+
+			$( ".make_radio" ).click(
+				function(){
+					$( ".make_radio" ).not( this ).prop( "checked",false ).trigger( 'change' );
+				}
+			);
 
 			if ( 'undefined' !== typeof wpadcenter_render_metaboxes ) {
 
@@ -61,11 +111,15 @@
 
 				change_active_metaboxes( current_ad_type );
 
+				if( $( "#ad-type :selected" ).val() === 'amp_ad' ) {
+					displayAmpWarning();
+			   	}
+
 				$( '#ad-type' ).change(
 					function () {
 						const selected_ad = $( "#ad-type :selected" ).val();
 						change_active_metaboxes( selected_ad );
-
+						displayAmpWarning();
 					}
 				);
 
@@ -89,6 +143,125 @@
 				}
 
 			}
+
+		//  create AMP ad page functions
+		var wrapper = $("#wpadcenter-amp-attributes-container");
+		var add_button = $("#wpadcenter-amp-add-attr-button");
+   
+		$(add_button).click(function(e) {
+			e.preventDefault();
+			var ampInputFields = '<div><label>Attribute : </label><input  name="amp-attributes[]" />'+ ' = ' + '<label>Value : </label><input  name="amp-values[]" />' + ' <button class="wpadcenter-amp-delete-attr-button">Remove</button><br><br></div>';
+   
+				$(wrapper).append( ampInputFields );
+   
+		});
+   
+		$(wrapper).on("click", ".wpadcenter-amp-delete-attr-button", function(e) {
+			e.preventDefault();
+			$(this).parent('div').remove();
+		});
+   
+		// adsense amp preference functions
+		if ($('#ampPreference').prop("checked")) {
+			$('.wpadcenterAmpCustomizeSettings').show();
+		}
+		else{
+			$('.wpadcenterAmpCustomizeSettings').hide();
+   
+		}
+   
+		$('#ampPreference').change(function(){
+   
+			if ($(this).prop("checked")) {
+   
+						convertAdsenseToAmp();
+						$('.wpadcenterAmpCustomizeSettings').show();
+   
+			}
+			else{
+				$('#wpadcenterAdsenseAmpCode').text('');
+				$('.wpadcenterAmpCustomizeSettings').hide();
+   
+			}
+		});
+   
+		$('.wpadcenterAmpCustomize').change(function(){
+			convertAdsenseToAmp();
+		});
+		$('#wpadcenter-google-adsense-code').change(function(){
+			convertAdsenseToAmp();
+   
+		});
+   
+   
+		function convertAdsenseToAmp(){
+			var rawCode=$('#wpadcenter-google-adsense-code').val();
+			if(rawCode){
+				   rawCode = $('<div />').html(rawCode);
+						var rawCode_html = rawCode.find( 'ins' );
+						var clientId = rawCode_html.attr( 'data-ad-client' );
+						if(!clientId){
+						   $('#wpadcenterAdsenseAmpCode').text("Please provide Client ID");
+						   return;
+					   }
+						var slotId = rawCode_html.attr( 'data-ad-slot' );
+						if(!slotId){
+							$('#wpadcenterAdsenseAmpCode').text("Please provide slot ID");
+							return;
+						}
+   
+			var ampAdCode='<amp-ad type="adsense" data-ad-client=" ' + clientId + ' " data-ad-slot=" ' + slotId + ' " ';
+						
+						
+						
+						
+   
+						   if ($('#wpadcenterAmpCustomizeAuto').prop("checked")) {
+   
+						ampAdCode += ' layout="fixed" width="300" height="250" ';
+						
+						   }
+   
+						   if ($('#wpadcenterAmpCustomizeDynamic').prop("checked")) {
+							   var dynamicWidth= $('#wpadcenterAmpCustomizeDynamicWidth').val();
+							   var dynamicHeight=$('#wpadcenterAmpCustomizeDynamicHeight').val();
+   
+							   ampAdCode += ' layout="responsive" width=" ' + dynamicWidth + 'vw" height=" ' + dynamicHeight + 'vw"  ';
+							
+						   }
+   
+						   if ($('#wpadcenterAmpCustomizeStatic').prop("checked")) {
+							   var staticHeight =$('#wpadcenterAmpCustomizeStaticHeight').val();
+							   ampAdCode += ' layout="fixed-height" width="auto" height=" ' + staticHeight + ' "';
+
+						   }
+   
+						   ampAdCode += '>';
+   
+   
+   
+						ampAdCode += '</amp-ad>';
+						$('#wpadcenterAdsenseAmpCode').text(ampAdCode);
+   
+				}
+		   }
+
+
+		   function displayAmpWarning() {
+			$('#wpadcenter_amp_warning').remove();
+			var selected_ad = $( "#ad-type :selected" ).val();
+			if ( selected_ad === 'amp_ad'){
+			var j = jQuery.noConflict();
+			j.ajax({
+				  type:"POST",
+				  url: "./admin-ajax.php",
+				  data: {
+				 action:'wpadcenter_pro_display_amp_warning'    
+			  }
+			  }).done( function(success){
+				jQuery('.wp-header-end').after(success);  });
+			}
+		}
 
 		}
 	);

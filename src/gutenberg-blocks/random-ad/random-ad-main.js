@@ -8,31 +8,34 @@ const { __, }       = wp.i18n;
 
 
 
-import SingleAd from  './single-ad-component';
+import RandomAd from  './random-ad-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
 
 
 
 
-registerBlockType('wpadcenter/single-ad',{
+registerBlockType('wpadcenter/random-ad',{
 
-     title:__('WPAdCenter Single Ad','wpadcenter'),
-     description: __('Block to generate WPAdCenter single ad','wpadcenter'),
+     title:__('WPAdCenter Random Ad','wpadcenter'),
+     description: __('Block to generate random WPAdCenter Ad from Adgroups','wpadcenter'),
      icon:'flag',
      category:'wpadcenter',
 
      attributes:{
-       ad_id: {
-       type: 'number',
+      
+       adgroup_ids: {
+       type: 'array',
+       default:[],
      },
-     ad_name: {
+     adgroups: {
+       type: 'array',
+       default:[],
+     },
+     adgroup_alignment: {
        type: 'text',
      },
-     ad_alignment: {
-       type: 'text',
-     },
-     max_width_check:{
+    max_width_check:{
       type: 'boolean',
     default:false, 
     },
@@ -52,20 +55,20 @@ const getOptions=(value,callback)=>{
 
 
   apiFetch( {
-    path:'/wp/v2/wpadcenter-ads/',
+    path:'/wp/v2/wpadcenter-adgroups/',
   } )
-  .then( ( ads ) => {
-    ads = ads.map( ( ad ) => {
-      let adLabel = ad.title.rendered + ' ( ' + ad.ad_type + ' - ' + ad.ad_size + ' )';
+  .then( ( adgroups ) => {
+    adgroups = adgroups.map( ( adgroup ) => {
       return {
-  							value: ad.id,
-  							label: adLabel,
+  							value: adgroup.id,
+  							label: adgroup.name,
   						};
     } );
-    callback(ads);
+    callback(adgroups);
   } );
 
 }
+
 
 const customStyles = {
   control: (base, state) => ({
@@ -77,7 +80,7 @@ const customStyles = {
 
     fontSize:"125%",
     borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
-   
+
    boxShadow: state.isFocused ? null : null,
 
  }),
@@ -85,7 +88,7 @@ const customStyles = {
     ...base,
 
     borderRadius: 0,
-  
+
     marginTop: 0,
     minWidth: "300px",
   }),
@@ -93,7 +96,7 @@ const customStyles = {
     ...base,
     padding: 0,
     maxWidth: "300px",
-   
+
   })
 };
 
@@ -111,40 +114,49 @@ const onMaxWidthChange=(value)=>{
 }
 
 const onAdSelection = ( selection ) => {
-
+      let current_adgroup_ids=[];
+      selection.forEach((adgroup)=>{
+        current_adgroup_ids.push(adgroup['value']);
+      })
       props.setAttributes( {
-        ad_id   : selection.value,
-        ad_name : selection.label,
+        adgroup_ids   : current_adgroup_ids,
+        adgroups: selection,
 
       } );
 
     }
-    const defaultValue = {
-      value: props.attributes.ad_id,
-      label: props.attributes.ad_name,
-    }
+    const defaultValue = props.attributes.adgroups;
+
+
 
 
     const adAlignment=(value)=>{
       props.setAttributes({
-        ad_alignment: value,
+        adgroup_alignment: value,
       });
 
     }
+    const headingStyles={
+      fontWeight:"300",
+      textAlign:"center",
+      fontSize:"medium",
+    }
+
 
 
        return <div className="Wpadcenter-gutenberg-container">
        { !! props.isSelected ? (
 
-       <Placeholder label="WPAdCenter Single Ad"  isColumnLayout="true">
+       <Placeholder label="WPAdCenter Random Ad"  isColumnLayout="true">
 
-      <h3 style={{fontWeight:"300",textAlign:"center",fontSize:"medium"}}>{__('Select Ad','wpadcenter')}</h3>
+      <h3 style={headingStyles}>{__('Select Ad Groups','wpadcenter')}</h3>
        <div style={{display:"flex",justifyContent:"center"}}>
-       
+
        <AsyncSelect
        styles={customStyles}
        className="wpadcenter-async-select"
        defaultOptions
+       isMulti
 			 loadOptions={ getOptions }
 			 defaultValue={ defaultValue }
 			 onChange={ onAdSelection }
@@ -152,22 +164,24 @@ const onAdSelection = ( selection ) => {
 
       />
       </div>
+
       <AdAlignment
       adAlignment={adAlignment}
-      currentAdAlignment={props.attributes.ad_alignment}
+      currentAdAlignment={props.attributes.adgroup_alignment}
       />
-       <MaxWidth
+
+    <MaxWidth
       maxWidthCheck={props.attributes.max_width_check}
       maxWidthControlChange={onMaxWidthControlChange}
       maxWidthChange={onMaxWidthChange}
       maxWidth={props.attributes.max_width_px}
       />
-     
+
 
       </Placeholder>):(
-        <SingleAd
-        adId={props.attributes.ad_id}
-        adAlignment={props.attributes.ad_alignment}
+        <RandomAd
+        adGroupIds={props.attributes.adgroup_ids}
+        adgroupAlignment={props.attributes.adgroup_alignment}
         max_width_check={props.attributes.max_width_check}
         max_width_px={props.attributes.max_width_px}
         />

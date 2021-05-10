@@ -14,8 +14,8 @@
  * @wordpress-plugin
  * Plugin Name:       WPAdCenter
  * Plugin URI:        https://wpadcenter.com
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           2.0.0
+ * Description:       Advertising management plugin for WordPress.
+ * Version:           2.0.1
  * Author:            WPEka Club
  * Author URI:        https://club.wpeka.com/
  * License:           GPL-2.0+
@@ -48,7 +48,7 @@ define( 'WPADCENTER_SETTINGS_FIELD', 'WPAdCenter-Settings' );
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WPADCENTER_VERSION', '2.0.0' );
+define( 'WPADCENTER_VERSION', '2.0.1' );
 
 if ( ! function_exists( 'adc_fs' ) ) {
 	/**
@@ -98,14 +98,16 @@ if ( ! defined( 'WPADCENTER_SCRIPT_SUFFIX' ) ) {
 }
 
 
+
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-wpadcenter-activator.php
+ *  * This action is documented in includes/class-wpadcenter-activator.php
  */
 function activate_wpadcenter() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter-activator.php';
 	Wpadcenter_Activator::activate();
 }
+
 
 /**
  * The code that runs during plugin deactivation.
@@ -135,7 +137,6 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter.php';
  * @since 1.0.0
  */
 function run_wpadcenter() {
-
 	$plugin = new Wpadcenter();
 	$plugin->run();
 

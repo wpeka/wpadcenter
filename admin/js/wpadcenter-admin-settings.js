@@ -53,6 +53,11 @@
 						} else {
 							$( 'input[name="ads_txt_tab"]' ).val( '0' );
 						}
+                        if (wpadcenter_tab_hash == 'wpadcenter-advanced') {
+                            $( 'input[name="geo_targeting_tab"]' ).val( '1' );
+                        } else {
+                            $( 'input[name="geo_targeting_tab"]' ).val( '0' );
+                        }
 						var wpadcenter_tab_elm = $( 'div[data-id="' + wpadcenter_tab_hash + '"]' );
 						$( '.wpadcenter-tab-content' ).hide();
 						if (wpadcenter_tab_elm.length > 0) {
@@ -62,6 +67,10 @@
 						if (ads_txt_tab == '1') {
 							$( 'input[name="check_ads_txt_problems"]' ).trigger( 'click' );
 						}
+                        var geo_targeting_tab = $( 'input[name="geo_targeting_tab"]' ).val();
+                        if (geo_targeting_tab == '1') {
+                            $( 'input[name="check_maxmind_license_key"]' ).trigger( 'click' );
+                        }
 					}
 				);
 				var location_hash = window.location.hash;
@@ -75,6 +84,11 @@
 						} else {
 							$( 'input[name="ads_txt_tab"]' ).val( '0' );
 						}
+                        if (wpadcenter_tab_hash == 'wpadcenter-advanced') {
+                            $( 'input[name="geo_targeting_tab"]' ).val( '1' );
+                        } else {
+                            $( 'input[name="geo_targeting_tab"]' ).val( '0' );
+                        }
 					}
 				} else {
 					wpadcenter_nav_tab.eq( 0 ).click();
@@ -147,6 +161,57 @@
 					}
 				}
 			);
+
+            $( 'input[name="check_maxmind_license_key"]' ).on(
+                'click',
+                function(e) {
+                    e.preventDefault();
+                    var geo_targeting_tab = $( 'input[name="geo_targeting_tab"]' ).val();
+                    if (geo_targeting_tab == '1') {
+                        var message  = $( '.maxmind_key_errors' );
+                        var spinner  = $( '.geo_targeting_spinner' );
+                        var license_key  = $( 'input[name="maxmind_license_key_field"]' ).val();;
+                        var ajax_url = $( 'input[name="geo_targeting_ajaxurl"]' ).val();
+                        var security = $( 'input[name="geo_targeting_security"]' ).val();
+                        message.html( '' );
+                        spinner.show();
+                        spinner.css( {'visibility':'visible'} );
+
+                        var data = {
+                            action : 'check_maxmind_license_key',
+                            security: security,
+                            license_key: license_key
+                        };
+                        $.ajax(
+                            {
+                                url: ajax_url,
+                                data: data,
+                                dataType:'json',
+                                type: 'POST',
+                                success: function (data)
+                                {
+                                    spinner.css( {'visibility':'hidden'} );
+                                    spinner.hide();
+                                    var check_message = '';
+                                    if(data.response == false) {
+                                    	check_message = data.error_message;
+                                        message.html(check_message);
+									}
+                                },
+                                error:function()
+                                {
+                                    spinner.css( {'visibility':'hidden'} );
+                                    spinner.hide();
+                                    if (data.error_message) {
+                                        message.html( data.error_message );
+                                    }
+                                }
+                            }
+                        );
+                    }
+                }
+            );
+
 			$( 'input[name="check_ads_txt_problems"]' ).on(
 				'click',
 				function(e) {
@@ -216,9 +281,9 @@
 					e.preventDefault();
 					var data       = $( this ).serialize();
 					var url        = $( this ).attr( 'action' );
-					var spinner    = $( this ).find( '.spinner' );
 					var submit_btn = $( this ).find( 'input[type="submit"]' );
-					spinner.css( {'visibility':'visible'} );
+					var wpadcenter_save = $ ( this ).find('.wpadcenter_save');
+					wpadcenter_save.addClass('button--loading');
 					submit_btn.css( {'opacity':'.5','cursor':'default'} ).prop( 'disabled',true );
 					$.ajax(
 						{
@@ -226,16 +291,20 @@
 							type:'POST',
 							data:data + '&wpadcenter_settings_ajax_update=' + submit_action,
 							success:function(data) {
-								spinner.css( {'visibility':'hidden'} );
+								wpadcenter_save.removeClass('button--loading');
 								submit_btn.css( {'opacity':'1','cursor':'pointer'} ).prop( 'disabled',false );
 								wpadcenter_notify_msg.success( wpadcenter_settings_success_message );
 								var ads_txt_tab = $( 'input[name="ads_txt_tab"]' ).val();
 								if (ads_txt_tab == '1') {
 									$( 'input[name="check_ads_txt_problems"]' ).trigger( 'click' );
 								}
+                                var geo_targeting_tab = $( 'input[name="geo_targeting_tab"]' ).val();
+                                if (geo_targeting_tab == '1') {
+                                    $( 'input[name="check_maxmind_license_key"]' ).trigger( 'click' );
+                                }
 							},
 							error:function () {
-								spinner.css( {'visibility':'hidden'} );
+								wpadcenter_save.removeClass('button--loading');
 								submit_btn.css( {'opacity':'1','cursor':'pointer'} ).prop( 'disabled',false );
 
 								wpadcenter_notify_msg.error( wpadcenter_settings_error_message );
@@ -314,6 +383,18 @@
 					}
 				}
 			);
+            $( document ).on(
+                'change',
+                'input[name="geo_targeting_field"]',
+                function(){
+                    if (this.value == 'true') {
+                        $( 'input[name="ads_txt_tab"]' ).val( '1' );
+                        $( 'input[name="check_maxmind_license_key"]' ).trigger( 'click' );
+                    } else {
+                        $( 'input[name="geo_targeting_tab"]' ).val( '0' );
+                    }
+                }
+            );
 
 		}
 	);
@@ -323,6 +404,10 @@
 			if (ads_txt_tab == '1') {
 				$( document ).find( 'input[name="check_ads_txt_problems"]' ).trigger( 'click' );
 			}
+            var geo_targeting_tab = $( 'input[name="geo_targeting_tab"]' ).val();
+            if (geo_targeting_tab == '1') {
+                $( document ).find( 'input[name="check_maxmind_license_key"]' ).trigger( 'click' );
+            }
 		}
 	)
 })( jQuery );

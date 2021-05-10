@@ -99,6 +99,28 @@ class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'max_width',
+			array(
+				'label'        => __( 'Enable Max Width', 'wpadcenter' ),
+				'type'         => \Elementor\Controls_Manager::SWITCHER,
+				'label_on'     => __( 'On', 'wpadcenter' ),
+				'label_off'    => __( 'Off', 'wpadcenter' ),
+				'return_value' => 'on',
+				'default'      => 'off',
+			)
+		);
+		$this->add_control(
+			'max_width_px',
+			array(
+				'label'   => __( 'Max Width', 'wpadcenter' ),
+				'type'    => \Elementor\Controls_Manager::NUMBER,
+				'min'     => 1,
+				'step'    => 1,
+				'default' => 100,
+			)
+		);
+
 		$this->end_controls_section();
 	}
 
@@ -144,9 +166,16 @@ class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 
 		$settings = $this->get_settings_for_display();
 
-		$ad_id      = $settings['ad_id'];
+		$ad_id = $settings['ad_id'];
+		if ( 'on' === $settings['max_width'] ) {
+			$settings['max_width'] = true;
+		} else {
+			$settings['max_width'] = false;
+		}
 		$attributes = array(
-			'classes' => $settings['alignment'],
+			'align'        => $settings['alignment'],
+			'max_width'    => $settings['max_width'],
+			'max_width_px' => $settings['max_width_px'],
 
 		);
 

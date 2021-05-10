@@ -73,3 +73,21 @@
 .edit-post-meta-boxes-area {
   margin: 0 !important;
 }
+#geo_countries, #geo_cities {
+	margin-top: 10px;
+}
+#geo_countries .geo_countries,
+#geo_countries .select2-container,
+#geo_cities .geo_cities {
+	width: 100% !important;
+}
+.wpadcenter-amp-delete-attr-button{
+	height:30px;
+	cursor:pointer;
+	border-radius:5px;
+	border:0;
+}
+.wpadcenter-amp-parameter-input {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

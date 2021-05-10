@@ -4,11 +4,10 @@ const { __, }       = wp.i18n;
 
 
 
-class AdGroup extends Component{
+class RandomAd extends Component{
   constructor(){
     super(...arguments);
     this.state={
-      ad_ids:[],
       ad_html:{
         __html:'',
       },
@@ -33,19 +32,17 @@ class AdGroup extends Component{
       type:"POST",
       url: "./admin-ajax.php",
       data: {
-          action:'wpadcenter_adgroup_gutenberg_preview', 
-          adgroup_nonce:wpadcenter_adgroup_verify.adgroup_nonce,   
+          action:'wpadcenter_random_ad_gutenberg_preview', 
+          random_ad_nonce:wpadcenter_random_ad_verify.random_ad_nonce,   
           ad_groups:this.props.adGroupIds,
           alignment:this.props.adgroupAlignment, 
-          num_ads:this.props.numAds,
-          num_columns:this.props.numColumns,   
           max_width_check:this.props.max_width_check,
           max_width_px:this.props.max_width_px
       }
-  }).done(adgroup_html => {
+  }).done(random_ad_html => {
         this.setState( {
             ad_html:{
-            __html:adgroup_html,
+            __html:random_ad_html,
         },
     } );
   });
@@ -70,4 +67,4 @@ class AdGroup extends Component{
 
   	}
     }
-export default AdGroup;
+export default RandomAd;

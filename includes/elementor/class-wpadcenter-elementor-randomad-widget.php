@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for registering adgroup elementor widget.
+ * Class for registering random ad elementor widget.
  *
  * @link  https://wpadcenter.com/
  * @since 1.0.0
@@ -22,20 +22,20 @@ use Elementor\Controls_Manager;
  * @subpackage Wpadcenter/includes/elementor
  * @author     WPEka <hello@wpeka.com>
  */
-class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
+class Wpadcenter_Elementor_RandomAd_Widget extends \Elementor\Widget_Base {
 
 	/**
 	 * Name slug for widget
 	 */
 	public function get_name() {
-		return 'wpadcenter-adgroup';
+		return 'wpadcenter-random-ad';
 	}
 
 	/**
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Adgroup';
+		return 'WPAdCenter Random Ad';
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_title',
 			array(
-				'label' => __( 'WPAdCenter Adgroup', 'wpadcenter' ),
+				'label' => __( 'WPAdCenter Random Ad', 'wpadcenter' ),
 			)
 		);
 
@@ -74,28 +74,6 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 				'multiple' => true,
 				'options'  => $adgroup_options,
 				'default'  => array_keys( $adgroup_options )[0],
-			)
-		);
-
-		$this->add_control(
-			'num_ads',
-			array(
-				'label'   => __( 'Number of Ads', 'wpadcenter' ),
-				'type'    => \Elementor\Controls_Manager::NUMBER,
-				'min'     => 1,
-				'step'    => 1,
-				'default' => 1,
-			)
-		);
-
-		$this->add_control(
-			'num_columns',
-			array(
-				'label'   => __( 'Number of Columns', 'wpadcenter' ),
-				'type'    => \Elementor\Controls_Manager::NUMBER,
-				'min'     => 1,
-				'step'    => 1,
-				'default' => 1,
 			)
 		);
 
@@ -179,13 +157,11 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 		$attributes = array(
 			'adgroup_ids'  => $settings['adgroup_ids'],
 			'align'        => $settings['alignment'],
-			'num_ads'      => $settings['num_ads'],
-			'num_columns'  => $settings['num_columns'],
 			'max_width'    => $settings['max_width'],
 			'max_width_px' => $settings['max_width_px'],
 		);
 
-		echo Wpadcenter_Public::display_adgroup_ads( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo Wpadcenter_Public::display_random_ad( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 

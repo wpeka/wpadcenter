@@ -80,7 +80,7 @@ class Wpadcenter {
 		if ( defined( 'WPADCENTER_VERSION' ) ) {
 			$this->version = WPADCENTER_VERSION;
 		} else {
-			$this->version = '2.0.0';
+			$this->version = '2.0.1';
 		}
 		$this->plugin_name = 'wpadcenter';
 
@@ -149,6 +149,11 @@ class Wpadcenter {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-adgroup-widget.php';
 
 		/**
+		 * The class responsible for defining random ad widget.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-random-ad-widget.php';
+
+		/**
 		 * The class responsible for defining single ad elementor widget.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
@@ -208,8 +213,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'admin_post_export_csv', $plugin_admin, 'wpadcenter_export_csv' );
 		$this->loader->add_filter( 'style_loader_src', $plugin_admin, 'wpadcanter_dequeue_styles' );
 		$this->loader->add_filter( 'print_styles_array', $plugin_admin, 'wpadcenter_remove_forms_style' );
-		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_single_ad_widget' );
-		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_adgroup_widget' );
+		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_widgets' );
 		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_gutenberg_blocks' );
 		$this->loader->add_filter( 'block_categories', $plugin_admin, 'wpadcenter_gutenberg_block_categories', 10, 1 );
 		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'wpadcenter_register_rest_fields' );
@@ -217,6 +221,14 @@ class Wpadcenter {
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_scripts' );
 		$this->loader->add_action( 'admin_head', $plugin_admin, 'wpadcenter_remove_permalink' );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_adgroup_gutenberg_preview', $plugin_admin, 'wpadcenter_adgroup_gutenberg_preview' );
+		$this->loader->add_action( 'wp_ajax_save_settings', $plugin_admin, 'wpadcenter_settings' );
+		$this->loader->add_action( 'wp_ajax_wpadcenter_singlead_gutenberg_preview', $plugin_admin, 'wpadcenter_singlead_gutenberg_preview' );
+		$this->loader->add_filter( 'post_row_actions', $plugin_admin, 'wpadcenter_remove_post_row_actions', 10, 1 );
+		$this->loader->add_action( 'restrict_manage_posts', $plugin_admin, 'wpadcenter_add_custom_filters' );
+		$this->loader->add_filter( 'parse_query', $plugin_admin, 'wpadcenter_custom_filters_query', 10, 1 );
+		$this->loader->add_action( 'wp_ajax_wpadcenter_random_ad_gutenberg_preview', $plugin_admin, 'wpadcenter_random_ad_gutenberg_preview' );
+		$this->loader->add_action( 'wp_ajax_wpadcenter_pro_display_amp_warning', $plugin_admin, 'wpadcenter_pro_display_amp_warning' );
+
 	}
 
 	/**
@@ -233,12 +245,11 @@ class Wpadcenter {
 			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 			$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
-			$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
-			$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
 			$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
 		}
+		$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
+		$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
 		$this->loader->add_action( 'enqueue_block_editor_assets', $plugin_public, 'wpadcenter_register_gutenberg_scripts' );
-
 	}
 
 	/**
@@ -297,7 +308,7 @@ class Wpadcenter {
 			case 'cron':
 				return defined( 'DOING_CRON' );
 			case 'frontend':
-				return ( ! is_admin() || defined( 'DOING_AJAX' ) ) && ! defined( 'DOING_CRON' ) && ! defined( 'REST_REQUEST' );
+				return ! is_admin() && ! defined( 'DOING_AJAX' ) && ! defined( 'DOING_CRON' ) && ! defined( 'REST_REQUEST' );
 		}
 	}
 
@@ -314,29 +325,38 @@ class Wpadcenter {
 	public static function wpadcenter_get_default_settings( $key = '' ) {
 		$settings = array(
 			// General settings.
-			'notification'             => false,
+			'enable_notifications'      => false,
 
-			'auto_refresh'             => false,
-			'transition_effect'        => 'none',
-			'transition_speed'         => '500',
-			'transition_delay'         => '1000',
+			'auto_refresh'              => false,
+			'transition_effect'         => 'none',
+			'transition_speed'          => '500',
+			'transition_delay'          => '1000',
 
-			'adblock_detector'         => false,
-			'adblock_detected_message' => 'We have noticed that you have an adblocker enabled which restricts ads served on the site.',
+			'adblock_detector'          => false,
+			'adblock_detected_message'  => __( 'We have noticed that you have an adblocker enabled which restricts ads served on the site.', 'wpadcenter' ),
+			'geo_targeting'             => false,
+			'maxmind_license_key'       => '',
+			'maxmind_db_prefix'         => wp_generate_password( 32, false ),
+			'maxmind_db_path'           => '',
 
-			'enable_ads_txt'           => false,
-			'ads_txt_content'          => '',
-			'enable_scripts'           => false,
-			'header_scripts'           => '',
-			'body_scripts'             => '',
-			'footer_scripts'           => '',
+			'enable_ads_txt'            => false,
+			'ads_txt_content'           => '',
+			'enable_scripts'            => false,
+			'header_scripts'            => '',
+			'body_scripts'              => '',
+			'footer_scripts'            => '',
 
-			'enable_advertisers'       => false,
+			'enable_advertisers'        => false,
 
-			'geo_location'             => 'none',
-			'trim_stats'               => '0',
-			'hide_ads_logged'          => false,
-			'roles_selected'           => '',
+			'geo_location'              => 'none',
+			'trim_stats'                => '0',
+			'days_to_send_before'       => 1,
+			'clicks_to_send_before'     => 100,
+			'views_to_send_before'      => 100,
+			'hide_ads_logged'           => false,
+			'roles_selected'            => '',
+			'roles_selected_visibility' => '',
+			'content_ads'               => false,
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -355,14 +375,16 @@ class Wpadcenter {
 		$ret = null;
 		switch ( $key ) {
 			// Convert all boolean values from text to bool.
-			case 'notification':
+			case 'enable_notifications':
 			case 'auto_refresh':
 			case 'adblock_detector':
+			case 'geo_targeting':
 			case 'enable_scripts':
 			case 'enable_advertisers':
 			case 'enable_ads_txt':
 			case 'hide_ads_logged':
 			case 'trim_statistics':
+			case 'content_ads':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {
@@ -374,6 +396,7 @@ class Wpadcenter {
 				}
 				break;
 			case 'roles_selected':
+			case 'roles_selected_visibility':
 			case 'header_scripts':
 			case 'body_scripts':
 			case 'footer_scripts':
@@ -536,7 +559,7 @@ class Wpadcenter {
 			$record      = $records[0];
 			$impressions = $record->ad_impressions + 1;
 			$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'ads_statistics SET ad_impressions = %d WHERE ad_date = %s and ad_id = %d', array( $impressions, $today, $ad_id ) ) ); // db call ok; no-cache ok.
-			do_action( 'wpadcenter_after_set_impressions', $impressions );
+			do_action( 'wp_adcenter_after_set_impressions', $impressions );
 		} else {
 			$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'ads_statistics` (`ad_impressions`, `ad_date`, `ad_id`) VALUES (%d,%s,%d)', array( 1, $today, $ad_id ) ) ); // db call ok; no-cache ok.
 		}

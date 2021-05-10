@@ -28,6 +28,7 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		$name           = 'WPAdCenter Single Ads';
 		$widget_options = array( 'description' => __( 'Display single ads in a Widget', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
+
 	}
 
 
@@ -46,16 +47,25 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		$before_title  = isset( $args['before_title'] ) ? $args['before_title'] : '';
 		$after_title   = isset( $args['after_title'] ) ? $args['after_title'] : '';
 
-		$title = empty( $instance['title'] ) ? '' : $instance['title'];
+		$title = isset( $instance['title'] ) ? $instance['title'] : '';
+
+		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( isset( $instance['max_width'] ) && 'on' === $instance['max_width'] ) {
+			$instance['max_width'] = true;
+		} else {
+			$instance['max_width'] = false;
+		}
+		$instance['max_width_px'] = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
+		$instance['ad_id']        = isset( $instance['ad_id'] ) ? $instance['ad_id'] : '0';
 
-		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-		$attributes = array();
-
+		$attributes = array(
+			'max_width'    => $instance['max_width'],
+			'max_width_px' => $instance['max_width_px'],
+		);
 		echo Wpadcenter_Public::display_single_ad( $instance['ad_id'], $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -86,8 +96,11 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 	 * @return string|void
 	 */
 	public function form( $instance ) {
-		$ad_id      = empty( $instance['ad_id'] ) ? '' : $instance['ad_id'];
-		$title      = empty( $instance['title'] ) ? '' : $instance['title'];
+		$ad_id        = isset( $instance['ad_id'] ) ? $instance['ad_id'] : '';
+		$title        = isset( $instance['title'] ) ? $instance['title'] : '';
+		$max_width    = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
+		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
+
 		$single_ads = array();
 
 		$current_time = time();
@@ -127,6 +140,42 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 					<?php $this->print_combobox_options( $single_ads, $ad_id ); ?>
 				</select>
 			</p>
+			<p>
+				<label for="<?php echo esc_html( $this->get_field_id( 'max_width' ) ); ?>"><?php echo esc_html__( 'Enable Max Width', 'wpadcenter' ); ?></label>
+				<input
+					type="checkbox"
+					class="wpadcenter_singlead_widget_max_width_check"
+					name="<?php echo esc_html( $this->get_field_name( 'max_width' ) ); ?>"
+					id="<?php echo esc_html( $this->get_field_id( 'max_width' ) ); ?>"
+					<?php checked( $max_width, 'on' ); ?>
+				>			
+			</p>		
+				<p class="wpadcenter_singlead_widget_max_width_px" 
+				<?php
+				if ( 'on' !== $max_width ) {
+					?>
+				style="display:none"
+
+					<?php
+				}
+				?>
+				>
+				<label for="<?php echo esc_html( $this->get_field_id( 'max_width_px' ) ); ?>"><?php echo esc_html__( 'Max Width : ', 'wpadcenter' ); ?></label>
+				<input
+					type="number"
+					name="<?php echo esc_html( $this->get_field_name( 'max_width_px' ) ); ?>"
+					id="<?php echo esc_html( $this->get_field_id( 'max_width_px' ) ); ?>"
+					value="<?php echo esc_html( $max_width_px ); ?>"
+				>
+				</p>	
+			<script>
+			(function ($) {
+			'use strict';
+			$('.wpadcenter_singlead_widget_max_width_check').change(function(){
+				$('.wpadcenter_singlead_widget_max_width_px').toggle();
+			});
+			})( jQuery );
+			</script>
 			<?php
 
 		} else {

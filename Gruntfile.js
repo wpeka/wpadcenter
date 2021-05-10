@@ -84,6 +84,10 @@ module.exports = function( grunt ) {
                 },
                 src: [
                     '**',
+                    '!vendor/**',
+                    'vendor/composer/**',
+                    'vendor/select2/**',
+                    'vendor/autoload.php',
                     '!admin/js/gutenberg-blocks/*.php',
                     '!node_modules/**',
                     '!release/**',

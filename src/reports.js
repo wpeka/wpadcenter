@@ -104,6 +104,7 @@ select_ad = reportsArray.map((item) => {
 	};
 });
 
+
 // Fields for detailed reports
 const detailedReportsField = [
 	{ key: 'Ad Title' },
@@ -186,6 +187,8 @@ var reports = new Vue({
 			currentAlertCounter: 10,
 			// select ad group option
 			select_adgroup: [{ name: 'none' }],
+			// select advertisers (pro)
+			select_advertiser: [],
 		}
 	},
 	mounted: function() {
@@ -193,6 +196,7 @@ var reports = new Vue({
 		this.ajax_url = this.$refs.adgroups_ajaxurl.value;
 		this.adgroups_security = this.$refs.adgroups_security.value;
 		this.selectad_security = this.$refs.selectad_security.value;
+		this.selectadvertiser_security = this.$refs.hasOwnProperty('selectadvertiser_security') ? this.$refs.selectadvertiser_security.value : ''; 
 		// manually setting start date and end date
 		this.endDate = new Date();
 		this.startDate = new Date();
@@ -209,6 +213,20 @@ var reports = new Vue({
 			data = JSON.parse(data);
 			this.select_adgroup = data;
 		});
+		// get advertisers from server
+		if( this.selectadvertiser_security !== '' ) {
+			j.ajax({
+				type: "POST",
+				url: this.ajax_url,
+				data: {
+					action: 'get_advertisers',
+					security: this.selectadvertiser_security
+				}
+			}).done(data => {
+				data = JSON.parse(data);
+				this.select_advertiser = data;
+			});
+		}
 	},
 	methods: {
 		// ajax call when select ad group is changed
@@ -427,6 +445,24 @@ var reports = new Vue({
 			this.$refs.csv_data.value = csvString;
 			document.getElementById('post_csv').submit();
 		},
+		onAdvertiserSelection(data) {
+			if( data === null ) { 
+				this.select_ad = select_ad;
+				return;
+			}
+			j.ajax({
+				type: "POST",
+				url: this.ajax_url,
+				data: {
+					action: "selected_advertiser_get_ads",
+                	selected_advertiser: data,
+                	security: this.selectadvertiser_security,
+				},
+			}).done(data => {
+				data = JSON.parse(data);
+				this.select_ad = data;
+			});
+		}
 	},
 	components: {
 		'line-chart': LineChart,
