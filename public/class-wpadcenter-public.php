@@ -307,14 +307,14 @@ class Wpadcenter_Public {
 		}
 		$display_ad = true;
 		$display_ad = apply_filters( 'wpadcenter_display_single_ad', $ad_id );
-		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
-
+		
 		if ( ! $display_ad ) {
 			return;
 		}
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
 
+		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
 			'wpadcenter-frontend',
