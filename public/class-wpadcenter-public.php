@@ -313,6 +313,12 @@ class Wpadcenter_Public {
 		}
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
+
+		// If API key is activate option will be set and we will add custom css to frontend else not
+		if ( get_option( 'wpadcenter-custom-ad-sizes' ) && ! empty( get_option( 'wpadcenter-custom-ad-sizes' )['css'] ) ) {
+			wp_add_inline_style( 'wpadcenter-frontend', get_option( 'wpadcenter-custom-ad-sizes' )['css'] );
+		}
+
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
 			'wpadcenter-frontend',
