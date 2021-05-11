@@ -307,17 +307,13 @@ class Wpadcenter_Public {
 		}
 		$display_ad = true;
 		$display_ad = apply_filters( 'wpadcenter_display_single_ad', $ad_id );
+		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
 
 		if ( ! $display_ad ) {
 			return;
 		}
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
-
-		// If API key is activate option will be set and we will add custom css to frontend else not
-		if ( get_option( 'wpadcenter-custom-ad-sizes' ) && ! empty( get_option( 'wpadcenter-custom-ad-sizes' )['css'] ) ) {
-			wp_add_inline_style( 'wpadcenter-frontend', get_option( 'wpadcenter-custom-ad-sizes' )['css'] );
-		}
 
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
