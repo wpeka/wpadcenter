@@ -255,7 +255,6 @@ const onAdSelection = ( selection ) => {
         adgroupAlignment={props.attributes.adgroup_alignment}
         max_width_check={props.attributes.max_width_check}
         max_width_px={props.attributes.max_width_px}
-        devicesList = {props.attributes.devices}
         />
 
       )}

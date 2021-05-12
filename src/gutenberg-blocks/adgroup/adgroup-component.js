@@ -41,7 +41,6 @@ class AdGroup extends Component{
           num_columns:this.props.numColumns,   
           max_width_check:this.props.max_width_check,
           max_width_px:this.props.max_width_px,
-          devices:this.props.devicesList          
       }
   }).done(adgroup_html => {
         this.setState( {

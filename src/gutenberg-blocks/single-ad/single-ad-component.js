@@ -42,7 +42,6 @@ class SingleAd extends Component{
           alignment:this.props.adAlignment,
           max_width_check:this.props.max_width_check,
           max_width_px:this.props.max_width_px,
-          devices:this.props.devicesList          
       }
   }).done(singlead_html => {
         this.setState( {

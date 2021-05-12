@@ -61,7 +61,7 @@
 }
 
 /*Gutenberg block css*/
-.wpadcenter-maxwidth-top, .wpadcenter-maxwidth-bottom, .wpadcenter-order-container {
+.wpadcenter-maxwidth-top, .wpadcenter-maxwidth-bottom, .wpadcenter-order-container, .wpadcenter-select-ad-top {
   display: flex;
   justify-content: center;
   margin-top: 20px;

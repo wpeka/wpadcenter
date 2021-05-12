@@ -2799,10 +2799,7 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['max_width_px'] ) ) {
 			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
 		}
-		$devices = array( 'mobile', 'tablet', 'desktop' );
-		if ( ! empty( $_POST['devices'] ) ) {
-				$devices = json_decode( sanitize_text_field( wp_unslash( $_POST['devices'] ) ) );
-		}
+
 			$adgroup_attributes = array(
 				'adgroup_ids'  => $adgroup_ids,
 				'align'        => $adgroup_alignment,
@@ -2810,7 +2807,6 @@ class Wpadcenter_Admin {
 				'num_columns'  => $num_columns,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
-				'devices'      => $devices,
 
 			);
 			echo Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes ); //phpcs:ignore
@@ -2849,15 +2845,11 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['max_width_px'] ) ) {
 			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
 		}
-		$devices = array( 'mobile', 'tablet', 'desktop' );
-		if ( ! empty( $_POST['devices'] ) ) {
-				$devices = json_decode( sanitize_text_field( wp_unslash( $_POST['devices'] ) ) );
-		}
+
 			$singlead_attributes = array(
 				'align'        => $ad_alignment,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
-				'devices'      => $devices,
 			);
 			echo Wpadcenter_Public::display_single_ad( $ad_id,$singlead_attributes ); //phpcs:ignore
 			wp_die();
@@ -2896,16 +2888,12 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['max_width_px'] ) ) {
 			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
 		}
-		$devices = array( 'mobile', 'tablet', 'desktop' );
-		if ( ! empty( $_POST['devices'] ) ) {
-				$devices = json_decode( sanitize_text_field( wp_unslash( $_POST['devices'] ) ) );
-		}
+
 			$random_ad_attributes = array(
 				'adgroup_ids'  => $adgroup_ids,
 				'align'        => $adgroup_alignment,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
-				'devices'      => $devices,
 
 			);
 			echo Wpadcenter_Public::display_random_ad( $random_ad_attributes ); //phpcs:ignore

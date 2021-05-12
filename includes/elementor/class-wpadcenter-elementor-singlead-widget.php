@@ -11,6 +11,7 @@
 
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
+use Elementor\Plugin;
 
 /**
  * Class for registering single ad elementor widget.
@@ -125,7 +126,7 @@ class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 			array(
 				'label'       => __( 'Display on Specific Devices', 'wpadcenter' ),
 				'type'        => \Elementor\Controls_Manager::SELECT2,
-				'description' => __( 'Display settings for mobile and tablet will take effect only on preview or live page, and not while editing in Elementor.', 'wpadcenter' ),
+				'description' => __( 'Display settings will take effect only on preview or live page, and not while editing in Elementor.', 'wpadcenter' ),
 				'multiple'    => true,
 				'options'     => array(
 					'mobile'  => __( 'Mobile', 'wpadcenter' ),
@@ -179,6 +180,9 @@ class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+			$settings['devices'] = array( 'mobile', 'tablet', 'desktop' );
+		}
 
 		$ad_id = $settings['ad_id'];
 		if ( 'on' === $settings['max_width'] ) {
