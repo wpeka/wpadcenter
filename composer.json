@@ -10,6 +10,7 @@
     "php": ">=7.0",
     "composer/installers": "~1.7",
     "maxmind-db/reader": "1.6.0",
+    "mobiledetect/mobiledetectlib": "^2.8",
     "pelago/emogrifier": "3.1.0",
     "psr/container": "1.0.0",
     "select2/select2": "^4.0"
