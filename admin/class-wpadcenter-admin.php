@@ -584,7 +584,7 @@ class Wpadcenter_Admin {
 			'banner_image'        => __( 'Banner Image', 'wpadcenter' ),
 			'external_image_link' => __( 'External Image Link', 'wpadcenter' ),
 			'ad_code'             => __( 'Ad Code', 'wpadcenter' ),
-			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),			
+			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),
 			'amp_ad'              => __( 'AMP', 'wpadcenter' ),
 		);
 
@@ -1661,7 +1661,7 @@ class Wpadcenter_Admin {
 		$amp_adsense_static_height  = $amp_adsense_static_height ? $amp_adsense_static_height : '100';
 
 		echo '<div>
-		<label for="ampPreference"><input name="amp-preference" type="checkbox" value="1" id="ampPreference" ' . checked( '1', $amp_preference, false ) . '> ' . esc_html__( 'Enable AMP support', 'wpadcenter' ) . ' <span style="color:grey">( ' . esc_html__( 'If enabled, automatically converts to AMP ad on AMP websites.','wpadcenter' ) . ' )</span></label>
+		<label for="ampPreference"><input name="amp-preference" type="checkbox" value="1" id="ampPreference" ' . checked( '1', $amp_preference, false ) . '> ' . esc_html__( 'Enable AMP support', 'wpadcenter' ) . ' <span style="color:grey">( ' . esc_html__( 'If enabled, automatically converts to AMP ad on AMP websites.', 'wpadcenter' ) . ' )</span></label>
 		</div>';
 
 		echo '<div class="wpadcenterAmpCustomizeSettings" >
@@ -2220,7 +2220,10 @@ class Wpadcenter_Admin {
 							'type'    => 'string',
 							'default' => '100',
 						),
-
+						'devices'         => array(
+							'type'    => 'string',
+							'default' => '["mobile","tablet","desktop"]',
+						),
 					),
 					'render_callback' => array( $this, 'gutenberg_display_single_ad_cb' ),
 				)
@@ -2266,6 +2269,10 @@ class Wpadcenter_Admin {
 							'type'    => 'string',
 							'default' => '100',
 						),
+						'devices'           => array(
+							'type'    => 'string',
+							'default' => '["mobile","tablet","desktop"]',
+						),
 
 					),
 					'render_callback' => array( $this, 'gutenberg_display_adgroup_cb' ),
@@ -2303,6 +2310,10 @@ class Wpadcenter_Admin {
 						'max_width_px'      => array(
 							'type'    => 'string',
 							'default' => '100',
+						),
+						'devices'           => array(
+							'type'    => 'string',
+							'default' => '["mobile","tablet","desktop"]',
 						),
 
 					),
@@ -2342,11 +2353,16 @@ class Wpadcenter_Admin {
 		if ( array_key_exists( 'max_width_px', $attributes ) ) {
 			$max_width_px = $attributes['max_width_px'];
 		}
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		if ( array_key_exists( 'devices', $attributes ) ) {
+			$devices = json_decode( $attributes['devices'] );
+		}
 
 		$ad_attributes = array(
 			'align'        => $ad_alignment,
 			'max_width'    => $max_width_check,
 			'max_width_px' => $max_width_px,
+			'devices'      => $devices,
 		);
 
 		return Wpadcenter_Public::display_single_ad( $ad_id, $ad_attributes );
@@ -2385,6 +2401,10 @@ class Wpadcenter_Admin {
 		if ( array_key_exists( 'max_width_px', $attributes ) ) {
 			$max_width_px = $attributes['max_width_px'];
 		}
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		if ( array_key_exists( 'devices', $attributes ) ) {
+			$devices = json_decode( $attributes['devices'] );
+		}
 			$adgroup_attributes = array(
 				'adgroup_ids'  => $adgroup_ids,
 				'align'        => $adgroup_alignment,
@@ -2392,6 +2412,8 @@ class Wpadcenter_Admin {
 				'num_columns'  => $num_columns,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+
 			);
 			return Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes );
 
@@ -2423,11 +2445,17 @@ class Wpadcenter_Admin {
 		if ( array_key_exists( 'max_width_px', $attributes ) ) {
 			$max_width_px = $attributes['max_width_px'];
 		}
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		if ( array_key_exists( 'devices', $attributes ) ) {
+			$devices = json_decode( $attributes['devices'] );
+		}
 			$random_ad_attributes = array(
 				'adgroup_ids'  => $adgroup_ids,
 				'align'        => $adgroup_alignment,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+
 			);
 			return Wpadcenter_Public::display_random_ad( $random_ad_attributes );
 
@@ -2582,7 +2610,7 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_ad_size_rest_field_cb( $object ) {
 		$ad_id   = $object['id'];
-		$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );	
+		$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
 		return $ad_size;
 	}
 
@@ -2771,6 +2799,10 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['max_width_px'] ) ) {
 			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
 		}
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		if ( ! empty( $_POST['devices'] ) ) {
+				$devices = json_decode( sanitize_text_field( wp_unslash( $_POST['devices'] ) ) );
+		}
 			$adgroup_attributes = array(
 				'adgroup_ids'  => $adgroup_ids,
 				'align'        => $adgroup_alignment,
@@ -2778,6 +2810,7 @@ class Wpadcenter_Admin {
 				'num_columns'  => $num_columns,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
 
 			);
 			echo Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes ); //phpcs:ignore
@@ -2816,10 +2849,15 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['max_width_px'] ) ) {
 			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
 		}
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		if ( ! empty( $_POST['devices'] ) ) {
+				$devices = json_decode( sanitize_text_field( wp_unslash( $_POST['devices'] ) ) );
+		}
 			$singlead_attributes = array(
 				'align'        => $ad_alignment,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
 			);
 			echo Wpadcenter_Public::display_single_ad( $ad_id,$singlead_attributes ); //phpcs:ignore
 			wp_die();
@@ -2858,11 +2896,16 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['max_width_px'] ) ) {
 			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
 		}
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		if ( ! empty( $_POST['devices'] ) ) {
+				$devices = json_decode( sanitize_text_field( wp_unslash( $_POST['devices'] ) ) );
+		}
 			$random_ad_attributes = array(
 				'adgroup_ids'  => $adgroup_ids,
 				'align'        => $adgroup_alignment,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
 
 			);
 			echo Wpadcenter_Public::display_random_ad( $random_ad_attributes ); //phpcs:ignore

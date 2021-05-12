@@ -29,6 +29,17 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		$widget_options = array( 'description' => __( 'Display single ads in a Widget', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
 
+		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+
+	}
+
+	/**
+	 * Enqueues scripts.
+	 *
+	 * @since 1.0.0
+	 */
+	public function scripts() {
+		wp_enqueue_style( 'wpadcenter-frontend', plugin_dir_url( __DIR__ ) . 'public/css/wpadcenter-public' . WPADCENTER_PRO_SCRIPT_SUFFIX . '.css', array(), '5.0.1', 'all' );
 	}
 
 
@@ -62,9 +73,19 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		$instance['max_width_px'] = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
 		$instance['ad_id']        = isset( $instance['ad_id'] ) ? $instance['ad_id'] : '0';
 
+		if ( isset( $instance['devices'] ) ) {
+			$key = array_search( 'set', $instance['devices'], true );
+			if ( false !== $key ) {
+				unset( $instance['devices'][ $key ] );
+			}
+		} else {
+			$instance['devices'] = array( 'mobile', 'tablet', 'desktop' );
+		}
+
 		$attributes = array(
 			'max_width'    => $instance['max_width'],
 			'max_width_px' => $instance['max_width_px'],
+			'devices'      => $instance['devices'],
 		);
 		echo Wpadcenter_Public::display_single_ad( $instance['ad_id'], $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -82,7 +103,6 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 	 * @return array
 	 */
 	public function update( $new_instance, $old_instance ) {
-
 		return $new_instance;
 	}
 
@@ -100,6 +120,7 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 		$title        = isset( $instance['title'] ) ? $instance['title'] : '';
 		$max_width    = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
+		$devices      = isset( $instance['devices'] ) ? $instance['devices'] : array( 'mobile', 'tablet', 'desktop' );
 
 		$single_ads = array();
 
@@ -176,6 +197,50 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 			});
 			})( jQuery );
 			</script>
+			<p>
+				<label for="specificDevices"><?php echo esc_html__( 'Display on specific devices : ', 'wpadcenter' ); ?></label>
+			</p>
+			<p>
+			<ul class="wpadcenter-specific-devices-container">
+			<li class="wpadcenter-specific-devices__item">
+			<input type="checkbox"
+			name="<?php echo esc_html( $this->get_field_name( 'devices' ) ) . '[]'; ?>"
+			value="mobile" 
+			<?php echo in_array( 'mobile', $devices, true ) ? 'checked' : ''; ?> 
+			/>
+			<span class="dashicons dashicons-smartphone"></span>
+			<span class="wpadcenter-specific-devices__label">Mobile</span>
+			</li>
+
+			<li class="wpadcenter-specific-devices__item">
+			<input type="checkbox"
+			name="<?php echo esc_html( $this->get_field_name( 'devices' ) ) . '[]'; ?>"
+			value="tablet" 
+			<?php echo in_array( 'tablet', $devices, true ) ? 'checked' : ''; ?> 
+			/>
+			<span class="dashicons dashicons-tablet"></span>
+			<span class="wpadcenter-specific-devices__label">Tablet</span>
+
+			</li>
+
+			<li class="wpadcenter-specific-devices__item">
+			<input type="checkbox"
+			name="<?php echo esc_html( $this->get_field_name( 'devices' ) ) . '[]'; ?>" 
+			value="desktop" 
+			<?php echo in_array( 'desktop', $devices, true ) ? 'checked' : ''; ?> 
+			/>
+			<span class="dashicons dashicons-desktop"></span>
+			<span class="wpadcenter-specific-devices__label">Desktop</span>
+
+			</li>
+			<input type="hidden"
+			name="<?php echo esc_html( $this->get_field_name( 'devices' ) ) . '[]'; ?>" 
+			value="set" 
+			checked 
+			/>
+
+			</ul>
+			</p>
 			<?php
 
 		} else {

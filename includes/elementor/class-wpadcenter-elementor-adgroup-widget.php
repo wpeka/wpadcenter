@@ -73,7 +73,6 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 				'type'     => \Elementor\Controls_Manager::SELECT2,
 				'multiple' => true,
 				'options'  => $adgroup_options,
-				'default'  => array_keys( $adgroup_options )[0],
 			)
 		);
 
@@ -143,6 +142,21 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 				'default' => 100,
 			)
 		);
+		$this->add_control(
+			'devices',
+			array(
+				'label'       => __( 'Display on Specific Devices', 'wpadcenter' ),
+				'type'        => \Elementor\Controls_Manager::SELECT2,
+				'description' => __( 'Display settings for mobile and tablet will take effect only on preview or live page, and not while editing in Elementor.', 'wpadcenter' ),
+				'multiple'    => true,
+				'options'     => array(
+					'mobile'  => __( 'Mobile', 'wpadcenter' ),
+					'tablet'  => __( 'Tablet', 'wpadcenter' ),
+					'desktop' => __( 'Desktop', 'wpadcenter' ),
+				),
+				'default'     => array( 'mobile', 'tablet', 'desktop' ),
+			)
+		);
 
 		$this->end_controls_section();
 	}
@@ -183,6 +197,8 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 			'num_columns'  => $settings['num_columns'],
 			'max_width'    => $settings['max_width'],
 			'max_width_px' => $settings['max_width_px'],
+			'devices'      => $settings['devices'],
+
 		);
 
 		echo Wpadcenter_Public::display_adgroup_ads( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

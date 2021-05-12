@@ -11,6 +11,8 @@ const { __, }       = wp.i18n;
 import RandomAd from  './random-ad-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
+import SelectDevice from '../select-device-component';
+
 
 
 
@@ -42,6 +44,10 @@ registerBlockType('wpadcenter/random-ad',{
     max_width_px:{
       type: 'text',
     default:100, 
+    },
+    devices : {
+      type:'string',
+      default:'["mobile","tablet","desktop"]',
     },
      align : {
       type:'string',
@@ -142,6 +148,21 @@ const onAdSelection = ( selection ) => {
       fontSize:"medium",
     }
 
+    const onDeviceListChange=(value)=>{
+      let currentDevicesList = JSON.parse( props.attributes.devices );
+      var index = currentDevicesList.indexOf(value);
+      if (index !== -1) {
+        currentDevicesList.splice(index, 1);
+        }
+        else{
+          currentDevicesList.push(value);
+        }
+        props.setAttributes({
+          devices: JSON.stringify( currentDevicesList ),
+        });
+
+    }
+
 
 
        return <div className="Wpadcenter-gutenberg-container">
@@ -177,6 +198,15 @@ const onAdSelection = ( selection ) => {
       maxWidth={props.attributes.max_width_px}
       />
 
+      <SelectDevice
+      devicesList={JSON.parse( props.attributes.devices )}
+      devicesListChange={onDeviceListChange}
+      displayOnMobile={JSON.parse( props.attributes.devices ).indexOf("mobile") !== -1 ? true : false}
+      displayOnTablet={JSON.parse( props.attributes.devices ).indexOf("tablet") !== -1 ? true : false}
+      displayOnDesktop={JSON.parse( props.attributes.devices ).indexOf("desktop") !== -1 ? true : false}
+
+      /> 
+
 
       </Placeholder>):(
         <RandomAd
@@ -184,6 +214,7 @@ const onAdSelection = ( selection ) => {
         adgroupAlignment={props.attributes.adgroup_alignment}
         max_width_check={props.attributes.max_width_check}
         max_width_px={props.attributes.max_width_px}
+        devicesList = {props.attributes.devices}
         />
 
       )}

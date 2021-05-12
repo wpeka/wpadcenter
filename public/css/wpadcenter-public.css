@@ -283,3 +283,28 @@
 .wpadcenter-320x100:not(.wpadcenter-maxwidth) {
   max-width: 320px !important;
 }
+
+.wpadcenter-specific-devices-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0 !important;
+}
+
+.wpadcenter-specific-devices-container .dashicons {
+  position: relative;
+  font-size: 40px;
+  right: 10px;
+  top: 5px;
+  bottom: 5px;
+}
+
+.wpadcenter-specific-devices__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wpadcenter-specific-devices__label {
+  margin-top: 25px;
+}

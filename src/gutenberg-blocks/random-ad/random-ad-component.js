@@ -37,7 +37,9 @@ class RandomAd extends Component{
           ad_groups:this.props.adGroupIds,
           alignment:this.props.adgroupAlignment, 
           max_width_check:this.props.max_width_check,
-          max_width_px:this.props.max_width_px
+          max_width_px:this.props.max_width_px,
+          devices:this.props.devicesList          
+
       }
   }).done(random_ad_html => {
         this.setState( {
