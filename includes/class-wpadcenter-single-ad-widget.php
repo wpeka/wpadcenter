@@ -39,7 +39,7 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 	 * @since 1.0.0
 	 */
 	public function scripts() {
-		wp_enqueue_style( 'wpadcenter-frontend', plugin_dir_url( __DIR__ ) . 'public/css/wpadcenter-public' . WPADCENTER_PRO_SCRIPT_SUFFIX . '.css', array(), '5.0.1', 'all' );
+		wp_enqueue_style( 'wpadcenter-frontend', plugin_dir_url( __DIR__ ) . 'public/css/wpadcenter-public' . WPADCENTER_SCRIPT_SUFFIX . '.css', array(), '5.0.1', 'all' );
 	}
 
 
