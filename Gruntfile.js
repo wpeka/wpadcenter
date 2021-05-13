@@ -87,6 +87,7 @@ module.exports = function( grunt ) {
                     '!vendor/**',
                     'vendor/composer/**',
                     'vendor/select2/**',
+                    'vendor/mobiledetect/**',
                     'vendor/autoload.php',
                     '!admin/js/gutenberg-blocks/*.php',
                     '!node_modules/**',
