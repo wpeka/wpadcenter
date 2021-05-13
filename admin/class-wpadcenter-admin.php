@@ -1433,7 +1433,7 @@ class Wpadcenter_Admin {
 		add_meta_box(
 			'amp-preference',
 			__( 'Amp Preference', 'wpadcenter' ),
-			array( $this, 'wpadcenter_pro_amp_preference_metabox' ),
+			array( $this, 'wpadcenter_amp_preference_metabox' ),
 			'wpadcenter-ads',
 			'normal',
 			'core'
@@ -1441,7 +1441,7 @@ class Wpadcenter_Admin {
 		add_meta_box(
 			'amp-attributes',
 			__( 'Amp Ad Parameters', 'wpadcenter' ),
-			array( $this, 'wpadcenter_pro_amp_attributes_metabox' ),
+			array( $this, 'wpadcenter_amp_attributes_metabox' ),
 			'wpadcenter-ads',
 			'normal',
 			'core'
@@ -1646,7 +1646,7 @@ class Wpadcenter_Admin {
 	 *
 	 * @param WP_POST $post Post object.
 	 */
-	public function wpadcenter_pro_amp_preference_metabox( $post ) {
+	public function wpadcenter_amp_preference_metabox( $post ) {
 
 		$amp_preference             = get_post_meta( $post->ID, 'wpadcenter_amp_preference', true );
 		$amp_adsense_code           = get_post_meta( $post->ID, 'wpadcenter_adsense_amp_code', true );
@@ -1687,7 +1687,7 @@ class Wpadcenter_Admin {
 	 *
 	 * @param WP_POST $post Post object.
 	 */
-	public function wpadcenter_pro_amp_attributes_metabox( $post ) {
+	public function wpadcenter_amp_attributes_metabox( $post ) {
 		wp_enqueue_style( $this->plugin_name );
 
 		echo '<div id="wpadcenter-amp-attributes-container">';
