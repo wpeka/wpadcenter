@@ -897,14 +897,14 @@ class Wpadcenter_Public {
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
+
+		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
+			return;
+		}
 		// if activated wpadcenter pro, return weighted random ad.
 		if ( get_option( 'wpadcenter_pro_active' ) && get_option( 'wc_am_client_wpadcenter_pro_activated' ) === 'Activated' ) {
 			$random_ad_html = apply_filters( 'wp_adcenter_random_weighted_ad', $attributes );
 			return $random_ad_html;
-		}
-
-		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
-			return;
 		}
 
 		$current_time = time();
