@@ -198,6 +198,8 @@
 			var rawCode=$('#wpadcenter-google-adsense-code').val();
 			if(rawCode){
 				   rawCode = $('<div />').html(rawCode);
+
+				   //Extract attributes from the google adsense loaded code
 						var rawCode_html = rawCode.find( 'ins' );
 						var clientId = rawCode_html.attr( 'data-ad-client' );
 						if(!clientId){
@@ -209,41 +211,104 @@
 							$('#wpadcenterAdsenseAmpCode').text("Please provide slot ID");
 							return;
 						}
+						var adType = '';
+						var width = '';
+						var height = '';
+						var format = rawCode_html.attr( 'data-ad-format' );
+            			var style = rawCode_html.attr( 'style' ) || '';
+
+						//Check for the ad types
+						if ('undefined' == typeof(format) && -1 != style.indexOf( 'width' )) {
+							adType = 'normal';
+							width = rawCode_html.css( 'width' ).replace( 'px', '' );
+							height = rawCode_html.css( 'height' ).replace( 'px', '' );
+						}
+			
+						else if ('undefined' != typeof(format) && 'auto' == format) {
+							adType = 'responsive';
+						}
+		
+						else if ('undefined' != typeof(format) && 'link' == format) {
+			
+							if( -1 != style.indexOf( 'width' ) ){ //fixed size
+
+								width = rawCode_html.css( 'width' ).replace( 'px', '' );
+								height = rawCode_html.css( 'height' ).replace( 'px', '' );
+								adType = 'link';
+							} else { //responsive size
+
+								adType = 'link-responsive';
+							}
+						}
+			
+						else if ('undefined' != typeof(format) && 'autorelaxed' == format) {
+							adType = 'matched-content';
+						}
+			
+						else if ('undefined' != typeof(format) && 'fluid' == format) {
+			
+								adType = 'in-article';
+							
+						}
+
+						//Converts into Amp code
+						var ampAdCode='<amp-ad type="adsense" data-ad-client="' + clientId + '" data-ad-slot="' + slotId + '" ';			
    
-			var ampAdCode='<amp-ad type="adsense" data-ad-client=" ' + clientId + ' " data-ad-slot=" ' + slotId + ' " ';
+						if ($('#wpadcenterAmpCustomizeAuto').prop("checked")) {
+
+							switch ( adType ) {
+					
+								case 'normal':
+								case 'link':
+									if ( width > 0 && height > 0 ) {
+										ampAdCode += 'layout="fixed" width="'+width+'" height="'+height+'" ';
+									}
+									break;
+					
+								case 'link-responsive':
+									ampAdCode += ' width="auto" height="90" layout="fixed-height" ';
+									break;
+				
+								case 'responsive':
+					 
+							
+									ampAdCode += 'width="100vw" height="320" data-auto-format="rspv" data-full-width><div overflow></div ';
+							
 						
+									break;
+					
+								case 'in-article':
+									ampAdCode += ' width="auto" height="320" layout="fixed-height" ';
+									break;
+					
+								case 'matched-content':
 						
+									ampAdCode += ' width="auto" height="320" layout="fixed-height" ';
 						
-						
-   
-						   if ($('#wpadcenterAmpCustomizeAuto').prop("checked")) {
-   
-						ampAdCode += ' layout="fixed" width="300" height="250" ';
-						
-						   }
+									break;
+								}
+							}
    
 						   if ($('#wpadcenterAmpCustomizeDynamic').prop("checked")) {
 							   var dynamicWidth= $('#wpadcenterAmpCustomizeDynamicWidth').val();
 							   var dynamicHeight=$('#wpadcenterAmpCustomizeDynamicHeight').val();
-   
-							   ampAdCode += ' layout="responsive" width=" ' + dynamicWidth + 'vw" height=" ' + dynamicHeight + 'vw"  ';
+								
+			
+			 					ampAdCode +=  'layout="responsive" width="'+dynamicWidth+'vw" height="'+dynamicHeight+'vw" ';
 							
 						   }
    
 						   if ($('#wpadcenterAmpCustomizeStatic').prop("checked")) {
 							   var staticHeight =$('#wpadcenterAmpCustomizeStaticHeight').val();
-							   ampAdCode += ' layout="fixed-height" width="auto" height=" ' + staticHeight + ' "';
 
+								ampAdCode += 'layout="fixed-height" width="auto" height="'+staticHeight+'" ';
 						   }
    
-						   ampAdCode += '>';
+							ampAdCode += '>';
    
-   
-   
-						ampAdCode += '</amp-ad>';
+   							ampAdCode += '</amp-ad>';
 						$('#wpadcenterAdsenseAmpCode').text(ampAdCode);
-   
-				}
+					}
 		   }
 
 

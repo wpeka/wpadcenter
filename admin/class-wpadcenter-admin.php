@@ -1433,7 +1433,7 @@ class Wpadcenter_Admin {
 		add_meta_box(
 			'amp-preference',
 			__( 'Amp Preference', 'wpadcenter' ),
-			array( $this, 'wpadcenter_pro_amp_preference_metabox' ),
+			array( $this, 'wpadcenter_amp_preference_metabox' ),
 			'wpadcenter-ads',
 			'normal',
 			'core'
@@ -1441,10 +1441,10 @@ class Wpadcenter_Admin {
 		add_meta_box(
 			'amp-attributes',
 			__( 'Amp Ad Parameters', 'wpadcenter' ),
-			array( $this, 'wpadcenter_pro_amp_attributes_metabox' ),
+			array( $this, 'wpadcenter_amp_attributes_metabox' ),
 			'wpadcenter-ads',
 			'normal',
-			'high'
+			'core'
 		);
 		do_action( 'wp_adcenter_add_meta_boxes', $post );
 
@@ -1646,7 +1646,7 @@ class Wpadcenter_Admin {
 	 *
 	 * @param WP_POST $post Post object.
 	 */
-	public function wpadcenter_pro_amp_preference_metabox( $post ) {
+	public function wpadcenter_amp_preference_metabox( $post ) {
 
 		$amp_preference             = get_post_meta( $post->ID, 'wpadcenter_amp_preference', true );
 		$amp_adsense_code           = get_post_meta( $post->ID, 'wpadcenter_adsense_amp_code', true );
@@ -1687,7 +1687,7 @@ class Wpadcenter_Admin {
 	 *
 	 * @param WP_POST $post Post object.
 	 */
-	public function wpadcenter_pro_amp_attributes_metabox( $post ) {
+	public function wpadcenter_amp_attributes_metabox( $post ) {
 		wp_enqueue_style( $this->plugin_name );
 
 		echo '<div id="wpadcenter-amp-attributes-container">';
@@ -1716,8 +1716,8 @@ class Wpadcenter_Admin {
 			);
 			foreach ( $default_attributes as $attribute ) {
 				echo '<div>
-						<label >' . esc_html__( 'Attribute :', 'wpadcenter' ) . '</label><input name="amp-attributes[] " value="' . esc_attr( $attribute ) . '"/> =
-						<label >' . esc_html__( 'Value :', 'wpadcenter' ) . '</label><input name="amp-values[] " />
+						<label >' . esc_html__( 'Attribute : ', 'wpadcenter' ) . '</label><input name="amp-attributes[] " value="' . esc_attr( $attribute ) . '"/> =
+						<label >' . esc_html__( 'Value : ', 'wpadcenter' ) . '</label><input name="amp-values[] " />
 						<button class="wpadcenter-amp-delete-attr-button">' . esc_html__( 'Remove', 'wpadcenter' ) . '</button>
 
 					<br><br>
@@ -1725,7 +1725,7 @@ class Wpadcenter_Admin {
 			}
 		}
 
-		echo '</div><br><button class="button-secondary" id="wpadcenter-amp-add-attr-button">' . esc_html__( 'Add Attribute', 'wpadcenter' ) . '</button><br><br><hr>';
+		echo '</div><br><button class="button-secondary wpadcenter-amp-add-attr-btn" id="wpadcenter-amp-add-attr-button"><span class="dashicons dashicons-plus"></span>' . esc_html__( 'Add Attribute', 'wpadcenter' ) . '</button><br><br><hr>';
 		echo '<br><label style="display:block" ><strong>' . esc_html__( 'Placeholder :     ', 'wpadcenter' ) . '</strong></label><input name="amp-placeholder" class="wpadcenter-amp-parameter-input" value="' . esc_attr( $saved_amp_placeholder ) . '" size="50" /><br><span style="color:grey">( ' . esc_html__( 'If supported by the ad network, this text is shown until the ad is available for viewing.', 'wpadcenter' ) . ' )</span><br><br><hr>';
 		echo '<br><label style="display:block" ><strong>' . esc_html__( 'Fallback :     ', 'wpadcenter' ) . '</strong></label><input name="amp-fallback" class="wpadcenter-amp-parameter-input" value="' . esc_attr( $saved_amp_fallback ) . '" size="50" /><br><span style="color:grey">( ' . esc_html__( 'If supported by the ad network, this text is shown if no ad is available for the ad slot.', 'wpadcenter' ) . ' )</span>';
 	}
