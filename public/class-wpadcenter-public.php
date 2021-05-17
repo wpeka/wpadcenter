@@ -356,8 +356,7 @@ class Wpadcenter_Public {
 		$text_ad_bg_color     = get_post_meta( $ad_id, 'wpadcenter_text_ad_background_color', true );
 		$text_ad_border_color = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_color', true );
 		$text_ad_border_width = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_width', true );
-		$text_ad_align_center = get_post_meta( $ad_id, 'wpadcenter_text_ad_align_vertically', true );			
-
+		$text_ad_align_center = get_post_meta( $ad_id, 'wpadcenter_text_ad_align_vertically', true );
 
 		$link_target = '_self';
 		if ( true === (bool) $open_in_new_tab ) {

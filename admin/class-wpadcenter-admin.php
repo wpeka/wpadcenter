@@ -477,7 +477,6 @@ class Wpadcenter_Admin {
 			'text-ad-border-width'                  => array( 'wpadcenter_text_ad_border_width', 'number' ),
 			'text-ad-align-vertically'              => array( 'wpadcenter_text_ad_align_vertically', 'bool' ),
 
-
 		);
 
 		return apply_filters( 'wp_adcenter_get_default_metafields', $metafields );
