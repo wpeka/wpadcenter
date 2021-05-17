@@ -266,6 +266,7 @@ class Wpadcenter_Public {
 				'align'           => 'none',
 				'max_width'       => 'off',
 				'max_width_value' => '100',
+				'devices'         => '',
 			),
 			$atts
 		);
@@ -275,11 +276,15 @@ class Wpadcenter_Public {
 			$atts['max_width'] = false;
 		}
 
-		$ad_id      = $atts['id'];
+		$ad_id = $atts['id'];
+
+		$atts['devices'] = ! $atts['devices'] ? array( 'mobile', 'tablet', 'desktop' ) : explode( ',', $atts['devices'] );
+
 		$attributes = array(
 			'align'        => 'align' . $atts['align'],
 			'max_width'    => $atts['max_width'],
 			'max_width_px' => $atts['max_width_value'],
+			'devices'      => $atts['devices'],
 		);
 		return self::display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
 
@@ -331,11 +336,17 @@ class Wpadcenter_Public {
 			'max_width_px'        => '100',
 			'display_adgroup'     => false,
 			'display_rotating_ad' => false,
+			'devices'             => array( 'mobile', 'desktop', 'tablet' ),
 		);
-		$attributes         = wp_parse_args( $attributes, $default_attributes );
-		$current_time       = time();
-		$start_date         = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
-		$end_date           = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
+
+		$attributes = wp_parse_args( $attributes, $default_attributes );
+
+		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
+			return;
+		}
+		$current_time = time();
+		$start_date   = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
+		$end_date     = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
@@ -674,6 +685,7 @@ class Wpadcenter_Public {
 				'num_columns'     => 1,
 				'max_width'       => 'off',
 				'max_width_value' => '100',
+				'devices'         => '',
 			),
 			$atts
 		);
@@ -685,6 +697,8 @@ class Wpadcenter_Public {
 		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
 		$atts['align']       = 'align' . $atts['align'];
 
+		$atts['devices'] = ! $atts['devices'] ? array( 'mobile', 'tablet', 'desktop' ) : explode( ',', $atts['devices'] );
+
 		$adgroup_atts = array(
 			'adgroup_ids'  => $atts['adgroup_ids'],
 			'align'        => $atts['align'],
@@ -692,6 +706,8 @@ class Wpadcenter_Public {
 			'num_columns'  => $atts['num_columns'],
 			'max_width'    => $atts['max_width'],
 			'max_width_px' => $atts['max_width_value'],
+			'devices'      => $atts['devices'],
+
 		);
 
 		return self::display_adgroup_ads( $adgroup_atts ); // phpcs:ignore
@@ -717,9 +733,14 @@ class Wpadcenter_Public {
 			'num_columns'  => 1,
 			'max_width'    => false,
 			'max_width_px' => '100',
+			'devices'      => array( 'mobile', 'desktop', 'tablet' ),
+
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
+		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
+			return;
+		}
 
 		$current_time = time();
 
@@ -830,6 +851,7 @@ class Wpadcenter_Public {
 				'align'           => 'none',
 				'max_width'       => 'off',
 				'max_width_value' => '100',
+				'devices'         => '',
 			),
 			$atts
 		);
@@ -841,11 +863,14 @@ class Wpadcenter_Public {
 		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
 		$atts['align']       = 'align' . $atts['align'];
 
+		$atts['devices'] = ! $atts['devices'] ? array( 'mobile', 'tablet', 'desktop' ) : explode( ',', $atts['devices'] );
+
 		$random_ad_atts = array(
 			'adgroup_ids'  => $atts['adgroup_ids'],
 			'align'        => $atts['align'],
 			'max_width'    => $atts['max_width'],
 			'max_width_px' => $atts['max_width_value'],
+			'devices'      => $atts['devices'],
 		);
 
 		return self::display_random_ad( $random_ad_atts ); // phpcs:ignore
@@ -869,9 +894,15 @@ class Wpadcenter_Public {
 			'align'        => 'alignnone',
 			'max_width'    => false,
 			'max_width_px' => '100',
+			'devices'      => array( 'mobile', 'desktop', 'tablet' ),
+
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
+
+		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
+			return;
+		}
 		// if activated wpadcenter pro, return weighted random ad.
 		if ( get_option( 'wpadcenter_pro_active' ) && get_option( 'wc_am_client_wpadcenter_pro_activated' ) === 'Activated' ) {
 			$random_ad_html = apply_filters( 'wp_adcenter_random_weighted_ad', $attributes );
@@ -935,4 +966,48 @@ class Wpadcenter_Public {
 		}
 
 	}
+
+	/**
+	 * Verifies if the ad should be displayed on the device.
+	 *
+	 * @param array $devices contains device names.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool return true or false depending upon the device.
+	 */
+	public static function wpadcenter_verify_device( $devices ) {
+
+		$detect = new Mobile_Detect();
+
+		if ( ! $detect->isMobile() && ! $detect->isTablet() && in_array( 'desktop', $devices, true ) ||
+					$detect->isTablet() && in_array( 'tablet', $devices, true ) ||
+					$detect->isMobile() && ! $detect->isTablet() && in_array( 'mobile', $devices, true ) ) {
+			if ( ! $detect->isMobile() && ! $detect->isTablet() ) {
+				if ( in_array( 'desktop', $devices, true ) ) {
+					return true;
+				} else {
+					return false;
+				}
+			} elseif ( $detect->isTablet() ) {
+				if ( in_array( 'tablet', $devices, true ) ) {
+					return true;
+				} else {
+					return false;
+				}
+			} elseif ( $detect->isMobile() && ! $detect->isTablet() ) {
+				if ( in_array( 'mobile', $devices, true ) ) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+
+	}
+
 }

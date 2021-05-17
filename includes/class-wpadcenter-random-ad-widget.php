@@ -56,6 +56,14 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 			$max_width = false;
 		}
 		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
+		if ( isset( $instance['devices'] ) ) {
+			$key = array_search( 'set', $instance['devices'], true );
+			if ( false !== $key ) {
+				unset( $instance['devices'][ $key ] );
+			}
+		} else {
+			$instance['devices'] = array( 'mobile', 'tablet', 'desktop' );
+		}
 
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -67,6 +75,8 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 			'adgroup_ids'  => $adgroup_ids,
 			'max_width'    => $max_width,
 			'max_width_px' => $max_width_px,
+			'devices'      => $instance['devices'],
+
 		);
 		echo Wpadcenter_Public::display_random_ad( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -102,6 +112,7 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 		$title        = isset( $instance['title'] ) ? $instance['title'] : '';
 		$max_width    = isset( $instance['max_width'] ) ? $instance['max_width'] : 'off';
 		$max_width_px = isset( $instance['max_width_px'] ) ? $instance['max_width_px'] : '100';
+		$devices      = isset( $instance['devices'] ) ? $instance['devices'] : array( 'mobile', 'tablet', 'desktop' );
 
 		$single_ads = array();
 
@@ -184,6 +195,50 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 			});
 			})( jQuery );
 			</script>
+			<p>
+				<label for="specificDevices"><?php echo esc_html__( 'Display on specific devices : ', 'wpadcenter' ); ?></label>
+			</p>
+			<p>
+			<ul class="wpadcenter-specific-devices-container">
+			<li class="wpadcenter-specific-devices__item">
+			<input type="checkbox"
+			name="<?php echo esc_html( $this->get_field_name( 'devices' ) ) . '[]'; ?>"
+			value="mobile" 
+			<?php echo in_array( 'mobile', $devices, true ) ? 'checked' : ''; ?> 
+			/>
+			<span class="dashicons dashicons-smartphone"></span>
+			<span class="wpadcenter-specific-devices__label">Mobile</span>
+			</li>
+
+			<li class="wpadcenter-specific-devices__item">
+			<input type="checkbox"
+			name="<?php echo esc_html( $this->get_field_name( 'devices' ) ) . '[]'; ?>"
+			value="tablet" 
+			<?php echo in_array( 'tablet', $devices, true ) ? 'checked' : ''; ?> 
+			/>
+			<span class="dashicons dashicons-tablet"></span>
+			<span class="wpadcenter-specific-devices__label">Tablet</span>
+
+			</li>
+
+			<li class="wpadcenter-specific-devices__item">
+			<input type="checkbox"
+			name="<?php echo esc_html( $this->get_field_name( 'devices' ) ) . '[]'; ?>" 
+			value="desktop" 
+			<?php echo in_array( 'desktop', $devices, true ) ? 'checked' : ''; ?> 
+			/>
+			<span class="dashicons dashicons-desktop"></span>
+			<span class="wpadcenter-specific-devices__label">Desktop</span>
+
+			</li>
+			<input type="hidden"
+			name="<?php echo esc_html( $this->get_field_name( 'devices' ) ) . '[]'; ?>" 
+			value="set" 
+			checked 
+			/>
+
+			</ul>
+			</p>
 
 			<?php
 
