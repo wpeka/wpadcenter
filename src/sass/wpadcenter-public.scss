@@ -60,6 +60,17 @@
   .wpadcenter-adgroup-widget-container {
 	overflow: hidden;
   }
+  .wpadcenter-text-ad-align-center {
+	display:flex!important;
+	align-items:center;
+  }
+  .wpadcenter-text-ad-align-none {
+	display:flex!important;
+	align-items:flex-start!important;
+  }
+  .wpadcenter-text-ad-code {
+	display:block;
+  }
 
 
 /*Gutenberg block css*/

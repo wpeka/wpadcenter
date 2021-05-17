@@ -348,11 +348,16 @@ class Wpadcenter_Public {
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
-		$ad_size         = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-		$ad_type         = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-		$link_url        = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
-		$open_in_new_tab = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
-		$nofollow        = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
+		$ad_size              = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
+		$ad_type              = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		$link_url             = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
+		$open_in_new_tab      = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
+		$nofollow             = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
+		$text_ad_bg_color     = get_post_meta( $ad_id, 'wpadcenter_text_ad_background_color', true );
+		$text_ad_border_color = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_color', true );
+		$text_ad_border_width = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_width', true );
+		$text_ad_align_center = get_post_meta( $ad_id, 'wpadcenter_text_ad_align_vertically', true );			
+
 
 		$link_target = '_self';
 		if ( true === (bool) $open_in_new_tab ) {
@@ -368,6 +373,13 @@ class Wpadcenter_Public {
 			$attributes['classes'] .= ' wpadcenter-' . $width . 'x' . $height;
 
 		}
+
+		if ( 'text_ad' === $ad_type && $text_ad_align_center ) {
+			$attributes['classes'] .= ' wpadcenter-text-ad-align-center';
+		} elseif ( 'text_ad' === $ad_type && ! $text_ad_align_center ) {
+			$attributes['classes'] .= ' wpadcenter-text-ad-align-none';
+		}
+
 		$amp_page = false;
 		if ( function_exists( 'is_amp_endpoint' ) ) {
 				$amp_page = is_amp_endpoint();
@@ -401,14 +413,23 @@ class Wpadcenter_Public {
 		if ( $attributes['classes'] ) {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
 		}
+
+		if ( 'text_ad' === $ad_type ) {
+			$single_ad_html .= ' style="background-color:' . $text_ad_bg_color . ';border:' . $text_ad_border_width . 'px solid ' . $text_ad_border_color . ';" ';
+		}
+
 		$single_ad_html .= '>';
 		$single_ad_html .= '<div class="wpadcenter-ad-inner" >';
 
-		$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
-		if ( true === (bool) $nofollow ) {
-			$single_ad_html .= 'rel="nofollow"';
+		if ( 'text_ad' !== $ad_type ) {
+
+			$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
+			if ( true === (bool) $nofollow ) {
+				$single_ad_html .= 'rel="nofollow"';
+			}
+			$single_ad_html .= '>';
+
 		}
-		$single_ad_html .= '>';
 
 		switch ( $ad_type ) {
 			case 'banner_image':
@@ -418,6 +439,11 @@ class Wpadcenter_Public {
 			case 'external_image_link':
 				$external_img_link   = get_post_meta( $ad_id, 'wpadcenter_external_image_link', true );
 					$single_ad_html .= '<img width="' . $width . '" height="' . $height . '" src="' . esc_url( $external_img_link ) . '"/>';
+				break;
+			case 'text_ad':
+				$text_ad_code = get_post_meta( $ad_id, 'wpadcenter_text_ad_code', true );
+
+				$single_ad_html .= '<div class="wpadcenter-text-ad-code" >' . $text_ad_code . '</div>';
 				break;
 			case 'ad_code':
 				$ad_code         = get_post_meta( $ad_id, 'wpadcenter_ad_code', true );

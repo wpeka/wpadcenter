@@ -328,6 +328,95 @@
 			}
 		}
 
+		/* Text ad functions*/
+
+		//Initial frame load of tiny mce
+		$( '#text-ad' ).on( 'DOMNodeInserted', function( event ) {
+			if ( event.target.className === 'mce-path-item' ) {
+				applyTextAdStyles();
+			}
+		} );
+		//frame reload on change in parameters
+		$( '#wpadcenter_text_ad_bg_color,#wpadcenter_text_ad_border_color,#wpadcenter_text_ad_border_width' ).change(function(){
+			applyTextAdStyles();
+		});
+
+		//Adds classes to track clicks on links
+		function addTextAdClasses( editor ) {
+			
+			if(editor === 'visual'){
+				var content = tinymce.get("text_ad_code").getContent();
+			}
+			else if(editor==='text') {
+				var content = $('#text-ad .wp-editor-area').val();
+			}
+			var adId = $('#wpadcenter_get_text_ad_id').data('value');
+
+				var htmlObject = document.createElement('div');
+			
+					htmlObject.innerHTML = content;
+					var x = htmlObject.getElementsByTagName("a");
+					for(var i=0;i<x.length;i++){
+						if (x[i].getAttribute('href')){
+							x[i].setAttribute('id','wpadcenter_ad');
+							x[i].setAttribute('data-value',adId);
+						}
+						
+
+					}
+					var tinyString = htmlObject.innerHTML;
+				if(editor === 'visual'){
+					tinymce.get("text_ad_code").setContent(tinyString);
+				}
+				else if(editor==='text') {
+					$('#text-ad .wp-editor-area').val(tinyString);
+				}
+				
+		}
+		//triggers function to add click tracking classes on changes in text editor
+		$('#text-ad .wp-editor-area').focusout(function(){
+			addTextAdClasses('text');
+		});
+		
+		//reloads tinymce editor with changes in parameters
+		function applyTextAdStyles() {
+
+
+			window.requestAnimationFrame( function() {
+		
+				var textBackgroundColor = $( '#wpadcenter_text_ad_bg_color' ).val();
+				var textBorderColor     = $( '#wpadcenter_text_ad_border_color' ).val();
+				var textBorderWidth     = $( '#wpadcenter_text_ad_border_width' ).val();
+
+				var textAdContainerId     = window.tinyMCE.get( 'text_ad_code' ).contentAreaContainer.id;
+		
+				var textAdBody =  document.querySelector( '#' + textAdContainerId + ' iframe' ).contentDocument.body;
+				
+				$('#' + textAdContainerId + ' iframe').css({
+					border: textBorderWidth + 'px solid ' + textBorderColor,
+					boxSizing   : 'border-box',
+				});
+
+				var textAdDoc = document.querySelector( '#' + textAdContainerId + ' iframe' ).contentDocument;
+				var tinyMceEditor =textAdDoc.querySelector("[contenteditable='true']");
+
+				tinyMceEditor.onblur = function(){
+					addTextAdClasses('visual');
+				}	
+				
+		
+				textAdBody.style.background = textBackgroundColor;
+
+				textAdBody.style.maxWidth = 'none';
+				textAdBody.style.margin = '0';
+
+				
+			} );
+		
+		}
+		
+
+
 		}
 	);
 
