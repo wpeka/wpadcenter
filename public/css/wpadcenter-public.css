@@ -10,6 +10,11 @@
   clear: both;
 }
 
+/*To limit the ad inside the container size.*/
+.wpadcenter-ad-container {
+  overflow: hidden;
+}
+
 .wpadcenter-activebutton {
   border: 1px solid;
   border-radius: 3px;

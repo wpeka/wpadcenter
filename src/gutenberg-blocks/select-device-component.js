@@ -58,12 +58,12 @@ class SelectDevice extends Component{
     return <div>
     
     <div className="wpadcenter-select-ad-top">
-    <h3 style={{fontWeight:"300",textAlign:"center",marginTop:"20px",fontSize:"medium"}}>{__('Display on Specific Devices','wpadcenter')}</h3>
+    <h3 style={{fontWeight:"300",textAlign:"center",marginTop:"0px",fontSize:"medium"}}>{__('Display on Specific Devices','wpadcenter')}</h3>
     <Tooltip
                     text={ __( 'Ads will be displayed only on selected devices.( Changes will take effect only on preview or live page and not while editing.)', 'wpadcenter' ) }
                         >
                            
-                        <span style={{marginTop:"20px"}} className="dashicons dashicons-lightbulb"></span>
+                        <span style={{marginTop:"0px"}} className="dashicons dashicons-lightbulb"></span>
                         </Tooltip>
       </div>
 			<ul className="wpadcenter-specific-devices-container">
