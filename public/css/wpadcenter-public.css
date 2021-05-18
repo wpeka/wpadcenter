@@ -60,6 +60,20 @@
   overflow: hidden;
 }
 
+.wpadcenter-text-ad-align-center {
+  display: flex !important;
+  align-items: center;
+}
+
+.wpadcenter-text-ad-align-none {
+  display: flex !important;
+  align-items: flex-start !important;
+}
+
+.wpadcenter-text-ad-code {
+  display: block;
+}
+
 /*Gutenberg block css*/
 .wpadcenter-maxwidth-top, .wpadcenter-maxwidth-bottom, .wpadcenter-order-container, .wpadcenter-select-ad-top {
   display: flex;
