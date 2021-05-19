@@ -403,9 +403,9 @@ class Wpadcenter_Public {
 
 		$single_ad_html .= '<div ';
 		$single_ad_html .= 'id="wpadcenter-ad-' . $ad_id . '" ';
-
+		$inline_styles   = '';
 		if ( $attributes['max_width'] ) {
-			$single_ad_html        .= 'style="max-width:' . $attributes['max_width_px'] . 'px" ';
+			$inline_styles         .= 'max-width:' . $attributes['max_width_px'] . 'px;';
 			$attributes['classes'] .= ' wpadcenter-maxwidth';
 		}
 
@@ -414,7 +414,10 @@ class Wpadcenter_Public {
 		}
 
 		if ( 'text_ad' === $ad_type ) {
-			$single_ad_html .= ' style="background-color:' . $text_ad_bg_color . ';border:' . $text_ad_border_width . 'px solid ' . $text_ad_border_color . ';" ';
+			$inline_styles .= ' background-color:' . $text_ad_bg_color . ';border:' . $text_ad_border_width . 'px solid ' . $text_ad_border_color . '; ';
+		}
+		if ( $inline_styles ) {
+			$single_ad_html .= ' style="' . $inline_styles . '"';
 		}
 
 		$single_ad_html .= '>';
