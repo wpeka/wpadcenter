@@ -118,14 +118,6 @@ class Wpadcenter_Admin {
 
 		<?php
 
-		wp_enqueue_script(
-			$this->plugin_name . 'ad-selection-script',
-			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-ad-selection' . WPADCENTER_SCRIPT_SUFFIX . '.js',
-			array( 'jquery' ),
-			$this->version,
-			true
-		);
-
 	}
 
 	/**
