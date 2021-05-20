@@ -40,6 +40,40 @@
 
 	$( document ).ready(
 		function(){
+			//google adsense ad selection
+			$( '#adsense-adunits button' ).click(
+				function(e){
+					e.preventDefault();
+					var button = $( e.target );
+		
+					$.ajax(
+						{
+							url:ajaxurl,
+							type:'POST',
+							data : {
+								action: 'adsense_load_adcode',
+								_wpnonce: AdsenseGAPI.nonce,
+								adunit:button.attr( 'data-unitid' )
+							},
+							success:function(data){
+								$( '#adsense-adunits button' ).text('Load');
+								button.text( 'Loaded' );
+								$( '#wpadcenter-google-adsense-code' ).text( data.message );
+								$( '#wpadcenter-google-adsense-code' ).val( data.message );
+
+								convertAdsenseToAmp();
+
+							},
+							error:function(request, status, error){
+								alert( error );
+							}
+		
+						}
+					);
+		
+				}
+			);
+
 			$( '#geo_countries select.geo_countries' ).select2();
 			$( 'input[name="target-ads-by"]' ).click(
 				function() {
@@ -204,11 +238,13 @@
 						var clientId = rawCode_html.attr( 'data-ad-client' );
 						if(!clientId){
 						   $('#wpadcenterAdsenseAmpCode').text("Please provide Client ID");
+						   $('#wpadcenterAdsenseAmpCode').val("Please provide Client ID");
 						   return;
 					   }
 						var slotId = rawCode_html.attr( 'data-ad-slot' );
 						if(!slotId){
 							$('#wpadcenterAdsenseAmpCode').text("Please provide slot ID");
+							$('#wpadcenterAdsenseAmpCode').val("Please provide slot ID");
 							return;
 						}
 						var adType = '';
@@ -307,8 +343,15 @@
 							ampAdCode += '>';
    
    							ampAdCode += '</amp-ad>';
-						$('#wpadcenterAdsenseAmpCode').text(ampAdCode);
-					}
+					
+							   $('#wpadcenterAdsenseAmpCode').text(ampAdCode);
+							   $('#wpadcenterAdsenseAmpCode').val(ampAdCode);
+	   
+						   }
+						   else{
+							   $('#wpadcenterAdsenseAmpCode').text('');
+							   $('#wpadcenterAdsenseAmpCode').val('');
+						   }
 		   }
 
 
