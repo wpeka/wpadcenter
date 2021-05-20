@@ -118,14 +118,6 @@ class Wpadcenter_Admin {
 
 		<?php
 
-		wp_enqueue_script(
-			$this->plugin_name . 'ad-selection-script',
-			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-ad-selection' . WPADCENTER_SCRIPT_SUFFIX . '.js',
-			array( 'jquery' ),
-			$this->version,
-			true
-		);
-
 	}
 
 	/**
@@ -452,6 +444,7 @@ class Wpadcenter_Admin {
 			'open-in-new-tab'                       => array( 'wpadcenter_open_in_new_tab', 'bool' ),
 			'nofollow-on-link'                      => array( 'wpadcenter_nofollow_on_link', 'bool' ),
 			'link-url'                              => array( 'wpadcenter_link_url', 'url' ),
+			'text-ad-code'                          => array( 'wpadcenter_text_ad_code', 'raw' ),
 			'ad-code'                               => array( 'wpadcenter_ad_code', 'raw' ),
 			'external-image-link'                   => array( 'wpadcenter_external_image_link', 'url' ),
 			'ad-google-adsense'                     => array( 'wpadcenter_ad_google_adsense', 'raw' ),
@@ -471,6 +464,11 @@ class Wpadcenter_Admin {
 			'amp-values'                            => array( 'wpadcenter_amp_values', 'array' ),
 			'amp-placeholder'                       => array( 'wpadcenter_amp_placeholder', 'string' ),
 			'amp-fallback'                          => array( 'wpadcenter_amp_fallback', 'string' ),
+			'text-ad-background-color'              => array( 'wpadcenter_text_ad_background_color', 'string' ),
+			'text-ad-border-color'                  => array( 'wpadcenter_text_ad_border_color', 'string' ),
+			'text-ad-border-width'                  => array( 'wpadcenter_text_ad_border_width', 'number' ),
+			'text-ad-align-vertically'              => array( 'wpadcenter_text_ad_align_vertically', 'bool' ),
+
 		);
 
 		return apply_filters( 'wp_adcenter_get_default_metafields', $metafields );
@@ -498,6 +496,12 @@ class Wpadcenter_Admin {
 					'ad-size',
 					'external-image-link',
 					'ad-details',
+				),
+			),
+			'text_ad'             => array(
+				'active_meta_box' => array(
+					'ad-size',
+					'text-ad',
 				),
 			),
 			'ad_code'             => array(
@@ -583,6 +587,7 @@ class Wpadcenter_Admin {
 		$ad_types = array(
 			'banner_image'        => __( 'Banner Image', 'wpadcenter' ),
 			'external_image_link' => __( 'External Image Link', 'wpadcenter' ),
+			'text_ad'             => __( 'Text Ad', 'wpadcenter' ),
 			'ad_code'             => __( 'Ad Code', 'wpadcenter' ),
 			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),
 			'amp_ad'              => __( 'AMP', 'wpadcenter' ),
@@ -1446,6 +1451,14 @@ class Wpadcenter_Admin {
 			'normal',
 			'core'
 		);
+		add_meta_box(
+			'text-ad',
+			__( 'Ad Text', 'wpadcenter' ),
+			array( $this, 'wpadcenter_text_ad_metabox' ),
+			'wpadcenter-ads',
+			'normal',
+			'core'
+		);
 		do_action( 'wp_adcenter_add_meta_boxes', $post );
 
 	}
@@ -1728,6 +1741,38 @@ class Wpadcenter_Admin {
 		echo '</div><br><button class="button-secondary wpadcenter-amp-add-attr-btn" id="wpadcenter-amp-add-attr-button"><span class="dashicons dashicons-plus"></span>' . esc_html__( 'Add Attribute', 'wpadcenter' ) . '</button><br><br><hr>';
 		echo '<br><label style="display:block" ><strong>' . esc_html__( 'Placeholder :     ', 'wpadcenter' ) . '</strong></label><input name="amp-placeholder" class="wpadcenter-amp-parameter-input" value="' . esc_attr( $saved_amp_placeholder ) . '" size="50" /><br><span style="color:grey">( ' . esc_html__( 'If supported by the ad network, this text is shown until the ad is available for viewing.', 'wpadcenter' ) . ' )</span><br><br><hr>';
 		echo '<br><label style="display:block" ><strong>' . esc_html__( 'Fallback :     ', 'wpadcenter' ) . '</strong></label><input name="amp-fallback" class="wpadcenter-amp-parameter-input" value="' . esc_attr( $saved_amp_fallback ) . '" size="50" /><br><span style="color:grey">( ' . esc_html__( 'If supported by the ad network, this text is shown if no ad is available for the ad slot.', 'wpadcenter' ) . ' )</span>';
+	}
+
+	/**
+	 * Call back function for the text ad editor metabox.
+	 *
+	 * @param WP_POST $post Post object.
+	 */
+	public function wpadcenter_text_ad_metabox( $post ) {
+		$saved_text_ad          = get_post_meta( $post->ID, 'wpadcenter_text_ad_code', true );
+		$saved_background_color = get_post_meta( $post->ID, 'wpadcenter_text_ad_background_color', true );
+		$saved_border_color     = get_post_meta( $post->ID, 'wpadcenter_text_ad_border_color', true );
+		$saved_border_width     = get_post_meta( $post->ID, 'wpadcenter_text_ad_border_width', true );
+		$saved_center_align     = get_post_meta( $post->ID, 'wpadcenter_text_ad_align_vertically', true );
+
+		echo '<br><span style="color:grey;">( ' . esc_html__( 'To be able to track clicks in your text ad, you must set all links to the permalink.', 'wpadcenter' ) . ' )</span>';
+
+		wp_editor(
+			$saved_text_ad,
+			'text_ad_code',
+			array(
+				'media_buttons' => false,
+				'textarea_name' => 'text-ad-code',
+				'textarea_rows' => 8,
+			)
+		);
+		echo '<input type="hidden" id="wpadcenter_get_text_ad_id" data-value="' . esc_attr( $post->ID ) . '">';
+		echo '<br><hr><label class="wpadcenter-text-ad-label" ><strong>' . esc_html__( 'Select Background Color', 'wpadcenter' ) . '</strong></label><input type="color" id="wpadcenter_text_ad_bg_color" name="text-ad-background-color" value="' . esc_attr( $saved_background_color ) . '"/>';
+		echo '<br><hr><label class="wpadcenter-text-ad-label" ><strong>' . esc_html__( 'Select Border Color', 'wpadcenter' ) . '</strong></label><input type="color" id="wpadcenter_text_ad_border_color" name="text-ad-border-color" value="' . esc_attr( $saved_border_color ) . '"/>';
+		echo '<br><hr><label class="wpadcenter-text-ad-label" ><strong>' . esc_html__( 'Select Border Width', 'wpadcenter' ) . '</strong></label><input type="number" id="wpadcenter_text_ad_border_width" name="text-ad-border-width" min="0" max="999" value="' . esc_attr( $saved_border_width ) . '" />';
+		echo '<br><hr><label style="margin-right:20px;"><strong>' . esc_html__( 'Center Align Vertically', 'wpadcenter' ) . '</strong></label><input name="text-ad-align-vertically" type="checkbox" value="1" id="text_ad_align_vartically" ' . checked( '1', $saved_center_align, false ) . '> 
+		<br><br><span style="color:grey;">( ' . esc_html__( 'Vertical alignment setting will take effect on front-end.', 'wpadcenter' ) . ' )</span>';
+
 	}
 
 	/**
