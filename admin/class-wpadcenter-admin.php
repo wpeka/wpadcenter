@@ -710,10 +710,11 @@ class Wpadcenter_Admin {
 				$temp_array['ad_title'] = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
 				$temp_array['ad_meta']  = get_post_meta( get_the_ID(), 'wpadcenter_ads_stats', true );
 				if ( is_array( $temp_array['ad_meta'] ) ) :
-					array_push( $return_array, $temp_array );
+					$return_array[ $temp_array['ad_id'] ] = $temp_array;
 				endif;
 			}
 		}
+		$return_array = apply_filters( 'wpadcenter_reports', $return_array );
 		wp_localize_script( $this->plugin_name . '-reports', 'reportsArray', $return_array );
 		require_once plugin_dir_path( __FILE__ ) . 'views/admin-display-reports.php';
 	}
@@ -2133,10 +2134,11 @@ class Wpadcenter_Admin {
 						'ad_title' => $ad_title,
 						'ad_meta'  => $ad_meta,
 					);
-					array_push( $return_array, $temp );
+					$return_array[ $temp['ad_id'] ] = $temp;
 				}
 			}
 			// echo reports data as per ad group selected and die.
+			$return_array = apply_filters( 'selected_adgroup_reports', $return_array );
 			echo wp_json_encode( $return_array );
 			wp_die();
 		}
@@ -2166,6 +2168,12 @@ class Wpadcenter_Admin {
 			if ( '' === $start_date || '' === $end_date || ! count( $ad_ids ) ) {
 				$return_array = array( 'error' => 'Error' );
 				echo wp_json_encode( $return_array );
+			}
+			$records = apply_filters( 'selected_ad_reports', $ad_ids, $start_date, $end_date );
+			if ( $records !== $ad_ids ) {
+				echo wp_json_encode( $records );
+				wp_die();
+				return;
 			}
 			global $wpdb;
 			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs:ignore
