@@ -68,10 +68,14 @@
   .wpadcenter-text-ad-align-center {
 	display:flex!important;
 	align-items:center;
+	width:auto!important;
+
   }
   .wpadcenter-text-ad-align-none {
 	display:flex!important;
 	align-items:flex-start!important;
+	width:auto !important;
+
   }
   .wpadcenter-text-ad-code {
 	display:block;
@@ -79,7 +83,7 @@
 	text-align:left;
   }
   .wpadcenter-text-ad-code a {
-	  display:inline;
+	  display:inline !important;
   }
 
 /*Gutenberg block css*/
