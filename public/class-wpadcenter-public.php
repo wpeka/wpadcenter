@@ -399,7 +399,13 @@ class Wpadcenter_Public {
 			}
 		}
 
-		$single_ad_html .= '<div class="wpadcenter-ad-container">';
+		$single_ad_html .= '<div class="wpadcenter-ad-container" ';
+
+		if ( 'text_ad' === $ad_type ) {
+			$single_ad_html .= 'style="overflow:visible" ';
+		}
+
+		$single_ad_html .= '>';
 
 		$single_ad_html .= '<div ';
 		$single_ad_html .= 'id="wpadcenter-ad-' . $ad_id . '" ';
