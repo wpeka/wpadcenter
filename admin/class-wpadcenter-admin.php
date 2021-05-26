@@ -1214,67 +1214,69 @@ class Wpadcenter_Admin {
 
 		$sizes_list    = $this->get_default_ad_sizes();
 		$ad_types_list = $this->get_default_ad_types();
+		$return_value  = '';
 		switch ( $column ) {
 			case 'ad-type':
 				$ad_type = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
 				if ( $ad_type ) {
-					echo esc_html( $ad_types_list[ $ad_type ] );
+					$return_value = esc_html( $ad_types_list[ $ad_type ] );
 				} else {
-					echo '-';
+					$return_value = '-';
 				}
 				break;
 			case 'ad-dimensions':
 				$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
 				if ( $ad_size && 'none' !== $ad_size ) {
-					$size_data = $sizes_list[ $ad_size ];
-					echo esc_html( $size_data[0] );
+					$size_data    = $sizes_list[ $ad_size ];
+					$return_value = esc_html( $size_data[0] );
 				} else {
-					echo '-';
+					$return_value = '-';
 				}
 				break;
 			case 'start-date':
 				$current_start_date = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
 				if ( $current_start_date ) {
-					echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_start_date ) );// get format from WordPress settings.
+					$return_value = esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_start_date ) );// get format from WordPress settings.
 				}
 				break;
 			case 'end-date':
 				$expire_limit     = '1924905600'; // unix timestamp for 31 dec 2030.
 				$current_end_date = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
 				if ( $current_end_date && $current_end_date === $expire_limit ) {
-					echo esc_html__( 'Forever', 'wpadcenter' );
+					$return_value = esc_html__( 'Forever', 'wpadcenter' );
 				} elseif ( $current_end_date ) {
-					echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_end_date ) );// get format from WordPress settings.
+					$return_value = esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_end_date ) );// get format from WordPress settings.
 				}
 				break;
 			case 'ad-group':
 				$names = wp_get_post_terms( $ad_id, 'wpadcenter-adgroups', array( 'fields' => 'names' ) );
 				if ( ! count( $names ) ) {
-					echo esc_html( '-' );
+					$return_value = esc_html( '-' );
 				} else {
-					echo esc_html( implode( ', ', $names ) );
+					$return_value = esc_html( implode( ', ', $names ) );
 				}
 				break;
 			case 'shortcode':
-				echo sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="[wpadcenter_ad id=%d align=\'none\']">[shortcode]</a>', intval( $ad_id ) );
+				$return_value = sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="[wpadcenter_ad id=%d align=\'none\']">[shortcode]</a>', intval( $ad_id ) );
 				break;
 			case 'template-tag':
-				echo sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="wpadcenter_display_ad( array( \'id\' => %d, \'align\' => \'none\' ) );">&lt;?php</a>', intval( $ad_id ) );
+				$return_value = sprintf( '<a href="#" class="wpadcenter_copy_text" data-attr="wpadcenter_display_ad( array( \'id\' => %d, \'align\' => \'none\' ) );">&lt;?php</a>', intval( $ad_id ) );
 				break;
 			case 'stats-for-today':
 				$today = gmdate( 'Y-m-d' );
 				global $wpdb;
 				$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics where ad_date=%s AND ad_id=%d', array( $today, $ad_id ) ) ); // phpcs:ignore
 				if ( ! count( $results ) ) {
-					echo '0 clicks / 0 views / 0.00% CTR';
+					$return_value = '0 clicks / 0 views / 0.00% CTR';
 				} else {
-					$record = $results[0];
-					$ctr    = number_format( (float) ( $record->ad_clicks / $record->ad_impressions ) * 100, 2, '.', '' ) . '%';
-					echo sprintf( '%d clicks / %d views / %s CTR', esc_html( $record->ad_clicks ), esc_html( $record->ad_impressions ), esc_html( $ctr ) );
+					$record       = $results[0];
+					$ctr          = number_format( (float) ( $record->ad_clicks / $record->ad_impressions ) * 100, 2, '.', '' ) . '%';
+					$return_value = sprintf( '%d clicks / %d views / %s CTR', esc_html( $record->ad_clicks ), esc_html( $record->ad_impressions ), esc_html( $ctr ) );
 				}
 				break;
 		}
-		do_action( 'wp_adcenter_manage_ads_column_values', $column, $ad_id );
+		$return_value = apply_filters( 'wp_adcenter_manage_ads_column_values', $return_value, $column, $ad_id );
+		echo $return_value;//phpcs:ignore
 	}
 
 
