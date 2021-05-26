@@ -73,27 +73,27 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	/**
 	 * Test wp_ajax_get_adgroups.
 	 */
-	// public function test_wpadcenter_get_adgroups() {
+	public function test_wpadcenter_get_adgroups() {
 
-	// become administrator.
-	// $this->_setRole( 'administrator' );
+	become administrator.
+	$this->_setRole( 'administrator' );
 
-	// Set up a default request.
-	// $_POST['security'] = wp_create_nonce( 'adgroups_security' );
-	// $_POST['action']   = 'get_adgroups';
-	// try {
-	// $this->_handleAjax( 'get_adgroups' );
-	// } catch ( WPAjaxDieContinueException $e ) {
-	// unset( $e );
-	// }
+	Set up a default request.
+	$_POST['security'] = wp_create_nonce( 'adgroups_security' );
+	$_POST['action']   = 'get_adgroups';
+	try {
+	$this->_handleAjax( 'get_adgroups' );
+	} catch ( WPAjaxDieContinueException $e ) {
+	unset( $e );
+	}
 
-	// get response.
-	// $response = json_decode( $this->_last_response );
-	// $count    = count( self::$ad_groups );
-	// for ( $i = 0; $i < $count; $i++ ) {
-	// $this->assertEquals( $response[ $i ]->term_id, self::$ad_groups[ $i ], 'ad group ids didnt match' );
-	// }
-	// }
+	get response.
+	$response = json_decode( $this->_last_response );
+	$count    = count( self::$ad_groups );
+	for ( $i = 0; $i < $count; $i++ ) {
+	$this->assertEquals( $response[ $i ]->term_id, self::$ad_groups[ $i ], 'ad group ids didnt match' );
+	}
+	}
 	/**
 	 * Test wp_ajax_selected_adgroup_reports.
 	 */
@@ -153,6 +153,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$this->assertEquals( $response[0]->ad_impressions, $ad_impressions );
 		$this->assertEquals( $response[0]->ad_clicks, $ad_clicks );
 	}
+
 
 	/**
 	 * Test wp_ajax_check_ads_txt_problems when content is not entered.
