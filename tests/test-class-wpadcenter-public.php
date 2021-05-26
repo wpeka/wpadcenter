@@ -272,4 +272,16 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$this->expectOutputString( $expected );
 		self::$wpadcenter_public->wpadcenter_output_footer_post();
 	}
+
+	/**
+	 * Test for wpadcenter_check_ads_txt_replace function
+	 */
+	public function test_wpadcenter_get_root_domain_info() {
+		$value = self::$wpadcenter_public->wpadcenter_get_root_domain_info( 'http://one.net.two/three/four/five' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_public->wpadcenter_get_root_domain_info( 'http://one.com.au/three/four/five' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_public->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
+		$this->assertTrue( $value );
+	}
 }

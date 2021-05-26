@@ -433,7 +433,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_gutenberg_display_adgroup_cb() {
 		$attributes   = array(
-			'adgroup_ids'       => self::$ad_group ,
+			'adgroup_ids'       => self::$ad_group,
 			'adgroup_alignment' => 'aligncenter',
 			'num_ads'           => '1',
 			'num_columns'       => '1',
@@ -450,7 +450,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_gutenberg_display_random_ad_cb() {
 		$attributes     = array(
-			'adgroup_ids'       => self::$ad_group ,
+			'adgroup_ids'       => self::$ad_group,
 			'adgroup_alignment' => 'aligncenter',
 			'max_width_check'   => false,
 			'max_width_px'      => '100',
@@ -739,4 +739,53 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
 		$this->assertTrue( $value );
 	}
+
+	/**
+	 * Test for wpadcenter_remove_post_row_actions function
+	 */
+	public function test_wpadcenter_remove_post_row_actions() {
+		global $current_screen;
+		$screen         = WP_Screen::get( 'wpadcenter-ads' );
+		$current_screen = $screen;
+		$value          = apply_filters( 'post_row_actions', array( 'view', 'inline hide-if-no-js' ) );
+		$this->assertTrue( is_array( $value ) );
+	}
+
+	/**
+	 * Test for wpadcenter_add_custom_filters function
+	 */
+	public function test_wpadcenter_add_custom_filters() {
+		global $current_screen;
+		$screen         = WP_Screen::get( 'wpadcenter-ads' );
+		$current_screen = $screen;
+		ob_start();
+		do_action( 'restrict_manage_posts' );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
+	/**
+	 * Test for wpadcenter_gutenberg_block_categories function
+	 */
+	public function test_wpadcenter_gutenberg_block_categories() {
+
+		$value = self::$wpadcenter_admin->wpadcenter_gutenberg_block_categories( array() );
+		$this->assertTrue( is_array( $value ) );
+	}
+
+	/**
+	 * public function wpadcenter_pro_display_amp_warning function
+	 */
+	public function test_wpadcenter_pro_display_amp_warning() {
+		ob_start();
+		try {
+			self::$wpadcenter_admin->wpadcenter_pro_display_amp_warning();
+		} catch ( WPDieException $e ) {
+			unset( $e );
+		} finally {
+			$output = ob_get_clean();
+		}
+		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+	}
+
 }
