@@ -82,7 +82,7 @@
 }
 
 .wpadcenter-text-ad-code a {
-  display: inline;
+  display: inline !important;
 }
 
 /*Gutenberg block css*/
