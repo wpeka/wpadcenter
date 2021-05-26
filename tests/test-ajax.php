@@ -75,10 +75,10 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 */
 	public function test_wpadcenter_get_adgroups() {
 
-	become administrator.
+	//become administrator.
 	$this->_setRole( 'administrator' );
 
-	Set up a default request.
+	//Set up a default request.
 	$_POST['security'] = wp_create_nonce( 'adgroups_security' );
 	$_POST['action']   = 'get_adgroups';
 	try {
@@ -87,7 +87,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	unset( $e );
 	}
 
-	get response.
+	//get response.
 	$response = json_decode( $this->_last_response );
 	$count    = count( self::$ad_groups );
 	for ( $i = 0; $i < $count; $i++ ) {
