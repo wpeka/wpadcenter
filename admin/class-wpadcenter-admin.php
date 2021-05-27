@@ -267,6 +267,13 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
+		wp_register_script(
+			$this->plugin_name . '-mascot',
+			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-mascot.js',
+			array(),
+			$this->version,
+			false
+		);
 	}
 
 	/**
@@ -716,6 +723,7 @@ class Wpadcenter_Admin {
 		}
 		wp_localize_script( $this->plugin_name . '-reports', 'reportsArray', $return_array );
 		require_once plugin_dir_path( __FILE__ ) . 'views/admin-display-reports.php';
+		$this->wpadcenter_mascot_on_pages();
 	}
 
 
@@ -763,6 +771,7 @@ class Wpadcenter_Admin {
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'partials/wpadcenter-admin-display.php';
+		self::wpadcenter_mascot_on_pages();
 	}
 
 	/**
@@ -2034,8 +2043,38 @@ class Wpadcenter_Admin {
 
 	}
 
+	/**
+	 * Add mascot links to pages.
+	 */
+	public static function wpadcenter_mascot_on_pages() {
+		$is_pro = get_option( 'wpadcenter_pro_active' );
+		if ( $is_pro ) {
+			$support_url = 'https://club.wpeka.com/my-account/orders/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=support';
+		} else {
+			$support_url = 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=forums';
+		}
 
+		$return_array = array(
+			'menu_items'       => array(
+				'support_text'       => __( 'Support', 'wpadcenter' ),
+				'support_url'        => $support_url,
+				'documentation_text' => __( 'Documentation', 'wpadcenter' ),
+				'documentation_url'  => 'https://docs.wpeka.com/wp-adcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=documentation',
+				'faq_text'           => __( 'FAQ', 'wpadcenter' ),
+				'faq_url'            => 'https://docs.wpeka.com/wp-adcenter/faq/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=faq',
+				'upgrade_text'       => __( 'Upgrade to Pro &raquo;', 'wpadcenter' ),
+				'upgrade_url'        => 'https://club.wpeka.com/product/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=upgrade-to-pro',
+			),
+			'is_pro'           => $is_pro,
+			'quick_links_text' => __( 'See Quick Links', 'wpadcenter' ),
+		);
+		wp_enqueue_script( 'wpadcenter-mascot' );
+		wp_localize_script( 'wpadcenter-mascot', 'mascot', $return_array );
 
+		?>
+			<div id="adc-mascot-app"></div>
+		<?php
+	}
 
 
 	/**
@@ -2059,16 +2098,6 @@ class Wpadcenter_Admin {
 			$this->plugin_name . '-gettingstarted',
 			'obj',
 			array(
-				'menu_items'          => array(
-					'support_text'       => __( 'Support', 'wpadcenter' ),
-					'support_url'        => $support_url,
-					'documentation_text' => __( 'Documentation', 'wpadcenter' ),
-					'documentation_url'  => 'https://docs.wpeka.com/wp-adcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=documentation',
-					'faq_text'           => __( 'FAQ', 'wpadcenter' ),
-					'faq_url'            => 'https://docs.wpeka.com/wp-adcenter/faq/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=faq',
-					'upgrade_text'       => __( 'Upgrade to Pro &raquo;', 'wpadcenter' ),
-					'upgrade_url'        => 'https://club.wpeka.com/product/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=upgrade-to-pro',
-				),
 				'ajax_url'            => admin_url( 'admin-ajax.php' ),
 				'ajax_nonce'          => wp_create_nonce( 'admin-ajax-nonce' ),
 				'is_pro'              => $is_pro,
@@ -2077,7 +2106,6 @@ class Wpadcenter_Admin {
 				'welcome_subtext'     => __( 'Complete Ad Management Plugin.', 'wpadcenter' ),
 				'welcome_description' => __( 'Thank you for choosing WP AdCenter plugin - the powerful WordPress ads plugin.', 'wpadcenter' ),
 				'welcome_sub_desc'    => __( 'You can control every aspect of ads on your website. Place ads or Ad scripts anywhere on your website. Compatible with Gutenberg & Popular Page Builders.', 'wpadcenter' ),
-				'quick_links_text'    => __( 'See Quick Links', 'wpadcenter' ),
 				'separator_text'      => __( '--- OR ---', 'wpadcenter' ),
 				'configure'           => array(
 					'text'           => __( 'Configure WP AdCenter Settings including:', 'wpadcenter' ),
@@ -2097,8 +2125,8 @@ class Wpadcenter_Admin {
 		);
 		?>
 		<div id="adc-gettingstarted-app"></div>
-		<div id="adc-mascot-app"></div>
 		<?php
+		self::wpadcenter_mascot_on_pages();
 	}
 
 	/**
