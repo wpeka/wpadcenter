@@ -272,4 +272,14 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$this->expectOutputString( $expected );
 		self::$wpadcenter_public->wpadcenter_output_footer_post();
 	}
+
+	/**
+	 * Test for wpadcenter_verify_device function
+	 */
+	public function test_wpadcenter_verify_device() {
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		$display = self::$wpadcenter_public->wpadcenter_verify_device( $devices );
+		$this->assertTrue( $display );
+
+	}
 }
