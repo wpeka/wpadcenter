@@ -284,4 +284,18 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$value = self::$wpadcenter_public->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
 		$this->assertTrue( $value );
 	}
+
+	/**
+	 * Test for wpadcenter_template_redirect function
+	 */
+	public function test_wpadcenter_template_redirect() {
+		$url = get_permalink( self::$ad_ids[0] );
+		$this->go_to( $url );
+		self::$wpadcenter_public->wpadcenter_template_redirect();
+		$disable_global_scripts = get_post_meta( self::$ad_ids[0], 'scripts', true );
+
+		$this->assertEquals( '<script type="text/javascript">console.log("hello world in head");</script>', $disable_global_scripts['header_scripts'] );
+		$this->assertEquals( '<script type="text/javascript">console.log("hello world in body");</script>', $disable_global_scripts['body_scripts'] );
+		$this->assertEquals( '<script type="text/javascript">console.log("hello world in footer");</script>', $disable_global_scripts['footer_scripts'] );
+	}
 }
