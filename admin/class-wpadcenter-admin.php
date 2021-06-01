@@ -275,6 +275,7 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_pro_admin_init() {
+		update_option( 'wpadcenter-version', WPADCENTER_VERSION );
 		if ( ! wp_next_scheduled( 'wpadcenter_monthly_cron' ) ) {
 			$date = new DateTime( 'now' );
 			$date->modify( 'first day of next month' );
