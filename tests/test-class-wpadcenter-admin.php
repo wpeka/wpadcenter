@@ -739,4 +739,81 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
 		$this->assertTrue( $value );
 	}
+
+	/**
+	 * Test for  wpadcenter_amp_preference_metabox function
+	 */
+	public function test_wpadcenter_amp_preference_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_amp_preference_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for  wpadcenter_amp_attributes_metabox function
+	 */
+	public function test_wpadcenter_amp_attributes_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_amp_attributes_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for  wpadcenter_text_ad_metabox function
+	 */
+	public function test_wpadcenter_text_ad_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_text_ad_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for  wpadcenter_save_ad_meta function
+	 */
+	public function test_wpadcenter_save_ad_meta() {
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'editor',
+			)
+		);
+		wp_set_current_user( $user_id );
+		$_POST['wpadcenter_save_ad_nonce'] = wp_create_nonce( 'wpadcenter_save_ad' );
+		$_POST['ad_type']                  = 'ad_code';
+		$_POST['ad-code']                  = '<h1>new test ad code</h1>';
+		self::$wpadcenter_admin->wpadcenter_save_ad_meta( self::$ad_ids[0] );
+		$saved_ad_code = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_code', true );
+		$this->assertEquals( $saved_ad_code, '<h1>new test ad code</h1>' );
+		$_POST['ad-type']                  = 'external_image_link';
+		$_POST['ad-size']                  = '200x200';
+		$_POST['open-in-new-tab']          = '1';
+		$_POST['nofollow-on-link']         = '1';
+		$_POST['start_date']               = '1622117869';
+		$_POST['limit-ad-impressions-set'] = '1';
+		$_POST['limit-ad-impressions']     = 2;
+		self::$wpadcenter_admin->wpadcenter_save_ad_meta( self::$ad_ids[0] );
+		$saved_ad_type = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', true );
+		$this->assertEquals( $saved_ad_type, 'external_image_link' );
+
+		$saved_ad_size = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_size', true );
+		$this->assertEquals( $saved_ad_size, '200x200' );
+
+		$saved_open_in_new_tab = get_post_meta( self::$ad_ids[0], 'wpadcenter_open_in_new_tab', true );
+		$this->assertEquals( $saved_open_in_new_tab, '1' );
+
+		$saved_nofollow_on_link = get_post_meta( self::$ad_ids[0], 'wpadcenter_nofollow_on_link', true );
+		$this->assertEquals( $saved_nofollow_on_link, '1' );
+
+		$saved_start_date = get_post_meta( self::$ad_ids[0], 'wpadcenter_start_date', true );
+		$this->assertEquals( $saved_start_date, '1622117869' );
+
+		$saved_limit_ad_impressions_set = get_post_meta( self::$ad_ids[0], 'wpadcenter_limit_impressions_set', true );
+		$this->assertEquals( $saved_limit_ad_impressions_set, '1' );
+
+		$saved_limit_ad_impressions = get_post_meta( self::$ad_ids[0], 'wpadcenter_limit_impressions', true );
+		$this->assertEquals( $saved_limit_ad_impressions, 2 );
+	}
+
 }
