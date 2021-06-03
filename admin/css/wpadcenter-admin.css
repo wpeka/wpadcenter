@@ -99,3 +99,7 @@
 	display:block;
 	margin-bottom: 7px;
 }
+.additional-rel-tag-container,.additional-css-class-container{
+	margin-top:10px;
+	margin-bottom:10px;
+}

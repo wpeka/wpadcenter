@@ -77,6 +77,41 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 				</div>
 				</c-card-body>
 			</c-card>
+			<c-card>
+				<?php do_action( 'wp_adcenter_before_link_options' ); ?>
+				<c-card-header><?php esc_html_e( 'Link Options', 'wpadcenter' ); ?></c-card-header>
+				<c-card-body>
+				<div class="ad-toggle">
+					<label for="link_open_in_new_tab"><?php esc_html_e( 'Open link in a new tab', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'If enabled, link opens in a new tab on click.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+					<input type="hidden" name="link_open_in_new_tab_field" v-model="link_open_in_new_tab">
+					<input ref="link_open_in_new_tab_mount" type="hidden" value="<?php echo esc_attr( $the_options['link_open_in_new_tab'] ); ?>">
+
+				</div>
+				<c-switch ref="link_open_in_new_tab" v-model="link_open_in_new_tab" id="link_open_in_new_tab" variant="3d" size="sm" color="dark" <?php checked( $the_options['link_open_in_new_tab'] ); ?> v-on:update:checked="onChangeOpenInNewTab"></c-switch>
+
+				<div class="ad-toggle wpadcenter-settings-secondary-heading">
+					<label for="link_nofollow"><?php esc_html_e( 'No follow on link', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'If enabled, it signals that the page linking out is claiming no endorsement of the page it links to.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+					<input type="hidden" name="link_nofollow_field" v-model="link_nofollow">
+					<input ref="link_nofollow_mount" type="hidden" value="<?php echo esc_attr( $the_options['link_nofollow'] ); ?>">
+
+				</div>
+				<c-switch ref="link_nofollow" v-model="link_nofollow" id="link_nofollow" variant="3d" size="sm" color="dark" <?php checked( $the_options['link_nofollow'] ); ?> v-on:update:checked="onChangeNoFollow"></c-switch>
+
+				<div class="wpadcenter-margin-mod wpadcenter-settings-secondary-heading">
+							<label for="wpadcenter-additional-rel-tags"><?php esc_html_e( 'Additional rel attribute tags', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip='"<?php esc_html_e( 'Adds rel attribute tags to links', 'wpadcenter' ); ?>"' color="primary" name="cib-google-keep"></c-icon>
+							<input type="hidden" ref="link_additional_rel_tags" v-model="link_additional_rel_tags" name="link_additional_rel_tags_field">
+							<input type="hidden" ref="link_additional_rel_tags_mount" value="<?php echo esc_html( stripslashes( $the_options['link_additional_rel_tags'] ) ); ?>">
+
+						</div>
+						<v-select id="wpadcenter-additional-rel-tags" :options="additional_rel_tags_options" multiple v-model="link_additional_rel_tags"  >
+						</v-select>
+				<div class="wpadcenter-margin-mod wpadcenter-settings-secondary-heading">
+						<label for="wpadcenter-additional-css-class" ><?php esc_html_e( 'Additional CSS classes', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These classes will be added to the link.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+						</div>
+						<textarea id="wpadcenter-additional-css-class" name="link_additional_css_class_field" class="form-control" rows="1"><?php echo esc_html( stripslashes( $the_options['link_additional_css_class'] ) ); ?></textarea>
+
+				</c-card-body>
+			</c-card>
 			<?php do_action( 'wp_adcenter_after_general_settings' ); ?>
 		</c-tab>
 		<?php do_action( 'wp_adcenter_before_scripts_tab' ); ?>
