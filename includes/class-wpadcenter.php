@@ -80,7 +80,7 @@ class Wpadcenter {
 		if ( defined( 'WPADCENTER_VERSION' ) ) {
 			$this->version = WPADCENTER_VERSION;
 		} else {
-			$this->version = '2.0.1';
+			$this->version = '2.1.0';
 		}
 		$this->plugin_name = 'wpadcenter';
 
@@ -157,6 +157,11 @@ class Wpadcenter {
 		 * The class responsible for defining single ad elementor widget.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
+
+		/**
+		 * The class responsible for detecting the device on which website is loaded.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
 
 	}
 

@@ -9,6 +9,11 @@
 	align-items: center;
 	clear: both;
   }
+
+  /*To limit the ad inside the container size.*/
+  .wpadcenter-ad-container {
+	  overflow:hidden;
+  }
   
   .wpadcenter-activebutton {
 	border: 1px solid;
@@ -60,10 +65,27 @@
   .wpadcenter-adgroup-widget-container {
 	overflow: hidden;
   }
+  .wpadcenter-text-ad-align-center {
+	display:flex!important;
+	align-items:center;
 
+  }
+  .wpadcenter-text-ad-align-none {
+	display:flex!important;
+	align-items:flex-start!important;
+
+  }
+  .wpadcenter-text-ad-code {
+	display:block;
+	word-wrap:break-word;
+	text-align:left;
+  }
+  .wpadcenter-text-ad-code a {
+	  display:inline !important;
+  }
 
 /*Gutenberg block css*/
-.wpadcenter-maxwidth-top,.wpadcenter-maxwidth-bottom,.wpadcenter-order-container{
+.wpadcenter-maxwidth-top,.wpadcenter-maxwidth-bottom,.wpadcenter-order-container,.wpadcenter-select-ad-top{
 	display:flex;
 	justify-content: center;
 	margin-top: 20px;
@@ -136,7 +158,7 @@
 		  }
 		  max-width: 200px;
 		height: 200px;
-		width: 200px;
+		width: 100%;
 	  }
 	  &240x400{
 		  &:not(.wpadcenter-maxwidth) {
@@ -144,7 +166,7 @@
 		  }
 		  max-width: 240px;
 		height: 400px;
-		width: 240px;
+		width: 100%;
 	  }
 	  &250x250{
 		  &:not(.wpadcenter-maxwidth) {
@@ -152,7 +174,7 @@
 		  }
 		  max-width: 250px;
 		height: 250px;
-		width: 250px;
+		width: 100%;
 	  }
 	  &250x360{
 		  &:not(.wpadcenter-maxwidth) {
@@ -160,7 +182,7 @@
 		  }
 		  max-width: 250px;
 		height: 360px;
-		width: 250px;
+		width: 100%;
 	  }
 	  &300x250{
 		  &:not(.wpadcenter-maxwidth) {
@@ -168,7 +190,7 @@
 		  }
 		  max-width: 300px;
 		height: 250px;
-		width: 300px;
+		width: 100%;
 	  }
 	  &336x280{
 		  &:not(.wpadcenter-maxwidth) {
@@ -176,7 +198,7 @@
 		  }
 		  max-width: 336px;
 		height: 280px;
-		width: 336px;
+		width: 100%;
 	  }
 	  &580x400{
 		  &:not(.wpadcenter-maxwidth) {
@@ -184,7 +206,7 @@
 		  }
 		  max-width: 580px;
 		height: 400px;
-		width: 580px;
+		width: 100%;
 	  }
 	  &120x600{
 		  &:not(.wpadcenter-maxwidth) {
@@ -192,7 +214,7 @@
 		  }
 		  max-width: 120px;
 		height: 600px;
-		width: 120px;
+		width: 100%;
 	  }
 	  &160x600{
 		  &:not(.wpadcenter-maxwidth) {
@@ -200,7 +222,7 @@
 		  }
 		  max-width: 160px;
 		height: 600px;
-		width: 160px;
+		width: 100%;
 	  }
 	  &300x600{
 		  &:not(.wpadcenter-maxwidth) {
@@ -208,7 +230,7 @@
 		  }
 		  max-width: 300px;
 		height: 600px;
-		width: 300px;
+		width: 100%;
 	  }
 	  &300x1050{
 		  &:not(.wpadcenter-maxwidth) {
@@ -216,7 +238,7 @@
 		  }
 		  max-width: 300px;
 		height: 1050px;
-		width: 300px;
+		width: 100%;
 	  }
 	  &468x60{
 	  	&:not(.wpadcenter-maxwidth) {
@@ -224,7 +246,7 @@
 	  	}
 	  	max-width: 468px;
 		height: 60px;
-		width: 468px;
+		width: 100%;
 	  }
 	  &728x90{
 		  &:not(.wpadcenter-maxwidth) {
@@ -232,7 +254,7 @@
 		  }
 		  max-width: 728px;
 		  height: 90px;
-		  width: 728px;
+		  width: 100%;
 	  }
 	  &930x180{
 		  &:not(.wpadcenter-maxwidth) {
@@ -240,7 +262,7 @@
 		  }
 		  max-width: 930px;
 		height: 180px;
-		width: 930px;
+		width: 100%;
 	  }
 	  &970x90{
 		  &:not(.wpadcenter-maxwidth) {
@@ -248,7 +270,7 @@
 		  }
 		  max-width: 970px;
 		height: 90px;
-		width: 970px;
+		width: 100%;
 	  }
 	  &970x250{
 		  &:not(.wpadcenter-maxwidth) {
@@ -256,7 +278,7 @@
 		  }
 		  max-width: 970px;
 		height: 250px;
-		width: 970px;
+		width: 100%;
 	  }
 	  &980x120{
 		  &:not(.wpadcenter-maxwidth) {
@@ -264,7 +286,7 @@
 		  }
 		  max-width: 980px;
 		height: 120px;
-		width: 980px;
+		width: 100%;
 	  }
 	  &120x60{
 		  &:not(.wpadcenter-maxwidth) {
@@ -272,7 +294,7 @@
 		  }
 		  max-width: 120px;
 		height: 60px;
-		width: 120px;
+		width: 100%;
 	  }
 	  &120x90{
 		  &:not(.wpadcenter-maxwidth) {
@@ -280,7 +302,7 @@
 		  }
 		  max-width: 120px;
 		height: 90px;
-		width: 120px;
+		width: 100%;
 	  }
 	  &125x125{
 		  &:not(.wpadcenter-maxwidth) {
@@ -288,7 +310,7 @@
 		  }
 		  max-width: 125px;
 		height: 125px;
-		width: 125px;
+		width: 100%;
 	  }
 	  &300x50{
 		  &:not(.wpadcenter-maxwidth) {
@@ -296,7 +318,7 @@
 		  }
 		  max-width: 300px;
 		height: 50px;
-		width: 300px;
+		width: 100%;
 	  }
 	  &320x50{
 		  &:not(.wpadcenter-maxwidth) {
@@ -304,7 +326,7 @@
 		  }
 		  max-width: 320px;
 		height: 50px;
-		width: 320px;
+		width: 100%;
 	  }
 	  &320x100{
 		  &:not(.wpadcenter-maxwidth) {
@@ -312,6 +334,27 @@
 		  }
 		  max-width: 320px;
 		height: 100px;
-		width: 320px;
+		width: 100%;
 	  }
   }
+.wpadcenter-specific-devices-container{
+	display:flex;
+	flex-direction: row;
+	justify-content:space-around;
+  padding:0!important;
+}
+.wpadcenter-specific-devices-container .dashicons{
+	position:relative;
+	font-size:40px;
+	right:10px;
+	top:5px;
+	bottom:5px;
+}
+.wpadcenter-specific-devices__item{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+}
+.wpadcenter-specific-devices__label{
+	margin-top:25px;
+}

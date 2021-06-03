@@ -37,7 +37,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_groups = $factory->term->create_many( 4, array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		add_role( 'advertiser', 'Advertiser', 'edit_posts' );
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.1' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.1.0' );
 	}
 	/**
 	 * Test wp_ajax_get_adgroups.

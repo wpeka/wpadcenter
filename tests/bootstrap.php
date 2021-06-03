@@ -28,11 +28,6 @@ function _manually_load_plugin() {
 	require $string;
 	// activate the plugin to get ads_statistics table on activation for testing.
 	do_action( 'activate_' . trim( $string, '/' ) ); //phpcs:ignore
-
-	$elementor = dirname( dirname( dirname( __FILE__ ) ) ) . '/elementor/elementor.php';
-	include $elementor;
-	// activate the plugin to get elementor widget on activation for testing.
-	do_action( 'activate_' . trim( $elementor, '/' ) ); //phpcs:ignore
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 

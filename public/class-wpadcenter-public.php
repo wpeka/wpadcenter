@@ -266,6 +266,7 @@ class Wpadcenter_Public {
 				'align'           => 'none',
 				'max_width'       => 'off',
 				'max_width_value' => '100',
+				'devices'         => '',
 			),
 			$atts
 		);
@@ -275,11 +276,15 @@ class Wpadcenter_Public {
 			$atts['max_width'] = false;
 		}
 
-		$ad_id      = $atts['id'];
+		$ad_id = $atts['id'];
+
+		$atts['devices'] = ! $atts['devices'] ? array( 'mobile', 'tablet', 'desktop' ) : explode( ',', $atts['devices'] );
+
 		$attributes = array(
 			'align'        => 'align' . $atts['align'],
 			'max_width'    => $atts['max_width'],
 			'max_width_px' => $atts['max_width_value'],
+			'devices'      => $atts['devices'],
 		);
 		return self::display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
 
@@ -307,12 +312,14 @@ class Wpadcenter_Public {
 		}
 		$display_ad = true;
 		$display_ad = apply_filters( 'wpadcenter_display_single_ad', $ad_id );
-
+		
 		if ( ! $display_ad ) {
 			return;
 		}
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
+
+		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
 			'wpadcenter-frontend',
@@ -329,19 +336,29 @@ class Wpadcenter_Public {
 			'max_width_px'        => '100',
 			'display_adgroup'     => false,
 			'display_rotating_ad' => false,
+			'devices'             => array( 'mobile', 'desktop', 'tablet' ),
 		);
-		$attributes         = wp_parse_args( $attributes, $default_attributes );
-		$current_time       = time();
-		$start_date         = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
-		$end_date           = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
+
+		$attributes = wp_parse_args( $attributes, $default_attributes );
+
+		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
+			return;
+		}
+		$current_time = time();
+		$start_date   = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
+		$end_date     = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
-		$ad_size         = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-		$ad_type         = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-		$link_url        = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
-		$open_in_new_tab = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
-		$nofollow        = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
+		$ad_size              = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
+		$ad_type              = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		$link_url             = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
+		$open_in_new_tab      = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
+		$nofollow             = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
+		$text_ad_bg_color     = get_post_meta( $ad_id, 'wpadcenter_text_ad_background_color', true );
+		$text_ad_border_color = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_color', true );
+		$text_ad_border_width = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_width', true );
+		$text_ad_align_center = get_post_meta( $ad_id, 'wpadcenter_text_ad_align_vertically', true );
 
 		$link_target = '_self';
 		if ( true === (bool) $open_in_new_tab ) {
@@ -357,6 +374,13 @@ class Wpadcenter_Public {
 			$attributes['classes'] .= ' wpadcenter-' . $width . 'x' . $height;
 
 		}
+
+		if ( 'text_ad' === $ad_type && $text_ad_align_center ) {
+			$attributes['classes'] .= ' wpadcenter-text-ad-align-center';
+		} elseif ( 'text_ad' === $ad_type && ! $text_ad_align_center ) {
+			$attributes['classes'] .= ' wpadcenter-text-ad-align-none';
+		}
+
 		$amp_page = false;
 		if ( function_exists( 'is_amp_endpoint' ) ) {
 				$amp_page = is_amp_endpoint();
@@ -377,27 +401,45 @@ class Wpadcenter_Public {
 			}
 		}
 
-		$single_ad_html .= '<div class="wpadcenter-ad-container">';
+		$single_ad_html .= '<div class="wpadcenter-ad-container" ';
+
+		if ( 'text_ad' === $ad_type ) {
+			$single_ad_html .= 'style="overflow:visible" ';
+		}
+
+		$single_ad_html .= '>';
 
 		$single_ad_html .= '<div ';
 		$single_ad_html .= 'id="wpadcenter-ad-' . $ad_id . '" ';
-
+		$inline_styles   = '';
 		if ( $attributes['max_width'] ) {
-			$single_ad_html        .= 'style="max-width:' . $attributes['max_width_px'] . 'px" ';
+			$inline_styles         .= 'max-width:' . $attributes['max_width_px'] . 'px;';
 			$attributes['classes'] .= ' wpadcenter-maxwidth';
 		}
 
 		if ( $attributes['classes'] ) {
 			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
 		}
+
+		if ( 'text_ad' === $ad_type ) {
+			$inline_styles .= ' background-color:' . $text_ad_bg_color . ';border:' . $text_ad_border_width . 'px solid ' . $text_ad_border_color . '; ';
+		}
+		if ( $inline_styles ) {
+			$single_ad_html .= ' style="' . $inline_styles . '"';
+		}
+
 		$single_ad_html .= '>';
 		$single_ad_html .= '<div class="wpadcenter-ad-inner" >';
 
-		$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
-		if ( true === (bool) $nofollow ) {
-			$single_ad_html .= 'rel="nofollow"';
+		if ( 'text_ad' !== $ad_type ) {
+
+			$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
+			if ( true === (bool) $nofollow ) {
+				$single_ad_html .= 'rel="nofollow"';
+			}
+			$single_ad_html .= '>';
+
 		}
-		$single_ad_html .= '>';
 
 		switch ( $ad_type ) {
 			case 'banner_image':
@@ -407,6 +449,11 @@ class Wpadcenter_Public {
 			case 'external_image_link':
 				$external_img_link   = get_post_meta( $ad_id, 'wpadcenter_external_image_link', true );
 					$single_ad_html .= '<img width="' . $width . '" height="' . $height . '" src="' . esc_url( $external_img_link ) . '"/>';
+				break;
+			case 'text_ad':
+				$text_ad_code = get_post_meta( $ad_id, 'wpadcenter_text_ad_code', true );
+
+				$single_ad_html .= '<div class="wpadcenter-text-ad-code" >' . $text_ad_code . '</div>';
 				break;
 			case 'ad_code':
 				$ad_code         = get_post_meta( $ad_id, 'wpadcenter_ad_code', true );
@@ -672,6 +719,7 @@ class Wpadcenter_Public {
 				'num_columns'     => 1,
 				'max_width'       => 'off',
 				'max_width_value' => '100',
+				'devices'         => '',
 			),
 			$atts
 		);
@@ -683,6 +731,8 @@ class Wpadcenter_Public {
 		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
 		$atts['align']       = 'align' . $atts['align'];
 
+		$atts['devices'] = ! $atts['devices'] ? array( 'mobile', 'tablet', 'desktop' ) : explode( ',', $atts['devices'] );
+
 		$adgroup_atts = array(
 			'adgroup_ids'  => $atts['adgroup_ids'],
 			'align'        => $atts['align'],
@@ -690,6 +740,8 @@ class Wpadcenter_Public {
 			'num_columns'  => $atts['num_columns'],
 			'max_width'    => $atts['max_width'],
 			'max_width_px' => $atts['max_width_value'],
+			'devices'      => $atts['devices'],
+
 		);
 
 		return self::display_adgroup_ads( $adgroup_atts ); // phpcs:ignore
@@ -715,9 +767,14 @@ class Wpadcenter_Public {
 			'num_columns'  => 1,
 			'max_width'    => false,
 			'max_width_px' => '100',
+			'devices'      => array( 'mobile', 'desktop', 'tablet' ),
+
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
+		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
+			return;
+		}
 
 		$current_time = time();
 
@@ -828,6 +885,7 @@ class Wpadcenter_Public {
 				'align'           => 'none',
 				'max_width'       => 'off',
 				'max_width_value' => '100',
+				'devices'         => '',
 			),
 			$atts
 		);
@@ -839,11 +897,14 @@ class Wpadcenter_Public {
 		$atts['adgroup_ids'] = explode( ',', $atts['adgroup_ids'] );
 		$atts['align']       = 'align' . $atts['align'];
 
+		$atts['devices'] = ! $atts['devices'] ? array( 'mobile', 'tablet', 'desktop' ) : explode( ',', $atts['devices'] );
+
 		$random_ad_atts = array(
 			'adgroup_ids'  => $atts['adgroup_ids'],
 			'align'        => $atts['align'],
 			'max_width'    => $atts['max_width'],
 			'max_width_px' => $atts['max_width_value'],
+			'devices'      => $atts['devices'],
 		);
 
 		return self::display_random_ad( $random_ad_atts ); // phpcs:ignore
@@ -867,9 +928,15 @@ class Wpadcenter_Public {
 			'align'        => 'alignnone',
 			'max_width'    => false,
 			'max_width_px' => '100',
+			'devices'      => array( 'mobile', 'desktop', 'tablet' ),
+
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
+
+		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
+			return;
+		}
 		// if activated wpadcenter pro, return weighted random ad.
 		if ( get_option( 'wpadcenter_pro_active' ) && get_option( 'wc_am_client_wpadcenter_pro_activated' ) === 'Activated' ) {
 			$random_ad_html = apply_filters( 'wp_adcenter_random_weighted_ad', $attributes );
@@ -933,4 +1000,48 @@ class Wpadcenter_Public {
 		}
 
 	}
+
+	/**
+	 * Verifies if the ad should be displayed on the device.
+	 *
+	 * @param array $devices contains device names.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool return true or false depending upon the device.
+	 */
+	public static function wpadcenter_verify_device( $devices ) {
+
+		$detect = new Mobile_Detect();
+
+		if ( ! $detect->isMobile() && ! $detect->isTablet() && in_array( 'desktop', $devices, true ) ||
+					$detect->isTablet() && in_array( 'tablet', $devices, true ) ||
+					$detect->isMobile() && ! $detect->isTablet() && in_array( 'mobile', $devices, true ) ) {
+			if ( ! $detect->isMobile() && ! $detect->isTablet() ) {
+				if ( in_array( 'desktop', $devices, true ) ) {
+					return true;
+				} else {
+					return false;
+				}
+			} elseif ( $detect->isTablet() ) {
+				if ( in_array( 'tablet', $devices, true ) ) {
+					return true;
+				} else {
+					return false;
+				}
+			} elseif ( $detect->isMobile() && ! $detect->isTablet() ) {
+				if ( in_array( 'mobile', $devices, true ) ) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+
+	}
+
 }
