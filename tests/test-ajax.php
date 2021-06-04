@@ -18,12 +18,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 *
 	 * @var object
 	 */
-	protected static $ad_groups = null;
-	/**
-	 * Setup necessary variables.
-	 *
-	 * @param mixed $factory factory to create variables.
-	 */
+	protected static $ad_groups;
 
 	 /**
 	  * The Wpadcenter_Admin class instance .
@@ -33,66 +28,40 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	  */
 	public static $wpadcenter_admin;
 
-	/**
-	 * Created ad ids.
-	 *
-	 * @since  1.0.0
-	 * @access public
-	 * @var    string $ad_ids ad ids.
-	 */
-	public static $ad_ids;
 
 	/**
-	 * Dummy post .
+	 * Setup necessary variables.
 	 *
-	 * @since  1.0.0
-	 * @access public
-	 * @var    string $first_dummy_post dummy post.
+	 * @param mixed $factory factory to create variables.
 	 */
-	public static $first_dummy_post;
-
-	 /**
-	  * Term id for taxonomy wpadcenter-adgroups for created dummy post
-	  *
-	  * @access public
-	  * @var int $term_id term id
-	  */
-	public static $term_id;
-
-
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_groups = $factory->term->create_many( 4, array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		add_role( 'advertiser', 'Advertiser', 'edit_posts' );
 		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.1.0' );
-		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
-		self::$first_dummy_post = get_post( self::$ad_ids[0] );
-		self::$term_id          = array( self::$ad_groups );
-		$taxonomy               = 'wpadcenter-adgroups';
-		wp_set_post_terms( self::$ad_ids[0], self::$term_id, $taxonomy );
 	}
 	/**
 	 * Test wp_ajax_get_adgroups.
 	 */
 	public function test_wpadcenter_get_adgroups() {
 
-	//become administrator.
-	$this->_setRole( 'administrator' );
+		// become administrator.
+		$this->_setRole( 'administrator' );
 
-	//Set up a default request.
-	$_POST['security'] = wp_create_nonce( 'adgroups_security' );
-	$_POST['action']   = 'get_adgroups';
-	try {
-	$this->_handleAjax( 'get_adgroups' );
-	} catch ( WPAjaxDieContinueException $e ) {
-	unset( $e );
-	}
+		// Set up a default request.
+		$_POST['security'] = wp_create_nonce( 'adgroups_security' );
+		$_POST['action']   = 'get_adgroups';
+		try {
+			$this->_handleAjax( 'get_adgroups' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
 
-	//get response.
-	$response = json_decode( $this->_last_response );
-	$count    = count( self::$ad_groups );
-	for ( $i = 0; $i < $count; $i++ ) {
-	$this->assertEquals( $response[ $i ]->term_id, self::$ad_groups[ $i ], 'ad group ids didnt match' );
-	}
+		// get response.
+		$response = json_decode( $this->_last_response );
+		$count    = count( self::$ad_groups );
+		for ( $i = 0; $i < $count; $i++ ) {
+			$this->assertEquals( $response[ $i ]->term_id, self::$ad_groups[ $i ], 'ad group ids didnt match' );
+		}
 	}
 	/**
 	 * Test wp_ajax_selected_adgroup_reports.
@@ -229,78 +198,5 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response );
 		$this->assertTrue( $response->error );
 		$this->assertTrue( is_string( $response->message ) );
-	}
-
-		/**
-		 * Test for wpadcenter_adgroup_gutenberg_preview function
-		 */
-	public function test_wpadcenter_adgroup_gutenberg_preview() {
-		// become administrator.
-		$this->_setRole( 'administrator' );
-
-		$_POST['adgroup_nonce']   = wp_create_nonce( 'adgroup_nonce' );
-		$_POST['action']          = 'wpadcenter_adgroup_gutenberg_preview';
-		$_POST['ad_groups']       = self::$ad_groups;
-		$_POST['alignment']       = 'left';
-		$_POST['num_ads']         = '1';
-		$_POST['num_columns']     = '1';
-		$_POST['max_width_check'] = 'true';
-		$_POST['max_width_px']    = '250';
-
-		try {
-			$this->_handleAjax( 'wpadcenter_adgroup_gutenberg_preview' );
-		} catch ( WPAjaxDieStopException $e ) {
-			unset( $e );
-			$this->assertTrue( true );
-		}
-	}
-
-
-	/**
-	 * Test for wpadcenter_singlead_gutenberg_preview function
-	 */
-	public function test_wpadcenter_singlead_gutenberg_preview() {
-		$args = array(
-			'post_type' => 'wpadcenter-ads',
-		);
-		$ad   = wp_insert_post( $args );
-		// become administrator.
-		$this->_setRole( 'administrator' );
-
-		$_POST['singlead_nonce']  = wp_create_nonce( 'singlead_nonce' );
-		$_POST['action']          = 'wpadcenter_singlead_gutenberg_preview';
-		$_POST['ad_id']           = self::$ad_ids[0];
-		$_POST['alignment']       = 'left';
-		$_POST['max_width_check'] = 'true';
-		$_POST['max_width_px']    = '250';
-
-		try {
-			$this->_handleAjax( 'wpadcenter_singlead_gutenberg_preview' );
-		} catch ( WPAjaxDieStopException $e ) {
-			unset( $e );
-			$this->assertTrue( true );
-		}
-	}
-
-	/**
-	 * Test for wpadcenter_random_ad_gutenberg_preview
-	 */
-	public function test_wpadcenter_random_ad_gutenberg_preview() {
-		// become administrator.
-		$this->_setRole( 'administrator' );
-
-		$_POST['random_ad_nonce'] = wp_create_nonce( 'random_ad_nonce' );
-		$_POST['action']          = 'wpadcenter_random_ad_gutenberg_preview';
-		$_POST['ad_groups']       = self::$ad_groups;
-		$_POST['alignment']       = 'left';
-		$_POST['max_width_check'] = 'true';
-		$_POST['max_width_px']    = '250';
-
-		try {
-			$this->_handleAjax( 'wpadcenter_random_ad_gutenberg_preview' );
-		} catch ( WPAjaxDieStopException $e ) {
-			unset( $e );
-			$this->assertTrue( true );
-		}
 	}
 }
