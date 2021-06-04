@@ -723,7 +723,6 @@ class Wpadcenter_Admin {
 		}
 		wp_localize_script( $this->plugin_name . '-reports', 'reportsArray', $return_array );
 		require_once plugin_dir_path( __FILE__ ) . 'views/admin-display-reports.php';
-		$this->wpadcenter_mascot_on_pages();
 	}
 
 
@@ -771,7 +770,6 @@ class Wpadcenter_Admin {
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'partials/wpadcenter-admin-display.php';
-		self::wpadcenter_mascot_on_pages();
 	}
 
 	/**
@@ -2046,7 +2044,11 @@ class Wpadcenter_Admin {
 	/**
 	 * Add mascot links to pages.
 	 */
-	public static function wpadcenter_mascot_on_pages() {
+	public function wpadcenter_mascot_on_pages() {
+		if ( empty( $_GET['post_type'] ) || 'wpadcenter-ads' !== $_GET['post_type'] ) {//phpcs:ignore
+			return;
+		}
+
 		$is_pro = get_option( 'wpadcenter_pro_active' );
 		if ( $is_pro ) {
 			$support_url = 'https://club.wpeka.com/my-account/orders/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=support';
@@ -2126,7 +2128,6 @@ class Wpadcenter_Admin {
 		?>
 		<div id="adc-gettingstarted-app"></div>
 		<?php
-		self::wpadcenter_mascot_on_pages();
 	}
 
 	/**
