@@ -154,7 +154,6 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$this->assertEquals( $response[0]->ad_clicks, $ad_clicks );
 	}
 
-
 	/**
 	 * Test wp_ajax_check_ads_txt_problems when content is not entered.
 	 */
@@ -209,7 +208,6 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$record = $wpdb->get_col( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_id = %d', $ad ) ); // db call ok; no-cache ok.
 		$this->assertTrue( is_array( $record ) && empty( $record ) );
 	}
-
 	/**
 	 * Test for wp_ajax_adsense_load_adcode.
 	 */
