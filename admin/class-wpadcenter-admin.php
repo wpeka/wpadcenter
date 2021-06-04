@@ -1762,6 +1762,12 @@ class Wpadcenter_Admin {
 		$saved_border_width     = get_post_meta( $post->ID, 'wpadcenter_text_ad_border_width', true );
 		$saved_center_align     = get_post_meta( $post->ID, 'wpadcenter_text_ad_align_vertically', true );
 
+		$saved_text_ad          = $saved_text_ad ? $saved_text_ad : '';
+		$saved_background_color = $saved_background_color ? $saved_background_color : '#ffffff';
+		$saved_border_color     = $saved_border_color ? $saved_border_color : '#000';
+		$saved_border_width     = $saved_border_width ? $saved_border_width : 0;
+		$saved_center_align     = $saved_center_align ? $saved_center_align : 0;
+
 		echo '<br><span style="color:grey;">( ' . esc_html__( 'To be able to track clicks in your text ad, you must set all links to the permalink.', 'wpadcenter' ) . ' )</span>';
 
 		wp_editor(
