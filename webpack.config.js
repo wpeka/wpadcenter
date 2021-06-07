@@ -17,6 +17,7 @@ var vueconfig = {
         adscheduler: './src/adscheduler.js',
         reports: './src/reports.js',
         weeklyStats: './src/weekly-stats.js',
+        mascot: './src/mascot.js'
     },
     output: {
         path: path.resolve(__dirname, 'admin/js/vue'),

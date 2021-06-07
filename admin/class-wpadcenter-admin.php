@@ -267,6 +267,13 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
+		wp_register_script(
+			$this->plugin_name . '-mascot',
+			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-mascot.js',
+			array(),
+			$this->version,
+			false
+		);
 	}
 
 	/**
@@ -440,35 +447,39 @@ class Wpadcenter_Admin {
 	 */
 	public static function get_default_metafields() {
 		$metafields = array(
-			'ad-type'                               => array( 'wpadcenter_ad_type', 'string' ),
-			'ad-size'                               => array( 'wpadcenter_ad_size', 'string' ),
-			'open-in-new-tab'                       => array( 'wpadcenter_open_in_new_tab', 'bool' ),
-			'nofollow-on-link'                      => array( 'wpadcenter_nofollow_on_link', 'bool' ),
-			'link-url'                              => array( 'wpadcenter_link_url', 'url' ),
-			'text-ad-code'                          => array( 'wpadcenter_text_ad_code', 'raw' ),
-			'ad-code'                               => array( 'wpadcenter_ad_code', 'raw' ),
-			'external-image-link'                   => array( 'wpadcenter_external_image_link', 'url' ),
-			'ad-google-adsense'                     => array( 'wpadcenter_ad_google_adsense', 'raw' ),
-			'start_date'                            => array( 'wpadcenter_start_date', 'date' ),
-			'end_date'                              => array( 'wpadcenter_end_date', 'date' ),
-			'limit-ad-impressions-set'              => array( 'wpadcenter_limit_impressions_set', 'bool' ),
-			'limit-ad-clicks-set'                   => array( 'wpadcenter_limit_clicks_set', 'bool' ),
-			'limit-ad-impressions'                  => array( 'wpadcenter_limit_impressions', 'number' ),
-			'limit-ad-clicks'                       => array( 'wpadcenter_limit_clicks', 'number' ),
-			'amp-preference'                        => array( 'wpadcenter_amp_preference', 'bool' ),
-			'wpadcenter-adsense-amp-code'           => array( 'wpadcenter_adsense_amp_code', 'raw' ),
-			'wpadcenter-adsense-amp-dynamic-width'  => array( 'wpadcenter_adsense_amp_dynamic_width', 'number' ),
-			'wpadcenter-adsense-amp-dynamic-height' => array( 'wpadcenter_adsense_amp_dynamic_height', 'number' ),
-			'wpadcenter-adsense-amp-static-height'  => array( 'wpadcenter_adsense_amp_static_height', 'number' ),
-			'wpadcenter-amp-adsense-customize'      => array( 'wpadcenter_amp_adsense_customize', 'string' ),
-			'amp-attributes'                        => array( 'wpadcenter_amp_attributes', 'array' ),
-			'amp-values'                            => array( 'wpadcenter_amp_values', 'array' ),
-			'amp-placeholder'                       => array( 'wpadcenter_amp_placeholder', 'string' ),
-			'amp-fallback'                          => array( 'wpadcenter_amp_fallback', 'string' ),
-			'text-ad-background-color'              => array( 'wpadcenter_text_ad_background_color', 'string' ),
-			'text-ad-border-color'                  => array( 'wpadcenter_text_ad_border_color', 'string' ),
-			'text-ad-border-width'                  => array( 'wpadcenter_text_ad_border_width', 'number' ),
-			'text-ad-align-vertically'              => array( 'wpadcenter_text_ad_align_vertically', 'bool' ),
+			'ad-type'                                => array( 'wpadcenter_ad_type', 'string' ),
+			'ad-size'                                => array( 'wpadcenter_ad_size', 'string' ),
+			'open-in-new-tab'                        => array( 'wpadcenter_open_in_new_tab', 'string' ),
+			'nofollow-on-link'                       => array( 'wpadcenter_nofollow_on_link', 'string' ),
+			'link-url'                               => array( 'wpadcenter_link_url', 'url' ),
+			'text-ad-code'                           => array( 'wpadcenter_text_ad_code', 'raw' ),
+			'ad-code'                                => array( 'wpadcenter_ad_code', 'raw' ),
+			'external-image-link'                    => array( 'wpadcenter_external_image_link', 'url' ),
+			'ad-google-adsense'                      => array( 'wpadcenter_ad_google_adsense', 'raw' ),
+			'start_date'                             => array( 'wpadcenter_start_date', 'date' ),
+			'end_date'                               => array( 'wpadcenter_end_date', 'date' ),
+			'limit-ad-impressions-set'               => array( 'wpadcenter_limit_impressions_set', 'bool' ),
+			'limit-ad-clicks-set'                    => array( 'wpadcenter_limit_clicks_set', 'bool' ),
+			'limit-ad-impressions'                   => array( 'wpadcenter_limit_impressions', 'number' ),
+			'limit-ad-clicks'                        => array( 'wpadcenter_limit_clicks', 'number' ),
+			'amp-preference'                         => array( 'wpadcenter_amp_preference', 'bool' ),
+			'wpadcenter-adsense-amp-code'            => array( 'wpadcenter_adsense_amp_code', 'raw' ),
+			'wpadcenter-adsense-amp-dynamic-width'   => array( 'wpadcenter_adsense_amp_dynamic_width', 'number' ),
+			'wpadcenter-adsense-amp-dynamic-height'  => array( 'wpadcenter_adsense_amp_dynamic_height', 'number' ),
+			'wpadcenter-adsense-amp-static-height'   => array( 'wpadcenter_adsense_amp_static_height', 'number' ),
+			'wpadcenter-amp-adsense-customize'       => array( 'wpadcenter_amp_adsense_customize', 'string' ),
+			'amp-attributes'                         => array( 'wpadcenter_amp_attributes', 'array' ),
+			'amp-values'                             => array( 'wpadcenter_amp_values', 'array' ),
+			'amp-placeholder'                        => array( 'wpadcenter_amp_placeholder', 'string' ),
+			'amp-fallback'                           => array( 'wpadcenter_amp_fallback', 'string' ),
+			'text-ad-background-color'               => array( 'wpadcenter_text_ad_background_color', 'string' ),
+			'text-ad-border-color'                   => array( 'wpadcenter_text_ad_border_color', 'string' ),
+			'text-ad-border-width'                   => array( 'wpadcenter_text_ad_border_width', 'number' ),
+			'text-ad-align-vertically'               => array( 'wpadcenter_text_ad_align_vertically', 'bool' ),
+			'additional-rel-tags'                    => array( 'wpadcenter_additional_rel_tags', 'array' ),
+			'additional-css-classes'                 => array( 'wpadcenter_additional_css_classes', 'string' ),
+			'global-additional-rel-tags-preference'  => array( 'wpadcenter_global_additional_rel_tags_preference', 'bool' ),
+			'global-additional-css-class-preference' => array( 'wpadcenter_global_additional_css_class_preference', 'bool' ),
 
 		);
 
@@ -490,6 +501,7 @@ class Wpadcenter_Admin {
 					'ad-size',
 					'postimagediv',
 					'ad-details',
+					'link-options',
 				),
 			),
 			'external_image_link' => array(
@@ -497,6 +509,7 @@ class Wpadcenter_Admin {
 					'ad-size',
 					'external-image-link',
 					'ad-details',
+					'link-options',
 				),
 			),
 			'text_ad'             => array(
@@ -1463,6 +1476,14 @@ class Wpadcenter_Admin {
 			'normal',
 			'core'
 		);
+		add_meta_box(
+			'link-options',
+			__( 'Link Options', 'wpadcenter' ),
+			array( $this, 'wpadcenter_link_options_metabox' ),
+			'wpadcenter-ads',
+			'side',
+			'core'
+		);
 		do_action( 'wp_adcenter_add_meta_boxes', $post );
 
 	}
@@ -1571,17 +1592,13 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_ad_detail_metabox( $post ) {
-		$open_in_new_tab  = get_post_meta( $post->ID, 'wpadcenter_open_in_new_tab', true );
-		$nofollow_on_link = get_post_meta( $post->ID, 'wpadcenter_nofollow_on_link', true );
-		$url              = get_post_meta( $post->ID, 'wpadcenter_link_url', true );
+
+		$url = get_post_meta( $post->ID, 'wpadcenter_link_url', true );
 		echo '
-		<div>
-		<label for="open-in-new-tab"><input name="open-in-new-tab" type="checkbox" value="1" id="open-in-new-tab" ' . checked( '1', $open_in_new_tab, false ) . '> ' . esc_html__( 'Open Link In a New Tab', 'wpadcenter' ) . '</label>
-		<label for="nofollow-on-link" style="margin-left:20px"><input name="nofollow-on-link" type="checkbox" value="1" id="nofollow-on-link" ' . checked( '1', $nofollow_on_link, false ) . '>' . esc_html__( 'Use nofollow on Link', 'wpadcenter' ) . '</label>
-		</div>
 		<div style="margin-top:10px">
 		<label for="link-url"><strong>' . esc_html__( 'Link URL', 'wpadcenter' ) . '</strong></label>
 		<input type="text" name="link-url" value="' . esc_attr( $url ) . '" id="link-url" style="width:100%" >
+
 		</div>
 		';
 	}
@@ -1773,7 +1790,8 @@ class Wpadcenter_Admin {
 			array(
 				'media_buttons' => false,
 				'textarea_name' => 'text-ad-code',
-				'textarea_rows' => 8,
+				'editor_height' => 230,
+				'textarea_rows' => 20,
 			)
 		);
 		echo '<input type="hidden" id="wpadcenter_get_text_ad_id" data-value="' . esc_attr( $post->ID ) . '">';
@@ -1783,6 +1801,95 @@ class Wpadcenter_Admin {
 		echo '<br><hr><label style="margin-right:20px;"><strong>' . esc_html__( 'Center Align Vertically', 'wpadcenter' ) . '</strong></label><input name="text-ad-align-vertically" type="checkbox" value="1" id="text_ad_align_vartically" ' . checked( '1', $saved_center_align, false ) . '> 
 		<br><br><span style="color:grey;">( ' . esc_html__( 'Vertical alignment setting will take effect on front-end.', 'wpadcenter' ) . ' )</span>';
 
+	}
+
+	/**
+	 * Call back function for link options metabox.
+	 *
+	 * @param WP_POST $post Post object.
+	 */
+	public function wpadcenter_link_options_metabox( $post ) {
+
+		$options                      = Wpadcenter::wpadcenter_get_settings();
+		$open_in_new_tab              = get_post_meta( $post->ID, 'wpadcenter_open_in_new_tab', true );
+		$nofollow_on_link             = get_post_meta( $post->ID, 'wpadcenter_nofollow_on_link', true );
+		$saved_additional_rel_tags    = get_post_meta( $post->ID, 'wpadcenter_additional_rel_tags', true );
+		$saved_additional_css_classes = get_post_meta( $post->ID, 'wpadcenter_additional_css_classes', true );
+
+		$additional_rel_tags = array(
+			'sponsored' => 'sponsored',
+			'ugc'       => 'ugc',
+		);
+
+		$global_open_link_in_new_tab            = $options['link_open_in_new_tab'] ? 'Yes' : 'No';
+		$global_nofollow_on_link                = $options['link_nofollow'] ? 'Yes' : 'No';
+		$global_additional_rel_tags_preference  = get_post_meta( $post->ID, 'wpadcenter_global_additional_rel_tags_preference', true );
+		$global_additional_css_class_preference = get_post_meta( $post->ID, 'wpadcenter_global_additional_css_class_preference', true );
+
+		$global_additional_rel_tags  = str_replace( ',', ' ', $options['link_additional_rel_tags'] );
+		$global_additional_css_class = $options['link_additional_css_class'];
+
+		$open_in_new_tab_options = array(
+			'Global ( ' . $global_open_link_in_new_tab . ' )' => 'global',
+			'Yes' => 'yes',
+			'No'  => 'no',
+
+		);
+		$nofollow_on_link_options = array(
+			'Global ( ' . $global_nofollow_on_link . ' )' => 'global',
+			'Yes'                                         => 'yes',
+			'No'                                          => 'no',
+
+		);
+		?>
+
+		<p>
+		<label ><?php echo esc_html__( 'Open link in new tab : ', 'wpadcenter' ); ?></label>
+
+				<select class="widefat" name="open-in-new-tab">
+					<?php $this->print_combobox_options( $open_in_new_tab_options, $open_in_new_tab ); ?>
+				</select>
+		</p>
+		<p>
+		<label ><?php echo esc_html__( 'Use nofollow on link : ', 'wpadcenter' ); ?></label>
+
+				<select class="widefat" name="nofollow-on-link">
+					<?php $this->print_combobox_options( $nofollow_on_link_options, $nofollow_on_link ); ?>
+				</select>
+		</p>
+		<p style="margin-bottom:4px">
+		<label><?php echo esc_html__( 'Additional rel tags : ', 'wpadcenter' ); ?></label>
+	</p>
+				<div>						
+				<?php /* translators: %s: Global rel attributes */ ?>
+					<label for="globalAdditionalRelTagsPreference"><input name="global-additional-rel-tags-preference" type="checkbox" value="1" id="globalAdditionalRelTagsPreference" <?php checked( '1', $global_additional_rel_tags_preference, true ); ?> ><?php echo sprintf( esc_html__( 'Global ( %s )', 'wpadcenter' ), esc_html( $global_additional_rel_tags ) ); ?></label>
+				</div>
+				<div class="additional-rel-tag-container">
+				<select name="additional-rel-tags[]" class="wpadcenter-additional-tags-select" multiple style="width:100%">
+					<?php
+					$saved_additional_rel_tags = $saved_additional_rel_tags ? $saved_additional_rel_tags : $global_additional_rel_tags;
+					foreach ( $additional_rel_tags as $tag_key => $tag ) :
+						if ( in_array( $tag_key, $saved_additional_rel_tags, true ) ) :
+							?>
+							<option value="<?php echo esc_attr( $tag_key ); ?>" id="<?php echo esc_attr( $tag_key ); ?>" selected="selected"><?php echo esc_attr( $tag ); ?></option>
+						<?php else : ?>
+							<option value="<?php echo esc_attr( $tag_key ); ?>" id="<?php echo esc_attr( $tag_key ); ?>" ><?php echo esc_attr( $tag ); ?></option>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</select>
+				</div>
+				<p style="margin-bottom:4px">
+				<label ><?php echo esc_html__( 'Additional CSS classes : ', 'wpadcenter' ); ?></label>
+						</p>
+				<div>
+				<?php /* translators: %s: Global additional css classes */ ?>
+					<label for="globalAdditionalCssClassPreference"><input name="global-additional-css-class-preference" type="checkbox" value="1" id="globalAdditionalCssClassPreference" <?php checked( '1', $global_additional_css_class_preference, true ); ?> ><?php echo sprintf( esc_html__( 'Global ( %s )', 'wpadcenter' ), esc_html( $global_additional_css_class ) ); ?></label>
+				</div>
+				<div class="additional-css-class-container">
+				<input type="text" name="additional-css-classes" value="<?php echo esc_attr( $saved_additional_css_classes ); ?>" id="additional-css-classes" style="width:100%" >
+				</div>
+
+		<?php
 	}
 
 	/**
@@ -2044,8 +2151,42 @@ class Wpadcenter_Admin {
 
 	}
 
+	/**
+	 * Add mascot links to pages.
+	 */
+	public function wpadcenter_mascot_on_pages() {
+		if ( empty( $_GET['post_type'] ) || 'wpadcenter-ads' !== $_GET['post_type'] ) {//phpcs:ignore
+			return;
+		}
 
+		$is_pro = get_option( 'wpadcenter_pro_active' );
+		if ( $is_pro ) {
+			$support_url = 'https://club.wpeka.com/my-account/orders/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=support';
+		} else {
+			$support_url = 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=forums';
+		}
 
+		$return_array = array(
+			'menu_items'       => array(
+				'support_text'       => __( 'Support', 'wpadcenter' ),
+				'support_url'        => $support_url,
+				'documentation_text' => __( 'Documentation', 'wpadcenter' ),
+				'documentation_url'  => 'https://docs.wpeka.com/wp-adcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=documentation',
+				'faq_text'           => __( 'FAQ', 'wpadcenter' ),
+				'faq_url'            => 'https://docs.wpeka.com/wp-adcenter/faq/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=faq',
+				'upgrade_text'       => __( 'Upgrade to Pro &raquo;', 'wpadcenter' ),
+				'upgrade_url'        => 'https://club.wpeka.com/product/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=upgrade-to-pro',
+			),
+			'is_pro'           => $is_pro,
+			'quick_links_text' => __( 'See Quick Links', 'wpadcenter' ),
+		);
+		wp_enqueue_script( 'wpadcenter-mascot' );
+		wp_localize_script( 'wpadcenter-mascot', 'mascot', $return_array );
+
+		?>
+			<div id="adc-mascot-app"></div>
+		<?php
+	}
 
 
 	/**
@@ -2069,16 +2210,6 @@ class Wpadcenter_Admin {
 			$this->plugin_name . '-gettingstarted',
 			'obj',
 			array(
-				'menu_items'          => array(
-					'support_text'       => __( 'Support', 'wpadcenter' ),
-					'support_url'        => $support_url,
-					'documentation_text' => __( 'Documentation', 'wpadcenter' ),
-					'documentation_url'  => 'https://docs.wpeka.com/wp-adcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=documentation',
-					'faq_text'           => __( 'FAQ', 'wpadcenter' ),
-					'faq_url'            => 'https://docs.wpeka.com/wp-adcenter/faq/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=faq',
-					'upgrade_text'       => __( 'Upgrade to Pro &raquo;', 'wpadcenter' ),
-					'upgrade_url'        => 'https://club.wpeka.com/product/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=upgrade-to-pro',
-				),
 				'ajax_url'            => admin_url( 'admin-ajax.php' ),
 				'ajax_nonce'          => wp_create_nonce( 'admin-ajax-nonce' ),
 				'is_pro'              => $is_pro,
@@ -2087,7 +2218,6 @@ class Wpadcenter_Admin {
 				'welcome_subtext'     => __( 'Complete Ad Management Plugin.', 'wpadcenter' ),
 				'welcome_description' => __( 'Thank you for choosing WP AdCenter plugin - the powerful WordPress ads plugin.', 'wpadcenter' ),
 				'welcome_sub_desc'    => __( 'You can control every aspect of ads on your website. Place ads or Ad scripts anywhere on your website. Compatible with Gutenberg & Popular Page Builders.', 'wpadcenter' ),
-				'quick_links_text'    => __( 'See Quick Links', 'wpadcenter' ),
 				'separator_text'      => __( '--- OR ---', 'wpadcenter' ),
 				'configure'           => array(
 					'text'           => __( 'Configure WP AdCenter Settings including:', 'wpadcenter' ),
@@ -2107,7 +2237,6 @@ class Wpadcenter_Admin {
 		);
 		?>
 		<div id="adc-gettingstarted-app"></div>
-		<div id="adc-mascot-app"></div>
 		<?php
 	}
 

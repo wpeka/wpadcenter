@@ -73,6 +73,7 @@
 		
 				}
 			);
+			$( '.wpadcenter-additional-tags-select' ).select2();
 
 			$( '#geo_countries select.geo_countries' ).select2();
 			$( 'input[name="target-ads-by"]' ).click(
@@ -458,7 +459,31 @@
 		
 		}
 		
-
+		// link options functions
+		function additionalRelTagSetup(){
+			if ($('#globalAdditionalRelTagsPreference').prop("checked")) {
+				$('.additional-rel-tag-container').hide();
+			}
+			else{
+				$('.additional-rel-tag-container').show();
+	   
+			}
+		}
+		function additionalCssClassSetup(){
+			if ($('#globalAdditionalCssClassPreference').prop("checked")) {
+				$('.additional-css-class-container').hide();
+			}
+			else{
+				$('.additional-css-class-container').show();
+	   
+			}
+		}
+		//check on page load
+		additionalRelTagSetup();
+		additionalCssClassSetup();
+		//check on change in selection
+		$('#globalAdditionalRelTagsPreference').change(additionalRelTagSetup);
+		$('#globalAdditionalCssClassPreference').change(additionalCssClassSetup);
 
 		}
 	);
