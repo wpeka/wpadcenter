@@ -5,7 +5,7 @@ Tags: ads, adsense, ad rotation, ads manager, wordpress ad inserter, wordpress a
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.7
-Stable tag: 2.0.1
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -276,6 +276,13 @@ Yes, WP AdCenter has extensive developer and user documentation. Here is a link 
 5. Reports.
 
 == Changelog ==
+= 2.1.0 =
+* Feature: AMP ads support.
+* Feature: Text ads support.
+* Feature: Display ads on specific devices - Mobile, Tablet and Desktop.
+* Update: Improved UI for settings page.
+* Update: Added name and size in ordered and single ads list in gutenberg blocks.
+
 = 2.0.1 =
 * Feature: Enable geo targeting to display ads in specific countries and/or cities.
 * Feature: Display ads as per user roles.
@@ -330,6 +337,13 @@ Yes, WP AdCenter has extensive developer and user documentation. Here is a link 
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.1.0 =
+* Feature: AMP ads support.
+* Feature: Text ads support.
+* Feature: Display ads on specific devices - Mobile, Tablet and Desktop.
+* Update: Improved UI for settings page.
+* Update: Added name and size in ordered and single ads list in gutenberg blocks.
+
 = 2.0.1 =
 * Feature: Enable geo targeting to display ads in specific countries and/or cities.
 * Feature: Display ads as per user roles.

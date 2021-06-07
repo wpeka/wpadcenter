@@ -312,12 +312,14 @@ class Wpadcenter_Public {
 		}
 		$display_ad = true;
 		$display_ad = apply_filters( 'wpadcenter_display_single_ad', $ad_id );
-
+		
 		if ( ! $display_ad ) {
 			return;
 		}
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
+
+		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
 			'wpadcenter-frontend',
@@ -399,7 +401,13 @@ class Wpadcenter_Public {
 			}
 		}
 
-		$single_ad_html .= '<div class="wpadcenter-ad-container">';
+		$single_ad_html .= '<div class="wpadcenter-ad-container" ';
+
+		if ( 'text_ad' === $ad_type ) {
+			$single_ad_html .= 'style="overflow:visible" ';
+		}
+
+		$single_ad_html .= '>';
 
 		$single_ad_html .= '<div ';
 		$single_ad_html .= 'id="wpadcenter-ad-' . $ad_id . '" ';
