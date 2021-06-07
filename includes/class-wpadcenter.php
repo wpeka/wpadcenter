@@ -233,7 +233,7 @@ class Wpadcenter {
 		$this->loader->add_filter( 'parse_query', $plugin_admin, 'wpadcenter_custom_filters_query', 10, 1 );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_random_ad_gutenberg_preview', $plugin_admin, 'wpadcenter_random_ad_gutenberg_preview' );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_pro_display_amp_warning', $plugin_admin, 'wpadcenter_pro_display_amp_warning' );
-
+		$this->loader->add_action( 'admin_footer', $plugin_admin, 'wpadcenter_mascot_on_pages' );
 	}
 
 	/**
