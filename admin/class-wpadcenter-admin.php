@@ -1816,6 +1816,18 @@ class Wpadcenter_Admin {
 		$saved_additional_rel_tags    = get_post_meta( $post->ID, 'wpadcenter_additional_rel_tags', true );
 		$saved_additional_css_classes = get_post_meta( $post->ID, 'wpadcenter_additional_css_classes', true );
 
+		// For compatibility with previous version ( <= 2.1.0 ).
+		if ( '1' === $open_in_new_tab ) {
+			$open_in_new_tab = 'yes';
+		} elseif ( '0' === $open_in_new_tab ) {
+			$open_in_new_tab = 'no';
+		}
+		if ( '1' === $nofollow_on_link ) {
+			$nofollow_on_link = 'yes';
+		} elseif ( '0' === $nofollow_on_link ) {
+			$nofollow_on_link = 'no';
+		}
+
 		$additional_rel_tags = array(
 			'sponsored' => 'sponsored',
 			'ugc'       => 'ugc',
@@ -1867,7 +1879,7 @@ class Wpadcenter_Admin {
 				<div class="additional-rel-tag-container">
 				<select name="additional-rel-tags[]" class="wpadcenter-additional-tags-select" multiple style="width:100%">
 					<?php
-					$saved_additional_rel_tags = $saved_additional_rel_tags ? $saved_additional_rel_tags : $global_additional_rel_tags;
+					$saved_additional_rel_tags = $saved_additional_rel_tags ? $saved_additional_rel_tags : array();
 					foreach ( $additional_rel_tags as $tag_key => $tag ) :
 						if ( in_array( $tag_key, $saved_additional_rel_tags, true ) ) :
 							?>
