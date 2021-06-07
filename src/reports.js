@@ -31,6 +31,15 @@ let total_clicks = 0;
 let total_impressions = 0;
 let total_CTR = 0;
 // calculate total clicks, total impressions, total CTR
+let temp = [];
+
+for( let report in reportsArray ) {
+	console.log(report);
+	temp.push(reportsArray[report]);
+}
+
+reportsArray = temp;
+
 if( reportsArray.length === 1 ) {
 	
 	total_clicks = reportsArray[0].ad_meta.total_clicks;
@@ -189,6 +198,8 @@ var reports = new Vue({
 			select_adgroup: [{ name: 'none' }],
 			// select advertisers (pro)
 			select_advertiser: [],
+			// ads selected string
+			selectedAdsString: '',
 		}
 	},
 	mounted: function() {
@@ -249,10 +260,16 @@ var reports = new Vue({
                     security: this.adgroups_security,
                 },
             }).done((data) => {
+				console.log(data);
 				// generate data to add into table also calculate totla ad group clicks, views and CTR.
                 data = JSON.parse(data);
 				this.totalAdGroupClicks = 0;
 				this.totalAdGroupViews = 0;
+				let tempArray = [];
+				for(let ad in data) {
+					tempArray.push(data[ad]);
+				}
+				data = tempArray;
                 for (let i = 0; i < data.length; i++) {
                     let CTR =
                         (data[i].ad_meta.total_clicks /
@@ -282,6 +299,12 @@ var reports = new Vue({
 		onAdSelection(data) {
 			// check for validations
 			this.selectedAds = data;
+			let tempArray = [];
+			for( let i = 0; i < this.selectedAds.length ; i++ ) {
+				tempArray.push( this.selectedAds[i].ad_title + ':' + this.selectedAds[i].ad_id );
+			}
+			this.selectedAdsString = tempArray.join(',');
+			j('#currentlySelectedAds').val(this.selectedAdsString).trigger('change');
 			let flag = false;
 			if( this.startDate === null || this.endDate === null ) {
 				this.validationError = "Start date And/or End date cannot be empty.";
@@ -316,8 +339,14 @@ var reports = new Vue({
 					end_date: parseInt((this.endDate.getTime() / 1000).toFixed(0)),
 				},
 			}).done((data) => {
+				console.log(data);
 				// generate datasets accordingly for views and clicks
 				data = JSON.parse(data);
+				let tempArray = [];
+				for(let ad in data) {
+					tempArray.push(data[ad]);
+				}
+				data = tempArray;
 				for( let i = 0; i < data.length; i++ ) {
 					let CTR =
                         (data[i].ad_clicks /

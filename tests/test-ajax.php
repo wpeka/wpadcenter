@@ -117,7 +117,8 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		// get response.
 		$response = json_decode( $this->_last_response );
-		$this->assertEquals( $response[0]->ad_id, $ad, 'Ad Id doesnt match' );
+		//error_log( print_r( $response, true ) );
+		$this->assertEquals( $response->$ad->ad_id, $ad, 'Ad Id doesnt match' );
 	}
 
 	/**
@@ -148,6 +149,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 		$response = json_decode( $this->_last_response );
+	
 		$this->assertEquals( $response[0]->ad_id, $ad );
 		$this->assertEquals( $response[0]->ad_date, $today );
 		$this->assertEquals( $response[0]->ad_impressions, $ad_impressions );

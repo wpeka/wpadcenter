@@ -546,6 +546,8 @@ class Wpadcenter_Public {
 		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			Wpadcenter::wpadcenter_set_impressions( $ad_id );
 		}
+
+		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
 		return $single_ad_html;
 	}
 
