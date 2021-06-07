@@ -1224,7 +1224,7 @@ class Wpadcenter_Admin {
 				break;
 			case 'ad-dimensions':
 				$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-				if ( $ad_size && 'none' !== $ad_size ) {
+				if ( $ad_size && 'none' !== $ad_size && ! empty( $sizes_list[ $ad_size ] ) ) {
 					$size_data = $sizes_list[ $ad_size ];
 					echo esc_html( $size_data[0] );
 				} else {
