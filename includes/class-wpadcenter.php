@@ -362,6 +362,11 @@ class Wpadcenter {
 			'roles_selected'            => '',
 			'roles_selected_visibility' => '',
 			'content_ads'               => false,
+			'link_open_in_new_tab'      => false,
+			'link_nofollow'             => false,
+			'link_additional_rel_tags'  => '',
+			'link_additional_css_class' => '',
+
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -390,6 +395,8 @@ class Wpadcenter {
 			case 'hide_ads_logged':
 			case 'trim_statistics':
 			case 'content_ads':
+			case 'link_open_in_new_tab':
+			case 'link_nofollow':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {
@@ -405,6 +412,8 @@ class Wpadcenter {
 			case 'header_scripts':
 			case 'body_scripts':
 			case 'footer_scripts':
+			case 'link_additional_rel_tags':
+			case 'link_additional_css_class':
 				$ret = trim( stripslashes( $value ) );
 				break;
 			case 'ads_txt_content':
