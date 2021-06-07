@@ -363,6 +363,18 @@ class Wpadcenter_Public {
 		$additional_css_classes        = get_post_meta( $ad_id, 'wpadcenter_additional_css_classes', true );
 		$global_additional_css_classes = $options['link_additional_css_class'];
 
+		// For compatibility with previous version ( <= 2.1.0 ).
+		if ( '1' === $open_in_new_tab ) {
+			$open_in_new_tab = 'yes';
+		} elseif ( '0' === $open_in_new_tab ) {
+			$open_in_new_tab = 'no';
+		}
+		if ( '1' === $nofollow ) {
+			$nofollow = 'yes';
+		} elseif ( '0' === $nofollow ) {
+			$nofollow = 'no';
+		}
+
 		$global_additional_rel_tags_preference  = get_post_meta( $ad_id, 'wpadcenter_global_additional_rel_tags_preference', true );
 		$global_additional_css_class_preference = get_post_meta( $ad_id, 'wpadcenter_global_additional_css_class_preference', true );
 
