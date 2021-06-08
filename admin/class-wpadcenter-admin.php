@@ -1837,6 +1837,8 @@ class Wpadcenter_Admin {
 		$global_nofollow_on_link                = $options['link_nofollow'] ? 'Yes' : 'No';
 		$global_additional_rel_tags_preference  = get_post_meta( $post->ID, 'wpadcenter_global_additional_rel_tags_preference', true );
 		$global_additional_css_class_preference = get_post_meta( $post->ID, 'wpadcenter_global_additional_css_class_preference', true );
+		$global_additional_rel_tags_preference  = '' !== $global_additional_rel_tags_preference ? $global_additional_rel_tags_preference : '1';
+		$global_additional_css_class_preference = '' !== $global_additional_css_class_preference ? $global_additional_css_class_preference : '1';
 
 		$global_additional_rel_tags  = str_replace( ',', ' ', $options['link_additional_rel_tags'] );
 		$global_additional_css_class = $options['link_additional_css_class'];
