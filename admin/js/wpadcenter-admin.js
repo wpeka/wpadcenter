@@ -40,6 +40,41 @@
 
 	$( document ).ready(
 		function(){
+			//google adsense ad selection
+			$( '#adsense-adunits button' ).click(
+				function(e){
+					e.preventDefault();
+					var button = $( e.target );
+		
+					$.ajax(
+						{
+							url:ajaxurl,
+							type:'POST',
+							data : {
+								action: 'adsense_load_adcode',
+								_wpnonce: AdsenseGAPI.nonce,
+								adunit:button.attr( 'data-unitid' )
+							},
+							success:function(data){
+								$( '#adsense-adunits button' ).text('Load');
+								button.text( 'Loaded' );
+								$( '#wpadcenter-google-adsense-code' ).text( data.message );
+								$( '#wpadcenter-google-adsense-code' ).val( data.message );
+
+								convertAdsenseToAmp();
+
+							},
+							error:function(request, status, error){
+								alert( error );
+							}
+		
+						}
+					);
+		
+				}
+			);
+			$( '.wpadcenter-additional-tags-select' ).select2();
+
 			$( '#geo_countries select.geo_countries' ).select2();
 			$( 'input[name="target-ads-by"]' ).click(
 				function() {
@@ -198,52 +233,126 @@
 			var rawCode=$('#wpadcenter-google-adsense-code').val();
 			if(rawCode){
 				   rawCode = $('<div />').html(rawCode);
+
+				   //Extract attributes from the google adsense loaded code
 						var rawCode_html = rawCode.find( 'ins' );
 						var clientId = rawCode_html.attr( 'data-ad-client' );
 						if(!clientId){
 						   $('#wpadcenterAdsenseAmpCode').text("Please provide Client ID");
+						   $('#wpadcenterAdsenseAmpCode').val("Please provide Client ID");
 						   return;
 					   }
 						var slotId = rawCode_html.attr( 'data-ad-slot' );
 						if(!slotId){
 							$('#wpadcenterAdsenseAmpCode').text("Please provide slot ID");
+							$('#wpadcenterAdsenseAmpCode').val("Please provide slot ID");
 							return;
 						}
+						var adType = '';
+						var width = '';
+						var height = '';
+						var format = rawCode_html.attr( 'data-ad-format' );
+            			var style = rawCode_html.attr( 'style' ) || '';
+
+						//Check for the ad types
+						if ('undefined' == typeof(format) && -1 != style.indexOf( 'width' )) {
+							adType = 'normal';
+							width = rawCode_html.css( 'width' ).replace( 'px', '' );
+							height = rawCode_html.css( 'height' ).replace( 'px', '' );
+						}
+			
+						else if ('undefined' != typeof(format) && 'auto' == format) {
+							adType = 'responsive';
+						}
+		
+						else if ('undefined' != typeof(format) && 'link' == format) {
+			
+							if( -1 != style.indexOf( 'width' ) ){ //fixed size
+
+								width = rawCode_html.css( 'width' ).replace( 'px', '' );
+								height = rawCode_html.css( 'height' ).replace( 'px', '' );
+								adType = 'link';
+							} else { //responsive size
+
+								adType = 'link-responsive';
+							}
+						}
+			
+						else if ('undefined' != typeof(format) && 'autorelaxed' == format) {
+							adType = 'matched-content';
+						}
+			
+						else if ('undefined' != typeof(format) && 'fluid' == format) {
+			
+								adType = 'in-article';
+							
+						}
+
+						//Converts into Amp code
+						var ampAdCode='<amp-ad type="adsense" data-ad-client="' + clientId + '" data-ad-slot="' + slotId + '" ';			
    
-			var ampAdCode='<amp-ad type="adsense" data-ad-client=" ' + clientId + ' " data-ad-slot=" ' + slotId + ' " ';
+						if ($('#wpadcenterAmpCustomizeAuto').prop("checked")) {
+
+							switch ( adType ) {
+					
+								case 'normal':
+								case 'link':
+									if ( width > 0 && height > 0 ) {
+										ampAdCode += 'layout="fixed" width="'+width+'" height="'+height+'" ';
+									}
+									break;
+					
+								case 'link-responsive':
+									ampAdCode += ' width="auto" height="90" layout="fixed-height" ';
+									break;
+				
+								case 'responsive':
+					 
+							
+									ampAdCode += 'width="100vw" height="320" data-auto-format="rspv" data-full-width><div overflow></div ';
+							
 						
+									break;
+					
+								case 'in-article':
+									ampAdCode += ' width="auto" height="320" layout="fixed-height" ';
+									break;
+					
+								case 'matched-content':
 						
+									ampAdCode += ' width="auto" height="320" layout="fixed-height" ';
 						
-						
-   
-						   if ($('#wpadcenterAmpCustomizeAuto').prop("checked")) {
-   
-						ampAdCode += ' layout="fixed" width="300" height="250" ';
-						
-						   }
+									break;
+								}
+							}
    
 						   if ($('#wpadcenterAmpCustomizeDynamic').prop("checked")) {
 							   var dynamicWidth= $('#wpadcenterAmpCustomizeDynamicWidth').val();
 							   var dynamicHeight=$('#wpadcenterAmpCustomizeDynamicHeight').val();
-   
-							   ampAdCode += ' layout="responsive" width=" ' + dynamicWidth + 'vw" height=" ' + dynamicHeight + 'vw"  ';
+								
+			
+			 					ampAdCode +=  'layout="responsive" width="'+dynamicWidth+'vw" height="'+dynamicHeight+'vw" ';
 							
 						   }
    
 						   if ($('#wpadcenterAmpCustomizeStatic').prop("checked")) {
 							   var staticHeight =$('#wpadcenterAmpCustomizeStaticHeight').val();
-							   ampAdCode += ' layout="fixed-height" width="auto" height=" ' + staticHeight + ' "';
 
+								ampAdCode += 'layout="fixed-height" width="auto" height="'+staticHeight+'" ';
 						   }
    
-						   ampAdCode += '>';
+							ampAdCode += '>';
    
-   
-   
-						ampAdCode += '</amp-ad>';
-						$('#wpadcenterAdsenseAmpCode').text(ampAdCode);
-   
-				}
+   							ampAdCode += '</amp-ad>';
+					
+							   $('#wpadcenterAdsenseAmpCode').text(ampAdCode);
+							   $('#wpadcenterAdsenseAmpCode').val(ampAdCode);
+	   
+						   }
+						   else{
+							   $('#wpadcenterAdsenseAmpCode').text('');
+							   $('#wpadcenterAdsenseAmpCode').val('');
+						   }
 		   }
 
 
@@ -262,6 +371,119 @@
 				jQuery('.wp-header-end').after(success);  });
 			}
 		}
+
+		/* Text ad functions*/
+
+		//Initial frame load of tiny mce
+		$( '#text-ad' ).on( 'DOMNodeInserted', function( event ) {
+			if ( event.target.className === 'mce-path-item' ) {
+				applyTextAdStyles();
+			}
+		} );
+		//frame reload on change in parameters
+		$( '#wpadcenter_text_ad_bg_color,#wpadcenter_text_ad_border_color,#wpadcenter_text_ad_border_width' ).change(function(){
+			applyTextAdStyles();
+		});
+
+		//Adds classes to track clicks on links
+		function addTextAdClasses( editor ) {
+			
+			if(editor === 'visual'){
+				var content = tinymce.get("text_ad_code").getContent();
+			}
+			else if(editor==='text') {
+				var content = $('#text-ad .wp-editor-area').val();
+			}
+			var adId = $('#wpadcenter_get_text_ad_id').data('value');
+
+				var htmlObject = document.createElement('div');
+			
+					htmlObject.innerHTML = content;
+					var x = htmlObject.getElementsByTagName("a");
+					for(var i=0;i<x.length;i++){
+						if (x[i].getAttribute('href')){
+							x[i].setAttribute('id','wpadcenter_ad');
+							x[i].setAttribute('data-value',adId);
+						}
+						
+
+					}
+					var tinyString = htmlObject.innerHTML;
+				if(editor === 'visual'){
+					tinymce.get("text_ad_code").setContent(tinyString);
+				}
+				else if(editor==='text') {
+					$('#text-ad .wp-editor-area').val(tinyString);
+				}
+				
+		}
+		//triggers function to add click tracking classes on changes in text editor
+		$('#text-ad .wp-editor-area').focusout(function(){
+			addTextAdClasses('text');
+		});
+		
+		//reloads tinymce editor with changes in parameters
+		function applyTextAdStyles() {
+
+
+			window.requestAnimationFrame( function() {
+		
+				var textBackgroundColor = $( '#wpadcenter_text_ad_bg_color' ).val();
+				var textBorderColor     = $( '#wpadcenter_text_ad_border_color' ).val();
+				var textBorderWidth     = $( '#wpadcenter_text_ad_border_width' ).val();
+
+				var textAdContainerId     = window.tinyMCE.get( 'text_ad_code' ).contentAreaContainer.id;
+		
+				var textAdBody =  document.querySelector( '#' + textAdContainerId + ' iframe' ).contentDocument.body;
+				
+				$('#' + textAdContainerId + ' iframe').css({
+					border: textBorderWidth + 'px solid ' + textBorderColor,
+					boxSizing   : 'border-box',
+				});
+
+				var textAdDoc = document.querySelector( '#' + textAdContainerId + ' iframe' ).contentDocument;
+				var tinyMceEditor =textAdDoc.querySelector("[contenteditable='true']");
+
+				tinyMceEditor.onblur = function(){
+					addTextAdClasses('visual');
+				}	
+				
+		
+				textAdBody.style.background = textBackgroundColor;
+
+				textAdBody.style.maxWidth = 'none';
+				textAdBody.style.margin = '0';
+
+				
+			} );
+		
+		}
+		
+		// link options functions
+		function additionalRelTagSetup(){
+			if ($('#globalAdditionalRelTagsPreference').prop("checked")) {
+				$('.additional-rel-tag-container').hide();
+			}
+			else{
+				$('.additional-rel-tag-container').show();
+	   
+			}
+		}
+		function additionalCssClassSetup(){
+			if ($('#globalAdditionalCssClassPreference').prop("checked")) {
+				$('.additional-css-class-container').hide();
+			}
+			else{
+				$('.additional-css-class-container').show();
+	   
+			}
+		}
+		//check on page load
+		additionalRelTagSetup();
+		additionalCssClassSetup();
+		//check on change in selection
+		$('#globalAdditionalRelTagsPreference').change(additionalRelTagSetup);
+		$('#globalAdditionalCssClassPreference').change(additionalCssClassSetup);
 
 		}
 	);

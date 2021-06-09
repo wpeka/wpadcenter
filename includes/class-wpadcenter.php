@@ -80,7 +80,7 @@ class Wpadcenter {
 		if ( defined( 'WPADCENTER_VERSION' ) ) {
 			$this->version = WPADCENTER_VERSION;
 		} else {
-			$this->version = '2.0.1';
+			$this->version = '2.1.0';
 		}
 		$this->plugin_name = 'wpadcenter';
 
@@ -158,6 +158,11 @@ class Wpadcenter {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
 
+		/**
+		 * The class responsible for detecting the device on which website is loaded.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
+
 	}
 
 	/**
@@ -228,7 +233,7 @@ class Wpadcenter {
 		$this->loader->add_filter( 'parse_query', $plugin_admin, 'wpadcenter_custom_filters_query', 10, 1 );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_random_ad_gutenberg_preview', $plugin_admin, 'wpadcenter_random_ad_gutenberg_preview' );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_pro_display_amp_warning', $plugin_admin, 'wpadcenter_pro_display_amp_warning' );
-
+		$this->loader->add_action( 'admin_footer', $plugin_admin, 'wpadcenter_mascot_on_pages' );
 	}
 
 	/**
@@ -357,6 +362,11 @@ class Wpadcenter {
 			'roles_selected'            => '',
 			'roles_selected_visibility' => '',
 			'content_ads'               => false,
+			'link_open_in_new_tab'      => false,
+			'link_nofollow'             => false,
+			'link_additional_rel_tags'  => '',
+			'link_additional_css_class' => '',
+
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -385,6 +395,8 @@ class Wpadcenter {
 			case 'hide_ads_logged':
 			case 'trim_statistics':
 			case 'content_ads':
+			case 'link_open_in_new_tab':
+			case 'link_nofollow':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {
@@ -400,6 +412,8 @@ class Wpadcenter {
 			case 'header_scripts':
 			case 'body_scripts':
 			case 'footer_scripts':
+			case 'link_additional_rel_tags':
+			case 'link_additional_css_class':
 				$ret = trim( stripslashes( $value ) );
 				break;
 			case 'ads_txt_content':

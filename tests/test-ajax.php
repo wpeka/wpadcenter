@@ -18,12 +18,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 *
 	 * @var object
 	 */
-	protected static $ad_groups = null;
-	/**
-	 * Setup necessary variables.
-	 *
-	 * @param mixed $factory factory to create variables.
-	 */
+	protected static $ad_groups;
 
 	 /**
 	  * The Wpadcenter_Admin class instance .
@@ -33,11 +28,47 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	  */
 	public static $wpadcenter_admin;
 
+	/**
+	 * Created ad ids.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string $ad_ids ad ids.
+	 */
+	public static $ad_ids;
 
+	/**
+	 * Dummy post .
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string $first_dummy_post dummy post.
+	 */
+	public static $first_dummy_post;
+
+	 /**
+	  * Term id for taxonomy wpadcenter-adgroups for created dummy post
+	  *
+	  * @access public
+	  * @var int $term_id term id
+	  */
+	public static $term_id;
+
+
+	/**
+	 * Setup necessary variables.
+	 *
+	 * @param mixed $factory factory to create variables.
+	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_groups = $factory->term->create_many( 4, array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		add_role( 'advertiser', 'Advertiser', 'edit_posts' );
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.1' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.1.0' );
+		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
+		self::$first_dummy_post = get_post( self::$ad_ids[0] );
+		self::$term_id          = array( self::$ad_groups );
+		$taxonomy               = 'wpadcenter-adgroups';
+		wp_set_post_terms( self::$ad_ids[0], self::$term_id, $taxonomy );
 	}
 	/**
 	 * Test wp_ajax_get_adgroups.
@@ -86,7 +117,8 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		// get response.
 		$response = json_decode( $this->_last_response );
-		$this->assertEquals( $response[0]->ad_id, $ad, 'Ad Id doesnt match' );
+		//error_log( print_r( $response, true ) );
+		$this->assertEquals( $response->$ad->ad_id, $ad, 'Ad Id doesnt match' );
 	}
 
 	/**
@@ -117,6 +149,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 		$response = json_decode( $this->_last_response );
+	
 		$this->assertEquals( $response[0]->ad_id, $ad );
 		$this->assertEquals( $response[0]->ad_date, $today );
 		$this->assertEquals( $response[0]->ad_impressions, $ad_impressions );
@@ -197,5 +230,4 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$this->assertTrue( $response->error );
 		$this->assertTrue( is_string( $response->message ) );
 	}
-
 }

@@ -370,3 +370,14 @@ a:focus {
 .rule:hover:not(.delete_rule) svg {
 	fill: black;
 }
+
+.enable_advertisers_enabled .c-callout {
+	margin: 0;
+}
+
+.emailAlertInfo {
+	font-size: 13px;
+}
+.wpadcenter-settings-secondary-heading{
+	margin-top:20px;
+}

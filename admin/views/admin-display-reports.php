@@ -320,6 +320,7 @@
 					<div class="chart-container">
 						<line-chart :chart-data="chartData" :options="chartOptions"></line-chart>
 					</div>
+					<?php do_action( 'wpadcenter_pro_custom_report_ga_charts', 'wpadcenter' ); ?>
 				</c-card-body>
 			</c-card>
 		</c-tab>

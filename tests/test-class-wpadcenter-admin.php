@@ -117,7 +117,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Test for admin constructor()
 	 */
 	public function test_admin_constructor() {
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.0.1' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.1.0' );
 		$this->assertTrue( self::$wpadcenter_admin instanceof Wpadcenter_Admin );
 	}
 
@@ -200,9 +200,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Test for wpadcenter_manage_edit_ads_columns function
 	 */
 	public function test_wpadcenter_manage_edit_ads_columns() {
-		$value = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
-		$this->assertEquals( null, $value );
-
 		global $current_screen;
 		$current_screen->post_type = 'wpadcenter-ads';
 
@@ -364,7 +361,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_enqueue_scripts() {
 		self::$wpadcenter_admin->enqueue_scripts();
-		do_action( 'admin_enqueue_scripts' );
+		// do_action( 'admin_enqueue_scripts' );
 		global $wp_scripts;
 		$all_enqueued_scripts = $wp_scripts->queue;
 		$this->assertTrue( in_array( 'wpadcenter-gapi-settings', $all_enqueued_scripts ) );
@@ -410,7 +407,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'wpadcenter/single-ad', $registered_blocks, 'Failed to register single ad gutenberg block' );
 		$this->assertArrayHasKey( 'wpadcenter/adgroup', $registered_blocks, 'Failed to register adgroup gutenberg block' );
 		$this->assertArrayHasKey( 'wpadcenter/random-ad', $registered_blocks, 'Failed to register random ad gutenberg block' );
-
 	}
 
 	/**
@@ -433,7 +429,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_gutenberg_display_adgroup_cb() {
 		$attributes   = array(
-			'adgroup_ids'       => self::$ad_group ,
+			'adgroup_ids'       => self::$ad_group,
 			'adgroup_alignment' => 'aligncenter',
 			'num_ads'           => '1',
 			'num_columns'       => '1',
@@ -450,7 +446,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_gutenberg_display_random_ad_cb() {
 		$attributes     = array(
-			'adgroup_ids'       => self::$ad_group ,
+			'adgroup_ids'       => self::$ad_group,
 			'adgroup_alignment' => 'aligncenter',
 			'max_width_check'   => false,
 			'max_width_px'      => '100',
@@ -511,7 +507,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_reports();
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -522,7 +518,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_ad_statistics( self::$first_dummy_post );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -533,7 +529,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_limit_impressions_clicks( self::$first_dummy_post );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -574,7 +570,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_ad_size_metabox( self::$first_dummy_post );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -620,7 +616,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_ad_detail_metabox( self::$first_dummy_post );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -666,7 +662,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_ad_type( self::$first_dummy_post );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -676,7 +672,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_getting_started();
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 
 		global $wp_scripts;
 		$all_enqueued_scripts = $wp_scripts->queue;
@@ -711,7 +707,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_page_posts_metabox_render( self::$first_dummy_post );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output != strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -738,5 +734,204 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$this->assertFalse( $value );
 		$value = self::$wpadcenter_admin->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
 		$this->assertTrue( $value );
+	}
+
+	/**
+	 * Test for  wpadcenter_amp_preference_metabox function
+	 */
+	public function test_wpadcenter_amp_preference_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_amp_preference_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for  wpadcenter_amp_attributes_metabox function
+	 */
+	public function test_wpadcenter_amp_attributes_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_amp_attributes_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for  wpadcenter_text_ad_metabox function
+	 */
+	public function test_wpadcenter_text_ad_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_text_ad_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for  wpadcenter_save_ad_meta function
+	 */
+	public function test_wpadcenter_save_ad_meta() {
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'editor',
+			)
+		);
+		wp_set_current_user( $user_id );
+		$_POST['wpadcenter_save_ad_nonce'] = wp_create_nonce( 'wpadcenter_save_ad' );
+		$_POST['ad_type']                  = 'ad_code';
+		$_POST['ad-code']                  = '<h1>new test ad code</h1>';
+		self::$wpadcenter_admin->wpadcenter_save_ad_meta( self::$ad_ids[0] );
+		$saved_ad_code = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_code', true );
+		$this->assertEquals( $saved_ad_code, '<h1>new test ad code</h1>' );
+		$_POST['ad-type']                  = 'external_image_link';
+		$_POST['ad-size']                  = '200x200';
+		$_POST['open-in-new-tab']          = '1';
+		$_POST['nofollow-on-link']         = '1';
+		$_POST['start_date']               = '1622117869';
+		$_POST['limit-ad-impressions-set'] = '1';
+		$_POST['limit-ad-impressions']     = 2;
+		self::$wpadcenter_admin->wpadcenter_save_ad_meta( self::$ad_ids[0] );
+		$saved_ad_type = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', true );
+		$this->assertEquals( $saved_ad_type, 'external_image_link' );
+
+		$saved_ad_size = get_post_meta( self::$ad_ids[0], 'wpadcenter_ad_size', true );
+		$this->assertEquals( $saved_ad_size, '200x200' );
+
+		$saved_open_in_new_tab = get_post_meta( self::$ad_ids[0], 'wpadcenter_open_in_new_tab', true );
+		$this->assertEquals( $saved_open_in_new_tab, '1' );
+
+		$saved_nofollow_on_link = get_post_meta( self::$ad_ids[0], 'wpadcenter_nofollow_on_link', true );
+		$this->assertEquals( $saved_nofollow_on_link, '1' );
+
+		$saved_start_date = get_post_meta( self::$ad_ids[0], 'wpadcenter_start_date', true );
+		$this->assertEquals( $saved_start_date, '1622117869' );
+
+		$saved_limit_ad_impressions_set = get_post_meta( self::$ad_ids[0], 'wpadcenter_limit_impressions_set', true );
+		$this->assertEquals( $saved_limit_ad_impressions_set, '1' );
+
+		$saved_limit_ad_impressions = get_post_meta( self::$ad_ids[0], 'wpadcenter_limit_impressions', true );
+		$this->assertEquals( $saved_limit_ad_impressions, 2 );
+	}
+
+	/**
+	 * Test for wpadcenter_remove_post_row_actions function
+	 *
+	 * @return void
+	 */
+	public function test_wpadcenter_remove_post_row_actions() {
+		global $current_screen;
+		$screen         = WP_Screen::get( 'wpadcenter-ads' );
+		$current_screen = $screen;
+		$value          = apply_filters( 'post_row_actions', array( 'view', 'inline hide-if-no-js' ) );
+		$this->assertTrue( is_array( $value ) );
+	}
+
+	/**
+	 * Test for wpadcenter_gutenberg_block_categories function
+	 */
+	public function test_wpadcenter_gutenberg_block_categories() {
+
+		$value = self::$wpadcenter_admin->wpadcenter_gutenberg_block_categories( array() );
+		$this->assertTrue( is_array( $value ) );
+	}
+
+	/**
+	 * Test for function wpadcenter_pro_display_amp_warning function
+	 */
+	public function test_wpadcenter_pro_display_amp_warning() {
+		ob_start();
+		try {
+			self::$wpadcenter_admin->wpadcenter_pro_display_amp_warning();
+		} catch ( WPDieException $e ) {
+			unset( $e );
+		} finally {
+			$output = ob_get_clean();
+		}
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for wpadcenter_adgroup_gutenberg_preview function
+	 */
+	public function test_wpadcenter_adgroup_gutenberg_preview() {
+		$_POST['adgroup_nonce']   = wp_create_nonce( 'adgroup_nonce' );
+		$_POST['action']          = 'wpadcenter_adgroup_gutenberg_preview';
+		$_POST['ad_groups']       = self::$ad_group;
+		$_POST['alignment']       = 'left';
+		$_POST['num_ads']         = '1';
+		$_POST['num_columns']     = '1';
+		$_POST['max_width_check'] = 'true';
+		$_POST['max_width_px']    = '250';
+		ob_start();
+		try {
+			self::$wpadcenter_admin->wpadcenter_adgroup_gutenberg_preview();
+		} catch ( WPDieException $ex ) {
+			unset( $ex );
+		}
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for wpadcenter_singlead_gutenberg_preview function
+	 */
+	public function test_wpadcenter_singlead_gutenberg_preview() {
+		$_POST['singlead_nonce']  = wp_create_nonce( 'singlead_nonce' );
+		$_POST['action']          = 'wpadcenter_singlead_gutenberg_preview';
+		$_POST['ad_id']           = self::$ad_ids[0];
+		$_POST['alignment']       = 'left';
+		$_POST['max_width_check'] = 'true';
+		$_POST['max_width_px']    = '250';
+
+		ob_start();
+		try {
+			self::$wpadcenter_admin->wpadcenter_singlead_gutenberg_preview();
+		} catch ( WPDieException $e ) {
+			unset( $e );
+		}
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for wpadcenter_random_ad_gutenberg_preview
+	 */
+	public function test_wpadcenter_random_ad_gutenberg_preview() {
+
+		$_POST['random_ad_nonce'] = wp_create_nonce( 'random_ad_nonce' );
+		$_POST['action']          = 'wpadcenter_random_ad_gutenberg_preview';
+		$_POST['ad_groups']       = self::$ad_group;
+		$_POST['alignment']       = 'left';
+		$_POST['max_width_check'] = 'true';
+		$_POST['max_width_px']    = '250';
+
+		ob_start();
+		try {
+			self::$wpadcenter_admin->wpadcenter_random_ad_gutenberg_preview();
+		} catch ( WPDieException $e ) {
+			unset( $e );
+		}
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for wpadcenter_ads_txt_replace function
+	 */
+	public function test_wpadcenter_ads_txt_replace() {
+		$output = self::$wpadcenter_admin->wpadcenter_ads_txt_replace();
+		$this->assertTrue( is_wp_error( $output ) );
+	}
+
+	/**
+	 * Test for wpadcenter_post_submitbox_start function
+	 */
+	public function test_wpadcenter_post_submitbox_start() {
+		$url = get_permalink( self::$ad_ids[0] );
+		$this->go_to( $url );
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_post_submitbox_start( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 }

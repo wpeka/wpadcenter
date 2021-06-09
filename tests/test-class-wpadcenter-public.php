@@ -58,7 +58,7 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids            = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group          = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
-		self::$wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.0.1' );
+		self::$wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.1.0' );
 		$current_time            = time();
 		foreach ( self::$ad_ids as $ad_id ) {
 			update_post_meta( $ad_id, 'wpadcenter_ad_type', 'ad_code' );
@@ -101,7 +101,7 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$this->assertFalse( shortcode_exists( 'wpadcenter_adgroup' ) );
 		$this->assertFalse( shortcode_exists( 'wpadcenter_random_ad' ) );
 
-		$wpadcenter_public_obj = new Wpadcenter_Public( 'wpadcenter', '2.0.1' );
+		$wpadcenter_public_obj = new Wpadcenter_Public( 'wpadcenter', '2.1.0' );
 		$this->assertTrue( $wpadcenter_public_obj instanceof Wpadcenter_Public );
 
 		$this->assertTrue( shortcode_exists( 'wpadcenter_ad' ) );
@@ -271,5 +271,42 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$expected = "\r\n" . self::$scripts['footer_scripts'] . "\r\n";
 		$this->expectOutputString( $expected );
 		self::$wpadcenter_public->wpadcenter_output_footer_post();
+	}
+
+	/**
+	 * Test for wpadcenter_verify_device function
+	 */
+	public function test_wpadcenter_verify_device() {
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		$display = self::$wpadcenter_public->wpadcenter_verify_device( $devices );
+		$this->assertTrue( $display );
+	}
+
+	/**
+	 * Test for wpadcenter_check_ads_txt_replace function
+	 *
+	 * @return void
+	 */
+	public function test_wpadcenter_get_root_domain_info() {
+		$value = self::$wpadcenter_public->wpadcenter_get_root_domain_info( 'http://one.net.two/three/four/five' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_public->wpadcenter_get_root_domain_info( 'http://one.com.au/three/four/five' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_public->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
+		$this->assertTrue( $value );
+	}
+
+	/**
+	 * Test for wpadcenter_template_redirect function
+	 */
+	public function test_wpadcenter_template_redirect() {
+		$url = get_permalink( self::$ad_ids[0] );
+		$this->go_to( $url );
+		self::$wpadcenter_public->wpadcenter_template_redirect();
+		$disable_global_scripts = get_post_meta( self::$ad_ids[0], 'scripts', true );
+
+		$this->assertEquals( '<script type="text/javascript">console.log("hello world in head");</script>', $disable_global_scripts['header_scripts'] );
+		$this->assertEquals( '<script type="text/javascript">console.log("hello world in body");</script>', $disable_global_scripts['body_scripts'] );
+		$this->assertEquals( '<script type="text/javascript">console.log("hello world in footer");</script>', $disable_global_scripts['footer_scripts'] );
 	}
 }

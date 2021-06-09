@@ -11,6 +11,8 @@ const { __, }       = wp.i18n;
 import SingleAd from  './single-ad-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
+import SelectDevice from '../select-device-component';
+
 
 
 
@@ -40,6 +42,10 @@ registerBlockType('wpadcenter/single-ad',{
       type: 'text',
     default:100, 
     },
+    devices : {
+      type:'string',
+      default:'["mobile","tablet","desktop"]',
+    },
      align : {
       type:'string',
       default:'wide'
@@ -56,9 +62,10 @@ const getOptions=(value,callback)=>{
   } )
   .then( ( ads ) => {
     ads = ads.map( ( ad ) => {
+      let adLabel = ad.title.rendered + ' ( ' + ad.ad_type + ' - ' + ad.ad_size + ' )';
       return {
   							value: ad.id,
-  							label: ad.title.rendered,
+  							label: adLabel,
   						};
     } );
     callback(ads);
@@ -131,6 +138,21 @@ const onAdSelection = ( selection ) => {
 
     }
 
+    const onDeviceListChange=(value)=>{
+      let currentDevicesList = JSON.parse( props.attributes.devices );
+      var index = currentDevicesList.indexOf(value);
+      if (index !== -1) {
+        currentDevicesList.splice(index, 1);
+        }
+        else{
+          currentDevicesList.push(value);
+        }
+        props.setAttributes({
+          devices: JSON.stringify( currentDevicesList ),
+        });
+
+    }
+
 
        return <div className="Wpadcenter-gutenberg-container">
        { !! props.isSelected ? (
@@ -161,7 +183,14 @@ const onAdSelection = ( selection ) => {
       maxWidthChange={onMaxWidthChange}
       maxWidth={props.attributes.max_width_px}
       />
-     
+      <SelectDevice
+      devicesList={JSON.parse( props.attributes.devices )}
+      devicesListChange={onDeviceListChange}
+      displayOnMobile={JSON.parse( props.attributes.devices ).indexOf("mobile") !== -1 ? true : false}
+      displayOnTablet={JSON.parse( props.attributes.devices ).indexOf("tablet") !== -1 ? true : false}
+      displayOnDesktop={JSON.parse( props.attributes.devices ).indexOf("desktop") !== -1 ? true : false}
+
+      />    
 
       </Placeholder>):(
         <SingleAd
