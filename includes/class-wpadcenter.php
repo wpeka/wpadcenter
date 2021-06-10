@@ -366,6 +366,7 @@ class Wpadcenter {
 			'link_nofollow'             => false,
 			'link_additional_rel_tags'  => '',
 			'link_additional_css_class' => '',
+			'cloaked_link_base'         => '',
 
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
@@ -414,6 +415,7 @@ class Wpadcenter {
 			case 'footer_scripts':
 			case 'link_additional_rel_tags':
 			case 'link_additional_css_class':
+			case 'cloaked_link_base':
 				$ret = trim( stripslashes( $value ) );
 				break;
 			case 'ads_txt_content':

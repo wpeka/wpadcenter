@@ -480,6 +480,7 @@ class Wpadcenter_Admin {
 			'additional-css-classes'                 => array( 'wpadcenter_additional_css_classes', 'string' ),
 			'global-additional-rel-tags-preference'  => array( 'wpadcenter_global_additional_rel_tags_preference', 'bool' ),
 			'global-additional-css-class-preference' => array( 'wpadcenter_global_additional_css_class_preference', 'bool' ),
+			'cloak-preference'                       => array( 'wpadcenter_cloak_preference', 'bool' ),
 
 		);
 
@@ -1241,7 +1242,7 @@ class Wpadcenter_Admin {
 			case 'ad-dimensions':
 				$ad_size = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
 				if ( $ad_size && 'none' !== $ad_size && ! empty( $sizes_list[ $ad_size ] ) ) {
-					$size_data = $sizes_list[ $ad_size ];
+					$size_data    = $sizes_list[ $ad_size ];
 					$return_value = esc_html( $size_data[0] );
 				} else {
 					$return_value = '-';
@@ -1594,13 +1595,15 @@ class Wpadcenter_Admin {
 	public function wpadcenter_ad_detail_metabox( $post ) {
 
 		$url = get_post_meta( $post->ID, 'wpadcenter_link_url', true );
+
 		echo '
 		<div style="margin-top:10px">
 		<label for="link-url"><strong>' . esc_html__( 'Link URL', 'wpadcenter' ) . '</strong></label>
-		<input type="text" name="link-url" value="' . esc_attr( $url ) . '" id="link-url" style="width:100%" >
+		<input type="text" name="link-url" value="' . esc_attr( $url ) . '" id="link-url" style="width:100%;margin-top:7px;" >
 
 		</div>
 		';
+		do_action( 'wp_adcenter_extend_ad_details_metabox', $post );
 	}
 
 
@@ -1858,27 +1861,34 @@ class Wpadcenter_Admin {
 		?>
 
 		<p>
-		<label ><?php echo esc_html__( 'Open link in new tab : ', 'wpadcenter' ); ?></label>
-
-				<select class="widefat" name="open-in-new-tab">
+		<label ><?php echo esc_html__( 'Open link in new tab ', 'wpadcenter' ); ?></label>
+				<span  class="wpadcenter-tooltip"><span class="dashicons dashicons-info"></span>
+					<span class="wpadcenter-tooltiptext">If enabled, link opens in a new tab on click.</span>
+				</span>
+				<select class="widefat wpadcenter-meta-spacing" name="open-in-new-tab">
 					<?php $this->print_combobox_options( $open_in_new_tab_options, $open_in_new_tab ); ?>
 				</select>
 		</p>
 		<p>
-		<label ><?php echo esc_html__( 'Use nofollow on link : ', 'wpadcenter' ); ?></label>
-
-				<select class="widefat" name="nofollow-on-link">
+		<label ><?php echo esc_html__( 'Use nofollow on link ', 'wpadcenter' ); ?></label>
+				<span  class="wpadcenter-tooltip"><span class="dashicons dashicons-info"></span>
+					<span class="wpadcenter-tooltiptext">If enabled, it signals that the page linking out is claiming no endorsement of the page it links to.</span>
+				</span>
+				<select class="widefat wpadcenter-meta-spacing" name="nofollow-on-link">
 					<?php $this->print_combobox_options( $nofollow_on_link_options, $nofollow_on_link ); ?>
 				</select>
 		</p>
 		<p style="margin-bottom:4px">
-		<label><?php echo esc_html__( 'Additional rel tags : ', 'wpadcenter' ); ?></label>
+		<label><?php echo esc_html__( 'Additional rel tags ', 'wpadcenter' ); ?></label>
+		<span  class="wpadcenter-tooltip"><span class="dashicons dashicons-info"></span>
+					<span class="wpadcenter-tooltiptext">Adds rel attribute tags to link. Uncheck to disable global setting and enable ad level settings.</span>
+				</span>
 	</p>
 				<div>						
 				<?php /* translators: %s: Global rel attributes */ ?>
 					<label for="globalAdditionalRelTagsPreference"><input name="global-additional-rel-tags-preference" type="checkbox" value="1" id="globalAdditionalRelTagsPreference" <?php checked( '1', $global_additional_rel_tags_preference, true ); ?> ><?php echo sprintf( esc_html__( 'Global ( %s )', 'wpadcenter' ), esc_html( $global_additional_rel_tags ) ); ?></label>
 				</div>
-				<div class="additional-rel-tag-container">
+				<div class="wpadcenter-additional-rel-tag-container">
 				<select name="additional-rel-tags[]" class="wpadcenter-additional-tags-select" multiple style="width:100%">
 					<?php
 					$saved_additional_rel_tags = $saved_additional_rel_tags ? $saved_additional_rel_tags : array();
@@ -1893,13 +1903,16 @@ class Wpadcenter_Admin {
 				</select>
 				</div>
 				<p style="margin-bottom:4px">
-				<label ><?php echo esc_html__( 'Additional CSS classes : ', 'wpadcenter' ); ?></label>
+				<label ><?php echo esc_html__( 'Additional CSS classes ', 'wpadcenter' ); ?></label>
+				<span  class="wpadcenter-tooltip"><span class="dashicons dashicons-info"></span>
+					<span class="wpadcenter-tooltiptext">This classes will be added to the link. Uncheck to disable global setting and enable ad level settings.</span>
+				</span>
 						</p>
 				<div>
 				<?php /* translators: %s: Global additional css classes */ ?>
 					<label for="globalAdditionalCssClassPreference"><input name="global-additional-css-class-preference" type="checkbox" value="1" id="globalAdditionalCssClassPreference" <?php checked( '1', $global_additional_css_class_preference, true ); ?> ><?php echo sprintf( esc_html__( 'Global ( %s )', 'wpadcenter' ), esc_html( $global_additional_css_class ) ); ?></label>
 				</div>
-				<div class="additional-css-class-container">
+				<div class="wpadcenter-additional-css-class-container">
 				<input type="text" name="additional-css-classes" value="<?php echo esc_attr( $saved_additional_css_classes ); ?>" id="additional-css-classes" style="width:100%" >
 				</div>
 
@@ -2278,10 +2291,10 @@ class Wpadcenter_Admin {
 			if ( $the_query->have_posts() ) {
 				while ( $the_query->have_posts() ) {
 					$the_query->the_post();
-					$ad_id    = get_the_ID();
-					$ad_title = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
-					$ad_meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
-					$temp     = array(
+					$ad_id                          = get_the_ID();
+					$ad_title                       = ! empty( get_the_title() ) ? get_the_title() : __( '(no title)', 'wpadcenter' );
+					$ad_meta                        = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+					$temp                           = array(
 						'ad_id'    => $ad_id,
 						'ad_title' => $ad_title,
 						'ad_meta'  => $ad_meta,
