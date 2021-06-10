@@ -1881,7 +1881,7 @@ class Wpadcenter_Admin {
 		<p style="margin-bottom:4px">
 		<label><?php echo esc_html__( 'Additional rel tags ', 'wpadcenter' ); ?></label>
 		<span  class="wpadcenter-tooltip"><span class="dashicons dashicons-info"></span>
-					<span class="wpadcenter-tooltiptext">Adds rel attribute tags to link. Uncheck to disable global setting and enable ad level settings.</span>
+					<span class="wpadcenter-tooltiptext">Adds rel attribute tags to link. Uncheck to disable global setting and enable ad level setting.</span>
 				</span>
 	</p>
 				<div>						
@@ -1905,7 +1905,7 @@ class Wpadcenter_Admin {
 				<p style="margin-bottom:4px">
 				<label ><?php echo esc_html__( 'Additional CSS classes ', 'wpadcenter' ); ?></label>
 				<span  class="wpadcenter-tooltip"><span class="dashicons dashicons-info"></span>
-					<span class="wpadcenter-tooltiptext">This classes will be added to the link. Uncheck to disable global setting and enable ad level settings.</span>
+					<span class="wpadcenter-tooltiptext">This classes will be added to the link. Uncheck to disable global setting and enable ad level setting.</span>
 				</span>
 						</p>
 				<div>
