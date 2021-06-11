@@ -109,7 +109,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 						<label for="wpadcenter-additional-css-class" ><?php esc_html_e( 'Additional CSS classes', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These classes will be added to the link.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
 						</div>
 						<textarea id="wpadcenter-additional-css-class" name="link_additional_css_class_field" class="form-control" rows="1"><?php echo esc_html( stripslashes( $the_options['link_additional_css_class'] ) ); ?></textarea>
-
+						<?php do_action( 'wp_adcenter_extend_link_options' ); ?>
 				</c-card-body>
 			</c-card>
 			<?php do_action( 'wp_adcenter_after_general_settings' ); ?>
