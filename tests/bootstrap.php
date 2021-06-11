@@ -28,6 +28,12 @@ function _manually_load_plugin() {
 	require $string;
 	// activate the plugin to get ads_statistics table on activation for testing.
 	do_action( 'activate_' . trim( $string, '/' ) ); //phpcs:ignore
+
+	// activate the elementor plugin.
+	$string = dirname( dirname( dirname( __FILE__ ) ) ) . '/elementor/elementor.php';
+	require $string;
+	// activate the plugin to get ads_statistics table on activation for testing.
+	do_action( 'activate_' . trim( $string, '/' ) ); //phpcs:ignore
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 

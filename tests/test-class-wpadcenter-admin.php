@@ -61,27 +61,26 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	public static $ad_group;
 
 	/**
+	 * Current time.
+	 *
+	 * @access public
+	 * @var int $current_time current time
+	 */
+	public static $current_time;
+
+	/**
+	 * Term id for taxonomy wpadcenter-adgroups for created dummy post
+	 *
+	 * @access public
+	 * @var int $term_id term id
+	 */
+	public static $term_id;
+
+	/**
 	 * Set up function.
 	 *
 	 * @param class WP_UnitTest_Factory $factory class instance.
 	 */
-
-
-	 /**
-	  * Current time.
-	  *
-	  * @access public
-	  * @var int $current_time current time
-	  */
-	public static $current_time;
-
-	  /**
-	   * Term id for taxonomy wpadcenter-adgroups for created dummy post
-	   *
-	   * @access public
-	   * @var int $term_id term id
-	   */
-	public static $term_id;
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids            = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group          = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
@@ -379,7 +378,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	/**
 	 * Tests for enqueue_styles function
 	 */
-
 	public function test_enqueue_styles() {
 		self::$wpadcenter_admin->enqueue_styles();
 		global $wp_styles;
@@ -460,7 +458,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Tests for wpadcenter_register_rest_fields function
 	 */
 	public function test_wpadcenter_register_rest_fields() {
-		// test for wpadcenter-ads rest fields
+		// Test for wpadcenter-ads rest fields.
 		$request = new WP_REST_Request( 'GET', '/wp/v2/wpadcenter-ads' );
 		$request->set_query_params( array( 'per_page' => 1 ) );
 		$response                   = rest_do_request( $request );
@@ -468,7 +466,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$wpadcenter_ads_rest_fields = $server->response_to_data( $response, false );
 		$this->assertArrayHasKey( 'ad_html', $wpadcenter_ads_rest_fields[0], 'Failed to register ad html rest field' );
 
-		// test for wpadcenter-adgroups rest fields.
+		// Test for wpadcenter-adgroups rest fields.
 		$request = new WP_REST_Request( 'GET', '/wp/v2/wpadcenter-adgroups' );
 		$request->set_query_params( array( 'per_page' => 1 ) );
 		$response                        = rest_do_request( $request );
@@ -810,19 +808,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 
 		$saved_limit_ad_impressions = get_post_meta( self::$ad_ids[0], 'wpadcenter_limit_impressions', true );
 		$this->assertEquals( $saved_limit_ad_impressions, 2 );
-	}
-
-	/**
-	 * Test for wpadcenter_remove_post_row_actions function
-	 *
-	 * @return void
-	 */
-	public function test_wpadcenter_remove_post_row_actions() {
-		global $current_screen;
-		$screen         = WP_Screen::get( 'wpadcenter-ads' );
-		$current_screen = $screen;
-		$value          = apply_filters( 'post_row_actions', array( 'view', 'inline hide-if-no-js' ) );
-		$this->assertTrue( is_array( $value ) );
 	}
 
 	/**
