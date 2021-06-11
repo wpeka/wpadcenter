@@ -200,9 +200,13 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_wpadcenter_manage_edit_ads_columns() {
 		global $current_screen;
-		$current_screen->post_type = 'wpadcenter-ads';
+		$current_screen->post_type = 'wpadcenter-adgroup';
 
 		$value = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
+		$this->assertTrue( empty( $value ) );
+
+		$current_screen->post_type = 'wpadcenter-ads';
+		$value                     = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
 			$this->assertArrayHasKey( 'cb', $value, "Array doesn't contains 'cb'" );
 			$this->assertArrayHasKey( 'title', $value, "Array doesn't contains 'title'" );
 			$this->assertArrayHasKey( 'ad-type', $value, "Array doesn't contains 'ad-type'" );
@@ -918,5 +922,13 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		self::$wpadcenter_admin->wpadcenter_post_submitbox_start( self::$first_dummy_post );
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+
+	/**
+	 * Test for test_wpadcenter_settings function
+	 */
+	public function test_wpadcenter_settings() {
+		$this->expectException( 'WPDieException' );
+		self::$wpadcenter_admin->wpadcenter_settings();
 	}
 }
