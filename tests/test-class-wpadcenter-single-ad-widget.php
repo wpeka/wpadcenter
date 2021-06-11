@@ -6,9 +6,9 @@
  * @subpackage Wpadcenter/includes
  */
 
- /**
-  * Require Wpadcenter_Single_Ad_Widget class.
-  */
+/**
+ * Require Wpadcenter_Single_Ad_Widget class.
+ */
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-single-ad-widget.php';
 
 /**
@@ -64,9 +64,9 @@ class Wpadcenter_Single_Ad_Widget_Test extends WP_UnitTestCase {
 		self::$wpadcenter_single_ad_widget = new Wpadcenter_Single_Ad_Widget();
 	}
 
-	 /**
-	  * Test for widget function
-	  */
+	/**
+	 * Test for widget function
+	 */
 	public function test_widget() {
 		$args = array(
 			'before_widget' => '<div>',
@@ -76,19 +76,27 @@ class Wpadcenter_Single_Ad_Widget_Test extends WP_UnitTestCase {
 		);
 
 		$instance = array(
-			'ad_id'     => self::$ad_ids[0],
+			'ad_id'     => self::$ad_ids,
 			'title'     => 'Sample title',
 			'max_width' => 'on',
 		);
 		ob_start();
 		$value  = self::$wpadcenter_single_ad_widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output !== strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+
+		$instance['max_width'] = 'off';
+		$instance['devices']   = array( 'set', 'mobile', 'tablet', 'desktop' );
+
+		ob_start();
+		$value  = self::$wpadcenter_single_ad_widget->widget( $args, $instance );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
-	  /**
-	   * Test for update function
-	   */
+	/**
+	 * Test for update function
+	 */
 	public function test_update() {
 		$output = self::$wpadcenter_single_ad_widget->update( 'new-title', 'old-title' );
 		$this->assertEquals( 'new-title', $output );
@@ -101,13 +109,13 @@ class Wpadcenter_Single_Ad_Widget_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_single_ad_widget->form(
 			array(
-				'ad_id'     => self::$ad_ids[0],
+				'ad_id'     => self::$ad_ids,
 				'title'     => 'Sample title',
-				'max_width' => 'on',
+				'max_width' => 'off',
 			)
 		);
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output !== strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -128,5 +136,14 @@ class Wpadcenter_Single_Ad_Widget_Test extends WP_UnitTestCase {
 		$output   = ob_get_clean();
 		$expected = '<option value="' . self::$second_dummy_post->ID . '">' . self::$second_dummy_post->post_title . '</option><option value="' . self::$first_dummy_post->ID . '" selected="selected">' . self::$first_dummy_post->post_title . '</option>';
 		$this->assertEquals( $expected, $output );
+	}
+
+	/**
+	 * Test for scripts function
+	 */
+	public function test_scripts() {
+		global $wp_styles;
+		self::$wpadcenter_single_ad_widget->scripts();
+		$this->assertTrue( in_array( 'wpadcenter-frontend', $wp_styles->queue, true ) );
 	}
 }

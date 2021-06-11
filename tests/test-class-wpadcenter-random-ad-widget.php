@@ -6,9 +6,9 @@
  * @subpackage Wpadcenter/includes
  */
 
- /**
-  * Require Wpadcenter_Random_Ad_Widget class.
-  */
+/**
+ * Require Wpadcenter_Random_Ad_Widget class.
+ */
 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpadcenter-random-ad-widget.php';
 /**
  * Wpadcenter_Random_Ad_Widget class test case.
@@ -48,7 +48,7 @@ class Wpadcenter_Random_Ad_Widget_Test extends WP_UnitTestCase {
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids                      = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
-		self::$ad_group                    = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
+		self::$ad_group                    = $factory->term->create_many( 4, array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		self::$wpadcenter_random_ad_widget = new Wpadcenter_Random_Ad_Widget();
 	}
 
@@ -71,7 +71,15 @@ class Wpadcenter_Random_Ad_Widget_Test extends WP_UnitTestCase {
 		ob_start();
 		$value  = self::$wpadcenter_random_ad_widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output !== strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+
+		$instance['max_width'] = 'off';
+		$instance['devices']   = array( 'set', 'mobile', 'tablet', 'desktop' );
+
+		ob_start();
+		$value  = self::$wpadcenter_random_ad_widget->widget( $args, $instance );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -91,11 +99,11 @@ class Wpadcenter_Random_Ad_Widget_Test extends WP_UnitTestCase {
 			array(
 				'adgroup_ids' => array( self::$ad_group ),
 				'title'       => 'Sample title',
-				'max_width'   => 'on',
+				'max_width'   => 'off',
 			)
 		);
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output !== strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 
