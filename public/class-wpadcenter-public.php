@@ -353,6 +353,7 @@ class Wpadcenter_Public {
 		$ad_size                       = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
 		$ad_type                       = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
 		$link_url                      = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
+		$link_url                      = apply_filters( 'wp_adcenter_modify_single_ad_link_url', $ad_id, $link_url );
 		$open_in_new_tab               = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
 		$global_open_in_new_tab        = $options['link_open_in_new_tab'];
 		$nofollow                      = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
@@ -361,7 +362,7 @@ class Wpadcenter_Public {
 		$additional_rel_tags           = $additional_rel_tags ? implode( ' ', $additional_rel_tags ) : '';
 		$global_additional_rel_tags    = str_replace( ',', ' ', $options['link_additional_rel_tags'] );
 		$additional_css_classes        = get_post_meta( $ad_id, 'wpadcenter_additional_css_classes', true );
-		$global_additional_css_classes = $options['link_additional_css_class'];
+		$global_additional_css_classes = $options['link_additional_css_class'];	
 
 		// For compatibility with previous version ( <= 2.1.0 ).
 		if ( '1' === $open_in_new_tab ) {
