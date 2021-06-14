@@ -153,6 +153,8 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Test for wpadcenter_add_meta_boxes function.
 	 */
 	public function test_wpadcenter_add_meta_boxes() {
+		update_option( 'wc_am_client_wpadcenter_pro_activated', 'Activated' );
+		update_option( 'wpadcenter_pro_active', true );
 		global $wp_meta_boxes;
 		self::$wpadcenter_admin->wpadcenter_add_meta_boxes( self::$first_dummy_post );
 		$metaboxes_high_priority = $wp_meta_boxes['wpadcenter-ads']['normal']['high'];
@@ -162,7 +164,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 
 		$metaboxes_low_priority = $wp_meta_boxes['wpadcenter-ads']['normal']['low'];
 		$metaboxes_low_priority = array_keys( $metaboxes_low_priority );
-		$expected_metaboxes     = array( 'ad-details' );
+		$expected_metaboxes     = array( 'ad-details', 'ad-limits' );
 		$this->assertFalse( boolval( array_diff( $expected_metaboxes, $metaboxes_low_priority ) ) );
 	}
 
@@ -756,6 +758,29 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		self::$wpadcenter_admin->wpadcenter_amp_attributes_metabox( self::$first_dummy_post );
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+
+		update_post_meta(
+			self::$first_dummy_post->ID,
+			'wpadcenter_amp_attributes',
+			array(
+				'type',
+				'width',
+				'height',
+			)
+		);
+		update_post_meta(
+			self::$first_dummy_post->ID,
+			'wpadcenter_amp_values',
+			array(
+				'industrybrains',
+				'300',
+				'200',
+			)
+		);
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_amp_attributes_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -931,4 +956,79 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$this->expectException( 'WPDieException' );
 		self::$wpadcenter_admin->wpadcenter_settings();
 	}
+
+	/**
+	 * Test for wpadcenter_parse_file function.
+	 */
+	public function test_wpadcenter_parse_file() {
+		$sample_text = 'This#is#a#sample#text.#This#is#a#sample#text.';
+		$value       = self::$wpadcenter_admin->wpadcenter_parse_file( $sample_text );
+		$this->assertTrue( is_array( $value ) && ! empty( $value ) );
+	}
+
+	/**
+	 * Test for wpadcenter_ad_selected function.
+	 */
+	public function test_wpadcenter_ad_selected() {
+		$_POST['security'] = wp_create_nonce( 'selectad_security' );
+		$_POST['action']   = 'selected_ad_reports';
+		$this->expectException( 'WPDieException' );
+		self::$wpadcenter_admin->wpadcenter_ad_selected();
+	}
+
+	/**
+	 * Test for wpadcenter_export_csv function.
+	 */
+	public function test_wpadcenter_export_csv() {
+		$_POST['action']   = 'admin_post_export_csv';
+		$_POST['security'] = wp_create_nonce( 'exportcsv_security' );
+
+		$_POST['csv_data'] = 'sample-text';
+		$this->expectException( 'WPDieException' );
+		self::$wpadcenter_admin->wpadcenter_export_csv();
+	}
+
+	/**
+	 * Test for wpadcanter_dequeue_styles function
+	 */
+	public function test_wpadcanter_dequeue_styles() {
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		wp_set_current_user( $user_id );
+		set_current_screen( 'edit.php ' );
+		global $current_screen;
+		$current_screen->post_type = 'wpadcenter-ads';
+		$current_screen->base      = 'wpadcenter-ads_page_wpadcenter-reports';
+		$value                     = self::$wpadcenter_admin->wpadcanter_dequeue_styles( 'http://localhost/example1/forms.css' );
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_admin->wpadcanter_dequeue_styles( 'http://localhost/example1' );
+		$this->assertEquals( 'http://localhost/example1', $value );
+	}
+
+	/**
+	 * Test for wpadcenter_remove_forms_style function
+	 */
+	public function test_wpadcenter_remove_forms_style() {
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		wp_set_current_user( $user_id );
+		set_current_screen( 'edit.php ' );
+		global $current_screen;
+		$current_screen->post_type = 'wpadcenter-ads';
+		$current_screen->base      = 'wpadcenter-ads_page_wpadcenter-reports';
+		$value                     = self::$wpadcenter_admin->wpadcenter_remove_forms_style(
+			array(
+				'forms',
+				'revisions',
+			)
+		);
+		$this->assertTrue( empty( $value ) );
+	}
 }
+
