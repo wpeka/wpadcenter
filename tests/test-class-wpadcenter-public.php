@@ -127,6 +127,22 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 
 		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
 		$this->assertTrue( is_string( $received_output ) );
+		update_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', 'banner_image' );
+		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
+		$this->assertTrue( is_string( $received_output ) );
+		update_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', 'external_image_link' );
+		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
+		$this->assertTrue( is_string( $received_output ) );
+		update_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', 'text_ad' );
+		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
+		$this->assertTrue( is_string( $received_output ) );
+		update_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', 'import_from_adsense' );
+		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
+		$this->assertTrue( is_string( $received_output ) );
+		update_post_meta( self::$ad_ids[0], 'wpadcenter_ad_type', 'amp_ad' );
+		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
+		$this->assertTrue( is_string( $received_output ) );
+
 	}
 
 	/**
@@ -309,4 +325,5 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$this->assertEquals( '<script type="text/javascript">console.log("hello world in body");</script>', $disable_global_scripts['body_scripts'] );
 		$this->assertEquals( '<script type="text/javascript">console.log("hello world in footer");</script>', $disable_global_scripts['footer_scripts'] );
 	}
+
 }

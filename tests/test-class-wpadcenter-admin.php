@@ -61,28 +61,46 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	public static $ad_group;
 
 	/**
+	 * WordPress default post type.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string $default_post  post of WordPress default post type.
+	 */
+	public static $default_post;
+
+	/**
 	 * Set up function.
 	 *
 	 * @param class WP_UnitTest_Factory $factory class instance.
 	 */
 
 
-	 /**
-	  * Current time.
-	  *
-	  * @access public
-	  * @var int $current_time current time
-	  */
+	/**
+	 * Current time.
+	 *
+	 * @access public
+	 * @var int $current_time current time
+	 */
 	public static $current_time;
 
-	  /**
-	   * Term id for taxonomy wpadcenter-adgroups for created dummy post
-	   *
-	   * @access public
-	   * @var int $term_id term id
-	   */
+	/**
+	 * Term id for taxonomy wpadcenter-adgroups for created dummy post
+	 *
+	 * @access public
+	 * @var int $term_id term id
+	 */
 	public static $term_id;
+
+	/**
+	 * Function for set up before unit tests.
+	 *
+	 * @param WP_UnitTest_Factory $factory helper for unit test functionality.
+	 *
+	 * @since 1.0.0
+	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+		self::$default_post      = $factory->post->create();
 		self::$ad_ids            = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group          = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		self::$first_dummy_post  = get_post( self::$ad_ids[0] );
@@ -934,4 +952,47 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
+
+	/**
+	 * Test for wpadcenter_save_scripts function
+	 */
+	public function test_wpadcenter_save_scripts() {
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'editor',
+			)
+		);
+			wp_set_current_user( $user_id );
+			$_REQUEST['nonce'] = wp_create_nonce( 'action' );
+
+			$_POST['body_scripts'] = '<h1>Heading for unit test.</h1>';
+
+			self::$wpadcenter_admin->wpadcenter_save_scripts( self::$default_post );
+
+			$scripts = get_post_meta( self::$default_post, 'scripts', true );
+
+			$this->assertEquals( $scripts['body_scripts'], '<h1>Heading for unit test.</h1>' );
+	}
+
+	/**
+	 * Test for wpadcenter_link_options_metabox function
+	 */
+	public function test_wpadcenter_link_options_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_link_options_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+
+	}
+
+	/**
+	 * Test for wpadcenter_mascot_on_pages function
+	 */
+	public function test_wpadcenter_mascot_on_pages() {
+		global $wp_scripts;
+
+		self::$wpadcenter_admin->wpadcenter_mascot_on_pages();
+		$this->assertArrayHasKey( 'wpadcenter-mascot', $wp_scripts->registered, 'wpadcenter-mascot script is not registered.' );
+	}
+
 }
