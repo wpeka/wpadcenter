@@ -381,3 +381,9 @@ a:focus {
 .wpadcenter-settings-secondary-heading{
 	margin-top:20px;
 }
+.wpadcenter-link-prefix-textbox:read-only {
+ background-color: #fff;
+}
+.wpadcenter-link-prefix-textbox:read-only:hover {
+	cursor:no-drop;
+}
