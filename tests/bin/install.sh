@@ -64,6 +64,10 @@ install_wp() {
 		download https://wordpress.org/nightly-builds/wordpress-latest.zip  $TMPDIR/wordpress-nightly/wordpress-nightly.zip
 		unzip -q $TMPDIR/wordpress-nightly/wordpress-nightly.zip -d $TMPDIR/wordpress-nightly/
 		mv $TMPDIR/wordpress-nightly/wordpress/* $WP_CORE_DIR
+		mkdir -p $TMPDIR/elementor
+		download https://downloads.wordpress.org/plugin/elementor.3.2.4.zip $TMPDIR/elementor.zip
+		unzip -q $TMPDIR/elementor.zip -d $TMPDIR/elementor/
+		mv $TMPDIR/elementor/* $WP_CORE_DIR/wp-content/plugins/elementor/
 	else
 		if [ $WP_VERSION == 'latest' ]; then
 			local ARCHIVE_NAME='latest'
@@ -91,6 +95,10 @@ install_wp() {
 	fi
 
 	download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
+	mkdir -p $TMPDIR/elementor
+	download https://downloads.wordpress.org/plugin/elementor.3.2.4.zip $TMPDIR/elementor.zip
+	unzip -q $TMPDIR/elementor.zip -d $TMPDIR/elementor/
+	mv $TMPDIR/elementor/* $WP_CORE_DIR/wp-content/plugins/elementor/
 }
 
 install_test_suite() {

@@ -831,19 +831,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test for wpadcenter_remove_post_row_actions function
-	 *
-	 * @return void
-	 */
-	public function test_wpadcenter_remove_post_row_actions() {
-		global $current_screen;
-		$screen         = WP_Screen::get( 'wpadcenter-ads' );
-		$current_screen = $screen;
-		$value          = apply_filters( 'post_row_actions', array( 'view', 'inline hide-if-no-js' ) );
-		$this->assertTrue( is_array( $value ) );
-	}
-
-	/**
 	 * Test for wpadcenter_gutenberg_block_categories function
 	 */
 	public function test_wpadcenter_gutenberg_block_categories() {
