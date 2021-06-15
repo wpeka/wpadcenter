@@ -49,7 +49,7 @@ class Wpadcenter_Adgroup_Widget_Test extends WP_UnitTestCase {
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids                    = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
-		self::$ad_group                  = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
+		self::$ad_group                  = $factory->term->create_many( 4, array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		self::$wpadcenter_adgroup_widget = new Wpadcenter_Adgroup_Widget();
 	}
 
@@ -65,7 +65,7 @@ class Wpadcenter_Adgroup_Widget_Test extends WP_UnitTestCase {
 		);
 
 		$instance = array(
-			'adgroup_ids' => array( self::$ad_group ),
+			'adgroup_ids' => array( self::$ad_group[0] ),
 			'title'       => 'Sample title',
 			'num_ads'     => '5',
 			'num_columns' => '5',
@@ -75,7 +75,15 @@ class Wpadcenter_Adgroup_Widget_Test extends WP_UnitTestCase {
 		ob_start();
 		$value  = self::$wpadcenter_adgroup_widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output !== strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+
+		$instance['max_width'] = 'off';
+		$instance['devices']   = array( 'set', 'mobile', 'tablet', 'desktop' );
+
+		ob_start();
+		$value  = self::$wpadcenter_adgroup_widget->widget( $args, $instance );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 	/**
@@ -93,16 +101,16 @@ class Wpadcenter_Adgroup_Widget_Test extends WP_UnitTestCase {
 		ob_start();
 		self::$wpadcenter_adgroup_widget->form(
 			array(
-				'adgroup_ids' => array( self::$ad_group ),
+				'adgroup_ids' => self::$ad_group,
 				'title'       => 'Sample title',
 				'num_ads'     => '5',
 				'num_columns' => '5',
 				'alignment'   => 'left',
-				'max_width'   => 'on',
+				'max_width'   => 'off',
 			)
 		);
 		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( $output !== strip_tags( $output ) ) );
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 
 }
