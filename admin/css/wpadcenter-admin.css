@@ -123,7 +123,7 @@
    
 	/* Position the tooltip text */
 	position: absolute;
-	z-index: 3;
+	z-index: 1001;
 	top: -5px;
 	right: 105%;
   }
@@ -133,6 +133,6 @@
 	visibility: visible;
   }
   .wpadcenter-tooltip .dashicons-info {
-	  margin-top:7px;
+	  margin-top:6px;
 	  font-size: 15px;
   }
