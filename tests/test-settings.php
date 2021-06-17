@@ -18,7 +18,7 @@ class SettingsTest extends WP_Ajax_UnitTestCase {
 
 	public function setup() {
 		parent::setup();
-		$this->wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.0.1' );
+		$this->wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.1.0' );
 	}
 
 	/**

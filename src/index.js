@@ -38,6 +38,11 @@ var vm = new Vue({
             adGroups: [],
             adgroups_security: null,
             count: 0,
+            link_open_in_new_tab : null,
+            link_nofollow : null,
+            additional_rel_tags_options : ['sponsored','ugc'],
+            link_additional_rel_tags : []
+
         }
     },
     methods: {
@@ -55,6 +60,9 @@ var vm = new Vue({
             this.content_ads = this.$refs?.content_ads ? this.$refs.content_ads.checked : false;
             this.adgroups_security = this.$refs?.adgroups_security ? this.$refs.adgroups_security.value : '';
             this.count = this.$refs?.count ? this.$refs.count.value : 0;
+            this.link_open_in_new_tab = this.$refs.link_open_in_new_tab_mount.value ? Boolean(this.$refs.link_open_in_new_tab_mount.value ) : false;
+            this.link_nofollow = this.$refs.link_nofollow_mount.value ? Boolean(this.$refs.link_nofollow_mount.value) : false;
+            this.link_additional_rel_tags = this.$refs.link_additional_rel_tags_mount.value ? this.$refs.link_additional_rel_tags_mount.value.split(',') : [];
             let navLinks = j('.nav-link').map(function() {
                 return this.getAttribute('href');
             });
@@ -98,6 +106,14 @@ var vm = new Vue({
             this.geo_targeting = !this.geo_targeting;
             this.$refs.geo_targeting_tab.value = this.geo_targeting ? "1" : "0";
             j('#check_maxmind_license_key').click();
+        },
+        onChangeOpenInNewTab() {
+            this.link_open_in_new_tab = !this.link_open_in_new_tab;
+            this.$refs.link_open_in_new_tab.value = this.link_open_in_new_tab ? "1" : "0";
+        },
+        onChangeNoFollow() {
+            this.link_nofollow = !this.link_nofollow;
+            this.$refs.link_nofollow .value = this.link_nofollow  ? "1" : "0";
         },
         onAddRuleContentAds(event) {
             let contentAds = Vue.extend(componentContentAds);

@@ -99,3 +99,40 @@
 	display:block;
 	margin-bottom: 7px;
 }
+.wpadcenter-additional-rel-tag-container,.wpadcenter-additional-css-class-container{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+.wpadcenter-meta-spacing{
+	margin-top:4px;
+}
+
+.wpadcenter-tooltip {
+	position: relative;
+	display: inline-block;
+  }
+  /* Tooltip text */
+  .wpadcenter-tooltip .wpadcenter-tooltiptext {
+	visibility: hidden;
+	width: 120px;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 5px 5px;
+	border-radius: 6px;
+   
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1001;
+	top: -5px;
+	right: 105%;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .wpadcenter-tooltip:hover .wpadcenter-tooltiptext {
+	visibility: visible;
+  }
+  .wpadcenter-tooltip .dashicons-info {
+	  margin-top:6px;
+	  font-size: 15px;
+  }

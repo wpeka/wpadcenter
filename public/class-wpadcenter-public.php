@@ -301,7 +301,6 @@ class Wpadcenter_Public {
 	 * @return string $single_ad_html html for the ad to be displayed.
 	 */
 	public static function display_single_ad( $ad_id, $attributes = array() ) {
-
 		$current_url = isset( $_SERVER['REQUEST_URI'] ) ? home_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) : '';
 		if ( strstr( $current_url, 'ads.txt' ) ) {
 			return;
@@ -312,12 +311,14 @@ class Wpadcenter_Public {
 		}
 		$display_ad = true;
 		$display_ad = apply_filters( 'wpadcenter_display_single_ad', $ad_id );
-
+		
 		if ( ! $display_ad ) {
 			return;
 		}
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
+
+		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend' );
 		wp_localize_script(
 			'wpadcenter-frontend',
@@ -342,24 +343,51 @@ class Wpadcenter_Public {
 		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
 			return;
 		}
+		$options      = Wpadcenter::wpadcenter_get_settings();
 		$current_time = time();
 		$start_date   = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
 		$end_date     = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
-		$ad_size              = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-		$ad_type              = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-		$link_url             = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
-		$open_in_new_tab      = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
-		$nofollow             = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
+		$ad_size                       = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
+		$ad_type                       = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		$link_url                      = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
+		$link_url                      = apply_filters( 'wp_adcenter_modify_single_ad_link_url', $ad_id, $link_url );
+		$open_in_new_tab               = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
+		$global_open_in_new_tab        = $options['link_open_in_new_tab'];
+		$nofollow                      = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
+		$global_nofollow               = $options['link_nofollow'];
+		$additional_rel_tags           = get_post_meta( $ad_id, 'wpadcenter_additional_rel_tags', true );
+		$additional_rel_tags           = $additional_rel_tags ? implode( ' ', $additional_rel_tags ) : '';
+		$global_additional_rel_tags    = str_replace( ',', ' ', $options['link_additional_rel_tags'] );
+		$additional_css_classes        = get_post_meta( $ad_id, 'wpadcenter_additional_css_classes', true );
+		$global_additional_css_classes = $options['link_additional_css_class'];	
+
+		// For compatibility with previous version ( <= 2.1.0 ).
+		if ( '1' === $open_in_new_tab ) {
+			$open_in_new_tab = 'yes';
+		} elseif ( '0' === $open_in_new_tab ) {
+			$open_in_new_tab = 'no';
+		}
+		if ( '1' === $nofollow ) {
+			$nofollow = 'yes';
+		} elseif ( '0' === $nofollow ) {
+			$nofollow = 'no';
+		}
+
+		$global_additional_rel_tags_preference  = get_post_meta( $ad_id, 'wpadcenter_global_additional_rel_tags_preference', true );
+		$global_additional_css_class_preference = get_post_meta( $ad_id, 'wpadcenter_global_additional_css_class_preference', true );
+
 		$text_ad_bg_color     = get_post_meta( $ad_id, 'wpadcenter_text_ad_background_color', true );
 		$text_ad_border_color = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_color', true );
 		$text_ad_border_width = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_width', true );
 		$text_ad_align_center = get_post_meta( $ad_id, 'wpadcenter_text_ad_align_vertically', true );
 
 		$link_target = '_self';
-		if ( true === (bool) $open_in_new_tab ) {
+		if ( 'global' === $open_in_new_tab && $global_open_in_new_tab ) {
+			$link_target = '_blank';
+		} elseif ( 'yes' === $open_in_new_tab ) {
 			$link_target = '_blank';
 		}
 		$width  = '';
@@ -399,7 +427,13 @@ class Wpadcenter_Public {
 			}
 		}
 
-		$single_ad_html .= '<div class="wpadcenter-ad-container">';
+		$single_ad_html .= '<div class="wpadcenter-ad-container" ';
+
+		if ( 'text_ad' === $ad_type ) {
+			$single_ad_html .= 'style="overflow:visible" ';
+		}
+
+		$single_ad_html .= '>';
 
 		$single_ad_html .= '<div ';
 		$single_ad_html .= 'id="wpadcenter-ad-' . $ad_id . '" ';
@@ -425,9 +459,34 @@ class Wpadcenter_Public {
 
 		if ( 'text_ad' !== $ad_type ) {
 
-			$single_ad_html .= '<a id="wpadcenter_ad" class="wpadcenter-ad-inner__item" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
-			if ( true === (bool) $nofollow ) {
-				$single_ad_html .= 'rel="nofollow"';
+			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
+
+			//adding classes to link 
+			$single_ad_html .= 'class="wpadcenter-ad-inner__item';
+			if ( $global_additional_css_class_preference ) {
+				$single_ad_html .= $global_additional_css_classes ? ' ' . $global_additional_css_classes : '';
+			} elseif ( $additional_css_classes ) {
+				$single_ad_html .= ' ' . $additional_css_classes;
+			}
+			
+			$single_ad_html .= '" ';
+
+			//adding rel tags to link
+			$rel_tags = '';
+			if ( 'global' === $nofollow && $global_nofollow ) {
+				$rel_tags .= 'nofollow';
+			} elseif ( 'yes' === $nofollow ) {
+				$rel_tags .= 'nofollow';
+			}
+
+			if ( $global_additional_rel_tags_preference ) {
+				$rel_tags .= $global_additional_rel_tags ? ' ' . $global_additional_rel_tags : '';
+			} elseif ( $additional_rel_tags ) {
+				$rel_tags .= ' ' . $additional_rel_tags;
+			}
+
+			if ( $rel_tags ) {
+				$single_ad_html .= 'rel="' . trim( $rel_tags ) . '"';
 			}
 			$single_ad_html .= '>';
 
@@ -500,6 +559,8 @@ class Wpadcenter_Public {
 		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			Wpadcenter::wpadcenter_set_impressions( $ad_id );
 		}
+
+		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
 		return $single_ad_html;
 	}
 
