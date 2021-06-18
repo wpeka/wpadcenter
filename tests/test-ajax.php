@@ -264,4 +264,40 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		$this->assertTrue( true );
 	}
+
+	/**
+	 * Test for wpadcenter_add_custom_filters function
+	 */
+	public function test_wpadcenter_add_custom_filters() {
+
+		global $current_screen;
+		$current_screen->post_type = 'wpadcenter-ads';
+
+		// become administrator.
+		$this->_setRole( 'administrator' );
+		update_option( 'wpadcenter_pro_active', true );
+		$_POST['wpadcenter_add_custom_filter_nonce'] = wp_create_nonce( 'wpadcenter_add_custom_filter' );
+		$_POST['wpadcenter_settings_ajax_update']    = 'update_admin_settings_form';
+		$_POST['_wpnonce']                           = wp_create_nonce( 'wpadcenter-update-' . WPADCENTER_SETTINGS_FIELD );
+		$_POST['enable_advertisers_field']           = 'true';
+		$_POST['action']                             = 'save_settings';
+
+		try {
+			$this->_handleAjax( 'save_settings' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		// added role as advertiser to current user.
+		$user_id = self::factory()->user->create();
+		$user    = new WP_User( $user_id );
+		$user->add_role( 'administrator' );
+		$user->add_role( 'editor' );
+		wp_set_current_user( $user_id );
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_add_custom_filters();
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
 }
