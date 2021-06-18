@@ -462,19 +462,19 @@
 		// link options functions
 		function additionalRelTagSetup(){
 			if ($('#globalAdditionalRelTagsPreference').prop("checked")) {
-				$('.additional-rel-tag-container').hide();
+				$('.wpadcenter-additional-rel-tag-container').hide();
 			}
 			else{
-				$('.additional-rel-tag-container').show();
+				$('.wpadcenter-additional-rel-tag-container').show();
 	   
 			}
 		}
 		function additionalCssClassSetup(){
 			if ($('#globalAdditionalCssClassPreference').prop("checked")) {
-				$('.additional-css-class-container').hide();
+				$('.wpadcenter-additional-css-class-container').hide();
 			}
 			else{
-				$('.additional-css-class-container').show();
+				$('.wpadcenter-additional-css-class-container').show();
 	   
 			}
 		}

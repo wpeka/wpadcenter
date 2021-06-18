@@ -1,4 +1,14 @@
 <?php
+/**
+ * Class Wpadcenter_Admin_Test
+ *
+ * @package Wpadcenter
+ * @subpackage Wpadcenter/tests
+ */
+
+/**
+ * Required file.
+ */
 require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
@@ -20,12 +30,12 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 */
 	protected static $ad_groups;
 
-	 /**
-	  * The Wpadcenter_Admin class instance .
-	  *
-	  * @access public
-	  * @var    string    $wpadcenter_admin  class instance.
-	  */
+	/**
+	 * The Wpadcenter_Admin class instance .
+	 *
+	 * @access public
+	 * @var    string    $wpadcenter_admin  class instance.
+	 */
 	public static $wpadcenter_admin;
 
 	/**
@@ -46,19 +56,19 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 */
 	public static $first_dummy_post;
 
-	 /**
-	  * Term id for taxonomy wpadcenter-adgroups for created dummy post
-	  *
-	  * @access public
-	  * @var int $term_id term id
-	  */
+	/**
+	 * Term id for taxonomy wpadcenter-adgroups for created dummy post
+	 *
+	 * @access public
+	 * @var int $term_id term id
+	 */
 	public static $term_id;
 
 
 	/**
-	 * Setup necessary variables.
+	 * Set up function.
 	 *
-	 * @param mixed $factory factory to create variables.
+	 * @param class WP_UnitTest_Factory $factory class instance.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_groups = $factory->term->create_many( 4, array( 'taxonomy' => 'wpadcenter-adgroups' ) );
@@ -117,7 +127,6 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		// get response.
 		$response = json_decode( $this->_last_response );
-		//error_log( print_r( $response, true ) );
 		$this->assertEquals( $response->$ad->ad_id, $ad, 'Ad Id doesnt match' );
 	}
 
@@ -149,7 +158,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 		$response = json_decode( $this->_last_response );
-	
+
 		$this->assertEquals( $response[0]->ad_id, $ad );
 		$this->assertEquals( $response[0]->ad_date, $today );
 		$this->assertEquals( $response[0]->ad_impressions, $ad_impressions );
@@ -160,6 +169,11 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 * Test wp_ajax_check_ads_txt_problems when content is not entered.
 	 */
 	public function test_check_ads_txt_problems() {
+
+		// before setting role as an admin.
+		$this->expectException( 'WPAjaxDieStopException' );
+		$this->_handleAjax( 'check_ads_txt_problems' );
+
 		// become administrator.
 		$this->_setRole( 'administrator' );
 
@@ -229,5 +243,25 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response );
 		$this->assertTrue( $response->error );
 		$this->assertTrue( is_string( $response->message ) );
+	}
+
+	/**
+	 * Test for wpadcenter_check_ads_txt_replace function
+	 */
+	public function test_wpadcenter_check_ads_txt_replace() {
+
+		// before setting role as an admin.
+		$this->expectException( 'WPAjaxDieStopException' );
+		$this->_handleAjax( 'check_ads_txt_replace' );
+
+		$_POST['action']   = 'check_ads_txt_replace';
+		$_POST['security'] = wp_create_nonce( 'check_ads_txt_replace' );
+
+		try {
+			$this->_handleAjax( 'check_ads_txt_replace' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+		$this->assertTrue( true );
 	}
 }
