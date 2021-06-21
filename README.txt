@@ -5,7 +5,7 @@ Tags: ads, adsense, ad rotation, ad manager, wordpress ad inserter, wordpress ad
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.7
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -283,6 +283,9 @@ Yes, WP AdCenter has extensive developer and user documentation. Here is a link 
 5. Reports.
 
 == Changelog ==
+= 2.2.0 =
+* Feature: Advanced link options added like rel attribute tags, additional CSS classes (Global and ad-level)
+
 = 2.1.0 =
 * Feature: AMP ads support.
 * Feature: Text ads support.
@@ -344,6 +347,9 @@ Yes, WP AdCenter has extensive developer and user documentation. Here is a link 
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.2.0 =
+* Feature: Advanced link options added like rel attribute tags, additional CSS classes (Global and ad-level)
+
 = 2.1.0 =
 * Feature: AMP ads support.
 * Feature: Text ads support.
