@@ -107,6 +107,10 @@
 	margin-top:4px;
 }
 
+.wpadcenter-tooltip {
+	position: relative;
+	display: inline-block;
+  }
   /* Tooltip text */
   .wpadcenter-tooltip .wpadcenter-tooltiptext {
 	visibility: hidden;
@@ -119,7 +123,9 @@
    
 	/* Position the tooltip text */
 	position: absolute;
-	z-index: 1;
+	z-index: 1001;
+	top: -5px;
+	right: 105%;
   }
   
   /* Show the tooltip text when you mouse over the tooltip container */
@@ -127,6 +133,6 @@
 	visibility: visible;
   }
   .wpadcenter-tooltip .dashicons-info {
-	  margin-top:7px;
+	  margin-top:6px;
 	  font-size: 15px;
   }
