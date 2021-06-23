@@ -170,10 +170,6 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 */
 	public function test_check_ads_txt_problems() {
 
-		// before setting role as an admin.
-		$this->expectException( 'WPAjaxDieStopException' );
-		$this->_handleAjax( 'check_ads_txt_problems' );
-
 		// become administrator.
 		$this->_setRole( 'administrator' );
 
@@ -243,26 +239,6 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response );
 		$this->assertTrue( $response->error );
 		$this->assertTrue( is_string( $response->message ) );
-	}
-
-	/**
-	 * Test for wpadcenter_check_ads_txt_replace function
-	 */
-	public function test_wpadcenter_check_ads_txt_replace() {
-
-		// before setting role as an admin.
-		$this->expectException( 'WPAjaxDieStopException' );
-		$this->_handleAjax( 'check_ads_txt_replace' );
-
-		$_POST['action']   = 'check_ads_txt_replace';
-		$_POST['security'] = wp_create_nonce( 'check_ads_txt_replace' );
-
-		try {
-			$this->_handleAjax( 'check_ads_txt_replace' );
-		} catch ( WPAjaxDieContinueException $e ) {
-			unset( $e );
-		}
-		$this->assertTrue( true );
 	}
 
 	/**

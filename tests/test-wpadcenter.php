@@ -95,4 +95,22 @@ class Wpadcenter_File_Test extends WP_UnitTestCase {
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && wp_strip_all_tags( $output ) !== $output );
 	}
+
+	/**
+	 * Test for run_wpadcenter function
+	 */
+	public function test_run_wpadcenter() {
+		run_wpadcenter();
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * Test for activate_wpadcenter function
+	 */
+	public function test_activate_wpadcenter() {
+		activate_wpadcenter();
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'ads_statistics';
+		$this->assertEquals( $table_name, $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) );
+	}
 }
