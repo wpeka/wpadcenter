@@ -310,6 +310,14 @@ class Wpadcenter_Public {
 			return;
 		}
 		$display_ad = true;
+
+		// check for cookie consent policy to show ads in front end.
+		$display_ad = $this->wpadcenter_check_cookie_consent( $display_ad );
+
+		if ( ! $display_ad ) {
+			return;
+		}
+
 		$display_ad = apply_filters( 'wpadcenter_display_single_ad', $ad_id );
 		
 		if ( ! $display_ad ) {
@@ -564,6 +572,64 @@ class Wpadcenter_Public {
 
 		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
 		return $single_ad_html;
+	}
+
+	/**
+	 * Check consent.
+	 *
+	 * @param boolean $display_ad boolean true or false.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_check_cookie_consent( $display_ad ) {
+		$the_options = Wpadcenter::wpadcenter_get_settings();
+
+		if ( ! $the_options['enable_privacy'] ) {
+			return false;
+		}
+
+		if ( 'show-all-ads-without' === $the_options['consent_method'] ) {
+			return false;
+		}
+
+		if ( 'cookie' !== $the_options['consent_method'] ) {
+			return false;
+		}
+
+		$cookie_values = array(
+			'borlabs-cookie'           => 'please find the detailed instructions below',
+			'complianz_consent_status' => 'allow',
+			'cmplz_marketing'          => 'allow',
+			'catAccCookies'            => '1',
+			'cookie_notice_accepted'   => 'true',
+			'viewed_cookie_policy'     => 'yes',
+			'moove_gdpr_popup'         => 'thirdparty',
+			'ginger-cookie'            => 'Y',
+		);
+
+		if ( $cookie_values[ $the_options['cookie_name'] ] === $the_options['cookie_value'] ) {
+			return true;
+		}
+
+		if ( $the_options['cookie_name'] === 'borlabsCookie' ) {
+			if ( $the_options['cookie_value'] === ',all' || $the_options['cookie_value'] === 'first-party' ) {
+				return true;
+			}
+		}
+
+		if ( $the_options['cookie_name'] === 'euconsent' ) {
+			if ( preg_match( '/BOzOg5COzOg5CAKAABENDJ-AAAAvhr/', $the_options['cookie_value'] ) ) {
+				return true;
+			}
+		}
+
+		if ( preg_match( '/wpgdprc-consent-/', $the_options['cookie_name'] ) ) {
+			if ( 'accept' === $the_options['cookie_value'] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

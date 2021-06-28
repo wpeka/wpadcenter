@@ -367,7 +367,11 @@ class Wpadcenter {
 			'link_additional_rel_tags'  => '',
 			'link_additional_css_class' => '',
 			'cloaked_link_base'         => '',
-
+			'enable_privacy'            => false,
+			'consent_method'            => '',
+			'cookie_name'               => '',
+			'cookie_value'              => '',
+			'cookie_non_personalized'   => false,
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -398,6 +402,8 @@ class Wpadcenter {
 			case 'content_ads':
 			case 'link_open_in_new_tab':
 			case 'link_nofollow':
+			case 'enable_privacy':
+			case 'cookie_non_personalized':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {
@@ -416,6 +422,9 @@ class Wpadcenter {
 			case 'link_additional_rel_tags':
 			case 'link_additional_css_class':
 			case 'cloaked_link_base':
+			case 'consent_method':
+			case 'cookie_value':
+			case 'cookie_name':
 				$ret = trim( stripslashes( $value ) );
 				break;
 			case 'ads_txt_content':
