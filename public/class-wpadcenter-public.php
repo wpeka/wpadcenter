@@ -311,15 +311,17 @@ class Wpadcenter_Public {
 		}
 		$display_ad = true;
 
-		// check for cookie consent policy to show ads in front end.
-		$display_ad = $this->wpadcenter_check_cookie_consent( $display_ad );
-
+		if ( Wpadcenter::is_request( 'frontend' ) ) {
+			// check for cookie consent policy to show ads in front end.
+			$display_ad = self::wpadcenter_check_cookie_consent( $display_ad );
+		}
+		
 		if ( ! $display_ad ) {
 			return;
 		}
 
 		$display_ad = apply_filters( 'wpadcenter_display_single_ad', $ad_id );
-		
+
 		if ( ! $display_ad ) {
 			return;
 		}
@@ -471,17 +473,17 @@ class Wpadcenter_Public {
 
 			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
 
-			//adding classes to link 
+			// adding classes to link
 			$single_ad_html .= 'class="wpadcenter-ad-inner__item';
 			if ( $global_additional_css_class_preference ) {
 				$single_ad_html .= $global_additional_css_classes ? ' ' . $global_additional_css_classes : '';
 			} elseif ( $additional_css_classes ) {
 				$single_ad_html .= ' ' . $additional_css_classes;
 			}
-			
+
 			$single_ad_html .= '" ';
 
-			//adding rel tags to link
+			// adding rel tags to link
 			$rel_tags = '';
 			if ( 'global' === $nofollow && $global_nofollow ) {
 				$rel_tags .= 'nofollow';
@@ -581,19 +583,19 @@ class Wpadcenter_Public {
 	 *
 	 * @since 1.0.0
 	 */
-	public function wpadcenter_check_cookie_consent( $display_ad ) {
+	public static function wpadcenter_check_cookie_consent( $display_ad ) {
 		$the_options = Wpadcenter::wpadcenter_get_settings();
 
 		if ( ! $the_options['enable_privacy'] ) {
-			return false;
+			return true;
 		}
 
 		if ( 'show-all-ads-without' === $the_options['consent_method'] ) {
-			return false;
+			return true;
 		}
 
 		if ( 'cookie' !== $the_options['consent_method'] ) {
-			return false;
+			return true;
 		}
 
 		$cookie_values = array(
@@ -607,28 +609,37 @@ class Wpadcenter_Public {
 			'ginger-cookie'            => 'Y',
 		);
 
-		if ( $cookie_values[ $the_options['cookie_name'] ] === $the_options['cookie_value'] ) {
-			return true;
-		}
-
-		if ( $the_options['cookie_name'] === 'borlabsCookie' ) {
-			if ( $the_options['cookie_value'] === ',all' || $the_options['cookie_value'] === 'first-party' ) {
+		if ( array_key_exists( $the_options['cookie_name'], $cookie_values ) ) {
+			if ( $cookie_values[ $the_options['cookie_name'] ] === $the_options['cookie_value'] ) {
+				if ( array_key_exists( $the_options['cookie_name'], $_COOKIE ) ) {
+					if ( $_COOKIE[ $the_options['cookie_name'] ] === $the_options['cookie_value'] ) {
+						return true;
+					}
+				}
+			}
+		} elseif ( array_key_exists( 'borlabsCookie', $_COOKIE ) ) {
+			if ( $_COOKIE['borlabsCookie'] === ',all' || $_COOKIE['borlabsCookie'] === 'first-party' ) {
 				return true;
 			}
-		}
-
-		if ( $the_options['cookie_name'] === 'euconsent' ) {
-			if ( preg_match( '/BOzOg5COzOg5CAKAABENDJ-AAAAvhr/', $the_options['cookie_value'] ) ) {
+		} elseif ( array_key_exists( 'euconsent', $_COOKIE ) ) {
+			if ( preg_match( '/BOzOg5COzOg5CAKAABENDJ-AAAAvhr/', $_COOKIE['euconsent'] ) ) {
 				return true;
 			}
-		}
-
-		if ( preg_match( '/wpgdprc-consent-/', $the_options['cookie_name'] ) ) {
+		} elseif ( preg_match( '/wpgdprc-consent-/', $the_options['cookie_name'] ) ) {
 			if ( 'accept' === $the_options['cookie_value'] ) {
 				return true;
 			}
 		}
 
+		foreach ( array_keys( $_COOKIE ) as $k ) {
+			if ( preg_match( '/wpgdprc-consent-/', $k ) ) {
+				if ( $_COOKIE[ $k ] === 'accept' ) {
+					return true;
+				} elseif ( preg_match( '/[0-9]+(,[0-9]+)*,?/', $_COOKIE[ $k ] ) ) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
