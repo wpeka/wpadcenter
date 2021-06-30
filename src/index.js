@@ -41,7 +41,8 @@ var vm = new Vue({
             link_open_in_new_tab : null,
             link_nofollow : null,
             additional_rel_tags_options : ['sponsored','ugc'],
-            link_additional_rel_tags : []
+            link_additional_rel_tags : [],
+            enable_affiliate: false,
 
         }
     },
@@ -51,6 +52,7 @@ var vm = new Vue({
             this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
             this.adblock_detector = this.$refs.hasOwnProperty('adblock_detector') ? this.$refs.adblock_detector.checked : false;
             this.geo_targeting = this.$refs.hasOwnProperty('geo_targeting') ? this.$refs.geo_targeting.checked : false;
+            this.enable_affiliate = this.$refs.hasOwnProperty('enable_affiliate') ? this.$refs.enable_affiliate.checked : false;
             this.$refs.ads_txt_tab.value = this.enable_ads_txt ? "1" : "0";
             if ( this.$refs.hasOwnProperty( 'geo_targeting_tab' ) ) {
                 this.$refs.geo_targeting_tab.value = this.geo_targeting ? "1" : "0";

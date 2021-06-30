@@ -366,6 +366,7 @@ class Wpadcenter {
 			'link_nofollow'             => false,
 			'link_additional_rel_tags'  => '',
 			'link_additional_css_class' => '',
+			'enable_affiliate'          => false,
 			'cloaked_link_base'         => '',
 
 		);
@@ -398,6 +399,7 @@ class Wpadcenter {
 			case 'content_ads':
 			case 'link_open_in_new_tab':
 			case 'link_nofollow':
+			case 'enable_affiliate':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {
