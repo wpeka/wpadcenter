@@ -121,6 +121,8 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		wp_set_post_terms( $post_id, self::$term_id, $taxonomy );
 		update_post_meta( self::$first_dummy_post->ID, 'wpadcenter_open_in_new_tab', true );
 		update_post_meta( self::$first_dummy_post->ID, 'wpadcenter_nofollow_on_link', true );
+		update_post_meta( self::$second_dummy_post->ID, 'wpadcenter_open_in_new_tab', false );
+		update_post_meta( self::$second_dummy_post->ID, 'wpadcenter_nofollow_on_link', false );
 		update_post_meta( self::$first_dummy_post->ID, 'wpadcenter_link_url', 'https://wpadcenter.com' );
 	}
 
@@ -128,7 +130,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Test for admin constructor()
 	 */
 	public function test_admin_constructor() {
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.1.0' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.2.0' );
 		$this->assertTrue( self::$wpadcenter_admin instanceof Wpadcenter_Admin );
 	}
 
@@ -991,7 +993,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Test for wpadcenter_export_csv function.
 	 */
 	public function test_wpadcenter_export_csv() {
-		$_POST['action']   = 'admin_post_export_csv';
+		$_POST['action']   = 'post_export_csv';
 		$_POST['security'] = wp_create_nonce( 'exportcsv_security' );
 
 		$_POST['csv_data'] = 'sample-text';
@@ -1072,17 +1074,103 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_link_options_metabox( self::$second_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+
 	}
 
 	/**
 	 * Test for wpadcenter_mascot_on_pages function
 	 */
 	public function test_wpadcenter_mascot_on_pages() {
+		$_GET['post_type'] = 'wpadcenter-ads';
 		global $wp_scripts;
-
+		ob_start();
 		self::$wpadcenter_admin->wpadcenter_mascot_on_pages();
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 		$this->assertArrayHasKey( 'wpadcenter-mascot', $wp_scripts->registered, 'wpadcenter-mascot script is not registered.' );
 	}
 
+		/**
+		 * Test for wpadcenter_check_ads_txt_replace function
+		 */
+	public function test_wpadcenter_check_ads_txt_replace() {
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		wp_set_current_user( $user_id );
+		$_POST['action']   = 'check_ads_txt_replace';
+		$_POST['security'] = wp_create_nonce( 'check_ads_txt_replace' );
+		$this->expectException( 'WPDieException' );
+		self::$wpadcenter_admin->wpadcenter_check_ads_txt_replace();
+	}
+
+	/**
+	 * Test for wpadcenter_get_notices function
+	 */
+	public function test_wpadcenter_get_notices() {
+		$value = self::$wpadcenter_admin->wpadcenter_get_notices();
+		$this->assertTrue( $value['response'] );
+		$this->assertEquals( '', $value['error_message'] );
+		$this->assertEquals( '<p>The file was not created.</p>', $value['file_available'] );
+	}
+
+	/**
+	 * Test for wpadcenter_is_subdir function
+	 */
+	public function test_wpadcenter_is_subdir() {
+		$value = self::$wpadcenter_admin->wpadcenter_is_subdir();
+		$this->assertFalse( $value );
+		$value = self::$wpadcenter_admin->wpadcenter_is_subdir( 'https://wordpress.org/plugins/wpadcenter/' );
+		$this->assertTrue( $value );
+	}
+
+	/**
+	 * Test for wpadcenter_remove_post_row_actions function
+	 */
+	public function test_wpadcenter_remove_post_row_actions() {
+		global $current_screen;
+		$current_screen->post_type = 'wpadcenter-ads';
+		$arr                       = self::$wpadcenter_admin->wpadcenter_remove_post_row_actions(
+			array(
+				'view'                 => 'true',
+				'inline hide-if-no-js' => 'true',
+			)
+		);
+		$this->assertTrue( empty( $arr ) );
+	}
+
+	/**
+	 * Test for wpadcenter_custom_filters_query function
+	 */
+	public function test_wpadcenter_custom_filters_query() {
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		wp_set_current_user( $user_id );
+		$wp_user_object = new WP_User( $user_id );
+		$wp_user_object->add_role( 'advertiser' );
+		$nonce                                      = wp_create_nonce( 'wpadcenter_add_custom_filter' );
+		$_GET['wpadcenter_add_custom_filter_nonce'] = $nonce;
+		$_GET['post_type']                          = 'wpadcenter-ads';
+		$_GET['ADMIN_FILTER_FIELD_AD_TYPE']         = 'ad_code';
+		$_GET['ADMIN_FILTER_FIELD_AD_SIZE']         = '468x60';
+		$_GET['ADMIN_FILTER_FIELD_AD_GROUP']        = self::$ad_group;
+		$_GET['ADMIN_FILTER_FIELD_ADVERTISER']      = $user_id;
+		global $pagenow;
+		$pagenow = 'edit.php';
+		$query   = new WP_Query();
+		self::$wpadcenter_admin->wpadcenter_custom_filters_query( $query );
+		$query_vars_array = $query->query_vars;
+		$this->assertArrayHasKey( 'meta_query', $query_vars_array, 'failed to add meta_query' );
+		$this->assertArrayHasKey( 'tax_query', $query_vars_array, 'failed to add tax_query' );
+	}
 }
 

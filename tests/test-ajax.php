@@ -73,7 +73,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_groups = $factory->term->create_many( 4, array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		add_role( 'advertiser', 'Advertiser', 'edit_posts' );
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.1.0' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.2.0' );
 		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$first_dummy_post = get_post( self::$ad_ids[0] );
 		self::$term_id          = array( self::$ad_groups );
@@ -246,6 +246,42 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
+	 * Test for wpadcenter_add_custom_filters function
+	 */
+	public function test_wpadcenter_add_custom_filters() {
+
+		global $current_screen;
+		$current_screen->post_type = 'wpadcenter-ads';
+
+		// become administrator.
+		$this->_setRole( 'administrator' );
+		update_option( 'wpadcenter_pro_active', true );
+		$_POST['wpadcenter_add_custom_filter_nonce'] = wp_create_nonce( 'wpadcenter_add_custom_filter' );
+		$_POST['wpadcenter_settings_ajax_update']    = 'update_admin_settings_form';
+		$_POST['_wpnonce']                           = wp_create_nonce( 'wpadcenter-update-' . WPADCENTER_SETTINGS_FIELD );
+		$_POST['enable_advertisers_field']           = 'true';
+		$_POST['action']                             = 'save_settings';
+
+		try {
+			$this->_handleAjax( 'save_settings' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+
+		// added role as advertiser to current user.
+		$user_id = self::factory()->user->create();
+		$user    = new WP_User( $user_id );
+		$user->add_role( 'administrator' );
+		$user->add_role( 'editor' );
+		wp_set_current_user( $user_id );
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_add_custom_filters();
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+  }
+   
+  /*
 	 * Test for wpadcenter_check_ads_txt_replace function
 	 */
 	public function test_wpadcenter_check_ads_txt_replace() {

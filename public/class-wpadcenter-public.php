@@ -362,7 +362,10 @@ class Wpadcenter_Public {
 		$additional_rel_tags           = $additional_rel_tags ? implode( ' ', $additional_rel_tags ) : '';
 		$global_additional_rel_tags    = str_replace( ',', ' ', $options['link_additional_rel_tags'] );
 		$additional_css_classes        = get_post_meta( $ad_id, 'wpadcenter_additional_css_classes', true );
-		$global_additional_css_classes = $options['link_additional_css_class'];	
+		$global_additional_css_classes = $options['link_additional_css_class'];
+
+		$global_additional_rel_tags_preference  = get_post_meta( $ad_id, 'wpadcenter_global_additional_rel_tags_preference', true );
+		$global_additional_css_class_preference = get_post_meta( $ad_id, 'wpadcenter_global_additional_css_class_preference', true );
 
 		// For compatibility with previous version ( <= 2.1.0 ).
 		if ( '1' === $open_in_new_tab ) {
@@ -375,9 +378,8 @@ class Wpadcenter_Public {
 		} elseif ( '0' === $nofollow ) {
 			$nofollow = 'no';
 		}
-
-		$global_additional_rel_tags_preference  = get_post_meta( $ad_id, 'wpadcenter_global_additional_rel_tags_preference', true );
-		$global_additional_css_class_preference = get_post_meta( $ad_id, 'wpadcenter_global_additional_css_class_preference', true );
+		$global_additional_rel_tags_preference  = '' !== $global_additional_rel_tags_preference ? $global_additional_rel_tags_preference : '1';
+		$global_additional_css_class_preference = '' !== $global_additional_css_class_preference ? $global_additional_css_class_preference : '1';
 
 		$text_ad_bg_color     = get_post_meta( $ad_id, 'wpadcenter_text_ad_background_color', true );
 		$text_ad_border_color = get_post_meta( $ad_id, 'wpadcenter_text_ad_border_color', true );
