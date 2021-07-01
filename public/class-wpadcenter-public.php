@@ -626,17 +626,13 @@ class Wpadcenter_Public {
 				return true;
 			}
 		} elseif ( preg_match( '/wpgdprc-consent-/', $the_options['cookie_name'] ) ) {
-			if ( 'accept' === $the_options['cookie_value'] ) {
-				return true;
-			}
-		}
-
-		foreach ( array_keys( $_COOKIE ) as $k ) {
-			if ( preg_match( '/wpgdprc-consent-/', $k ) ) {
-				if ( $_COOKIE[ $k ] === 'accept' ) {
-					return true;
-				} elseif ( preg_match( '/[0-9]+(,[0-9]+)*,?/', $_COOKIE[ $k ] ) ) {
-					return true;
+			foreach ( array_keys( $_COOKIE ) as $k ) {
+				if ( preg_match( '/wpgdprc-consent-/', $k ) ) {
+					if ( $_COOKIE[ $k ] === 'accept' ) {
+						return true;
+					} elseif ( preg_match( '/[0-9]+(,[0-9]+)*,?/', $_COOKIE[ $k ] ) ) {
+						return true;
+					}
 				}
 			}
 		}
