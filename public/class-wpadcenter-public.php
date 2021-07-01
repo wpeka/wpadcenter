@@ -313,9 +313,9 @@ class Wpadcenter_Public {
 
 		if ( Wpadcenter::is_request( 'frontend' ) ) {
 			// check for cookie consent policy to show ads in front end.
-			$display_ad = self::wpadcenter_check_cookie_consent( $display_ad );
+			$display_ad = self::wpadcenter_check_cookie_consent( $display_ad, $ad_id );
 		}
-		
+
 		if ( ! $display_ad ) {
 			return;
 		}
@@ -583,7 +583,7 @@ class Wpadcenter_Public {
 	 *
 	 * @since 1.0.0
 	 */
-	public static function wpadcenter_check_cookie_consent( $display_ad ) {
+	public static function wpadcenter_check_cookie_consent( $display_ad, $ad_id ) {
 		$the_options = Wpadcenter::wpadcenter_get_settings();
 
 		if ( ! $the_options['enable_privacy'] ) {
@@ -598,6 +598,11 @@ class Wpadcenter_Public {
 			return true;
 		}
 
+		$ad_type = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		if ( 'import_from_adsense' === $ad_type && $the_options['cookie_non_personalized'] ) {
+			return true;
+		}
+
 		$cookie_values = array(
 			'borlabs-cookie'           => 'please find the detailed instructions below',
 			'complianz_consent_status' => 'allow',
@@ -605,7 +610,6 @@ class Wpadcenter_Public {
 			'catAccCookies'            => '1',
 			'cookie_notice_accepted'   => 'true',
 			'viewed_cookie_policy'     => 'yes',
-			'moove_gdpr_popup'         => 'thirdparty',
 			'ginger-cookie'            => 'Y',
 		);
 
@@ -617,12 +621,18 @@ class Wpadcenter_Public {
 					}
 				}
 			}
-		} elseif ( array_key_exists( 'borlabsCookie', $_COOKIE ) ) {
-			if ( $_COOKIE['borlabsCookie'] === ',all' || $_COOKIE['borlabsCookie'] === 'first-party' ) {
+		} elseif ( array_key_exists( 'borlabsCookie', $_COOKIE ) && $the_options['cookie_name'] === 'borlabsCookie' ) {
+			if ( $the_options['cookie_value'] === ',all' || $the_options['cookie_value'] === 'first-party' ) {
+				if ( $_COOKIE['borlabsCookie'] === ',all' || $_COOKIE['borlabsCookie'] === 'first-party' ) {
+					return true;
+				}
+			}
+		} elseif ( array_key_exists( 'euconsent', $_COOKIE ) && $the_options['cookie_name'] === 'euconsent' ) {
+			if ( preg_match( '/BOzOg5COzOg5CAKAABENDJ-AAAAvhr/', $_COOKIE['euconsent'] ) && preg_match( '/BOzOg5COzOg5CAKAABENDJ-AAAAvhr/', $the_options['cookie_value'] ) ) {
 				return true;
 			}
-		} elseif ( array_key_exists( 'euconsent', $_COOKIE ) ) {
-			if ( preg_match( '/BOzOg5COzOg5CAKAABENDJ-AAAAvhr/', $_COOKIE['euconsent'] ) ) {
+		} elseif ( array_key_exists( 'moove_gdpr_popup', $_COOKIE ) && $the_options['cookie_name'] === 'moove_gdpr_popup' ) {
+			if ( preg_match( '/thirdparty/', $the_options['cookie_value'] ) && preg_match( '/thirdparty/', $_COOKIE['moove_gdpr_popup'] ) ) {
 				return true;
 			}
 		} elseif ( preg_match( '/wpgdprc-consent-/', $the_options['cookie_name'] ) ) {
@@ -634,6 +644,12 @@ class Wpadcenter_Public {
 						return true;
 					}
 				}
+			}
+		}
+
+		if ( array_key_exists( $the_options['cookie_name'], $_COOKIE ) ) {
+			if ( $_COOKIE['cookie_name'] === $the_options['cookie_value'] ) {
+				return true;
 			}
 		}
 		return false;
