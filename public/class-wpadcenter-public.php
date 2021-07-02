@@ -611,6 +611,7 @@ class Wpadcenter_Public {
 			'cookie_notice_accepted'   => 'true',
 			'viewed_cookie_policy'     => 'yes',
 			'ginger-cookie'            => 'Y',
+			'wpl_viewed_cookie'        => 'yes',
 		);
 
 		if ( array_key_exists( $the_options['cookie_name'], $cookie_values ) ) {
@@ -640,15 +641,16 @@ class Wpadcenter_Public {
 				if ( preg_match( '/wpgdprc-consent-/', $k ) ) {
 					if ( $_COOKIE[ $k ] === 'accept' ) {
 						return true;
-					} elseif ( preg_match( '/[0-9]+(,[0-9]+)*,?/', $_COOKIE[ $k ] ) ) {
+					}
+					$match = '/' . $the_options['cookie_value'] . '/';
+					if ( preg_match( $match, $_COOKIE[ $k ] ) ) {
 						return true;
 					}
 				}
 			}
 		}
-
 		if ( array_key_exists( $the_options['cookie_name'], $_COOKIE ) ) {
-			if ( $_COOKIE['cookie_name'] === $the_options['cookie_value'] ) {
+			if ( $_COOKIE[ $the_options['cookie_name'] ] === $the_options['cookie_value'] ) {
 				return true;
 			}
 		}
