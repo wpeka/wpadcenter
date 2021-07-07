@@ -599,8 +599,13 @@ class Wpadcenter_Public {
 		}
 
 		$ad_type = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-		if ( 'import_from_adsense' === $ad_type && $the_options['cookie_non_personalized'] ) {
-			return true;
+		if ( 'import_from_adsense' === $ad_type ) {
+			if ( $the_options['cookie_non_personalized'] ) {
+				echo '<script>(adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=1;</script>';
+				return true;
+			} else {
+				echo '<script>(adsbygoogle=window.adsbygoogle||[]).requestNonPersonalizedAds=0;</script>';
+			}
 		}
 
 		$cookie_values = array(
