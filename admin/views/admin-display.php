@@ -121,7 +121,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 					</div>
 					<c-switch ref="enable_privacy" v-model="enable_privacy" id="inline-form-enable_privacy" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_privacy'] ); ?> v-on:update:checked="enable_privacy = !enable_privacy"></c-switch>
 					<div class="enable_privacy_enabled" v-show="enable_privacy">
-						<p style="font-weight: bold; margin-top: 1rem;"><?php esc_html_e( 'Consent Method:' ); ?></p>
+						<p style="font-weight: bold; margin-top: 1rem;"><?php esc_html_e( 'Consent Method:', 'wpadcenter' ); ?></p>
 						<input type="hidden" ref="consent_method" value="<?php echo esc_html( $the_options['consent_method'] ); ?>">
 						<div class="radio-group">
 							<input type="radio" v-model="consent_method" name="consent_method_field" id="show-all-ads-without" value='show-all-ads-without' <?php checked( 'show-all-ads-without', $the_options['consent_method'] ); ?>>
@@ -133,9 +133,9 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 						</div>
 						<div class="cookie_method" v-show="consent_method === 'cookie'" style="margin-top: 0.5rem;">
 							<div class="cookie_options">
-								<label><?php esc_html_e( 'Cookie name' ); ?></label>
+								<label><?php esc_html_e( 'Cookie name', 'wpadcenter' ); ?></label>
 								<c-input name="cookie_name_field" value="<?php echo esc_html( $the_options['cookie_name'] ); ?>"></c-input>
-								<label><?php esc_html_e( 'cookie value' ); ?></label>
+								<label><?php esc_html_e( 'cookie value', 'wpadcenter' ); ?></label>
 								<c-input name="cookie_value_field" value="<?php echo esc_html( $the_options['cookie_value'] ); ?>"></c-input>
 							</div>
 							<hr />
