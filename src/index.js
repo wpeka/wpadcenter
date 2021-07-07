@@ -46,6 +46,8 @@ var vm = new Vue({
             radioOptions: [],
             consent_method: null,
             cookie_non_personalized: false,
+            enable_affiliate: false,
+
         }
     },
     methods: {
@@ -57,6 +59,7 @@ var vm = new Vue({
             this.cookie_non_personalized = this.$refs.cookie_non_personalized.checked;
             this.adblock_detector = this.$refs.hasOwnProperty('adblock_detector') ? this.$refs.adblock_detector.checked : false;
             this.geo_targeting = this.$refs.hasOwnProperty('geo_targeting') ? this.$refs.geo_targeting.checked : false;
+            this.enable_affiliate = this.$refs.hasOwnProperty('enable_affiliate') ? this.$refs.enable_affiliate.checked : false;
             this.$refs.ads_txt_tab.value = this.enable_ads_txt ? "1" : "0";
             if ( this.$refs.hasOwnProperty( 'geo_targeting_tab' ) ) {
                 this.$refs.geo_targeting_tab.value = this.geo_targeting ? "1" : "0";
