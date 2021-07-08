@@ -9,7 +9,7 @@
  * @subpackage Wpadcenter/admin/views
  */
 
-$the_options = get_option( WPADCENTER_SETTINGS_FIELD );
+$the_options = Wpadcenter::wpadcenter_get_settings();
 $data_obj    = \Wpeka\Adcenter\Wpadcenter_Adsense::get_instance();
 $data        = $data_obj->get_saved_accounts();
 $nonce       = wp_create_nonce( 'wpeka-google-adsense' );
@@ -110,6 +110,42 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 						</div>
 						<textarea id="wpadcenter-additional-css-class" name="link_additional_css_class_field" class="form-control" rows="1"><?php echo esc_html( stripslashes( $the_options['link_additional_css_class'] ) ); ?></textarea>
 						<?php do_action( 'wp_adcenter_extend_link_options' ); ?>
+				</c-card-body>
+			</c-card>
+			<c-card>
+				<c-card-header><?php esc_html_e( 'Privacy Options', 'wpadcenter' ); ?></c-card-header>
+				<c-card-body>
+					<div class="ad-toggle">
+						<label for="inline-form-enable_privacy"><?php esc_html_e( 'Enable Privacy Module', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Show ads only to users who give the permission to cookies and ads', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
+						<input type="hidden" name="enable_privacy_field" v-model="enable_privacy">
+					</div>
+					<c-switch ref="enable_privacy" v-model="enable_privacy" id="inline-form-enable_privacy" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_privacy'] ); ?> v-on:update:checked="enable_privacy = !enable_privacy"></c-switch>
+					<div class="enable_privacy_enabled" v-show="enable_privacy">
+						<p style="font-weight: bold; margin-top: 1rem;"><?php esc_html_e( 'Consent Method:', 'wpadcenter' ); ?></p>
+						<input type="hidden" ref="consent_method" value="<?php echo esc_html( $the_options['consent_method'] ); ?>">
+						<div class="radio-group">
+							<input type="radio" v-model="consent_method" name="consent_method_field" id="show-all-ads-without" value='show-all-ads-without' <?php checked( 'show-all-ads-without', $the_options['consent_method'] ); ?>>
+							<label for="show-all-ads-without"><?php esc_html_e( 'Show all ads without consent', 'wpadcenter' ); ?></label>
+						</div>
+						<div class="radio-group">
+							<input type="radio" v-model="consent_method" name="consent_method_field" value="cookie" id="cookie-consent" <?php checked( 'cookie', $the_options['consent_method'] ); ?>>
+							<label for="cookie-consent"><?php echo __( 'Cookie', 'wpadcenter' ) . ' - <a href="http://www.google.com">Manual</a>';//phpcs:ignore ?></label>
+						</div>
+						<div class="cookie_method" v-show="consent_method === 'cookie'" style="margin-top: 0.5rem;">
+							<div class="cookie_options">
+								<label><?php esc_html_e( 'Cookie name', 'wpadcenter' ); ?></label>
+								<c-input name="cookie_name_field" value="<?php echo esc_html( $the_options['cookie_name'] ); ?>"></c-input>
+								<label><?php esc_html_e( 'cookie value', 'wpadcenter' ); ?></label>
+								<c-input name="cookie_value_field" value="<?php echo esc_html( $the_options['cookie_value'] ); ?>"></c-input>
+							</div>
+							<hr />
+							<div class="ad-toggle">
+								<label for="inline-form-cookie_non_personalized"><?php esc_html_e( 'Show non-personalized AdSense ads until consent is given.', 'wpadcenter' ); ?></label>
+								<input type="hidden" name="cookie_non_personalized_field" v-model="cookie_non_personalized">
+							</div>
+							<c-switch ref="cookie_non_personalized" v-model="cookie_non_personalized" id="inline-form-enable_privacy" variant="3d" size="sm" color="dark" <?php checked( $the_options['cookie_non_personalized'] ); ?> v-on:update:checked="cookie_non_personalized = !cookie_non_personalized"></c-switch>
+						</div>
+					</div>
 				</c-card-body>
 			</c-card>
 			<?php do_action( 'wp_adcenter_after_general_settings' ); ?>
