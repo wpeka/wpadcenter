@@ -387,3 +387,30 @@ a:focus {
 .wpadcenter-link-prefix-textbox:read-only:hover {
 	cursor:no-drop;
 }
+
+.radio-group {
+	display: flex;
+	align-items: center;
+}
+
+.radio-group > label {
+	margin-left: 10px;
+}
+
+.radio-group > input {
+	vertical-align: middle;
+}
+
+.cookie_options {
+	display: flex;
+	align-items: center;
+}
+
+.cookie_method {
+	margin-left: 25px;
+}
+
+.cookie_options .form-group {
+	margin: 0;
+	margin-right: 10px;
+}
