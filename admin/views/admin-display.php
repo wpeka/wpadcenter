@@ -14,6 +14,7 @@ $data_obj    = \Wpeka\Adcenter\Wpadcenter_Adsense::get_instance();
 $data        = $data_obj->get_saved_accounts();
 $nonce       = wp_create_nonce( 'wpeka-google-adsense' );
 $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
+debug_to_console( $data );
 
 ?>
 <style>
@@ -185,6 +186,10 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 								<option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $key ); ?></option>
 							<?php } ?>
 						</select>
+						<div id="gadsense_remove_authentication" style="margin-top: 1rem;">
+							<button type="button" class="button remove-gauthentication"><?php esc_html_e( 'Remove Authentication', 'wpadcenter' ); ?></button>
+							<span class="spinner"></span>
+						</div>
 
 					<?php else : ?>
 						<label for="mapi-code" class="wpadcenter-label-margin-bottom"><?php esc_html_e( 'Token', 'wpadcenter' ); ?></label>			

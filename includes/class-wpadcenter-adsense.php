@@ -74,6 +74,7 @@ class Wpadcenter_Adsense {
 	private function __construct() {
 
 		add_action( 'wp_ajax_adsense_confirm_code', array( $this, 'confirm_code_and_generate_tokens' ) );
+		add_action( 'wp_ajax_adsense_remove_authentication', array( $this, 'wpadcenter_remove_authentication' ) );
 
 		$this->google_api = new \Wpeka\Adcenter\Wpadcenter_Google_Api();
 
@@ -156,14 +157,14 @@ class Wpadcenter_Adsense {
 	 */
 	public function get_account_details( $token ) {
 
-		$accounts = $this->google_api->get_account_list( $token['access_token'] );
+		$data = $this->google_api->get_account_list( $token['access_token'] );
 
-		if ( isset( $accounts['status'] ) && false === $accounts['status'] ) {
+		if ( isset( $data['status'] ) && 'FAILED_PRECONDITION' === $data['status'] ) {
 
 			wp_send_json(
 				array(
 					'status' => false,
-					'body'   => $accounts['error_msg'],
+					'body'   => $data['message'],
 				)
 			);
 
@@ -173,12 +174,15 @@ class Wpadcenter_Adsense {
 		$options['connect_error'] = array();
 		update_option( self::OPTNAME, $options );
 
-		if ( 2 > count( $accounts['items'] ) ) {
+		if ( count( $data['accounts'] ) ) {
 
-			$adsense_id = $accounts['items'][0]['id'];
+			$adsense_id = $data['accounts'][0]['name'];
+			preg_match( '/pub-[0-9]+/', $adsense_id, $adsense_id );
+			$adsense_id = $adsense_id[0];
+			$data['accounts'][0]['id'] = $adsense_id;
 			self::save_token_from_data(
 				$token,
-				$accounts['items'][0]
+				$data['accounts'][0]
 			);
 
 			update_option( self::PUBID, $adsense_id );
@@ -190,24 +194,14 @@ class Wpadcenter_Adsense {
 				)
 			);
 
-		} else {
-			$html    = '';
-			$details = array();
-			foreach ( $accounts['items'] as $item ) {
-				$html                  .= '<option value="' . esc_attr(
-					$item['id']
-				) . '">' . $item['name'] . ' [' . $item['id'] . ']</option>';
-				$details[ $item['id'] ] = $item;
-			}
+		}
+		else {
 			wp_send_json(
 				array(
-					'status'     => true,
-					'html'       => $html,
-					'details'    => $details,
-					'token_data' => $token,
+					'status' => false,
+					'body'   => __( 'No accounts found', 'wpadcenter' ),
 				)
 			);
-
 		}
 		wp_die();
 
@@ -243,9 +237,7 @@ class Wpadcenter_Adsense {
 				'message' => $access_token['msg'],
 			);
 		}
-
 		$response = $this->google_api->get_ad_units( $account, $access_token );
-
 		if ( is_wp_error( $response ) ) {
 
 			return array(
@@ -261,7 +253,7 @@ class Wpadcenter_Adsense {
 
 		$ad_units = json_decode( $response['body'], true );
 
-		if ( null === $ad_units || ! isset( $ad_units['kind'] ) || 'adsense#adUnits' !== $ad_units['kind'] ) {
+		if ( null === $ad_units || ! isset( $ad_units['adUnits'] ) ) {
 
 			$error_message = sprintf(
 				/* translators: %s: account */
@@ -292,7 +284,7 @@ class Wpadcenter_Adsense {
 			);
 		}
 
-		if ( ! isset( $ad_units['items'] ) ) {
+		if ( ! isset( $ad_units['adUnits'] ) ) {
 			return array(
 				'error' => false,
 				'msg'   => sprintf(
@@ -310,11 +302,11 @@ class Wpadcenter_Adsense {
 		}
 
 		$new_ad_units = array();
-		foreach ( $ad_units['items'] as $item ) {
+		foreach ( $ad_units['adUnits'] as $item ) {
 			if ( 'INACTIVE' === $item['status'] ) {
 				continue;
 			}
-			$new_ad_units[ $item['id'] ] = $item;
+			$new_ad_units[ $item['name'] ] = $item;
 		}
 		$options['accounts'][ $account ]['ad_units'] = $new_ad_units;
 		update_option( self::OPTNAME, $options );
@@ -360,6 +352,8 @@ class Wpadcenter_Adsense {
 		}
 
 		$ad_code = json_decode( $response['body'], true );
+		error_log( print_r( $ad_code, true ) );
+		error_log( '0000000----------------------------');
 
 		if ( null === $ad_code || ! isset( $ad_code['adCode'] ) ) {
 
@@ -435,7 +429,7 @@ class Wpadcenter_Adsense {
 				return array(
 					'status' => false,
 					'msg'    => esc_html__(
-						'It seems that some changes have been made in the Advanced Ads settings. Please refresh this page.',
+						'It seems that some changes have been made in the wpadcenter settings. Please refresh this page.',
 						'wpadcenter'
 					),
 					'reload' => true,
@@ -548,6 +542,24 @@ class Wpadcenter_Adsense {
 
 		$options['accounts'][ $adsense_id ]['details'] = $details;
 		update_option( self::OPTNAME, $options );
-	}
+	}	
 
+	/**
+	 * Removes current authentication
+	 */
+	public function wpadcenter_remove_authentication() {
+		// check for nonce.
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'wpeka-google-adsense', 'nonce' );
+		}
+
+		$wpeka_adsense_pubid = get_option( 'wpeka_adsense_pubid' );
+
+		delete_option( 'wpeka_adsense_pubid' );
+		delete_option( 'wpeka_adsense' );
+		delete_transient( '_wpeka_adunits_' . $wpeka_adsense_pubid );
+
+		wp_send_json_success();
+		wp_die();
+	}
 }

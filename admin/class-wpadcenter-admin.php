@@ -99,15 +99,15 @@ class Wpadcenter_Admin {
 			<th><?php esc_html_e( 'Status', 'wpadcenter' ); ?></th>
 			</thead>
 			<tbody id="adsense-adunits">
-
+			
 			<?php foreach ( $data['adunits'] as $unit ) : ?>
 
 				<tr>
-					<td><?php echo esc_html( $unit['name'] ); ?></td>
-					<td><?php echo esc_html( $unit['status'] ); ?></td>
+					<td><?php echo esc_html( $unit['displayName'] ); ?></td>
+					<td><?php echo esc_html( $unit['state'] ); ?></td>
 					<td>
-						<button class="button button-primary" data-unitid="<?php echo esc_attr( $unit['id'] ); ?>"
-								id="<?php echo esc_attr( $unit['code'] ); ?>">
+						<button class="button button-primary" data-unitid="<?php echo esc_attr( $unit['name'] ); ?>"
+								id="<?php echo esc_attr( $unit['reportingDimensionId'] ); ?>">
 							<?php esc_html_e( 'Load', 'wpadcenter' ); ?>
 						</button>
 					</td>
@@ -135,6 +135,7 @@ class Wpadcenter_Admin {
 		}
 
 		$code = $this->adsense->get_ad_code( sanitize_text_field( wp_unslash( $_POST['adunit'] ) ) );
+		error_log( print_r( $code, true ) );
 		wp_send_json( $code );
 
 	}
