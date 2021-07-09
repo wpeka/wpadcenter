@@ -93,28 +93,30 @@ class Wpadcenter_Admin {
 			}
 			AdsenseGAPI.nonce = '<?php echo esc_html( $nonce ); ?>';
 		</script>
-		<table class="form-table">
-			<thead>
-			<th><?php esc_html_e( 'Name', 'wpadcenter' ); ?></th>
-			<th><?php esc_html_e( 'Status', 'wpadcenter' ); ?></th>
-			<th><?php esc_html_e( 'Type', 'wpadcenter' ); ?></th>
-			</thead>
-			<tbody id="adsense-adunits">
-			<?php foreach ( $data['adunits'] as $unit ) : ?>
-				<tr>
-					<td><?php echo esc_html( $unit['displayName'] ); ?></td>
-					<td><?php echo esc_html( $unit['state'] ); ?></td>
-					<td><?php echo esc_html( $unit['contentAdsSettings']['type'] ); ?></td>
-					<td>
-						<button class="button button-primary" data-unitid="<?php echo esc_attr( $unit['name'] ); ?>"
-								id="<?php echo esc_attr( $unit['reportingDimensionId'] ); ?>">
-							<?php esc_html_e( 'Load', 'wpadcenter' ); ?>
-						</button>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-			</tbody>
-		</table>
+		<div class="wpadcenter-adunit-list">
+			<table class="form-table">
+				<thead>
+				<th><?php esc_html_e( 'Name', 'wpadcenter' ); ?></th>
+				<th><?php esc_html_e( 'Status', 'wpadcenter' ); ?></th>
+				<th><?php esc_html_e( 'Type', 'wpadcenter' ); ?></th>
+				</thead>
+				<tbody id="adsense-adunits">
+				<?php foreach ( $data['adunits'] as $unit ) : ?>
+					<tr>
+						<td><?php echo esc_html( $unit['displayName'] ); ?></td>
+						<td><?php echo esc_html( $unit['state'] ); ?></td>
+						<td><?php echo esc_html( $unit['contentAdsSettings']['type'] ); ?></td>
+						<td>
+							<button class="button button-primary" data-unitid="<?php echo esc_attr( $unit['name'] ); ?>"
+									id="<?php echo esc_attr( $unit['reportingDimensionId'] ); ?>">
+								<?php esc_html_e( 'Load', 'wpadcenter' ); ?>
+							</button>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
 
 		<?php
 
