@@ -221,7 +221,6 @@ class Wpadcenter_Adsense {
 		}
 		$transient_key = '_wpeka_adunits_' . $account;
 		$value         = get_transient( $transient_key );
-
 		if ( false !== $value ) {
 			return array(
 				'error'   => false,
@@ -303,7 +302,7 @@ class Wpadcenter_Adsense {
 
 		$new_ad_units = array();
 		foreach ( $ad_units['adUnits'] as $item ) {
-			if ( 'INACTIVE' === $item['status'] ) {
+			if ( 'INACTIVE' === $item['state'] || 'ARCHIVED' === $item['state'] ) {
 				continue;
 			}
 			$new_ad_units[ $item['name'] ] = $item;
