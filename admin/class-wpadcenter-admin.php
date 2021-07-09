@@ -284,6 +284,17 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_pro_admin_init() {
 		update_option( 'wpadcenter-version', WPADCENTER_VERSION );
+
+		if ( ! get_option( 'wpadcenter_migration_v2' ) ) {
+			$wpeka_adsense_pubid = get_option( 'wpeka_adsense_pubid' );
+
+			delete_option( 'wpeka_adsense_pubid' );
+			delete_option( 'wpeka_adsense' );
+			delete_transient( '_wpeka_adunits_' . $wpeka_adsense_pubid );
+
+			update_option( 'wpadcenter_migration_v2', true );
+		}
+
 		if ( ! wp_next_scheduled( 'wpadcenter_monthly_cron' ) ) {
 			$date = new DateTime( 'now' );
 			$date->modify( 'first day of next month' );
