@@ -14,7 +14,6 @@ $data_obj    = \Wpeka\Adcenter\Wpadcenter_Adsense::get_instance();
 $data        = $data_obj->get_saved_accounts();
 $nonce       = wp_create_nonce( 'wpeka-google-adsense' );
 $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
-debug_to_console( $data );
 
 ?>
 <style>
