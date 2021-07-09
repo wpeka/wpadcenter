@@ -360,10 +360,21 @@ class Wpadcenter_Public {
 		if ( $current_time < $start_date || $current_time > $end_date ) {
 			return;
 		}
-		$ad_size                       = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
-		$ad_type                       = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
-		$link_url                      = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
-		$link_url                      = apply_filters( 'wp_adcenter_modify_single_ad_link_url', $link_url, $ad_id );
+		$ad_size  = get_post_meta( $ad_id, 'wpadcenter_ad_size', true );
+		$ad_type  = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+		$link_url = get_post_meta( $ad_id, 'wpadcenter_link_url', true );
+
+		// For compatibility with pro version <=5.2.0.
+		$wpadcenter_api_key = get_option( 'wc_am_client_wpadcenter_pro_activated' );
+		if ( get_option( 'wpadcenter_pro_active' ) && 'Activated' === $wpadcenter_api_key ) {
+			$wpadcenter_pro_current_version = get_option( 'wpadcenter-pro-version' );
+			if ( $wpadcenter_pro_current_version && version_compare( $wpadcenter_pro_current_version, '5.2.0' ) === 1 ) {
+				$link_url = apply_filters( 'wp_adcenter_modify_single_ad_link_url', $link_url, $ad_id );
+			} else {
+				$link_url = apply_filters( 'wp_adcenter_modify_single_ad_link_url', $ad_id, $link_url );
+			}
+		}
+
 		$open_in_new_tab               = get_post_meta( $ad_id, 'wpadcenter_open_in_new_tab', true );
 		$global_open_in_new_tab        = $options['link_open_in_new_tab'];
 		$nofollow                      = get_post_meta( $ad_id, 'wpadcenter_nofollow_on_link', true );
