@@ -29,6 +29,22 @@
 				}
 			);
 
+			$( '.remove-gauthentication' ).click(function(e) {
+				let spinner = $( '#gadsense_remove_authentication' ).parent().find( '.spinner' );
+				spinner.addClass( 'is-active' );
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'adsense_remove_authentication',
+						nonce: AdsenseGAPI.nonce,
+					}
+				}).done(data => {
+					spinner.removeClass( 'is-active' );
+					location.reload();
+				});
+			});
+
 			// Confirm code for account connection.
 			$( '#mapi-confirm-code' ).click(
 				function(e){

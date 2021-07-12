@@ -58,7 +58,7 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_ids            = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group          = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
-		self::$wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.2.0' );
+		self::$wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.2.2' );
 		$current_time            = time();
 		foreach ( self::$ad_ids as $ad_id ) {
 			update_post_meta( $ad_id, 'wpadcenter_ad_type', 'ad_code' );
@@ -101,7 +101,7 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$this->assertFalse( shortcode_exists( 'wpadcenter_adgroup' ) );
 		$this->assertFalse( shortcode_exists( 'wpadcenter_random_ad' ) );
 
-		$wpadcenter_public_obj = new Wpadcenter_Public( 'wpadcenter', '2.2.0' );
+		$wpadcenter_public_obj = new Wpadcenter_Public( 'wpadcenter', '2.2.2' );
 		$this->assertTrue( $wpadcenter_public_obj instanceof Wpadcenter_Public );
 
 		$this->assertTrue( shortcode_exists( 'wpadcenter_ad' ) );

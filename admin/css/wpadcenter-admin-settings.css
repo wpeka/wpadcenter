@@ -414,3 +414,19 @@ a:focus {
 	margin: 0;
 	margin-right: 10px;
 }
+
+.adc-save {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+.adc-save-button {
+	width: 750px;
+	position: relative;
+}
+
+.wpadcenter_save {
+	float: right;
+}

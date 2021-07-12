@@ -95,6 +95,7 @@ module.exports = function( grunt ) {
                     '!tests/**',
                     '!build/**',
                     '!src/**',
+                    'src/gutenberg-blocks/**',
                     '!.git/**',
                     '!.github/**',
                     '!bin/**',
