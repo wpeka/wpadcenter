@@ -298,6 +298,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 5. Reports.
 
 == Changelog ==
+= 2.2.1 =
+* Fix: Hotfix for issue related to ad click url.
+
 = 2.2.0 =
 * Feature: Advanced link options added like rel attribute tags, additional CSS classes (Global and ad-level)
 
@@ -362,6 +365,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.2.1 =
+* Fix: Hotfix for issue related to ad click url.
+
 = 2.2.0 =
 * Feature: Advanced link options added like rel attribute tags, additional CSS classes (Global and ad-level)
 
