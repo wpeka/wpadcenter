@@ -49,7 +49,7 @@ class Wpadcenter_Google_Api {
 	 * @return array
 	 */
 	public function get_account_list( $access_token ) {
-		$url      = 'https://www.googleapis.com/adsense/v1.4/accounts';
+		$url      = 'https://adsense.googleapis.com/v2/accounts';
 		$headers  = array( 'Authorization' => 'Bearer ' . $access_token );
 		$response = wp_remote_get( $url, array( 'headers' => $headers ) );
 
@@ -63,7 +63,7 @@ class Wpadcenter_Google_Api {
 		}
 
 		$accounts = json_decode( $response['body'], true );
-		if ( ! isset( $accounts['items'] ) || isset( $accounts['error'] ) ) {
+		if ( ! isset( $accounts['accounts'] ) || isset( $accounts['error'] ) ) {
 			$msg = __( 'An error occurred while requesting account details.', 'wpadcenter' );
 			if ( isset( $accounts['error']['message'] ) ) {
 				$msg = $accounts['error']['message'];
@@ -122,7 +122,7 @@ class Wpadcenter_Google_Api {
 	 */
 	public function get_ad_units( $account, $access_token ) {
 
-		$url = 'https://www.googleapis.com/adsense/v1.4/accounts/' . $account . '/adclients/ca-' . $account . '/adunits?includeInactive=false';
+		$url = 'https://adsense.googleapis.com/v2/accounts/' . $account . '/adclients/ca-' . $account . '/adunits';
 
 		$headers = array(
 			'Authorization' => 'Bearer ' . $access_token,
@@ -143,7 +143,7 @@ class Wpadcenter_Google_Api {
 	 */
 	public function get_ad_code( $account_id, $ad_unit, $access_token ) {
 
-		$url = 'https://www.googleapis.com/adsense/v1.4/accounts/' . $account_id . '/adclients/ca-' . $account_id . '/adunits/' . $ad_unit . '/adcode';
+		$url = 'https://adsense.googleapis.com/v2/' . $ad_unit . '/adcode/';
 
 		$headers  = array(
 			'Authorization' => 'Bearer ' . $access_token,
