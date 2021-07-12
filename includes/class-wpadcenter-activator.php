@@ -30,6 +30,12 @@ class Wpadcenter_Activator {
 	 * @since 1.0.0
 	 */
 	public static function activate() {
+
+		$wpadcenter_review_option_exists = get_option( 'wpadcenter_review_pending' );
+		if ( ! $wpadcenter_review_option_exists ) {
+			add_option( 'wpadcenter_review_pending', '0', '', true );
+		}
+
 		global $wpdb;
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		if ( is_multisite() ) {

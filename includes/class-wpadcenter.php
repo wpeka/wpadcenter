@@ -234,6 +234,8 @@ class Wpadcenter {
 		$this->loader->add_action( 'wp_ajax_wpadcenter_random_ad_gutenberg_preview', $plugin_admin, 'wpadcenter_random_ad_gutenberg_preview' );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_pro_display_amp_warning', $plugin_admin, 'wpadcenter_pro_display_amp_warning' );
 		$this->loader->add_action( 'admin_footer', $plugin_admin, 'wpadcenter_mascot_on_pages' );
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wpadcenter_admin_review_notice' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_review_already_done', 5 );
 	}
 
 	/**
