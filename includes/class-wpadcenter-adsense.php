@@ -351,8 +351,6 @@ class Wpadcenter_Adsense {
 		}
 
 		$ad_code = json_decode( $response['body'], true );
-		error_log( print_r( $ad_code, true ) );
-		error_log( '0000000----------------------------');
 
 		if ( null === $ad_code || ! isset( $ad_code['adCode'] ) ) {
 

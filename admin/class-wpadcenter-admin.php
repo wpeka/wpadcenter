@@ -137,7 +137,6 @@ class Wpadcenter_Admin {
 		}
 
 		$code = $this->adsense->get_ad_code( sanitize_text_field( wp_unslash( $_POST['adunit'] ) ) );
-		error_log( print_r( $code, true ) );
 		wp_send_json( $code );
 
 	}
@@ -3336,4 +3335,64 @@ class Wpadcenter_Admin {
 			wp_die();
 	}
 
+	/**
+	 * Function to display wpadcenter review notice on admin page.
+	 *
+	 * @return void
+	 */
+	public function wpadcenter_admin_review_notice() {
+		$wpadcenter_review_option_exists = get_option( 'wpadcenter_review_pending' );
+		switch ( $wpadcenter_review_option_exists ) {
+			case '0':
+				$check_for_review_transient = get_transient( 'wpadcenter_review_transient' );
+				if ( false === $check_for_review_transient ) {
+					set_transient( 'wpadcenter_review_transient', 'Review Pending', 604800 );
+					update_option( 'wpadcenter_review_pending', '1', true );
+				}
+				break;
+			case '1':
+				$check_for_review_transient = get_transient( 'wpadcenter_review_transient' );
+				if ( false === $check_for_review_transient ) {
+					echo '<style>.wpadcenter-review-notice.updated{padding-bottom:1%;display:flex;flex-direction:column}.wpadcenter-review-btns{background-color:#2271b1;padding:10px;max-width:150px;text-align:center;border-radius:2px}.wpadcenter-review-already-done-btn{margin-left:10px}.wpadcenter-review-btns-container{display:flex;flex-direction:row}.wpadcenter-review-btns:hover{background-color:#135e96}.wpadcenter-review-btns>a{color:#fff;text-decoration:none}.wpadcenter-review-already-done-btn>a>i,.wpadcenter-review-rate-us-btn>a>i{margin-left:5px;line-height:inherit}.wpadcenter-review-notice-text-container{display:flex;flex-direction:row;justify-content:space-between;}.wpadcenter-review-dismiss-btn{display:flex;margin-top:10px;text-decoration:none}.wpadcenter-review-dismiss-btn>i{font-size:15px}.wpadcenter-review-dismiss-btn>.dashicons-dismiss:before{vertical-align:middle}@media (max-width:768px){.wpadcenter-review-notice.updated{padding-bottom:2%!important}}</style>';
+					echo sprintf(
+						'<div class="wpadcenter-review-notice updated">
+						<div class="wpadcenter-review-notice-text-container">		
+						<p><span>%3$s<strong>WPAdCenter</strong>.%4$s</span></p>
+						<div><a class="wpadcenter-review-dismiss-btn" href="%2$s"><i class="dashicons dashicons-dismiss"></i>%5$s</a></div>
+						</div>
+						<div class="wpadcenter-review-btns-container">
+						<div class="wpadcenter-review-btns wpadcenter-review-rate-us-btn"><a href="%1$s" target="_blank">%6$s<i class="dashicons dashicons-thumbs-up"></i></a></div>
+						<div class="wpadcenter-review-btns wpadcenter-review-already-done-btn"><a href="%2$s">%7$s<i class="dashicons dashicons-smiley"></i></a></div>
+						</div>
+						</div>',
+						esc_url( 'https://wordpress.org/support/plugin/wpadcenter/reviews/' ),
+						esc_url( get_admin_url() . '?already_done=1' ),
+						esc_html__( 'Awesome you have been using WPAdCenter for more than a week', 'wpadcenter' ),
+						esc_html__( ' Could you please write us a review and give it a 5- star rating on WordPress? Just to help us spread the word and boost our motivation.', 'wpadcenter' ),
+						esc_html__( 'Dismiss', 'wpadcenter' ),
+						esc_html__( 'Rate Us', 'wpadcenter' ),
+						esc_html__( 'I already did', 'wpadcenter' )
+					);
+				}
+				break;
+			case '2':
+				break;
+			default:
+				break;
+		}
+	}
+	/**
+	 * Function to check the user's input on wpadcenter review notice.
+	 *
+	 * @return void
+	 */
+	public function wpadcenter_review_already_done() {
+		$dnd = '';
+		if ( isset( $_GET['already_done'] ) && ! empty( $_GET['already_done'] ) ) { //phpcs:ignore
+			$dnd = esc_attr( $_GET['already_done'] ); //phpcs:ignore
+		}
+		if ( '1' === $dnd ) {
+			update_option( 'wpadcenter_review_pending', '2', true );
+		}
+	}
 }
