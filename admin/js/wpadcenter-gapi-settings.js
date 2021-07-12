@@ -30,7 +30,7 @@
 			);
 
 			$( '.remove-gauthentication' ).click(function(e) {
-				let spinner = $( '#gadsense_remove_authentication' ).parent().find( '.spinner' );
+				var spinner = $( '#gadsense_remove_authentication' ).parent().find( '.spinner' );
 				spinner.addClass( 'is-active' );
 				$.ajax({
 					url: ajaxurl,
@@ -39,7 +39,7 @@
 						action: 'adsense_remove_authentication',
 						nonce: AdsenseGAPI.nonce,
 					}
-				}).done(data => {
+				}).done(function(data) {
 					spinner.removeClass( 'is-active' );
 					location.reload();
 				});
