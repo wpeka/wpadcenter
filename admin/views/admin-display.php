@@ -25,11 +25,6 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 <div class="adc-nav">
 	<div class="adc-nav-inner">
 		<div class="adc-logo"></div>
-		<div class="adc-save">
-			<c-button color="info" class="wpadcenter_save" onClick="return wpadcenter_settings_btn_click(this.name)" name="update_admin_settings_form" type="submit">
-				<span class="wpadcenter_save-text"><?php esc_html_e( 'Save Changes', 'wpadcenter' ); ?></span>
-			</c-button>
-		</div>
 	</div></div>
 	<c-tabs ref="active_tab" id="wpadcenter_tabs">
 		<?php do_action( 'wp_adcenter_before_general_tab' ); ?>
@@ -209,6 +204,13 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 		</c-tab>
 		<?php do_action( 'wp_adcenter_after_integrations_tab' ); ?>
 	</c-tabs>
+	<div class="adc-save">
+		<div class="adc-save-button">
+			<c-button color="info" class="wpadcenter_save" onClick="return wpadcenter_settings_btn_click(this.name)" name="update_admin_settings_form" type="submit">
+				<span class="wpadcenter_save-text"><?php esc_html_e( 'Save Changes', 'wpadcenter' ); ?></span>
+			</c-button>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript">
