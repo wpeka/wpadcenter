@@ -124,7 +124,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 						</div>
 						<div class="radio-group">
 							<input type="radio" v-model="consent_method" name="consent_method_field" value="cookie" id="cookie-consent" <?php checked( 'cookie', $the_options['consent_method'] ); ?>>
-							<label for="cookie-consent"><?php echo __( 'Cookie', 'wpadcenter' ) . ' - <a href="http://www.google.com">Manual</a>';//phpcs:ignore ?></label>
+							<label for="cookie-consent"><?php echo __( 'Cookie', 'wpadcenter' ) . ' - <a href="https://docs.wpeka.com/wp-adcenter/privacy-options" target="_blank">Manual</a>';//phpcs:ignore ?></label>
 						</div>
 						<div class="cookie_method" v-show="consent_method === 'cookie'" style="margin-top: 0.5rem;">
 							<div class="cookie_options">
