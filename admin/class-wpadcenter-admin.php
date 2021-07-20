@@ -2867,13 +2867,44 @@ class Wpadcenter_Admin {
 	}
 
 	/**
-	 * Ajax for getting ad groups from server.
+	 * Ajax for getting ad groups from server. wpadcenter_get_ads
 	 */
 	public function wpadcenter_get_adgroups() {
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'adgroups_security', 'security' );
 		}
 		$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
+		echo wp_json_encode( $array );
+		wp_die();
+	}
+
+	/**
+	 * Ajax for getting ad groups from server.
+	 */
+	public function wpadcenter_get_ads() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'adgroups_security', 'security' );
+		}
+
+		$args = array(
+			'post_type'   => 'wpadcenter-ads',
+			'post_status' => 'publish',
+		);
+
+		// The Query.
+		$the_query = new WP_Query( $args );
+		$array     = array();
+
+		// The Loop.
+		if ( $the_query->have_posts() ) {
+			while ( $the_query->have_posts() ) {
+				$the_query->the_post();
+				array_push(
+					$array,
+					get_post( get_the_ID() )
+				);
+			}
+		}
 		echo wp_json_encode( $array );
 		wp_die();
 	}

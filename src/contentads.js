@@ -6,7 +6,7 @@ const componentContentAds = {
             <div class="rule" @click="onCollapseClick">
                 <div class="rule_label">
                     <svg ref="wpadcenter_arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator"><path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path></svg>
-                    <label>{{ post_ }} | {{ position_ }} | {{ alignment_ }} | {{ adgroup_ }}</label>
+                    <label>{{ post_ }} | {{ position_ }} | {{ alignment_ }} | {{ adgroup_ }} | {{ ad_ }}</label>
                 </div>
                 <c-button class="delete_rule" color="danger" @click.stop="onDeleteRule">Delete Rule</c-button>
             </div>
@@ -27,6 +27,10 @@ const componentContentAds = {
                     
                     <input type="radio" value="content" v-model="position_" :id="getPlacementId('content')"/>
                     <label :for="getPlacementId('content')" >Content</label>
+
+                    <input type="radio" value="in-feed" v-model="position_" :id="getPlacementId('in-feed')"/>
+                    <label :for="getPlacementId('in-feed')" >In Feed</label>
+
                 </div>
                 <input type="hidden" :name="getPlacementName('[type]')" v-model="position_" />
                 <hr />
@@ -38,6 +42,14 @@ const componentContentAds = {
                     <v-select :clearable="false" placeholder="Select Element" :options="elementOptions" v-model="element_selected_" label="key"></v-select>
                     <input type="hidden" :name="getPlacementName('[content][element]')" v-bind:value="element_selected_.value" />                   
                 </div>
+
+                <label v-show="position_ === 'in-feed'">Position: </label>
+                <div class="postition-content" v-show="position_ === 'in-feed'">
+                <label :for="getPlacementName('[in-feed][number]')"> Inject before post </label> <input type="number" :name="getPlacementName('[in-feed][number]')" v-model="in_feed_number_" style="width: 120px;"  />             
+                </div>
+                <label style= "margin-top: 5px;">The page on which infeed will be displayed: {{ blog_page_ }}</label>
+                <hr v-show="position_ === 'in-feed'" />
+
                 <input :id="getPlacementId('position-reverse')" type="checkbox" ref="position_reverse" v-model="position_reverse_" v-show="position_ === 'content'" />
                 <label :for="getPlacementId('position-reverse')" v-show="position_ === 'content'">Start counting from bottom</label>
                 <hr v-show="position_ === 'content'" />
@@ -62,6 +74,13 @@ const componentContentAds = {
                     <label>Select Adgroup: </label>
                     <v-select :clearable="false" placeholder="Select Adgroup" :options="adGroups" label="name" v-model="adgroup_selected_" @input="onAdgroupChange"></v-select>
                     <input type="hidden" :name="getPlacementName('[adgroup]')" v-bind:value="adgroup_selected_.term_id" />
+                </div>
+
+                <hr />
+                <div class="content-ads-adgroup">
+                <label>Select Ad: </label>
+                <v-select :clearable="false" placeholder="Select Ad" :options="ads" label ="post_title"  v-model="ad_selected_" @input="onAdChange"></v-select>
+                <input type="hidden" :name="getPlacementName('[ad]')" v-bind:value = "ad_selected_.ID" />
                 </div>
             </c-collapse>
         </div>`,
@@ -90,62 +109,73 @@ const componentContentAds = {
             ],
             active: true,
             adGroups: [],
+            ads: [],
             position_: this.position,
             alignment_: this.alignment,
             adgroup_selected_: this.adgroup_selected,
+            ad_selected_: this.ad_selected,
+            blog_page_: this.blog_page,
             position_selected_: this.position_selected,
             element_selected_: this.element_selected,
             post_selected_: this.post_selected,
             count_: this.count,
             adgroups_security_: this.adgroups_security,
             number_: this.number,
+            in_feed_number_: this.in_feed_number,
             position_reverse_: this.position_reverse,
             post_: '-',
             adgroup_: '-',
+            ad_: '-',
         }
     },
     props: [
         'position',
         'alignment',
         'adgroup_selected',
+        'ad_selected',
+        'blog_page',
         'position_selected',
         'element_selected',
         'post_selected',
         'count',
         'adgroups_security',
         'number',
+        'in_feed_number',
         'position_reverse',
         'show'
     ],
     methods: {
-        getPlacementName: function(name) {
+        getPlacementName: function (name) {
             return 'placement[' + this.count + ']' + name;
         },
-        onDeleteRule: function() {
+        onDeleteRule: function () {
             this.active = false;
         },
-        getPlacementId: function(id) {
+        getPlacementId: function (id) {
             return id + '-' + this.count;
         },
-        onPostChange: function() {
+        onPostChange: function () {
             this.post_ = this.post_selected_.join(',');
-            if( this.post_ === '' ) {
+            if (this.post_ === '') {
                 this.post_ = '-';
             }
         },
-        onAdgroupChange: function() {
+        onAdgroupChange: function () {
             console.log(this.adgroup_selected_);
             this.adgroup_ = this.adgroup_selected_.name;
         },
-        onCollapseClick: function() {
+        onAdChange: function () {
+            this.ad_ = this.ad_selected_.post_title;
+        },
+        onCollapseClick: function () {
             this.contentAdsRulesShow = !this.contentAdsRulesShow;
-            if( ! this.contentAdsRulesShow ) {
-                if( this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp') ) {
+            if (!this.contentAdsRulesShow) {
+                if (this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
                     this.$refs.wpadcenter_arrow.classList.remove('vs__close-indicator-wp');
                 }
             }
             else {
-                if( ! this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp') ) {
+                if (!this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
                     this.$refs.wpadcenter_arrow.classList.add('vs__close-indicator-wp');
                 }
             }
@@ -162,7 +192,7 @@ const componentContentAds = {
         }).done(data => {
             this.adGroups = JSON.parse(data);
             this.adGroups.forEach((item) => {
-                if( item.term_id === parseInt(this.adgroup_selected_) ) {
+                if (item.term_id === parseInt(this.adgroup_selected_)) {
                     this.adgroup_selected_ = item;
                     this.adgroup_ = item.name;
                     return;
@@ -170,38 +200,58 @@ const componentContentAds = {
             });
         });
 
+
+        j.ajax({
+            type: "POST",
+            url: './admin-ajax.php',
+            data: {
+                action: 'get_ads',
+                security: this.adgroups_security,
+            }
+        }).done(data => {
+            this.ads = JSON.parse(data);
+
+            this.ads.forEach((item) => {
+                if (item.post_title === this.ad_selected_) {
+                    this.ad_selected_ = item;
+                    this.ad_ = item.post_title;
+                    return;
+                }
+            });
+        });
+
         this.positionOptions.forEach((item) => {
-            if( item.key === this.position_selected_ ) {
+            if (item.key === this.position_selected_) {
                 this.position_selected_ = item;
                 return;
             }
         });
         this.elementOptions.forEach((item) => {
-            if( item.value === this.element_selected_ ) {
+            if (item.value === this.element_selected_) {
                 this.element_selected_ = item;
                 return;
             }
         });
-        if(this.post_selected_ === '') {
+        if (this.post_selected_ === '') {
             this.post_selected_ = [];
         }
         else {
             this.post_ = this.post_selected_;
             this.post_selected_ = this.post_selected_.split(',');
         }
-        if ( this.show !== true ) {
+        if (this.show !== true) {
             this.contentAdsRulesShow = false;
         }
-        if ( this.position_reverse_ === 'false' ) {
+        if (this.position_reverse_ === 'false') {
             this.$refs.position_reverse.checked = false;
         }
-        if( ! this.contentAdsRulesShow ) {
-            if( this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp') ) {
+        if (!this.contentAdsRulesShow) {
+            if (this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
                 this.$refs.wpadcenter_arrow.classList.remove('vs__close-indicator-wp');
             }
         }
         else {
-            if( ! this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp') ) {
+            if (!this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
                 this.$refs.wpadcenter_arrow.classList.add('vs__close-indicator-wp');
             }
         }
