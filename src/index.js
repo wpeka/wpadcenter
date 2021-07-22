@@ -141,7 +141,6 @@ var vm = new Vue({
                     in_feed_number: 1,
                     position_reverse: false,
                     show: true,
-                    blog_page: [],
                 }
             }).$mount();
             this.count++;

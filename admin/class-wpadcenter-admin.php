@@ -2905,6 +2905,19 @@ class Wpadcenter_Admin {
 				);
 			}
 		}
+
+		$blog_url = '';
+		if ( get_option( 'page_for_posts' ) ) {
+			$blog_url = esc_html( get_permalink( get_option( 'page_for_posts' ) ) );
+		} else {
+			$blog_url = esc_html( home_url( '/' ) );
+		}
+
+		// Added blog page saved in WordPress.
+		array_push(
+			$array,
+			$blog_url,
+		);
 		echo wp_json_encode( $array );
 		wp_die();
 	}
