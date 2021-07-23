@@ -6,7 +6,7 @@ const componentContentAds = {
             <div class="rule" @click="onCollapseClick">
                 <div class="rule_label">
                     <svg ref="wpadcenter_arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator"><path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path></svg>
-                    <label>{{ post_ }} | {{ position_ }} | {{ alignment_ }} | {{ adgroup_ }} </label>
+                    <label> <span v-show="position_ !== 'in-feed'" >{{ post_ }} |</span> {{ position_ }} | {{ alignment_ }} | <span v-show="position_ !== 'in-feed'"> {{ adgroup_ }} </span> <span v-show="position_ === 'in-feed'"> {{ ad_ }} </span> </label>
                 </div>
                 <c-button class="delete_rule" color="danger" @click.stop="onDeleteRule">Delete Rule</c-button>
             </div>
@@ -44,7 +44,7 @@ const componentContentAds = {
                 </div>
 
                 <div class="postition-in-feed" v-show="position_ === 'in-feed'">
-                Before: <input type="number" :name="getPlacementName('[in-feed][number]')" v-model="in_feed_number_" style="width: 120px;"  /> post   <br>       
+                Before: <input type="number" :name="getPlacementName('[in-feed][number]')" v-model="in_feed_number_" min = "1" style="width: 120px;"  /> post   <br>       
                 <label style="margin-top: 6px;">The page on which infeed will be displayed: {{ blog_page }}</label>
                 </div>
                 <hr v-show="position_ === 'in-feed'" />
@@ -112,7 +112,7 @@ const componentContentAds = {
             alignment_: this.alignment,
             adgroup_selected_: this.adgroup_selected,
             ad_selected_: this.ad_selected,
-            blog_page : this.blog_page,
+            blog_page: this.blog_page,
             position_selected_: this.position_selected,
             element_selected_: this.element_selected,
             post_selected_: this.post_selected,
