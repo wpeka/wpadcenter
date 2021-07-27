@@ -221,7 +221,7 @@ class Wpadcenter {
 		$this->loader->add_filter( 'print_styles_array', $plugin_admin, 'wpadcenter_remove_forms_style' );
 		$this->loader->add_action( 'widgets_init', $plugin_admin, 'wpadcenter_register_widgets' );
 		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_gutenberg_blocks' );
-		$this->loader->add_filter( 'block_categories', $plugin_admin, 'wpadcenter_gutenberg_block_categories', 10, 1 );
+		$this->loader->add_filter( 'block_categories_all', $plugin_admin, 'wpadcenter_gutenberg_block_categories', 10, 1 );
 		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'wpadcenter_register_rest_fields' );
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'wpadcenter_page_posts_scripts' );
 		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_scripts' );
