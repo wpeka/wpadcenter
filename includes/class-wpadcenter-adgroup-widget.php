@@ -192,7 +192,7 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 					foreach ( $alignments as $value => $name ) {
 						?>
 						<label>
-						<input type="radio" id="<?php echo esc_attr( $this->get_field_id( 'alignment' ) ); ?>" 
+						<input type="radio" id="<?php echo esc_attr( $this->get_field_id( $value ) ); ?>" 
 						name="<?php echo esc_attr( $this->get_field_name( 'alignment' ) ); ?>"
 						value="<?php echo esc_attr( $value ); ?>"
 						<?php checked( $value === $alignment, true ); ?>  />
