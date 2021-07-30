@@ -189,15 +189,19 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	public function test_wpadcenter_register_widgets() {
 		global $wp_version;
 
-		if ( version_compare( $wp_version, '5.8' ) >= 0 ) {
-			return;
-		}
 		self::$wpadcenter_admin->wpadcenter_register_widgets();
 		$widgets = array_keys( $GLOBALS['wp_widget_factory']->widgets );
 
-		$this->assertTrue( in_array( 'Wpadcenter_Single_Ad_Widget', $widgets, true ) );
-		$this->assertTrue( in_array( 'Wpadcenter_Adgroup_Widget', $widgets, true ) );
-		$this->assertTrue( in_array( 'Wpadcenter_Random_Ad_Widget', $widgets, true ) );
+		if ( version_compare( $wp_version, '5.8' ) >= 0 ) {
+			$this->assertFalse( in_array( 'Wpadcenter_Single_Ad_Widget', $widgets, true ) );
+			$this->assertFalse( in_array( 'Wpadcenter_Adgroup_Widget', $widgets, true ) );
+			$this->assertFalse( in_array( 'Wpadcenter_Random_Ad_Widget', $widgets, true ) );
+		} else {
+			$this->assertTrue( in_array( 'Wpadcenter_Single_Ad_Widget', $widgets, true ) );
+			$this->assertTrue( in_array( 'Wpadcenter_Adgroup_Widget', $widgets, true ) );
+			$this->assertTrue( in_array( 'Wpadcenter_Random_Ad_Widget', $widgets, true ) );
+
+		}
 
 	}
 
