@@ -3015,9 +3015,16 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_register_widgets() {
-		register_widget( 'Wpadcenter_Single_Ad_Widget' );
-		register_widget( 'Wpadcenter_Adgroup_Widget' );
-		register_widget( 'Wpadcenter_Random_Ad_Widget' );
+
+		global $wp_version;
+
+		if ( version_compare( $wp_version, '5.8' ) >= 0 ) {
+			return;
+		}
+
+			register_widget( 'Wpadcenter_Single_Ad_Widget' );
+			register_widget( 'Wpadcenter_Adgroup_Widget' );
+			register_widget( 'Wpadcenter_Random_Ad_Widget' );
 
 	}
 
