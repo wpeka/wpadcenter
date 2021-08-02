@@ -5,7 +5,7 @@ Tags: ads, adsense, ad rotation, ad manager, wordpress ad inserter, wordpress ad
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.7
-Stable tag: 2.2.2
+Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -298,6 +298,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 5. Reports.
 
 == Changelog ==
+= 2.2.3 =
+* Update: WordPress 5.8 compatibility.
+
 = 2.2.2 =
 * Feature: Display ads on consent.
 * Update: AdSense migration v1.4 to v2.
@@ -369,6 +372,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.2.3 =
+* Update: WordPress 5.8 compatibility.
+
 = 2.2.2 =
 * Feature: Display ads on consent.
 * Update: AdSense migration v1.4 to v2.
