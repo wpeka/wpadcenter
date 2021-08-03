@@ -4,7 +4,7 @@ Donate link: https://www.wpadcenter.com/
 Tags: ads, adsense, ad rotation, ad manager, wordpress ad inserter, wordpress ads, wordpress ads plugin, wordpress advertising plugin, wordpress ad rotator, banners, adverts, ads shortcode, amazon, wordpress ads manager plugin, dfp, ads manager, amp, ad blocking detection, header code, in-feed ads, sticky fixed widgets
 Requires at least: 5.0+
 Requires PHP: 5.6
-Tested up to: 5.7
+Tested up to: 5.8
 Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
