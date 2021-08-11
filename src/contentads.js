@@ -6,7 +6,7 @@ const componentContentAds = {
             <div class="rule" @click="onCollapseClick">
                 <div class="rule_label">
                     <svg ref="wpadcenter_arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator"><path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path></svg>
-                    <label> <span v-show="position_ !== 'in-feed'" >{{ post_ }} |</span> {{ position_ }} | {{ alignment_ }} | <span v-show="position_ !== 'in-feed'"> {{ adgroup_ }} </span> <span v-show="position_ === 'in-feed'"> {{ ad_ }} </span> </label>
+                    <label> <span v-show="position_ !== 'in-feed'" >{{ post_ }} |</span> {{ position_ }} | {{ alignment_ }} | {{ adorgroup_ }}</label>
                 </div>
                 <c-button class="delete_rule" color="danger" @click.stop="onDeleteRule">Delete Rule</c-button>
             </div>
@@ -37,10 +37,10 @@ const componentContentAds = {
                 <label v-show="position_ === 'content'">Content Options: </label>
                 <div class="postition-content" v-show="position_ === 'content'">
                     <v-select :clearable="false" placeholder="Select Position" :options="positionOptions" v-model="position_selected_" label="key"></v-select>
-				    <input type="hidden" :name="getPlacementName('[content][after-before]')" v-bind:value="position_selected_.value" />
+				    <input type="hidden" :name="getPlacementName('[content][after-before]')" v-bind:value="position_ === 'content'?position_selected_.value:''" />
                     <input type="number" :name="getPlacementName('[content][number]')" v-model="number_"/>
                     <v-select :clearable="false" placeholder="Select Element" :options="elementOptions" v-model="element_selected_" label="key"></v-select>
-                    <input type="hidden" :name="getPlacementName('[content][element]')" v-bind:value="element_selected_.value" />                   
+                    <input type="hidden" :name="getPlacementName('[content][element]')" v-bind:value="position_ === 'content'?element_selected_.value:''" />                   
                 </div>
 
                 <div class="postition-in-feed" v-show="position_ === 'in-feed'">
@@ -69,17 +69,23 @@ const componentContentAds = {
                 <input type="hidden" :name="getPlacementName('[align]')" v-model="alignment_" />
                 <input type="hidden" :name="getPlacementName('[content][position-reverse]')" v-model="position_reverse_" />
                 <hr />
-                <div v-show="position_ !== 'in-feed'"  class="content-ads-adgroup">
-                    <label>Select Adgroup: </label>
-                    <v-select :clearable="false" placeholder="Select Adgroup" :options="adGroups" label="name" v-model="adgroup_selected_" @input="onAdgroupChange"></v-select>
-                    <input type="hidden" :name="getPlacementName('[adgroup]')" v-bind:value="adgroup_selected_.term_id" />
-                </div>
+                <div  class="content-ads-adgroup">
+                <label>Select From: </label>
+                <div class="content-ads-alignment">
+                    <input type="radio" v-model="ad_or_adgroup_" value="ads" :id="getPlacementId('ad')"/>
+                    <label :for="getPlacementId('ad')">Ads</label>
 
-                <div v-show="position_ === 'in-feed'" class="In-feed-ads">
-                <label>Select Ad: </label>
-                <v-select :clearable="false" placeholder="Select Ad" :options="ads" label ="post_title"  v-model="ad_selected_" @input="onAdChange"></v-select>
-                <input type="hidden" :name="getPlacementName('[ad]')" v-bind:value = "ad_selected_.ID" />
+                    <input type="radio" v-model="ad_or_adgroup_" value="adgroups" :id="getPlacementId('adgroup')" />
+                    <label :for="getPlacementId('adgroup')">Adgroups</label>
                 </div>
+                <input type="hidden" :name="getPlacementName('[ad_or_adgroup]')" v-model="ad_or_adgroup_" />
+
+                    <v-select style = "margin-top:6px;" v-show="ad_or_adgroup_==='adgroups'" :clearable="false" placeholder="Select Adgroup" :options="adGroups" label="name" v-model="adgroup_selected_" @input="onAdgroupChange"></v-select>
+                    <input v-show="ad_or_adgroup_==='adgroups'" type="hidden" :name="getPlacementName('[adgroup]')" v-bind:value="adgroup_selected_.term_id" />
+                    <v-select style = "margin-top:6px;" v-show="ad_or_adgroup_==='ads'" :clearable="false" placeholder="Select Ad" :options="ads" label ="post_title"  v-model="ad_selected_" @input="onAdChange"></v-select>
+                    <input v-show="ad_or_adgroup_==='ads'" type="hidden" :name="getPlacementName('[ad]')" v-bind:value = "ad_selected_.ID" />
+                </div>            
+            
             </c-collapse>
         </div>`,
 
@@ -110,6 +116,8 @@ const componentContentAds = {
             ads: [],
             position_: this.position,
             alignment_: this.alignment,
+            select_from_: this.select_from,
+            ad_or_adgroup_: this.ad_or_adgroup,
             adgroup_selected_: this.adgroup_selected,
             ad_selected_: this.ad_selected,
             blog_page: this.blog_page,
@@ -122,13 +130,14 @@ const componentContentAds = {
             in_feed_number_: this.in_feed_number,
             position_reverse_: this.position_reverse,
             post_: '-',
-            adgroup_: '-',
-            ad_: '-',
+            adorgroup_: '-',
         }
     },
     props: [
         'position',
         'alignment',
+        'select_from',
+        'ad_or_adgroup',
         'adgroup_selected',
         'ad_selected',
         'position_selected',
@@ -159,10 +168,13 @@ const componentContentAds = {
         },
         onAdgroupChange: function () {
             console.log(this.adgroup_selected_);
-            this.adgroup_ = this.adgroup_selected_.name;
+            this.adorgroup_ = this.adgroup_selected_.name;
+            this.ad_selected_ = [];
         },
         onAdChange: function () {
-            this.ad_ = this.ad_selected_.post_title;
+            console.log(this.ad_selected_);
+            this.adorgroup_ = this.ad_selected_.post_title;
+            this.adgroup_selected_ = [];
         },
         onCollapseClick: function () {
             this.contentAdsRulesShow = !this.contentAdsRulesShow;
@@ -191,7 +203,7 @@ const componentContentAds = {
             this.adGroups.forEach((item) => {
                 if (item.term_id === parseInt(this.adgroup_selected_)) {
                     this.adgroup_selected_ = item;
-                    this.adgroup_ = item.name;
+                    this.adorgroup_ = item.name;
                     return;
                 }
             });
@@ -211,7 +223,7 @@ const componentContentAds = {
             this.ads.forEach((item) => {
                 if (item.post_title === this.ad_selected_) {
                     this.ad_selected_ = item;
-                    this.ad_ = item.post_title;
+                    this.adorgroup_ = item.post_title;
                     return;
                 }
             });

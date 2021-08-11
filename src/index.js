@@ -2,13 +2,18 @@ import Vue from 'vue';
 import CoreuiVue from '@coreui/vue';
 import CoreuiVueCharts from '@coreui/vue-chartjs';
 import { cilPencil, cilSettings, cilInfo, cibGoogleKeep } from '@coreui/icons';
+import VueMaterial  from 'vue-material'
 import vSelect from 'vue-select';
 import componentContentAds from './contentads';
 Vue.component('v-select', vSelect);
 
+
 import '@coreui/coreui/dist/css/coreui.min.css';
 import 'vue-select/dist/vue-select.css';
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
 
+Vue.use(VueMaterial );
 Vue.use(CoreuiVue);
 Vue.use(CoreuiVueCharts)
 
@@ -130,6 +135,7 @@ var vm = new Vue({
                 propsData: {
                     position: 'before-content',
                     alignment: 'none',
+                    ad_or_adgroup: 'ads',
                     adgroup_selected: [],
                     ad_selected: [],
                     post_selected: '',
