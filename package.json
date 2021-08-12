@@ -1,6 +1,6 @@
 {
   "name": "wpadcenter",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "tested_up_to": "5.7",
   "dependencies": {
     "@coreui/coreui": "^3.4.0",

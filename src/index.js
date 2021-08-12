@@ -16,8 +16,8 @@ Vue.use(CoreuiVueCharts)
 const j = jQuery.noConflict();
 
 var vm = new Vue({
-   el: '#app',
-    data () {
+    el: '#app',
+    data() {
         return {
             auto_refresh: null,
             adblock_detector: null,
@@ -38,10 +38,10 @@ var vm = new Vue({
             adGroups: [],
             adgroups_security: null,
             count: 0,
-            link_open_in_new_tab : null,
-            link_nofollow : null,
-            additional_rel_tags_options : ['sponsored','ugc'],
-            link_additional_rel_tags : [],
+            link_open_in_new_tab: null,
+            link_nofollow: null,
+            additional_rel_tags_options: ['sponsored', 'ugc'],
+            link_additional_rel_tags: [],
             enable_privacy: false,
             radioOptions: [],
             consent_method: null,
@@ -51,7 +51,7 @@ var vm = new Vue({
         }
     },
     methods: {
-        setValues: function() {
+        setValues: function () {
             this.enable_scripts = this.$refs.enable_scripts.checked;
             this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
             this.enable_privacy = this.$refs.enable_privacy.checked;
@@ -61,23 +61,23 @@ var vm = new Vue({
             this.geo_targeting = this.$refs.hasOwnProperty('geo_targeting') ? this.$refs.geo_targeting.checked : false;
             this.enable_affiliate = this.$refs.hasOwnProperty('enable_affiliate') ? this.$refs.enable_affiliate.checked : false;
             this.$refs.ads_txt_tab.value = this.enable_ads_txt ? "1" : "0";
-            if ( this.$refs.hasOwnProperty( 'geo_targeting_tab' ) ) {
+            if (this.$refs.hasOwnProperty('geo_targeting_tab')) {
                 this.$refs.geo_targeting_tab.value = this.geo_targeting ? "1" : "0";
             }
-            this.enable_advertisers = this.$refs.hasOwnProperty('enable_advertisers') ? this.$refs.enable_advertisers.checked : false; 
+            this.enable_advertisers = this.$refs.hasOwnProperty('enable_advertisers') ? this.$refs.enable_advertisers.checked : false;
             this.enable_notifications = this.$refs.hasOwnProperty('enable_notifications') ? this.$refs.enable_notifications.checked : false;
             this.content_ads = this.$refs?.content_ads ? this.$refs.content_ads.checked : false;
             this.adgroups_security = this.$refs?.adgroups_security ? this.$refs.adgroups_security.value : '';
             this.count = this.$refs?.count ? this.$refs.count.value : 0;
-            this.link_open_in_new_tab = this.$refs.link_open_in_new_tab_mount.value ? Boolean(this.$refs.link_open_in_new_tab_mount.value ) : false;
+            this.link_open_in_new_tab = this.$refs.link_open_in_new_tab_mount.value ? Boolean(this.$refs.link_open_in_new_tab_mount.value) : false;
             this.link_nofollow = this.$refs.link_nofollow_mount.value ? Boolean(this.$refs.link_nofollow_mount.value) : false;
             this.link_additional_rel_tags = this.$refs.link_additional_rel_tags_mount.value ? this.$refs.link_additional_rel_tags_mount.value.split(',') : [];
-            let navLinks = j('.nav-link').map(function() {
+            let navLinks = j('.nav-link').map(function () {
                 return this.getAttribute('href');
             });
-            for(let i = 0 ; i < navLinks.length ;i++) {
+            for (let i = 0; i < navLinks.length; i++) {
                 let re = new RegExp(navLinks[i]);
-                if( window.location.href.match(re) ) {
+                if (window.location.href.match(re)) {
                     this.$refs.active_tab.activeTabIndex = i;
                     break;
                 }
@@ -93,14 +93,14 @@ var vm = new Vue({
                 },
             }).done(data => {
                 data = JSON.parse(data);
-                if( Array.isArray( data ) ) {
+                if (Array.isArray(data)) {
                     let roles_selected_visibility = data.pop();
                     let roles_selected = data.pop();
-                    this.roles = [ ...data];
-                    if( roles_selected !== '' ) {
+                    this.roles = [...data];
+                    if (roles_selected !== '') {
                         this.roles_selected = roles_selected.split(',');
                     }
-                    if( roles_selected_visibility !== '' ) {
+                    if (roles_selected_visibility !== '') {
                         this.roles_selected_visibility = roles_selected_visibility.split(',');
                     }
                 }
@@ -122,7 +122,7 @@ var vm = new Vue({
         },
         onChangeNoFollow() {
             this.link_nofollow = !this.link_nofollow;
-            this.$refs.link_nofollow .value = this.link_nofollow  ? "1" : "0";
+            this.$refs.link_nofollow.value = this.link_nofollow ? "1" : "0";
         },
         onAddRuleContentAds(event) {
             let contentAds = Vue.extend(componentContentAds);
@@ -131,12 +131,14 @@ var vm = new Vue({
                     position: 'before-content',
                     alignment: 'none',
                     adgroup_selected: [],
+                    ad_selected: [],
                     post_selected: '',
                     position_selected: '',
                     element_selected: '',
                     count: this.count,
                     adgroups_security: this.adgroups_security,
                     number: 1,
+                    in_feed_number: 1,
                     position_reverse: false,
                     show: true,
                 }

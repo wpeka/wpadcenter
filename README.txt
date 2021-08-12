@@ -4,8 +4,8 @@ Donate link: https://www.wpadcenter.com/
 Tags: ads, adsense, ad rotation, ad manager, wordpress ad inserter, wordpress ads, wordpress ads plugin, wordpress advertising plugin, wordpress ad rotator, banners, adverts, ads shortcode, amazon, wordpress ads manager plugin, dfp, ads manager, amp, ad blocking detection, header code, in-feed ads, sticky fixed widgets
 Requires at least: 5.0+
 Requires PHP: 5.6
-Tested up to: 5.7
-Stable tag: 2.2.2
+Tested up to: 5.8
+Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,8 @@ Here are the advanced features of the WP AdCenter WordPress advertising plugin t
 - You can display <strong>location-based ads</strong> to the audiences based upon their specific GEO location(s) accurately with MaxMind database integration.
 - The ads can be precisely targeted with country, state, region, and city-level <strong>geo-targeting options.</strong>
 - You can also <strong>blacklist geo locations or IP  addresses</strong> specifically to stop showing ads to the audiences in that region.
+- Place ads in between the posts on your homepage or other pages with <strong>In-Feed ads.</strong> These ads offer a better user experience and monetization of the spaces inside feeds.
+- Manage all your affiliate links from a single dashboard with <strong>Affiliate Link Management.</strong> Scan and see which pages/posts have affiliate links, check their click performance, and make comparisons.
 - <strong>Easily receive payments</strong> online from advertisers with WooCommerce integration. Integrate with Stripe, Paypal, and other payment gateways supported by WooCommerce without any trouble.
 - With <strong>user role ad visibility,</strong> you can restrict ad display based on user roles. You can hide your ads to specific user roles, to avoid false clicks.
 - The <strong>cloaked URL</strong> feature ensures that the visitors see the original domain name and not the destination URL. You can change the prefix that comes before the cloaked link's slug from the global settings in WP AdCenter.
@@ -298,6 +300,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 5. Reports.
 
 == Changelog ==
+= 2.2.3 =
+* Update: WordPress 5.8 compatibility.
+
 = 2.2.2 =
 * Feature: Display ads on consent.
 * Update: AdSense migration v1.4 to v2.
@@ -369,6 +374,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.2.3 =
+* Update: WordPress 5.8 compatibility.
+
 = 2.2.2 =
 * Feature: Display ads on consent.
 * Update: AdSense migration v1.4 to v2.
