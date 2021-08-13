@@ -2867,7 +2867,7 @@ class Wpadcenter_Admin {
 	}
 
 	/**
-	 * Ajax for getting ad groups from server. wpadcenter_get_ads
+	 * Ajax for getting ad groups from server.
 	 */
 	public function wpadcenter_get_adgroups() {
 		if ( isset( $_POST['action'] ) ) {
@@ -2875,6 +2875,29 @@ class Wpadcenter_Admin {
 		}
 		$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
 		echo wp_json_encode( $array );
+		wp_die();
+	}
+
+	/**
+	 * Ajax for getting placements from server.
+	 */
+	public function wpadcenter_get_placements() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'ab_testing_security', 'security' );
+		}
+
+		$the_options = \Wpadcenter::wpadcenter_get_settings();
+		$_placements = get_option( 'wpadcenter-pro-placements' );
+
+		// if content ads is not enabled in settings.
+		if ( ! $the_options['content_ads'] ) {
+			return;
+		}
+		// if no placements found.
+		if ( empty( $_placements ) || ! $_placements ) {
+			return;
+		}
+		echo wp_json_encode( $_placements );
 		wp_die();
 	}
 

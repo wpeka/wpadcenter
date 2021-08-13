@@ -170,6 +170,7 @@ label {
 	border: none;
 	border-bottom: 2px solid #39f !important;
 	color: #39f;
+	text-decoration: none !important;
 }
 .nav-link {
 	color: #3c434a;
@@ -277,6 +278,17 @@ a:focus {
 	background: #e9f5f8;
 	margin: 10px 0px;
 }
+
+.new_ab_test {
+	padding: 20px;
+	background: #e9f5f8;
+	margin: 10px 0px;
+}
+
+.new_ab_test input{
+	color: #222;
+}
+
 .content-ads-alignment {
 	display: flex;
 	overflow: hidden;
@@ -336,6 +348,13 @@ a:focus {
 	border: 1px solid rgba(60,60,60,.26);
 }
 
+.placement_name input[type="text"] {
+	border: 1px solid rgba(60,60,60,.26);
+	min-height: 30px;
+	width: 50%;
+	padding: 0 5px;
+}
+
 .contentAdsRules label {
 	margin-bottom: 5px;
 }
@@ -353,15 +372,16 @@ a:focus {
 	grid-gap: 20px;
 }
 
-.new_ab_test {
+/* .new_ab_test {
 	margin: 10px 0px;
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-gap: 10px;
-}
+} */
 
 .error{
 	color: red;
+	margin-top: 6px;
 }
 
 .enable_notifications_enabled label {
@@ -382,6 +402,18 @@ a:focus {
 	fill: black;
 }
 
+.delete_test{
+	width: 100px;
+	float: right;
+	margin-bottom: 10px;
+}
+.test{
+	position: relative;
+    margin-top: 20px;
+}
+#test-placement{
+	background-color: #fff;
+}
 .enable_advertisers_enabled .c-callout {
 	margin: 0;
 }

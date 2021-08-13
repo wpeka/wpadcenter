@@ -6,12 +6,20 @@ const componentContentAds = {
             <div class="rule" @click="onCollapseClick">
                 <div class="rule_label">
                     <svg ref="wpadcenter_arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator"><path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path></svg>
-                    <label> <span v-show="position_ !== 'in-feed'" >{{ post_ }} |</span> {{ position_ }} | {{ alignment_ }} | {{ adorgroup_ }}</label>
+                    <label> {{placement_name_}} | <span v-show="position_ !== 'in-feed'" >{{ post_ }} |</span> {{ position_ }} | {{ alignment_ }} | {{ adorgroup_ }}</label>
                 </div>
                 <c-button class="delete_rule" color="danger" @click.stop="onDeleteRule">Delete Rule</c-button>
             </div>
             <c-collapse :show="contentAdsRulesShow">
                 <hr />
+                <div class="placement_name">
+                <label>Placement Name: </label>
+                <input type="text" v-model="placement_name_" :id="getPlacementId('placement_name')" />
+               </div>
+                <input type="hidden" :name="getPlacementName('[name]')" v-model="placement_name_" />
+                <input type="hidden" :name="getPlacementName('[id]')" v-bind:value="placement_id_ ?placement_id_:new Date().getTime()" />
+                <hr />
+
                 <label  v-show="position_ !== 'in-feed'" >Post Types: </label>
                 <input v-show="position_ !== 'in-feed'" type="hidden" ref="Post_Selected" :name="getPlacementName('[post]')" v-model="post_selected_" />
                 <v-select v-show="position_ !== 'in-feed'" :clearable="false" placeholder='Select Post And/or Pages' :options="PostOptions" multiple v-model="post_selected_" @input="onPostChange"></v-select>
@@ -115,6 +123,8 @@ const componentContentAds = {
             adGroups: [],
             ads: [],
             position_: this.position,
+            placement_id_: this.placement_id,
+            placement_name_: this.placement_name,
             alignment_: this.alignment,
             select_from_: this.select_from,
             ad_or_adgroup_: this.ad_or_adgroup,
@@ -134,7 +144,9 @@ const componentContentAds = {
         }
     },
     props: [
+        'placement_id',
         'position',
+        'placement_name',
         'alignment',
         'select_from',
         'ad_or_adgroup',
@@ -167,12 +179,12 @@ const componentContentAds = {
             }
         },
         onAdgroupChange: function () {
-            console.log(this.adgroup_selected_);
+          //  console.log(this.adgroup_selected_);
             this.adorgroup_ = this.adgroup_selected_.name;
             this.ad_selected_ = [];
         },
         onAdChange: function () {
-            console.log(this.ad_selected_);
+           // console.log(this.ad_selected_);
             this.adorgroup_ = this.ad_selected_.post_title;
             this.adgroup_selected_ = [];
         },
