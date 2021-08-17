@@ -1168,6 +1168,13 @@ class Wpadcenter_Public {
 	 */
 	public static function wpadcenter_verify_device( $devices ) {
 
+		if ( ! class_exists( 'Mobile_Detect' ) ) {
+			/**
+			 * The class responsible for detecting the device on which website is loaded.
+			 */
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
+		}
+
 		$detect = new Mobile_Detect();
 
 		if ( ! $detect->isMobile() && ! $detect->isTablet() && in_array( 'desktop', $devices, true ) ||
