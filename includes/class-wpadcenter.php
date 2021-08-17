@@ -489,7 +489,7 @@ class Wpadcenter {
 	 * @param string $view_file View file.
 	 * @param string $target_id Target tab id.
 	 */
-	public static function wpadcenter_envelope_settings_tab( $view_file = '', $target_id ) {
+	public static function wpadcenter_envelope_settings_tab( $view_file = '', $target_id = '' ) {
 		$the_options = self::wpadcenter_get_settings();
 		?>
 		<div class="wpadcenter-tab-content" data-id="<?php echo esc_attr( $target_id ); ?>">
