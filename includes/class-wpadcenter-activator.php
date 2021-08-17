@@ -79,7 +79,7 @@ class Wpadcenter_Activator {
 		$charset_collate = $wpdb->get_charset_collate();
 		$table_name      = $wpdb->prefix . 'placements_statistics';
 		$sql             = "CREATE TABLE $table_name (
-			placement_name VARCHAR(11) NOT NULL,
+			placement_name VARCHAR(30) NOT NULL,
 			placement_date DATE DEFAULT NULL,
 			placement_clicks int(11) DEFAULT 0,
 			placement_impressions int(11) DEFAULT 0,

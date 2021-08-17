@@ -18,7 +18,7 @@ const componentABTests = {
                 <div>
                     <label for="test-name">Name the test:</label>
                     <c-input type="text" v-model="test_name_" :id="getTestId('test_name')" ></c-input>
-                    <input type="hidden" :name="getTestName('[name]')" v-model="test_name_" />
+                    <input type="hidden" :name="getTestName('[name]')" v-model="test_name_ ? test_name_ : default_test_name_" />
                     <input type="hidden" :name="getTestName('[id]')" v-bind:value="test_id_ ?test_id_:new Date().getTime()" />
                 </div>
                 <div>
@@ -55,6 +55,7 @@ const componentABTests = {
             placement_label_: this.placement_label,
             placements_names: '',
             date_: this.date,
+            default_test_name_: 'Test - ' + this.test_count,
         }
     },
     props: [
