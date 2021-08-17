@@ -1336,6 +1336,7 @@ class Wpadcenter_Admin {
 							'terms'    => $term_id,
 						),
 					),
+					'posts_per_page' => -1,
 				);
 				$output    = 0;
 				$the_query = new WP_Query( $args );
@@ -1356,6 +1357,7 @@ class Wpadcenter_Admin {
 							'terms'    => $term_id,
 						),
 					),
+					'posts_per_page' => -1,
 				);
 				$output    = 0;
 				$the_query = new WP_Query( $args );
