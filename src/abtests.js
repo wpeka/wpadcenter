@@ -2,32 +2,42 @@
 const j = jQuery.noConflict();
 const componentABTests = {
     template:
-        `<div class="new_ab_test" v-if="active_">
-            <div class="delete_test">
-                <c-button class="btn btn-danger" color="danger" @click.stop="onDeleteTest">Delete Test</c-button>
+        `<div class="contentAdsRules" v-if="active_">
+            <div class="rule" @click="onCollapseClick">
+                <div class="rule_label">
+                <svg ref="wpadcenter_arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator"><path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path></svg>
+                <label> {{test_name_}} | {{test_duration_}} | {{ placement_label_ }}</label>
+                </div>
+                <div class="delete_test">
+                    <c-button class="btn btn-danger" color="danger" @click.stop="onDeleteTest">Delete Test</c-button>
+                 </div>
             </div>
+        <c-collapse :show="contentABTestsShow">
+        <hr />
             <div class="test">
-            <div>
-            <label for="test-name">Name the test:</label>
-            <c-input type="text" v-model="test_name_" :id="getTestId('test_name')" ></c-input>
-            <input type="hidden" :name="getTestName('[name]')" v-model="test_name_" />
-            <input type="hidden" :name="getTestName('[id]')" v-bind:value="test_id_ ?test_id_:new Date().getTime()" />
-
-        </div>
-        <div>
-            <label for="test-duration">Duration of test (in days):</label>
-            <c-input type="number" v-model="test_duration_" :id="getTestId('test_duration')" min="1"></c-input>
-            <input type="hidden" :name="getTestName('[duration]')" v-model="test_duration_" />
-            </div>
-        <div>
-            <label for="test-placements">Select placements:</label>
-            <v-select v-if="Array.isArray(placements)" :id="getTestId('test_placement')" :clearable="false" placeholder="Select Placements" :options="placements" v-model="placements_selected_" label="name" multiple @input="onPlacementSelection">
-            </v-select>	
-            <input type="hidden" :name="getTestName('[placements]')" v-bind:value="selections" />
-        </div>
+                <div>
+                    <label for="test-name">Name the test:</label>
+                    <c-input type="text" v-model="test_name_" :id="getTestId('test_name')" ></c-input>
+                    <input type="hidden" :name="getTestName('[name]')" v-model="test_name_" />
+                    <input type="hidden" :name="getTestName('[id]')" v-bind:value="test_id_ ?test_id_:new Date().getTime()" />
+                </div>
+                <div>
+                    <label for="test-duration">Duration of test (in days):</label>
+                    <c-input type="number" v-model="test_duration_" :id="getTestId('test_duration')" min="1"></c-input>
+                    <input type="hidden" :name="getTestName('[duration]')" v-model="test_duration_" />
+                </div>
+                <div>
+                    <label for="test-placements">Select placements:</label>
+                    <v-select v-if="Array.isArray(placements)" :id="getTestId('test_placement')" :clearable="false" placeholder="Select Placements" :options="placements" v-model="placements_selected_" label="name" multiple @input="onPlacementSelection" style="background:#fff;">
+                    </v-select>	
+                    <input type="hidden" :name="getTestName('[placements]')" v-bind:value="selections" />
+                    <input type="hidden" :name="getTestName('[placement_label]')" v-bind:value="placement_label_" />
+                    <input type="hidden" :name="getTestName('[date]')" v-bind:value="date_" />
+                    </div>
             </div>
             <label v-show="error_show_" class="error">You need to select at least 2 placements to be able to create A/B test</label>
-         </div>`,
+            </c-collapse>
+            </div>`,
     data() {
         return {
             active_: this.active,
@@ -41,6 +51,10 @@ const componentABTests = {
             error_show_: this.error_show,
             selected_placement_name_: this.selected_placement_name,
             selections: '',
+            contentABTestsShow: false,
+            placement_label_: this.placement_label,
+            placements_names: '',
+            date_: this.date,
         }
     },
     props: [
@@ -53,6 +67,8 @@ const componentABTests = {
         'error_show',
         'selected_placement_name',
         'test_id',
+        'placement_label',
+        'date',
     ],
     methods: {
         getTestName: function (name) {
@@ -76,10 +92,27 @@ const componentABTests = {
         },
         getPlacementsIdsToString: function () {
             this.selections = [];
+            this.placement_label_ = ''
             this.placements_selected_.forEach((entry) => {
                 this.selections.push(entry.id);
+                this.placement_label_ += entry.name + ' ';
             });
             this.selections = this.selections.toString()
+            this.placements_names = this.selections;
+        },
+
+        onCollapseClick: function () {
+            this.contentABTestsShow = !this.contentABTestsShow;
+            if (!this.contentABTestsShow) {
+                if (this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
+                    this.$refs.wpadcenter_arrow.classList.remove('vs__close-indicator-wp');
+                }
+            }
+            else {
+                if (!this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
+                    this.$refs.wpadcenter_arrow.classList.add('vs__close-indicator-wp');
+                }
+            }
         }
     },
     mounted() {
@@ -92,32 +125,33 @@ const componentABTests = {
             }
         }).done(data => {
             this.placements = JSON.parse(data);
-            console.log(this.placements);
+            // console.log(this.placements);
 
             // Rendering already saved placements
             if (typeof this.placements_selected_ === 'string') {
                 let temp = this.placements_selected_.split(',');
                 this.placements_selected_ = [];
+
                 //Get Ids of all placements
-                var result = this.placements.map((obj) => {
-                    return obj.id;
-                });
+                var result = [];
+                for (const [key, value] of Object.entries(this.placements)) {
+                    result.push(value['id']);
+                }
 
                 //Check if placement have the ID we are looking for 
                 temp.forEach((entry) => {
-                    console.log(result.includes(entry));
                     if (result.includes(entry)) {
-                        this.placements.forEach((placement_entry) => {
+                        for (const [key, value] of Object.entries(this.placements)) {
                             //Select placement objects with the selected ids
-                            if (placement_entry.id === entry) {
-                                this.placements_selected_.push(placement_entry);
+                            if (value.id === entry) {
+                                this.placements_selected_.push(value);
                                 this.getPlacementsIdsToString();
                             }
-                        })
+                        }
                     }
                 });
 
-                if (!this.placements_selected_) {
+                if ( this.placements_selected_.length < 2 ) {
                     this.onDeleteTest();
                 }
             }

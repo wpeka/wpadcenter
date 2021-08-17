@@ -2,7 +2,6 @@ import Vue from 'vue';
 import CoreuiVue from '@coreui/vue';
 import CoreuiVueCharts from '@coreui/vue-chartjs';
 import { cilPencil, cilSettings, cilInfo, cibGoogleKeep } from '@coreui/icons';
-import VueMaterial from 'vue-material'
 import vSelect from 'vue-select';
 import componentContentAds from './contentads';
 import componentABTests from './abtests';
@@ -11,10 +10,7 @@ Vue.component('v-select', vSelect);
 
 import '@coreui/coreui/dist/css/coreui.min.css';
 import 'vue-select/dist/vue-select.css';
-import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default.css'
 
-Vue.use(VueMaterial);
 Vue.use(CoreuiVue);
 Vue.use(CoreuiVueCharts)
 
@@ -167,6 +163,9 @@ var vm = new Vue({
                 propsData: {
                     active: true,
                     test_id: '',
+                    placement_label: '',
+                    placement_names: '',
+                    date: new Date().toISOString(),
                     placements: [],
                     ab_testing_security: this.ab_testing_security,
                     test_count: this.test_count,

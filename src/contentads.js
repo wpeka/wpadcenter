@@ -16,7 +16,7 @@ const componentContentAds = {
                 <label>Placement Name: </label>
                 <input type="text" v-model="placement_name_" :id="getPlacementId('placement_name')" />
                </div>
-                <input type="hidden" :name="getPlacementName('[name]')" v-model="placement_name_" />
+                <input type="hidden" :name="getPlacementName('[name]')" v-model="placement_name_ ? placement_name_ : default_placement_name_" />
                 <input type="hidden" :name="getPlacementName('[id]')" v-bind:value="placement_id_ ?placement_id_:new Date().getTime()" />
                 <hr />
 
@@ -134,6 +134,7 @@ const componentContentAds = {
             position_selected_: this.position_selected,
             element_selected_: this.element_selected,
             post_selected_: this.post_selected,
+            default_placement_name_: 'Placement-' + this.count,
             count_: this.count,
             adgroups_security_: this.adgroups_security,
             number_: this.number,
@@ -179,12 +180,12 @@ const componentContentAds = {
             }
         },
         onAdgroupChange: function () {
-          //  console.log(this.adgroup_selected_);
+            //  console.log(this.adgroup_selected_);
             this.adorgroup_ = this.adgroup_selected_.name;
             this.ad_selected_ = [];
         },
         onAdChange: function () {
-           // console.log(this.ad_selected_);
+            // console.log(this.ad_selected_);
             this.adorgroup_ = this.ad_selected_.post_title;
             this.adgroup_selected_ = [];
         },

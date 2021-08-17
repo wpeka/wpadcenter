@@ -213,8 +213,10 @@ class Wpadcenter {
 		$this->loader->add_filter( 'manage_wpadcenter-adgroups_custom_column', $plugin_admin, 'wpadcenter_manage_ad_groups_column_values', 10, 3 );
 		$this->loader->add_action( 'wp_ajax_selected_adgroup_reports', $plugin_admin, 'wpadcenter_ad_group_selected' );
 		$this->loader->add_action( 'wp_ajax_selected_ad_reports', $plugin_admin, 'wpadcenter_ad_selected' );
+		$this->loader->add_action( 'wp_ajax_selected_test_report', $plugin_admin, 'wpadcenter_test_selected' );
 		$this->loader->add_action( 'wp_ajax_get_roles', $plugin_admin, 'wpadcenter_get_roles' );
 		$this->loader->add_action( 'wp_ajax_get_adgroups', $plugin_admin, 'wpadcenter_get_adgroups' );
+		$this->loader->add_action( 'wp_ajax_get_tests', $plugin_admin, 'wpadcenter_get_tests' );
 		$this->loader->add_action( 'wp_ajax_get_placements', $plugin_admin, 'wpadcenter_get_placements' );
 		$this->loader->add_action( 'wp_ajax_get_ads', $plugin_admin, 'wpadcenter_get_ads' );
 		$this->loader->add_action( 'admin_post_export_csv', $plugin_admin, 'wpadcenter_export_csv' );
@@ -580,10 +582,30 @@ class Wpadcenter {
 	 *
 	 * @param int $ad_id Advertisement ID.
 	 */
-	public static function wpadcenter_set_impressions( $ad_id ) {
+	public static function wpadcenter_set_impressions( $ad_id, $placement_id = '' ) {
 		global $wpdb;
-		$meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
-		$today = gmdate( 'Y-m-d' );
+		$meta           = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+		$today          = gmdate( 'Y-m-d' );
+		$placement_name = '';
+
+		if ( ! empty( $placement_id ) ) {
+			$placement_meta = get_option( 'wpadcenter-pro-placements', true );
+			foreach ( $placement_meta as $placement ) {
+				if ( $placement['id'] === $placement_id ) {
+					$placement_name = $placement['name'];
+				}
+			}
+
+			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'placements_statistics WHERE placement_date = %s and placement_id = %s', array( $today, $placement_id ) ) ); // db call ok; no-cache ok.
+			if ( count( $records ) ) {
+				$record      = $records[0];
+				$impressions = $record->placement_impressions + 1;
+				$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'placements_statistics SET placement_impressions = %d WHERE placement_date = %s and placement_id = %d', array( $impressions, $today, $placement_id ) ) ); // db call ok; no-cache ok.
+			} else {
+				$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'placements_statistics` (`placement_impressions`, `placement_date`, `placement_name`, `placement_id`) VALUES (%d,%s,%s,%s)', array( 1, $today, $placement_name, $placement_id ) ) ); // db call ok; no-cache ok.
+			}
+		}
+
 		$meta['total_impressions']++;
 		$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date = %s and ad_id = %d LIMIT 1', array( $today, $ad_id ) ) ); // db call ok; no-cache ok.
 		if ( count( $records ) ) {

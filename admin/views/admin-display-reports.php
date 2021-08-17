@@ -46,6 +46,10 @@
 		margin-right: 40px;
 	}
 
+	.selected-test{
+		text-align: center;
+	}
+
 	.wpadcenter-select {
 		display: block;
 		margin-left: 20px;
@@ -96,6 +100,11 @@
 		justify-content: space-between;
 	}
 
+	.wpads-ab-test-report {
+		display: flex;
+		justify-content: space-between;
+	}
+
 	.wpadcenter-date {
 		display: flex;
 		align-items: center;
@@ -133,6 +142,11 @@
 	.wpadcenter-select-adgroup {
 		min-width: 150px;
 		margin-top: 10px;
+	}
+
+	.wpadcenter-select-test {
+		min-width: 250px;
+		margin-bottom: 10px;
 	}
 
 	.wpadcenter-datepicker {
@@ -323,6 +337,45 @@
 					<?php do_action( 'wpadcenter_pro_custom_report_ga_charts', 'wpadcenter' ); ?>
 				</c-card-body>
 			</c-card>
+		</c-tab>
+		<c-tab title="<?php esc_attr_e( 'A/B Test Results', 'wpadcenter' ); ?>" active>
+				<c-card>
+				<c-card-header>
+					<c-card-title tag="h5"><?php esc_html_e( 'A/B Test Results', 'wpadcenter' ); ?></c-card-title>
+					<c-card-subtitle tag="p"><?php esc_html_e( 'Find the generated result for A/B Test below.', 'wpadcenter' ); ?></c-card-subtitle>
+				</c-card-header>
+				<c-card-body >
+						<div class="wpads-ab-test-report">
+						<div class="wpadcenter-flex-mod">
+							<?php do_action( 'wpadcenter_before_select_ab_tests' ); ?>
+							<div class="wpadcenter-select-test wpadcenter-select">
+								<label for="wpadcenter-select-ab_tests"><?php esc_html_e( 'Choose test ', 'wpadcenter' ); ?></label>
+								<v-select placeholder="<?php esc_attr_e( 'Select test', 'wpadcenter' ); ?>" id="wpadcenter-select-ab-test" label="name" :options="tests" ref="wpadcenter_select_ab_tests"  @input="onTestSelection">
+								</v-select>
+								<input type="hidden" ref="ab_tests_security" name="ab_tests_security" value="<?php echo esc_attr( wp_create_nonce( 'ab_tests_security' ) ); ?>">
+							</div>
+						</div>
+						</div>
+				</c-card-body>
+				</c-card>
+
+				<c-card>
+				<c-card-header class="wpadcenter-flex-mod">
+					<div>
+						<c-card-title tag="h5"><?php esc_html_e( 'A/B Test Report', 'wpadcenter' ); ?></c-card-title>
+						<c-card-subtitle tag="p"><?php esc_html_e( 'Generated report will be displayed below', 'wpadcenter' ); ?></c-card-subtitle>
+					</div>
+				</c-card-header>
+				<c-card-body>
+					<c-card-title tag="h4" class="selected-test">{{selectedTest . name}}</c-card-title>
+					<c-data-table :fields="abTestsReportsField" :items="abTestsReportsData" sorter :items-per-page="5" pagination></c-data-table>
+					<div class="chart-container">
+						<line-chart :chart-data="chartABData" :options="chartOptions"></line-chart>
+					</div>
+					<?php do_action( 'wpadcenter_pro_ab_tests_report_ga_charts', 'wpadcenter' ); ?>
+				</c-card-body>
+			</c-card>
+
 		</c-tab>
 	</c-tabs>
 </div>

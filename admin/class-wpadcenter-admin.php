@@ -301,7 +301,33 @@ class Wpadcenter_Admin {
 			$date->modify( 'first day of next month' );
 			wp_schedule_single_event( $date->format( 'U' ), 'wpadcenter_monthly_cron' );
 		}
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'placements_statistics';
+		if ( ! get_option( 'wpadcenter_placement_table_install' ) ) {  // db call ok; no-cache ok
+			$this->wpadcenter_install_placement_table();
+		}
 	}
+
+	/**
+	 * Function to create new table for placements
+	 */
+	public static function wpadcenter_install_placement_table() {
+		global $wpdb;
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		$charset_collate = $wpdb->get_charset_collate();
+		$table_name      = $wpdb->prefix . 'placements_statistics';
+		$sql             = "CREATE TABLE $table_name (
+			placement_name VARCHAR(11) NOT NULL,
+			placement_date DATE DEFAULT NULL,
+			placement_clicks int(11) DEFAULT 0,
+			placement_impressions int(11) DEFAULT 0,
+			placement_id VARCHAR(20) NOT NULL
+			) $charset_collate;";
+		dbDelta( $sql );
+	}
+
+
 
 	/**
 	 * Admin init.
@@ -1328,8 +1354,8 @@ class Wpadcenter_Admin {
 				break;
 			case 'number-of-ads':
 				$args      = array(
-					'post_type' => 'wpadcenter-ads',
-					'tax_query' => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+					'post_type'      => 'wpadcenter-ads',
+					'tax_query'      => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 						array(
 							'taxonomy' => 'wpadcenter-adgroups',
 							'field'    => 'term_id',
@@ -1349,8 +1375,8 @@ class Wpadcenter_Admin {
 				break;
 			case 'number-of-active-ads':
 				$args      = array(
-					'post_type' => 'wpadcenter-ads',
-					'tax_query' => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+					'post_type'      => 'wpadcenter-ads',
+					'tax_query'      => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 						array(
 							'taxonomy' => 'wpadcenter-adgroups',
 							'field'    => 'term_id',
@@ -2368,6 +2394,35 @@ class Wpadcenter_Admin {
 	}
 
 	/**
+	 * Ajax when test is selected in reports custom-reports page.
+	 */
+	public function wpadcenter_test_selected() {
+		// check nonce security.
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'ab_tests_security', 'security' );
+		}
+
+		if ( 'selected_test_report' === $_POST['action'] ) {
+			$test = $_POST['selected_test']; // phpcs:ignore
+			$result = array();
+			if ( get_option( 'wpadcenter-pro-tests', true ) ) {
+				$placement_ids = explode( ',', $test['placements'] );
+				global $wpdb;
+				if ( is_array( $placement_ids ) ) {
+					foreach ( $placement_ids as $placement_id ) {
+
+						$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'placements_statistics WHERE placement_id = %s', array( $placement_id ) ) ); // phpcs:ignore
+						// $records[0]->placement_name = $test['placement_name_label_'][ $placement_id ];
+						array_push( $result, ...$records );
+					}
+				}
+			}
+			echo wp_json_encode( $result );
+			wp_die();
+		}
+	}
+
+	/**
 	 * Post request when export csv is called on custom-reports page.
 	 */
 	public function wpadcenter_export_csv() {
@@ -2877,6 +2932,19 @@ class Wpadcenter_Admin {
 		}
 		$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
 		echo wp_json_encode( $array );
+		wp_die();
+	}
+
+	/**
+	 * Ajax for getting ab tests from server.
+	 */
+	public function wpadcenter_get_tests() {
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'ab_tests_security', 'security' );
+		}
+		$_placements = empty( get_option( 'wpadcenter-pro-placements' ) ) ? array() : get_option( 'wpadcenter-pro-tests' );
+		$_tests      = empty( get_option( 'wpadcenter-pro-tests' ) ) ? array() : get_option( 'wpadcenter-pro-tests' );
+		echo wp_json_encode( $_tests );
 		wp_die();
 	}
 
