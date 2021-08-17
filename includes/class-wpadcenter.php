@@ -158,11 +158,6 @@ class Wpadcenter {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
 
-		/**
-		 * The class responsible for detecting the device on which website is loaded.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
-
 	}
 
 	/**
