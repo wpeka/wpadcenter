@@ -158,11 +158,6 @@ class Wpadcenter {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor/class-wpadcenter-elementor-widgets.php';
 
-		/**
-		 * The class responsible for detecting the device on which website is loaded.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
-
 	}
 
 	/**
@@ -492,7 +487,7 @@ class Wpadcenter {
 	 * @param string $view_file View file.
 	 * @param string $target_id Target tab id.
 	 */
-	public static function wpadcenter_envelope_settings_tab( $view_file = '', $target_id ) {
+	public static function wpadcenter_envelope_settings_tab( $view_file = '', $target_id = '' ) {
 		$the_options = self::wpadcenter_get_settings();
 		?>
 		<div class="wpadcenter-tab-content" data-id="<?php echo esc_attr( $target_id ); ?>">
