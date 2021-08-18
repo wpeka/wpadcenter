@@ -44,13 +44,19 @@ class Wpadcenter_Activator {
 			foreach ( $blog_ids as $blog_id ) {
 				switch_to_blog( $blog_id );
 				self::wpadcenter_install_table();
+				self::wpadcenter_install_placement_table();
 				restore_current_blog();
 			}
 		} else {
 			self::wpadcenter_install_table();
+			self::wpadcenter_install_placement_table();
 		}
+		update_option( 'wpadcenter_placement_table_install', true );
 	}
 
+	/**
+	 * Function to create new table for ads
+	 */
 	public static function wpadcenter_install_table() {
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
@@ -60,6 +66,24 @@ class Wpadcenter_Activator {
 			ad_date DATE DEFAULT NULL,
 			ad_clicks int(11) DEFAULT 0,
 			ad_impressions int(11) DEFAULT 0
+			) $charset_collate;";
+		dbDelta( $sql );
+	}
+
+
+	/**
+	 * Function to create new table for placements
+	 */
+	public static function wpadcenter_install_placement_table() {
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
+		$table_name      = $wpdb->prefix . 'placements_statistics';
+		$sql             = "CREATE TABLE $table_name (
+			placement_name VARCHAR(30) NOT NULL,
+			placement_date DATE DEFAULT NULL,
+			placement_clicks int(11) DEFAULT 0,
+			placement_impressions int(11) DEFAULT 0,
+			placement_id VARCHAR(20) NOT NULL
 			) $charset_collate;";
 		dbDelta( $sql );
 	}

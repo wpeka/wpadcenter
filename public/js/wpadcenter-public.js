@@ -7,7 +7,7 @@
  * @package Wpadcenter
  */
 
-(function( $ ) {
+(function ($) {
 	'use strict';
 
 	/**
@@ -38,25 +38,27 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
-	$( document ).ready(
-		function() {
-			$( document ).on(
+	$(document).ready(
+		function () {
+			$(document).on(
 				'click',
 				'#wpadcenter_ad',
-				function() {
-					var ad_id   = $( this ).data( 'value' );
+				function () {
+					var ad_id = $(this).data('value');
+					var placement_id = $(this).attr('class');
 					var request = {
 						action: "set_clicks",
 						ad_id: ad_id,
+						placement_id: placement_id,
 						security: ajax_url.security,
 					};
-					$.post( ajax_url.url, request ).always(
-						function(response){
-							response = JSON.parse( response );
+					$.post(ajax_url.url, request).always(
+						function (response) {
+							response = JSON.parse(response);
 						}
 					);
 				}
 			);
 		}
 	);
-})( jQuery );
+})(jQuery);
