@@ -127,29 +127,27 @@ const componentABTests = {
         }).done(data => {
             this.placements = JSON.parse(data);
             let placement = [];
-
             // If this.placements is object convert it into array
-            if( typeof  this.placements === 'object'){
-                for (const [key, value] of Object.entries( this.placements)) {
-                    placement.push( value);
-                  }
-                  this.placements = placement;
+            if (typeof this.placements === 'object') {
+                for (const [key, value] of Object.entries(this.placements)) {
+                    placement.push(value);
+                }
+                this.placements = placement;
             }
-
             // Rendering already saved placements labels
             if (typeof this.placements_selected_ === 'string') {
                 let temp = this.placements_selected_.split(',');
                 this.placements_selected_ = [];
 
                 temp.forEach((entry) => {
-                            for (const [key, value] of Object.entries(this.placements)) {
+                    for (const [key, value] of Object.entries(this.placements)) {
 
-                            // Check for matching placements objects from placements array for selected placement label
-                            if (value.id === entry) {
-                                this.placements_selected_.push(value);
-                                this.getPlacementsIdsToString();
-                            }
+                        // Check for matching placements objects from placements array for selected placement label
+                        if (value.id === entry) {
+                            this.placements_selected_.push(value);
+                            this.getPlacementsIdsToString();
                         }
+                    }
                 });
             }
         });

@@ -568,7 +568,6 @@ var reports = new Vue({
 						labels.push(data1[i]['Date']);
 					}
 				}
-
 				IDs = [];
 				let outputClicks = [];
 				labels = [];
