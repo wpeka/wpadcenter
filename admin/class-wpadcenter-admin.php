@@ -2405,8 +2405,7 @@ public function wpadcenter_test_selected() {
 	if ( 'selected_test_report' === $_POST['action'] ) {
 		$test = $_POST['selected_test']; // phpcs:ignore
 		$result     = array();
-		$start_date   = $test['start_date'];
-		$end_date   = $test['end_date'];
+
 		if ( get_option( 'wpadcenter-pro-tests', true ) ) {
 			$placement_ids = explode( ',', $test['placements'] );
 			global $wpdb;
@@ -2418,7 +2417,7 @@ public function wpadcenter_test_selected() {
 				}
 			}
 		}
-		echo wp_json_encode( $result );
+		echo wp_json_encode( $result ); 
 		wp_die();
 	}
 }

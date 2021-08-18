@@ -28,7 +28,7 @@ const componentABTests = {
                 </div>
                 <div>
                     <label for="test-placements">Select placements:</label>
-                    <v-select v-if="Array.isArray(placements)" :id="getTestId('test_placement')" :clearable="false" placeholder="Select Placements" :options="placements" v-model="placements_selected_" label="name" multiple @input="onPlacementSelection" style="background:#fff;">
+                    <v-select :id="getTestId('test_placement')" :clearable="false" placeholder="Select Placements" :options="placements" v-model="placements_selected_" label="name" multiple @input="onPlacementSelection" style="background:#fff;">
                     </v-select>	
                     <input type="hidden" :name="getTestName('[placements]')" v-bind:value="selections" />
                     <input type="hidden" :name="getTestName('[placement_label]')" v-bind:value="placement_label_" />
@@ -126,35 +126,31 @@ const componentABTests = {
             }
         }).done(data => {
             this.placements = JSON.parse(data);
-            // console.log(this.placements);
+            let placement = [];
 
-            // Rendering already saved placements
+            // If this.placements is object convert it into array
+            if( typeof  this.placements === 'object'){
+                for (const [key, value] of Object.entries( this.placements)) {
+                    placement.push( value);
+                  }
+                  this.placements = placement;
+            }
+
+            // Rendering already saved placements labels
             if (typeof this.placements_selected_ === 'string') {
                 let temp = this.placements_selected_.split(',');
                 this.placements_selected_ = [];
 
-                //Get Ids of all placements
-                var result = [];
-                for (const [key, value] of Object.entries(this.placements)) {
-                    result.push(value['id']);
-                }
-
-                //Check if placement have the ID we are looking for 
                 temp.forEach((entry) => {
-                    if (result.includes(entry)) {
-                        for (const [key, value] of Object.entries(this.placements)) {
-                            //Select placement objects with the selected ids
+                            for (const [key, value] of Object.entries(this.placements)) {
+
+                            // Check for matching placements objects from placements array for selected placement label
                             if (value.id === entry) {
                                 this.placements_selected_.push(value);
                                 this.getPlacementsIdsToString();
                             }
                         }
-                    }
                 });
-
-                if ( this.placements_selected_.length < 2 ) {
-                    this.onDeleteTest();
-                }
             }
         });
     }
