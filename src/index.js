@@ -42,7 +42,6 @@ var vm = new Vue({
             ab_testing_security: null,
             count: 0,
             test_count: 0,
-            // placement_id: '',
             link_open_in_new_tab: null,
             link_nofollow: null,
             additional_rel_tags_options: ['sponsored', 'ugc'],
@@ -76,7 +75,6 @@ var vm = new Vue({
             this.ab_testing_security = this.$refs?.ab_testing_security ? this.$refs.ab_testing_security.value : '';
             this.count = this.$refs?.count ? this.$refs.count.value : 0;
             this.test_count = this.$refs?.test_count ? this.$refs.test_count.value : 0;
-            // this.placement_id = this.$refs?.placement_id ? this.$refs.placement_id.value : '';
             this.link_open_in_new_tab = this.$refs.link_open_in_new_tab_mount.value ? Boolean(this.$refs.link_open_in_new_tab_mount.value) : false;
             this.link_nofollow = this.$refs.link_nofollow_mount.value ? Boolean(this.$refs.link_nofollow_mount.value) : false;
             this.link_additional_rel_tags = this.$refs.link_additional_rel_tags_mount.value ? this.$refs.link_additional_rel_tags_mount.value.split(',') : [];

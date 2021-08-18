@@ -180,12 +180,10 @@ const componentContentAds = {
             }
         },
         onAdgroupChange: function () {
-            //  console.log(this.adgroup_selected_);
             this.adorgroup_ = this.adgroup_selected_.name;
             this.ad_selected_ = [];
         },
         onAdChange: function () {
-            // console.log(this.ad_selected_);
             this.adorgroup_ = this.ad_selected_.post_title;
             this.adgroup_selected_ = [];
         },

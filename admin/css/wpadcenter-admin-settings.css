@@ -376,13 +376,6 @@ a:focus {
 	grid-gap: 20px;
 }
 
-/* .new_ab_test {
-	margin: 10px 0px;
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-gap: 10px;
-} */
-
 .error{
 	color: red;
 	margin-top: 6px;
