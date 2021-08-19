@@ -21,6 +21,7 @@
 
  
      },
+     presets: ['@babel/preset-env', '@babel/preset-react'],
      output: {
          path: path.resolve(__dirname, 'admin/js/gutenberg-blocks'),
          filename: 'wpadcenter-gutenberg-[name].js'
