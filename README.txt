@@ -297,7 +297,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 2. Manage Ads.
 3. Create A New Ad.
 4. Manage Ad Groups.
-5. Reports.
+5. Reports - Dashboard.
+6. Reports - Detailed Reports.
+7. Adding Scripts
 
 == Changelog ==
 = 2.2.3 =
