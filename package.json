@@ -3,15 +3,20 @@
   "version": "2.2.3",
   "tested_up_to": "5.7",
   "dependencies": {
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
     "@coreui/coreui": "^3.4.0",
     "@coreui/vue": "^3.2.7",
     "@coreui/vue-chartjs": "^1.0.6",
+    "babel-jest": "^27.0.6",
     "chart.js": "^2.9.4",
     "css-loader": "^5.2.0",
+    "jest": "^27.0.6",
     "moment-timezone": "^0.5.33",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-select": "^4.3.0",
+    "react-test-renderer": "^17.0.2",
     "style-loader": "^2.0.0",
     "v-calendar": "^2.3.0",
     "vue-chartjs": "^3.5.1",
@@ -42,6 +47,8 @@
     "start": "wp-scripts start --config webpack.config.js --progress",
     "build": "wp-scripts build --config webpack.config.js",
     "build:gutenbergblocks": "wp-scripts build --config webpack.config.gutenbergscripts.js",
-    "makepot": "wp i18n make-pot . languages/wpadcenter.pot --exclude=release,analytics,node_modules,vendor,src,bin,tests"
+    "makepot": "wp i18n make-pot . languages/wpadcenter.pot --exclude=release,analytics,node_modules,vendor,src,bin,tests",
+    "test": "jest --coverage",
+    "jest": "jest"
   }
 }
