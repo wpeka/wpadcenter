@@ -5,7 +5,7 @@ Tags: ads, adsense, ad rotation, ad manager, wordpress ad inserter, wordpress ad
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.8
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -302,6 +302,11 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 7. Adding Scripts
 
 == Changelog ==
+= 2.2.4 =
+* Fix: Ad count on the manage adgroups page.
+* Update: PHP 8 compatibility.
+* Update: Users can select ad or ad groups in placements.
+
 = 2.2.3 =
 * Update: WordPress 5.8 compatibility.
 
@@ -376,6 +381,11 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.2.4 =
+* Fix: Ad count on the manage adgroups page.
+* Update: PHP 8 compatibility.
+* Update: Users can select ad or ad groups in placements.
+
 = 2.2.3 =
 * Update: WordPress 5.8 compatibility.
 
