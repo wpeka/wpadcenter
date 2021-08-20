@@ -4,7 +4,9 @@ import CoreuiVueCharts from '@coreui/vue-chartjs';
 import { cilPencil, cilSettings, cilInfo, cibGoogleKeep } from '@coreui/icons';
 import vSelect from 'vue-select';
 import componentContentAds from './contentads';
+import componentABTests from './abtests';
 Vue.component('v-select', vSelect);
+
 
 import '@coreui/coreui/dist/css/coreui.min.css';
 import 'vue-select/dist/vue-select.css';
@@ -37,7 +39,9 @@ var vm = new Vue({
             content_ads: null,
             adGroups: [],
             adgroups_security: null,
+            ab_testing_security: null,
             count: 0,
+            test_count: 0,
             link_open_in_new_tab: null,
             link_nofollow: null,
             additional_rel_tags_options: ['sponsored', 'ugc'],
@@ -68,7 +72,9 @@ var vm = new Vue({
             this.enable_notifications = this.$refs.hasOwnProperty('enable_notifications') ? this.$refs.enable_notifications.checked : false;
             this.content_ads = this.$refs?.content_ads ? this.$refs.content_ads.checked : false;
             this.adgroups_security = this.$refs?.adgroups_security ? this.$refs.adgroups_security.value : '';
+            this.ab_testing_security = this.$refs?.ab_testing_security ? this.$refs.ab_testing_security.value : '';
             this.count = this.$refs?.count ? this.$refs.count.value : 0;
+            this.test_count = this.$refs?.test_count ? this.$refs.test_count.value : 0;
             this.link_open_in_new_tab = this.$refs.link_open_in_new_tab_mount.value ? Boolean(this.$refs.link_open_in_new_tab_mount.value) : false;
             this.link_nofollow = this.$refs.link_nofollow_mount.value ? Boolean(this.$refs.link_nofollow_mount.value) : false;
             this.link_additional_rel_tags = this.$refs.link_additional_rel_tags_mount.value ? this.$refs.link_additional_rel_tags_mount.value.split(',') : [];
@@ -128,8 +134,10 @@ var vm = new Vue({
             let contentAds = Vue.extend(componentContentAds);
             let component = new contentAds({
                 propsData: {
+                    placement_id: '',
                     position: 'before-content',
                     alignment: 'none',
+                    ad_or_adgroup: 'ads',
                     adgroup_selected: [],
                     ad_selected: [],
                     post_selected: '',
@@ -145,6 +153,30 @@ var vm = new Vue({
             }).$mount();
             this.count++;
             this.$refs.content_ads_enabled.appendChild(component.$el);
+        },
+
+        onCreateNewTestClick(event) {
+            let abTests = Vue.extend(componentABTests);
+            let component = new abTests({
+                propsData: {
+                    active: true,
+                    test_id: '',
+                    placement_label: '',
+                    placement_names: '',
+                    date: new Date().toISOString(),
+                    placements: [],
+                    ab_testing_security: this.ab_testing_security,
+                    test_count: this.test_count,
+                    placements_selected: [],
+                    test_duration: 1,
+                    test_name: '',
+                    error_show: false,
+                    selected_placement_name: [],
+
+                }
+            }).$mount();
+            this.test_count++;
+            this.$refs.ab_tests_enabled.appendChild(component.$el);
         }
     },
     mounted() {
@@ -153,5 +185,6 @@ var vm = new Vue({
     icons: { cilPencil, cilSettings, cilInfo, cibGoogleKeep },
     components: {
         'component-content-ads': componentContentAds,
+        'component-ab-tests': componentABTests,
     }
 });
