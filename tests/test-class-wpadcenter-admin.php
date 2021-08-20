@@ -223,26 +223,26 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	/**
 	 * Test for wpadcenter_manage_edit_ads_columns function
 	 */
-	// public function test_wpadcenter_manage_edit_ads_columns() {
-	// 	global $current_screen;
-	// 	$current_screen->post_type = 'wpadcenter-adgroup';
+	public function test_wpadcenter_manage_edit_ads_columns() {
+		global $current_screen;
+		$current_screen->post_type = 'wpadcenter-adgroup';
 
-	// 	$value = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
-	// 	$this->assertTrue( empty( $value ) );
+		$value = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
+		$this->assertTrue( empty( $value ) );
 
-	// 	$current_screen->post_type = 'wpadcenter-ads';
-	// 	$value                     = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
-	// 		$this->assertArrayHasKey( 'cb', $value, "Array doesn't contains 'cb'" );
-	// 		$this->assertArrayHasKey( 'title', $value, "Array doesn't contains 'title'" );
-	// 		$this->assertArrayHasKey( 'ad-type', $value, "Array doesn't contains 'ad-type'" );
-	// 		$this->assertArrayHasKey( 'ad-dimensions', $value, "Array doesn't contains 'ad-dimensions'" );
-	// 		$this->assertArrayHasKey( 'ad-group', $value, "Array doesn't contains 'ad-group'" );
-	// 		$this->assertArrayHasKey( 'shortcode', $value, "Array doesn't contains 'shortcode'" );
-	// 		$this->assertArrayHasKey( 'template-tag', $value, "Array doesn't contains 'template-tag'" );
-	// 		$this->assertArrayHasKey( 'stats-for-today', $value, "Array doesn't contains 'stats-for-today'" );
-	// 		$this->assertArrayHasKey( 'start-date', $value, "Array doesn't contains 'start-date'" );
-	// 		$this->assertArrayHasKey( 'end-date', $value, "Array doesn't contains 'end-date'" );
-	// }
+		$current_screen->post_type = 'wpadcenter-ads';
+		$value                     = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();
+			$this->assertArrayHasKey( 'cb', $value, "Array doesn't contains 'cb'" );
+			$this->assertArrayHasKey( 'title', $value, "Array doesn't contains 'title'" );
+			$this->assertArrayHasKey( 'ad-type', $value, "Array doesn't contains 'ad-type'" );
+			$this->assertArrayHasKey( 'ad-dimensions', $value, "Array doesn't contains 'ad-dimensions'" );
+			$this->assertArrayHasKey( 'ad-group', $value, "Array doesn't contains 'ad-group'" );
+			$this->assertArrayHasKey( 'shortcode', $value, "Array doesn't contains 'shortcode'" );
+			$this->assertArrayHasKey( 'template-tag', $value, "Array doesn't contains 'template-tag'" );
+			$this->assertArrayHasKey( 'stats-for-today', $value, "Array doesn't contains 'stats-for-today'" );
+			$this->assertArrayHasKey( 'start-date', $value, "Array doesn't contains 'start-date'" );
+			$this->assertArrayHasKey( 'end-date', $value, "Array doesn't contains 'end-date'" );
+	}
 
 	/**
 	 * Tests for wpadcenter_manage_ad_groups_column_values function()
@@ -1140,46 +1140,31 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test for wpadcenter_remove_post_row_actions function
-	 */
-	// public function test_wpadcenter_remove_post_row_actions() {
-	// 	global $current_screen;
-	// 	$current_screen->post_type = 'wpadcenter-ads';
-	// 	$arr                       = self::$wpadcenter_admin->wpadcenter_remove_post_row_actions(
-	// 		array(
-	// 			'view'                 => 'true',
-	// 			'inline hide-if-no-js' => 'true',
-	// 		)
-	// 	);
-	// 	$this->assertTrue( empty( $arr ) );
-	// }
-
-	/**
 	 * Test for wpadcenter_custom_filters_query function
 	 */
-	// public function test_wpadcenter_custom_filters_query() {
-	// 	$user_id = self::factory()->user->create(
-	// 		array(
-	// 			'role' => 'administrator',
-	// 		)
-	// 	);
-	// 	wp_set_current_user( $user_id );
-	// 	$wp_user_object = new WP_User( $user_id );
-	// 	$wp_user_object->add_role( 'advertiser' );
-	// 	$nonce                                      = wp_create_nonce( 'wpadcenter_add_custom_filter' );
-	// 	$_GET['wpadcenter_add_custom_filter_nonce'] = $nonce;
-	// 	$_GET['post_type']                          = 'wpadcenter-ads';
-	// 	$_GET['ADMIN_FILTER_FIELD_AD_TYPE']         = 'ad_code';
-	// 	$_GET['ADMIN_FILTER_FIELD_AD_SIZE']         = '468x60';
-	// 	$_GET['ADMIN_FILTER_FIELD_AD_GROUP']        = self::$ad_group;
-	// 	$_GET['ADMIN_FILTER_FIELD_ADVERTISER']      = $user_id;
-	// 	global $pagenow;
-	// 	$pagenow = 'edit.php';
-	// 	$query   = new WP_Query();
-	// 	self::$wpadcenter_admin->wpadcenter_custom_filters_query( $query );
-	// 	$query_vars_array = $query->query_vars;
-	// 	$this->assertArrayHasKey( 'meta_query', $query_vars_array, 'failed to add meta_query' );
-	// 	$this->assertArrayHasKey( 'tax_query', $query_vars_array, 'failed to add tax_query' );
-	// }
+	public function test_wpadcenter_custom_filters_query() {
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		wp_set_current_user( $user_id );
+		$wp_user_object = new WP_User( $user_id );
+		$wp_user_object->add_role( 'advertiser' );
+		$nonce                                      = wp_create_nonce( 'wpadcenter_add_custom_filter' );
+		$_GET['wpadcenter_add_custom_filter_nonce'] = $nonce;
+		$_GET['post_type']                          = 'wpadcenter-ads';
+		$_GET['ADMIN_FILTER_FIELD_AD_TYPE']         = 'ad_code';
+		$_GET['ADMIN_FILTER_FIELD_AD_SIZE']         = '468x60';
+		$_GET['ADMIN_FILTER_FIELD_AD_GROUP']        = self::$ad_group;
+		$_GET['ADMIN_FILTER_FIELD_ADVERTISER']      = $user_id;
+		global $pagenow;
+		$pagenow = 'edit.php';
+		$query   = new WP_Query();
+		self::$wpadcenter_admin->wpadcenter_custom_filters_query( $query );
+		$query_vars_array = $query->query_vars;
+		$this->assertArrayHasKey( 'meta_query', $query_vars_array, 'failed to add meta_query' );
+		$this->assertArrayHasKey( 'tax_query', $query_vars_array, 'failed to add tax_query' );
+	}
 }
 
