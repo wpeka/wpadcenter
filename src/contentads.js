@@ -1,24 +1,26 @@
 // jquery $ as j
 const j = jQuery.noConflict();
+const pro_ver_above_or_5_2_3 = localized_data.wpadcenter_pro_version.localeCompare('5.2.3', undefined, { numeric: true, sensitivity: 'base' }) >= 0 ;
 const componentContentAds = {
     template:
         `<div class="contentAdsRules" v-if="active">
             <div class="rule" @click="onCollapseClick">
                 <div class="rule_label">
                     <svg ref="wpadcenter_arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator"><path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path></svg>
-                    <label> {{placement_name_}} | <span v-show="position_ !== 'in-feed'" >{{ post_ }} |</span> {{ position_ }} | {{ alignment_ }} | {{ adorgroup_ }}</label>
+                    <label v-show="!pro_ver_above_or_5_2_3"> <span v-show="position_ !== 'in-feed'" >{{ post_ }} |</span> {{ position_ }} | {{ alignment_ }} | <span v-show="position_ !== 'in-feed'"> {{ adgroup_ }} </span> <span v-show="position_ === 'in-feed'"> {{ ad_ }} </span> </label>
+                    <label v-show="pro_ver_above_or_5_2_3"> {{placement_name_}} | <span v-show="position_ !== 'in-feed'" >{{ post_ }} |</span> {{ position_ }} | {{ alignment_ }} | {{ adorgroup_ }}</label>
                 </div>
                 <c-button class="delete_rule" color="danger" @click.stop="onDeleteRule">Delete Rule</c-button>
             </div>
             <c-collapse :show="contentAdsRulesShow">
                 <hr />
-                <div class="placement_name">
+                <div class="placement_name" v-if="pro_ver_above_or_5_2_3">
                 <label>Placement Name: </label>
                 <input type="text" v-model="placement_name_" :id="getPlacementId('placement_name')" />
                </div>
                 <input type="hidden" :name="getPlacementName('[name]')" v-model="placement_name_ ? placement_name_ : default_placement_name_" />
                 <input type="hidden" :name="getPlacementName('[id]')" v-bind:value="placement_id_ ?placement_id_:new Date().getTime()" />
-                <hr />
+                <hr v-if="pro_ver_above_or_5_2_3"/>
 
                 <label  v-show="position_ !== 'in-feed'" >Post Types: </label>
                 <input v-show="position_ !== 'in-feed'" type="hidden" ref="Post_Selected" :name="getPlacementName('[post]')" v-model="post_selected_" />
@@ -77,7 +79,18 @@ const componentContentAds = {
                 <input type="hidden" :name="getPlacementName('[align]')" v-model="alignment_" />
                 <input type="hidden" :name="getPlacementName('[content][position-reverse]')" v-model="position_reverse_" />
                 <hr />
-                <div  class="content-ads-adgroup">
+
+                <div v-show="position_ !== 'in-feed' && !pro_ver_above_or_5_2_3"  class="content-ads-adgroup">
+                <label>Select Adgroup: </label>
+                <v-select :clearable="false" placeholder="Select Adgroup" :options="adGroups" label="name" v-model="adgroup_selected_" @input="onAdgroupChange"></v-select>
+                <input type="hidden" :name="getPlacementName('[adgroup]')" v-bind:value="adgroup_selected_.term_id" />
+                </div>
+                <div v-show="position_ === 'in-feed' && !pro_ver_above_or_5_2_3" class="In-feed-ads">
+                <label v-show="!pro_ver_above_or_5_2_3">Select Ad: </label>
+                <v-select :clearable="false" placeholder="Select Ad" :options="ads" label ="post_title"  v-model="ad_selected_" @input="onAdChange"></v-select>
+                <input type="hidden" :name="getPlacementName('[ad]')" v-bind:value = "ad_selected_.ID" />
+                </div>
+                <div v-show="pro_ver_above_or_5_2_3"  class="content-ads-adgroup">
                 <label>Select From: </label>
                 <div class="content-ads-alignment">
                     <input type="radio" v-model="ad_or_adgroup_" value="ads" :id="getPlacementId('ad')"/>
@@ -141,7 +154,10 @@ const componentContentAds = {
             in_feed_number_: this.in_feed_number,
             position_reverse_: this.position_reverse,
             post_: '-',
+            ad_ : '-',
+            adgroup_ : '-',
             adorgroup_: '-',
+            pro_ver_above_or_5_2_3: pro_ver_above_or_5_2_3,
         }
     },
     props: [
@@ -180,11 +196,21 @@ const componentContentAds = {
             }
         },
         onAdgroupChange: function () {
-            this.adorgroup_ = this.adgroup_selected_.name;
+            if ( pro_ver_above_or_5_2_3 ) {
+                this.adorgroup_ = this.adgroup_selected_.name;
+            }
+            else{
+                this.adgroup_ = this.adgroup_selected_.name;
+            }
             this.ad_selected_ = [];
         },
         onAdChange: function () {
-            this.adorgroup_ = this.ad_selected_.post_title;
+            if ( pro_ver_above_or_5_2_3 ) {
+                this.adorgroup_ = this.ad_selected_.post_title;
+            }
+            else{
+                this.ad_ = this.ad_selected_.post_title;
+            }
             this.adgroup_selected_ = [];
         },
         onCollapseClick: function () {
@@ -214,7 +240,12 @@ const componentContentAds = {
             this.adGroups.forEach((item) => {
                 if (item.term_id === parseInt(this.adgroup_selected_)) {
                     this.adgroup_selected_ = item;
-                    this.adorgroup_ = item.name;
+                    if ( pro_ver_above_or_5_2_3 ) {
+                        this.adorgroup_ = item.name;
+                    }
+                    else{
+                        this.ad_ = item.post_title;
+                    }
                     return;
                 }
             });
