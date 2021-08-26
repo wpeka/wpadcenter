@@ -284,6 +284,10 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_pro_admin_init() {
+		global $wpdb;
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
 		update_option( 'wpadcenter-version', WPADCENTER_VERSION );
 
 		if ( ! get_option( 'wpadcenter_migration_v2' ) ) {
@@ -301,6 +305,57 @@ class Wpadcenter_Admin {
 			$date->modify( 'first day of next month' );
 			wp_schedule_single_event( $date->format( 'U' ), 'wpadcenter_monthly_cron' );
 		}
+
+		if ( ! get_option( 'wpadcenter_update_placements_5.2.3' ) ) {
+			$placement_list = get_option( 'wpadcenter-pro-placements' );
+			$updated_list   = array();
+			if ( $placement_list ) {
+				foreach ( $placement_list as $placement ) {
+					$selected_ad_or_adgroup = '';
+					if ( ! isset( $placement['ad_or_adgroup'] ) ) {
+						if ( 'in-feed' === $placement['type'] ) {
+							$placement['ad_or_adgroup'] = 'ads';
+
+							$selected_ad_or_adgroup = $placement['ad'] ? get_the_title( $placement['ad'] ) : '';
+						} else {
+							$placement['ad_or_adgroup'] = 'adgroups';
+							$adgroup_id                 = $placement['adgroup'];
+							if ( $adgroup_id && ! is_wp_error( get_term( $placement['adgroup'] ) ) ) {
+								$selected_ad_or_adgroup = get_term( $placement['adgroup'] )->name;
+							}
+						}
+					}
+					if ( ! isset( $placement['name'] ) ) {
+
+						$placement['name'] = $placement['post'] . ' ' . $placement['type'] . ' ' . $placement['align'] . ' ' . $selected_ad_or_adgroup;
+					}
+					if ( ! isset( $placement['id'] ) ) {
+						$placement['id'] = time();
+					}
+					array_push( $updated_list, $placement );
+
+				}
+				update_option( 'wpadcenter-pro-placements', $updated_list );
+
+			}
+
+			update_option( 'wpadcenter_update_placements_5.2.3', '1' );
+		}
+
+		if ( ! get_option( 'wpadcenter_placement_db' ) ) {
+			$charset_collate = $wpdb->get_charset_collate();
+			$table_name      = $wpdb->prefix . 'placements_statistics';
+			$sql             = "CREATE TABLE $table_name (
+					placement_name VARCHAR(30) NOT NULL,
+					placement_date DATE DEFAULT NULL,
+					placement_clicks int(11) DEFAULT 0,
+					placement_impressions int(11) DEFAULT 0,
+					placement_id VARCHAR(20) NOT NULL
+					) $charset_collate;";
+			dbDelta( $sql );
+			update_option( 'wpadcenter_placement_db', '1' );
+		}
+
 	}
 
 	/**
