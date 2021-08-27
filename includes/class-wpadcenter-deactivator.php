@@ -30,6 +30,9 @@ class Wpadcenter_Deactivator {
 	 */
 	public static function deactivate() {
 		wp_clear_scheduled_hook( 'wpadcenter_monthly_cron' );
+		delete_option( 'wpadcenter_update_placements_5.2.3' );
+		delete_option( 'wpadcenter_placement_db' );
+
 	}
 
 }

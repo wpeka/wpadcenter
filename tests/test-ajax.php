@@ -322,6 +322,8 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		);
 		update_option( WPADCENTER_SETTINGS_FIELD, array( 'content_ads' => true ) );
 		update_option( 'wpadcenter-pro-placements', $placement );
+		update_option( 'wpadcenter_update_placements_5.2.3', '1' );
+
 		try {
 			$this->_handleAjax( 'get_placements' );
 		} catch ( WPAjaxDieCOntinueException $e ) {
@@ -379,6 +381,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			),
 		);
 		update_option( 'wpadcenter-pro-placements', $placements );
+		update_option( 'wpadcenter_update_placements_5.2.3', '1' );
 		update_option( 'wpadcenter-pro-tests', $test );
 
 		try {
