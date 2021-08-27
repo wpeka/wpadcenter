@@ -46,6 +46,10 @@
 		margin-right: 40px;
 	}
 
+	.selected-test{
+		text-align: center;
+	}
+
 	.wpadcenter-select {
 		display: block;
 		margin-left: 20px;
@@ -96,6 +100,11 @@
 		justify-content: space-between;
 	}
 
+	.wpads-ab-test-report {
+		display: flex;
+		justify-content: space-between;
+	}
+
 	.wpadcenter-date {
 		display: flex;
 		align-items: center;
@@ -133,6 +142,11 @@
 	.wpadcenter-select-adgroup {
 		min-width: 150px;
 		margin-top: 10px;
+	}
+
+	.wpadcenter-select-test {
+		min-width: 250px;
+		margin-bottom: 10px;
 	}
 
 	.wpadcenter-datepicker {
@@ -324,6 +338,7 @@
 				</c-card-body>
 			</c-card>
 		</c-tab>
+		<?php do_action( 'wpadcenter_pro_ab_test_report' ); ?>
 	</c-tabs>
 </div>
 </div>

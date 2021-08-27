@@ -267,6 +267,7 @@ class Wpadcenter_Public {
 				'max_width'       => 'off',
 				'max_width_value' => '100',
 				'devices'         => '',
+				'placement_id'    => '',
 			),
 			$atts
 		);
@@ -285,6 +286,7 @@ class Wpadcenter_Public {
 			'max_width'    => $atts['max_width'],
 			'max_width_px' => $atts['max_width_value'],
 			'devices'      => $atts['devices'],
+			'placement_id' => $atts['placement_id'],
 		);
 		return self::display_single_ad( $atts['id'], $attributes ); // phpcs:ignore
 
@@ -346,6 +348,7 @@ class Wpadcenter_Public {
 			'display_adgroup'     => false,
 			'display_rotating_ad' => false,
 			'devices'             => array( 'mobile', 'desktop', 'tablet' ),
+			'placement_id'        => '',
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
@@ -461,7 +464,7 @@ class Wpadcenter_Public {
 		}
 
 		if ( $attributes['classes'] ) {
-			$single_ad_html .= 'class="' . $attributes['classes'] . '" ';
+			$single_ad_html .= 'class="' . $attributes['classes'] . '"';
 		}
 
 		if ( 'text_ad' === $ad_type ) {
@@ -476,7 +479,7 @@ class Wpadcenter_Public {
 
 		if ( 'text_ad' !== $ad_type ) {
 
-			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
+			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" class= "' . $attributes['placement_id'] . '"';
 
 			// adding classes to link
 			$single_ad_html .= 'class="wpadcenter-ad-inner__item';
@@ -574,7 +577,7 @@ class Wpadcenter_Public {
 		$single_ad_html .= '</div>';
 
 		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
-			Wpadcenter::wpadcenter_set_impressions( $ad_id );
+			Wpadcenter::wpadcenter_set_impressions( $ad_id, $attributes ['placement_id'] );
 		}
 
 		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
@@ -692,8 +695,36 @@ class Wpadcenter_Public {
 					if ( isset( $_POST['ad_id'] ) ) {
 						$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
 					}
-					$meta  = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
-					$today = gmdate( 'Y-m-d' );
+					if ( isset( $_POST['placement_id'] ) ) {
+						$placement_id = sanitize_text_field( wp_unslash( $_POST['placement_id'] ) );
+					}
+					if ( isset( $_GET['placement_id'] ) ) {
+						$placement_id = sanitize_text_field( wp_unslash( $_GET['placement_id'] ) );
+					}
+					$meta = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+
+					$today          = gmdate( 'Y-m-d' );
+					$placement_name = '';
+					// Create new placement meta for ad.
+					if ( ! empty( $placement_id ) ) {
+
+						$placement_meta = get_option( 'wpadcenter-pro-placements', true );
+						foreach ( $placement_meta as $placement ) {
+							if ( $placement['id'] === $placement_id ) {
+								$placement_name = $placement['name'];
+							}
+						}
+						$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'placements_statistics WHERE placement_date = %s and placement_id = %s', array( $today, $placement_id ) ) ); // db call ok; no-cache ok.
+
+						if ( count( $records ) ) {
+							$record = $records[0];
+							$clicks = $record->placement_clicks + 1;
+							$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'placements_statistics SET placement_clicks = %d WHERE placement_date = %s and placement_id = %s', array( $clicks, $today, $placement_id ) ) ); // db call ok; no-cache ok.
+						} else {
+							$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'placements_statistics` (`placement_clicks`, `placement_date`, `placement_name`, `placement_id`) VALUES (%d,%s,%s,%s)', array( 1, $today, $placement_name, $placement_id ) ) ); // db call ok; no-cache ok.
+						}
+					}
+
 					$meta['total_clicks']++;
 					$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date = %s and ad_id = %d LIMIT 1', array( $today, $ad_id ) ) ); // db call ok; no-cache ok.
 					if ( count( $records ) ) {
@@ -702,6 +733,7 @@ class Wpadcenter_Public {
 						$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'ads_statistics SET ad_clicks = %d WHERE ad_date = %s and ad_id = %d', array( $clicks, $today, $ad_id ) ) ); // db call ok; no-cache ok.
 						do_action( 'wp_adcenter_after_set_impressions', $clicks );
 					} else {
+
 						$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'ads_statistics` (`ad_clicks`, `ad_date`, `ad_id`) VALUES (%d,%s,%d)', array( 1, $today, $ad_id ) ) ); // db call ok; no-cache ok.
 					}
 					update_post_meta( $ad_id, 'wpadcenter_ads_stats', $meta );
@@ -876,6 +908,7 @@ class Wpadcenter_Public {
 				'max_width'       => 'off',
 				'max_width_value' => '100',
 				'devices'         => '',
+				'placement_id'    => '',
 			),
 			$atts
 		);
@@ -897,9 +930,9 @@ class Wpadcenter_Public {
 			'max_width'    => $atts['max_width'],
 			'max_width_px' => $atts['max_width_value'],
 			'devices'      => $atts['devices'],
+			'placement_id' => $atts['placement_id'],
 
 		);
-
 		return self::display_adgroup_ads( $adgroup_atts ); // phpcs:ignore
 	}
 
@@ -913,7 +946,6 @@ class Wpadcenter_Public {
 	 * @return string $adgroup_html html for the ads to be displayed.
 	 */
 	public static function display_adgroup_ads( $attributes = array() ) {
-
 		wp_enqueue_style( 'wpadcenter-frontend' );
 
 		$default_attributes = array(
@@ -924,7 +956,7 @@ class Wpadcenter_Public {
 			'max_width'    => false,
 			'max_width_px' => '100',
 			'devices'      => array( 'mobile', 'desktop', 'tablet' ),
-
+			'placement_id' => '',
 		);
 
 		$attributes = wp_parse_args( $attributes, $default_attributes );
@@ -985,6 +1017,7 @@ class Wpadcenter_Public {
 					'display_adgroup' => true,
 					'max_width'       => $attributes['max_width'],
 					'max_width_px'    => $attributes['max_width_px'],
+					'placement_id'    => $attributes['placement_id'],
 				);
 				$adgroup_html        .= self::display_single_ad( $ad_id, $single_ad_attributes );
 				$ad_count++;
@@ -1167,6 +1200,13 @@ class Wpadcenter_Public {
 	 * @return bool return true or false depending upon the device.
 	 */
 	public static function wpadcenter_verify_device( $devices ) {
+
+		if ( ! class_exists( 'Mobile_Detect' ) ) {
+			/**
+			 * The class responsible for detecting the device on which website is loaded.
+			 */
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
+		}
 
 		$detect = new Mobile_Detect();
 

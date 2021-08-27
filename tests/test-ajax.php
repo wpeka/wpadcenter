@@ -73,7 +73,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$ad_groups = $factory->term->create_many( 4, array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		add_role( 'advertiser', 'Advertiser', 'edit_posts' );
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.2.3' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.2.4' );
 		self::$ad_ids           = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$first_dummy_post = get_post( self::$ad_ids[0] );
 		self::$term_id          = array( self::$ad_groups );
@@ -279,9 +279,9 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		self::$wpadcenter_admin->wpadcenter_add_custom_filters();
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
-  }
-   
-  /*
+	}
+
+	/**
 	 * Test for wpadcenter_check_ads_txt_replace function
 	 */
 	public function test_wpadcenter_check_ads_txt_replace() {
@@ -298,6 +298,126 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		} catch ( WPAjaxDieContinueException $e ) {
 			unset( $e );
 		}
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * Test for wpadcenter_get_placements function
+	 */
+	public function test_wpadcenter_get_placements() {
+
+		// Become an administrator.
+		$this->_setRole( 'administrator' );
+		$_POST['action']   = 'get_placements';
+		$_POST['security'] = wp_create_nonce( 'ab_testing_security' );
+		$placement         = array(
+			'name'    => 'Placement 1',
+			'post'    => 'Post',
+			'type'    => 'before-content',
+			'in-feed' => array(
+				'number' => 1,
+			),
+			'align'   => 'left',
+			'ad'      => self::$ad_ids[0],
+		);
+		update_option( WPADCENTER_SETTINGS_FIELD, array( 'content_ads' => true ) );
+		update_option( 'wpadcenter-pro-placements', $placement );
+		try {
+			$this->_handleAjax( 'get_placements' );
+		} catch ( WPAjaxDieCOntinueException $e ) {
+			unset( $e );
+		}
+		$response = json_decode( $this->_last_response );
+		$this->assertSame( $placement['name'], $response->name );
+		$this->assertSame( $placement['post'], $response->post );
+		$this->assertSame( $placement['type'], $response->type );
+		$this->assertEquals( $placement['in-feed']['number'], $response->{'in-feed'}->number );
+		$this->assertSame( $placement['align'], $response->align );
+		$this->assertSame( $placement['ad'], $response->ad );
+	}
+
+	/**
+	 * Test for wpadcenter_get_tests function
+	 */
+	public function test_wpadcenter_get_tests() {
+		// Become an administrator.
+		$this->_setRole( 'administrator' );
+		$_POST['action']   = 'get_tests';
+		$_POST['security'] = wp_create_nonce( 'ab_tests_security' );
+		$placements        = array(
+			array(
+				'name'    => 'Placement 1',
+				'id'      => '1629435908433',
+				'post'    => 'Post',
+				'type'    => 'before-content',
+				'in-feed' => array(
+					'number' => 1,
+				),
+				'align'   => 'left',
+				'ad'      => self::$ad_ids[0],
+			),
+			array(
+				'name'    => 'Placement 2',
+				'id'      => '1629436715322',
+				'post'    => 'Post',
+				'type'    => 'after-content',
+				'in-feed' => array(
+					'number' => 2,
+				),
+				'align'   => 'left',
+				'ad'      => self::$ad_ids[1],
+			),
+		);
+		$test              = array(
+			array(
+				'name'       => 'Test 1',
+				'id'         => '1629451142729',
+				'duration'   => 1,
+				'placements' => '1629435908433,1629436715322',
+				'start_date' => gmdate( 'd/M/Y h:i:s' ),
+				'end_date'   => gmdate( 'd/M/Y h:i:s', strtotime( gmdate() . '+ 2 days' ) ),
+			),
+		);
+		update_option( 'wpadcenter-pro-placements', $placements );
+		update_option( 'wpadcenter-pro-tests', $test );
+
+		try {
+			$this->_handleAjax( 'get_tests' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+		$response = json_decode( $this->_last_response );
+		$this->assertSame( $test[0]['name'], $response[0]->name );
+		$this->assertSame( $test[0]['id'], $response[0]->id );
+		$this->assertSame( $test[0]['duration'], $response[0]->duration );
+		$this->assertSame( $test[0]['placements'], $response[0]->placements );
+		$this->assertSame( $test[0]['start_date'], $response[0]->start_date );
+		$this->assertSame( $test[0]['end_date'], $response[0]->end_date );
+	}
+
+	/**
+	 * Test for wpadcenter_test_selected function
+	 */
+	public function test_wpadcenter_test_selected() {
+
+		// Become administrator.
+		$this->_setRole( 'administrator' );
+		$_POST['action']        = 'selected_test_report';
+		$_POST['security']      = wp_create_nonce( 'ab_tests_security' );
+		$_POST['selected_test'] = array(
+			'name'       => 'Test 1',
+			'id'         => '1629451142729',
+			'duration'   => 1,
+			'placements' => '1629435908433,1629436715322',
+			'start_date' => gmdate( 'd/M/Y h:i:s' ),
+			'end_date'   => gmdate( 'd/M/Y h:i:s', strtotime( gmdate() . '+ 2 days' ) ),
+		);
+		try {
+			$this->_handleAjax( 'selected_test_report' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+		$response = json_decode( $this->_last_response );
 		$this->assertTrue( true );
 	}
 }
