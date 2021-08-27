@@ -309,6 +309,7 @@ class Wpadcenter_Admin {
 		if ( ! get_option( 'wpadcenter_update_placements_5.2.3' ) ) {
 			$placement_list = get_option( 'wpadcenter-pro-placements' );
 			$updated_list   = array();
+			$unique_id      = 0;
 			if ( $placement_list ) {
 				foreach ( $placement_list as $placement ) {
 					$selected_ad_or_adgroup = '';
@@ -330,10 +331,10 @@ class Wpadcenter_Admin {
 						$placement['name'] = $placement['post'] . ' ' . $placement['type'] . ' ' . $placement['align'] . ' ' . $selected_ad_or_adgroup;
 					}
 					if ( ! isset( $placement['id'] ) ) {
-						$placement['id'] = time();
+						$placement['id'] = time() . $unique_id;
 					}
 					array_push( $updated_list, $placement );
-
+					$unique_id++;
 				}
 				update_option( 'wpadcenter-pro-placements', $updated_list );
 
