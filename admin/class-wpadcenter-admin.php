@@ -2995,7 +2995,7 @@ class Wpadcenter_Admin {
 			// Delete test if expired.
 			$start_date = $test['start_date'];
 			$end_date   = $test['end_date'];
-			if ( ( intval( $end_date ) - intval( $start_date ) ) <= 0 ) {
+			if ( intval( strtotime( str_replace( '/', ' ', $end_date ) ) ) < intval( strtotime( str_replace( '/', ' ', $start_date ) ) ) ) {
 				unset( $_tests[ $count ] );
 			}
 		}
