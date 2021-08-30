@@ -377,12 +377,12 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 				'duration'   => 1,
 				'placements' => '1629435908433,1629436715322',
 				'start_date' => gmdate( 'd/M/Y h:i:s' ),
-				'end_date'   => gmdate( 'd/M/Y h:i:s', strtotime( gmdate() . '+ 2 days' ) ),
+				'end_date'   => gmdate( 'd/M/Y h:i:s', strtotime( 'now + 2 days' ) ),
 			),
 		);
 		update_option( 'wpadcenter-pro-placements', $placements );
-		update_option( 'wpadcenter_update_placements_5.2.3', '1' );
 		update_option( 'wpadcenter-pro-tests', $test );
+		update_option( 'wpadcenter_update_placements_5.2.3', '1' );
 
 		try {
 			$this->_handleAjax( 'get_tests' );
@@ -413,7 +413,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			'duration'   => 1,
 			'placements' => '1629435908433,1629436715322',
 			'start_date' => gmdate( 'd/M/Y h:i:s' ),
-			'end_date'   => gmdate( 'd/M/Y h:i:s', strtotime( gmdate() . '+ 2 days' ) ),
+			'end_date'   => gmdate( 'd/M/Y h:i:s', strtotime( 'now + 2 days' ) ),
 		);
 		try {
 			$this->_handleAjax( 'selected_test_report' );
