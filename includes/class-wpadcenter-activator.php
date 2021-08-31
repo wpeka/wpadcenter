@@ -86,6 +86,7 @@ class Wpadcenter_Activator {
 			placement_id VARCHAR(20) NOT NULL
 			) $charset_collate;";
 		dbDelta( $sql );
+		update_option( 'wpadcenter_placement_db', '1' );
 	}
 
 }

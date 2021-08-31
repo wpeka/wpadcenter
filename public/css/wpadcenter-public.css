@@ -2,6 +2,10 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+.wpadcenter-adgroup {
+  overflow: hidden;
+}
+
 .wpadcenter-adgroup__row {
   display: flex;
   flex-direction: row;
