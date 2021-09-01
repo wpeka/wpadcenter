@@ -168,7 +168,7 @@
 <div class="wrap">
 <h2></h2>
 <div id="reports" v-cloak>
-	<c-tabs>
+	<c-tabs ref="activeTab">
 		<c-tab title="<?php esc_attr_e( 'Dashboard', 'wpadcenter' ); ?>" active>
 			<c-card>
 				<c-card-header>
