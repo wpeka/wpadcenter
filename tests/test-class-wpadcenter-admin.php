@@ -225,6 +225,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 */
 	public function test_wpadcenter_manage_edit_ads_columns() {
 		global $current_screen;
+		$current_screen            = (object) $current_screen;
 		$current_screen->post_type = 'wpadcenter-adgroup';
 
 		$value = self::$wpadcenter_admin->wpadcenter_manage_edit_ads_columns();

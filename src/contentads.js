@@ -93,10 +93,10 @@ const componentContentAds = {
                 <div v-show="pro_ver_above_or_5_2_3"  class="content-ads-adgroup">
                 <label>Select From: </label>
                 <div class="content-ads-alignment">
-                    <input type="radio" v-model="ad_or_adgroup_" value="ads" :id="getPlacementId('ad')"/>
+                    <input type="radio" v-model="ad_or_adgroup_" value="ads" :id="getPlacementId('ad')" @input="onAdChange"/>
                     <label :for="getPlacementId('ad')">Ads</label>
 
-                    <input type="radio" v-model="ad_or_adgroup_" value="adgroups" :id="getPlacementId('adgroup')" />
+                    <input type="radio" v-model="ad_or_adgroup_" value="adgroups" :id="getPlacementId('adgroup')" @input="onAdgroupChange"/>
                     <label :for="getPlacementId('adgroup')">Adgroups</label>
                 </div>
                 <input type="hidden" :name="getPlacementName('[ad_or_adgroup]')" v-model="ad_or_adgroup_" />
