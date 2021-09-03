@@ -238,6 +238,7 @@ var reports = new Vue({
 		this.endDate = new Date();
 		this.startDate = new Date();
 		this.startDate.setMonth(this.startDate.getMonth() - 1);
+		this.$refs.activeTab.activeTabIndex = 0;
 		// get ad groups from server
 		j.ajax({
 			type: "POST",
