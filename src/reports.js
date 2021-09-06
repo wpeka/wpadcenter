@@ -159,7 +159,9 @@ const chartOptions = {
 				beginAtZero: true,
 			}
 		}]
-	}
+	},
+	responsive: true,
+	maintainAspectRatio: false,
 }
 var reports = new Vue({
 	el: '#reports',
