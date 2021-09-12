@@ -23,6 +23,8 @@ const chartOptions = {
 			},
 		}]
 	},
+	responsive: true,
+	maintainAspectRatio: false,
 }
 // calculate datasets from localized data
 let totalClicks = 0;
