@@ -59,6 +59,7 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		self::$ad_ids            = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group          = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		self::$wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.2.4' );
+
 		$current_time            = time();
 		foreach ( self::$ad_ids as $ad_id ) {
 			update_post_meta( $ad_id, 'wpadcenter_ad_type', 'ad_code' );
@@ -326,4 +327,114 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$this->assertEquals( '<script type="text/javascript">console.log("hello world in footer");</script>', $disable_global_scripts['footer_scripts'] );
 	}
 
+	/**
+	 * Test for click fraud protection on display_single_ad function.
+	 *
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 * @expectedException
+	 */
+	public function test_cfp_display_single_ad() {
+
+		// Hide ads cookie set and enabled click fraud protection.
+		$_COOKIE['wpadcenter_hide_ads']                   = true;
+		$settings_option                                  = get_option( 'WPAdCenter-Settings' );
+		$settings_option['enable_click_fraud_protection'] = true;
+		$settings_option['click_fraud_num_clicks']        = '3';
+		$settings_option['click_fraud_duration']          = '10';
+		$settings_option['click_fraud_hide_duration']     = '1';
+
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
+		$this->assertNull( $received_output );
+
+		// Hide ads cookie set and not enabled click fraud protection.
+		$settings_option['enable_click_fraud_protection'] = false;
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
+		$this->assertTrue( is_string( $received_output ) && ( wp_strip_all_tags( $received_output ) !== $received_output ) );
+
+		// Hide ads cookie not set and enabled click fraud protection.
+		unset( $_COOKIE['wpadcenter_hide_ads'] );
+		$settings_option['enable_click_fraud_protection'] = true;
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_single_ad( self::$ad_ids[0] );
+		$this->assertTrue( is_string( $received_output ) && ( wp_strip_all_tags( $received_output ) !== $received_output ) );
+	}
+
+	/**
+	 * Test for click fraud protection on display_adgroup_ads function.
+	 *
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 * @expectedException
+	 */
+	public function test_cfp_display_adgroup_ads() {
+
+		// Hide ads cookie set and enabled click fraud protection.
+		$_COOKIE['wpadcenter_hide_ads']                   = true;
+		$settings_option                                  = get_option( 'WPAdCenter-Settings' );
+		$settings_option['enable_click_fraud_protection'] = true;
+		$settings_option['click_fraud_num_clicks']        = '3';
+		$settings_option['click_fraud_duration']          = '10';
+		$settings_option['click_fraud_hide_duration']     = '1';
+		$atts = array(
+			'adgroup_ids' => array( self::$ad_group ),
+		);
+
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_adgroup_ads( $atts );
+		$this->assertNull( $received_output );
+
+		// Hide ads cookie set and not enabled click fraud protection.
+		$settings_option['enable_click_fraud_protection'] = false;
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_adgroup_ads( $atts );
+		$this->assertTrue( is_string( $received_output ) && ( wp_strip_all_tags( $received_output ) !== $received_output ) );
+
+		// Hide ads cookie not set and enabled click fraud protection.
+		unset( $_COOKIE['wpadcenter_hide_ads'] );
+		$settings_option['enable_click_fraud_protection'] = true;
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_adgroup_ads( $atts );
+		$this->assertTrue( is_string( $received_output ) && ( wp_strip_all_tags( $received_output ) !== $received_output ) );
+	}
+
+	/**
+	 * Test for click fraud protection on display_random_ad function.
+	 *
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 * @expectedException
+	 */
+	public function test_cfp_display_random_ad() {
+
+		// Hide ads cookie set and enabled click fraud protection.
+		$_COOKIE['wpadcenter_hide_ads']                   = true;
+		$settings_option                                  = get_option( 'WPAdCenter-Settings' );
+		$settings_option['enable_click_fraud_protection'] = true;
+		$settings_option['click_fraud_num_clicks']        = '3';
+		$settings_option['click_fraud_duration']          = '10';
+		$settings_option['click_fraud_hide_duration']     = '1';
+		$atts = array(
+			'adgroup_ids' => array( self::$ad_group ),
+		);
+
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_random_ad( $atts );
+		$this->assertNull( $received_output );
+
+		// Hide ads cookie set and not enabled click fraud protection.
+		$settings_option['enable_click_fraud_protection'] = false;
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_random_ad( $atts );
+		$this->assertTrue( is_string( $received_output ) && ( wp_strip_all_tags( $received_output ) !== $received_output ) );
+
+		// Hide ads cookie not set and enabled click fraud protection.
+		unset( $_COOKIE['wpadcenter_hide_ads'] );
+		$settings_option['enable_click_fraud_protection'] = true;
+		update_option( 'WPAdCenter-Settings', $settings_option );
+		$received_output = self::$wpadcenter_public->display_random_ad( $atts );
+		$this->assertTrue( is_string( $received_output ) && ( wp_strip_all_tags( $received_output ) !== $received_output ) );
+	}
 }

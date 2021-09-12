@@ -331,49 +331,54 @@ class Wpadcenter {
 	public static function wpadcenter_get_default_settings( $key = '' ) {
 		$settings = array(
 			// General settings.
-			'enable_notifications'      => false,
+			'enable_notifications'          => false,
 
-			'auto_refresh'              => false,
-			'transition_effect'         => 'none',
-			'transition_speed'          => '500',
-			'transition_delay'          => '1000',
+			'auto_refresh'                  => false,
+			'transition_effect'             => 'none',
+			'transition_speed'              => '500',
+			'transition_delay'              => '1000',
 
-			'adblock_detector'          => false,
-			'adblock_detected_message'  => __( 'We have noticed that you have an adblocker enabled which restricts ads served on the site.', 'wpadcenter' ),
-			'geo_targeting'             => false,
-			'maxmind_license_key'       => '',
-			'maxmind_db_prefix'         => wp_generate_password( 32, false ),
-			'maxmind_db_path'           => '',
+			'adblock_detector'              => false,
+			'adblock_detected_message'      => __( 'We have noticed that you have an adblocker enabled which restricts ads served on the site.', 'wpadcenter' ),
+			'geo_targeting'                 => false,
+			'maxmind_license_key'           => '',
+			'maxmind_db_prefix'             => wp_generate_password( 32, false ),
+			'maxmind_db_path'               => '',
 
-			'enable_ads_txt'            => false,
-			'ads_txt_content'           => '',
-			'enable_scripts'            => false,
-			'header_scripts'            => '',
-			'body_scripts'              => '',
-			'footer_scripts'            => '',
+			'enable_ads_txt'                => false,
+			'ads_txt_content'               => '',
+			'enable_scripts'                => false,
+			'header_scripts'                => '',
+			'body_scripts'                  => '',
+			'footer_scripts'                => '',
 
-			'enable_advertisers'        => false,
+			'enable_advertisers'            => false,
 
-			'geo_location'              => 'none',
-			'trim_stats'                => '0',
-			'days_to_send_before'       => 1,
-			'clicks_to_send_before'     => 100,
-			'views_to_send_before'      => 100,
-			'hide_ads_logged'           => false,
-			'roles_selected'            => '',
-			'roles_selected_visibility' => '',
-			'content_ads'               => false,
-			'link_open_in_new_tab'      => false,
-			'link_nofollow'             => false,
-			'link_additional_rel_tags'  => '',
-			'link_additional_css_class' => '',
-			'enable_affiliate'          => false,
-			'cloaked_link_base'         => '',
-			'enable_privacy'            => false,
-			'consent_method'            => '',
-			'cookie_name'               => '',
-			'cookie_value'              => '',
-			'cookie_non_personalized'   => false,
+			'geo_location'                  => 'none',
+			'trim_stats'                    => '0',
+			'days_to_send_before'           => 1,
+			'clicks_to_send_before'         => 100,
+			'views_to_send_before'          => 100,
+			'hide_ads_logged'               => false,
+			'roles_selected'                => '',
+			'roles_selected_visibility'     => '',
+			'content_ads'                   => false,
+			'link_open_in_new_tab'          => false,
+			'link_nofollow'                 => false,
+			'link_additional_rel_tags'      => '',
+			'link_additional_css_class'     => '',
+			'enable_affiliate'              => false,
+			'cloaked_link_base'             => '',
+			'enable_privacy'                => false,
+			'consent_method'                => '',
+			'cookie_name'                   => '',
+			'cookie_value'                  => '',
+			'cookie_non_personalized'       => false,
+			'enable_click_fraud_protection' => false,
+			'click_fraud_num_clicks'        => '10',
+			'click_fraud_duration'          => '10',
+			'click_fraud_hide_duration'     => '1',
+
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -407,6 +412,7 @@ class Wpadcenter {
 			case 'enable_privacy':
 			case 'cookie_non_personalized':
 			case 'enable_affiliate':
+			case 'enable_click_fraud_protection':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
 				} elseif ( 'false' === $value || false === $value ) {
