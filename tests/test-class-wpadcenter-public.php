@@ -59,6 +59,7 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		self::$ad_ids            = $factory->post->create_many( 2, array( 'post_type' => 'wpadcenter-ads' ) );
 		self::$ad_group          = $factory->term->create( array( 'taxonomy' => 'wpadcenter-adgroups' ) );
 		self::$wpadcenter_public = new Wpadcenter_Public( 'wpadcenter', '2.2.4' );
+
 		$current_time            = time();
 		foreach ( self::$ad_ids as $ad_id ) {
 			update_post_meta( $ad_id, 'wpadcenter_ad_type', 'ad_code' );

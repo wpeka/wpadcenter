@@ -51,6 +51,7 @@ var vm = new Vue({
             consent_method: null,
             cookie_non_personalized: false,
             enable_affiliate: false,
+            enable_click_fraud_protection: false,
 
         }
     },
@@ -111,6 +112,7 @@ var vm = new Vue({
                     }
                 }
             });
+            this.enable_click_fraud_protection = this.$refs.hasOwnProperty('enable_click_fraud_protection') ? this.$refs.enable_click_fraud_protection.checked : false;
         },
         onChangeEnableAdsTxt() {
             this.enable_ads_txt = !this.enable_ads_txt;
@@ -177,6 +179,10 @@ var vm = new Vue({
             }).$mount();
             this.test_count++;
             this.$refs.ab_tests_enabled.appendChild(component.$el);
+        },
+        onChangeEnableClickFraudProtection(event) {
+            this.enable_click_fraud_protection = !this.enable_click_fraud_protection;
+            this.$refs.enable_click_fraud_protection.value = this.enable_click_fraud_protection ? "1" : "0";
         }
     },
     mounted() {

@@ -303,6 +303,12 @@ class Wpadcenter_Public {
 	 * @return string $single_ad_html html for the ad to be displayed.
 	 */
 	public static function display_single_ad( $ad_id, $attributes = array() ) {
+
+		$options = Wpadcenter::wpadcenter_get_settings();
+
+		if ( $options['enable_click_fraud_protection'] && isset( $_COOKIE['wpadcenter_hide_ads'] ) ) {
+			return;
+		}
 		$current_url = isset( $_SERVER['REQUEST_URI'] ) ? home_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) : '';
 		if ( strstr( $current_url, 'ads.txt' ) ) {
 			return;
@@ -356,7 +362,6 @@ class Wpadcenter_Public {
 		if ( ! self::wpadcenter_verify_device( $attributes['devices'] ) ) {
 			return;
 		}
-		$options      = Wpadcenter::wpadcenter_get_settings();
 		$current_time = time();
 		$start_date   = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
 		$end_date     = get_post_meta( $ad_id, 'wpadcenter_end_date', true );
@@ -737,6 +742,8 @@ class Wpadcenter_Public {
 						$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'ads_statistics` (`ad_clicks`, `ad_date`, `ad_id`) VALUES (%d,%s,%d)', array( 1, $today, $ad_id ) ) ); // db call ok; no-cache ok.
 					}
 					update_post_meta( $ad_id, 'wpadcenter_ads_stats', $meta );
+
+					do_action( 'wpadcenter_on_ad_click', $ad_id );				
 				}
 			}
 		}
@@ -946,6 +953,13 @@ class Wpadcenter_Public {
 	 * @return string $adgroup_html html for the ads to be displayed.
 	 */
 	public static function display_adgroup_ads( $attributes = array() ) {
+
+		$options = Wpadcenter::wpadcenter_get_settings();
+
+		if ( $options['enable_click_fraud_protection'] && isset( $_COOKIE['wpadcenter_hide_ads'] ) ) {
+			return;
+		}
+
 		wp_enqueue_style( 'wpadcenter-frontend' );
 
 		$default_attributes = array(
@@ -1109,6 +1123,12 @@ class Wpadcenter_Public {
 	 * @return string $random_ads_html html for the ads to be displayed.
 	 */
 	public static function display_random_ad( $attributes = array() ) {
+
+		$options = Wpadcenter::wpadcenter_get_settings();
+
+		if ( $options['enable_click_fraud_protection'] && isset( $_COOKIE['wpadcenter_hide_ads'] ) ) {
+			return;
+		}
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
 
