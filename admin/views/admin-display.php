@@ -143,7 +143,6 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 					</div>
 				</c-card-body>
 			</c-card>
-			<?php do_action( 'wp_adcenter_global_ad_email' ); ?>
 			<?php do_action( 'wp_adcenter_after_general_settings' ); ?>
 		</c-tab>
 		<?php do_action( 'wp_adcenter_before_scripts_tab' ); ?>
