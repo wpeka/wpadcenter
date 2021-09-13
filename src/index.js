@@ -51,7 +51,13 @@ var vm = new Vue({
             consent_method: null,
             cookie_non_personalized: false,
             enable_affiliate: false,
-
+            enable_global_email: false,
+            global_email_frequency_options: ['Daily','Weekly', 'Monthly'],
+            global_email_frequency: 'Daily',
+            global_email_report_type: 'Last 7 days',
+            global_email_report_type_options: ['Last 7 days', 'Last 30 days'],
+            frequency_message: 'The daily report is sent at 9 AM PST',
+            frequency_message_options: ['The daily report is sent at 9 AM PST', 'The weekly report is sent on every Monday at 9 AM PST', 'The monthly report is sent on the 1st of every month at 9 AM PST'],
         }
     },
     methods: {
@@ -59,6 +65,7 @@ var vm = new Vue({
             this.enable_scripts = this.$refs.enable_scripts.checked;
             this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
             this.enable_privacy = this.$refs.enable_privacy.checked;
+            this.enable_global_email = this.$refs.enable_global_email.checked;
             this.consent_method = this.$refs.consent_method.value;
             this.cookie_non_personalized = this.$refs.cookie_non_personalized.checked;
             this.adblock_detector = this.$refs.hasOwnProperty('adblock_detector') ? this.$refs.adblock_detector.checked : false;
@@ -78,6 +85,8 @@ var vm = new Vue({
             this.link_open_in_new_tab = this.$refs.link_open_in_new_tab_mount.value ? Boolean(this.$refs.link_open_in_new_tab_mount.value) : false;
             this.link_nofollow = this.$refs.link_nofollow_mount.value ? Boolean(this.$refs.link_nofollow_mount.value) : false;
             this.link_additional_rel_tags = this.$refs.link_additional_rel_tags_mount.value ? this.$refs.link_additional_rel_tags_mount.value.split(',') : [];
+            this.global_email_frequency = this.$refs.global_email_frequency_mount.value ? this.$refs.global_email_frequency_mount.value : '';
+            this.global_email_report_type = this.$refs.global_email_report_type_mount.value ? this.$refs.global_email_report_type_mount.value : '';
             let navLinks = j('.nav-link').map(function () {
                 return this.getAttribute('href');
             });
@@ -111,6 +120,17 @@ var vm = new Vue({
                     }
                 }
             });
+        },
+        onFrequencyChange() {
+            let index = this.global_email_frequency_options.indexOf(this.global_email_frequency);
+            if(index >= 0) {
+                this.$refs.frequency_message.innerText = this.frequency_message_options[index];
+                this.frequency_message = this.$refs.frequency_message.innerText;
+            }
+            else{
+                this.$refs.frequency_message.innerText = '' ;
+                this.frequency_message = '';
+            }
         },
         onChangeEnableAdsTxt() {
             this.enable_ads_txt = !this.enable_ads_txt;
