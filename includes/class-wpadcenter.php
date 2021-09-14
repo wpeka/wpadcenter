@@ -374,6 +374,12 @@ class Wpadcenter {
 			'cookie_name'               => '',
 			'cookie_value'              => '',
 			'cookie_non_personalized'   => false,
+			'enable_global_email'       => false,
+			'global_email_recipients'   => '',
+			'global_email_subject'      => 'AdCenter Ad Report',
+			'global_email_frequency'    => 'Daily',
+			'global_email_report_type'  => 'Last 7 days',
+			'frequency_message'         => 'The daily report is sent at 9 AM PST',
 		);
 		$settings = apply_filters( 'wpadcenter_default_settings', $settings );
 		return '' !== $key ? $settings[ $key ] : $settings;
@@ -406,6 +412,7 @@ class Wpadcenter {
 			case 'link_nofollow':
 			case 'enable_privacy':
 			case 'cookie_non_personalized':
+			case 'enable_global_email':
 			case 'enable_affiliate':
 				if ( 'true' === $value || true === $value ) {
 					$ret = true;
@@ -427,6 +434,11 @@ class Wpadcenter {
 			case 'cloaked_link_base':
 			case 'consent_method':
 			case 'cookie_value':
+			case 'global_email_frequency':
+			case 'global_email_subject':
+			case 'global_email_recipients':
+			case 'global_email_report_type':
+			case 'frequency_message':
 			case 'cookie_name':
 				$ret = trim( stripslashes( $value ) );
 				break;
