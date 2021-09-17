@@ -5,6 +5,8 @@ import { cilPencil, cilSettings, cilInfo, cibGoogleKeep } from '@coreui/icons';
 import vSelect from 'vue-select';
 import componentContentAds from './contentads';
 import componentABTests from './abtests';
+import multipleEmailInput from './multiple-email-input';
+
 Vue.component('v-select', vSelect);
 
 
@@ -234,5 +236,6 @@ var vm = new Vue({
     components: {
         'component-content-ads': componentContentAds,
         'component-ab-tests': componentABTests,
+        'multiple-email-input':multipleEmailInput,
     }
 });
