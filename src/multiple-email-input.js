@@ -69,7 +69,7 @@ var multipleEmailInput =  {
                 } else {
                     errMessage = j('#wpadcenter_email_recipient_warning_data').data('invalid');
                 }
-                if((!j('.email-error')[0] && this.uniqueEmails(this.emailList).length && j('#email').val() != '') || (!j('.email-error')[0] && !this.uniqueEmails(this.emailList).length && j('#email').val() == '')){
+                if((!j('.email-error')[0] && this.uniqueEmails(this.emailList).length && j('#email').val() != '') || (!j('.email-error')[0] && !this.uniqueEmails(this.emailList).length)){
                     let errrMessage = "<div class='email-error'>"+errMessage+"</div>";
                     if(j("#show-emails").length){
                         j("#show-emails").after(errrMessage);
