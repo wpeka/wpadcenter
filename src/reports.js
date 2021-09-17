@@ -159,7 +159,9 @@ const chartOptions = {
 				beginAtZero: true,
 			}
 		}]
-	}
+	},
+	responsive: true,
+	maintainAspectRatio: false,
 }
 var reports = new Vue({
 	el: '#reports',
@@ -231,7 +233,7 @@ var reports = new Vue({
 		// get necessary data from DOM
 		this.ajax_url = this.$refs.adgroups_ajaxurl.value;
 		this.adgroups_security = this.$refs.adgroups_security.value;
-		this.ab_tests_security = this.$refs.ab_tests_security.value;
+		this.ab_tests_security = this.$refs.hasOwnProperty('ab_tests_security') ? this.$refs.ab_tests_security.value : '';
 		this.selectad_security = this.$refs.selectad_security.value;
 		this.selectadvertiser_security = this.$refs.hasOwnProperty('selectadvertiser_security') ? this.$refs.selectadvertiser_security.value : '';
 		// manually setting start date and end date
@@ -252,18 +254,20 @@ var reports = new Vue({
 			this.select_adgroup = data;
 		});
 
-		// get A/B Test from server 
-		j.ajax({
-			type: "POST",
-			url: this.ajax_url,
-			data: {
-				action: 'get_tests',
-				security: this.ab_tests_security,
-			}
-		}).done(data => {
-			data = JSON.parse(data);
-			this.tests = data;
-		});
+		if ( this.ab_tests_security !== '' ) {
+			// get A/B Test from server 
+			j.ajax({
+				type: "POST",
+				url: this.ajax_url,
+				data: {
+					action: 'get_tests',
+					security: this.ab_tests_security,
+				}
+			}).done(data => {
+				data = JSON.parse(data);
+				this.tests = data;
+			});
+		}
 
 		// get advertisers from server
 		if (this.selectadvertiser_security !== '') {

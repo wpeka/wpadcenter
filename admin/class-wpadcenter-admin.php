@@ -1478,7 +1478,7 @@ class Wpadcenter_Admin {
 			array( $this, 'wpadcenter_ad_detail_metabox' ),
 			'wpadcenter-ads',
 			'normal',
-			'low'
+			'core'
 		);
 		add_meta_box(
 			'ad-code',
