@@ -5,6 +5,8 @@ import { cilPencil, cilSettings, cilInfo, cibGoogleKeep } from '@coreui/icons';
 import vSelect from 'vue-select';
 import componentContentAds from './contentads';
 import componentABTests from './abtests';
+import multipleEmailInput from './multiple-email-input';
+
 Vue.component('v-select', vSelect);
 
 
@@ -52,8 +54,6 @@ var vm = new Vue({
             cookie_non_personalized: false,
             enable_affiliate: false,
             enable_global_email: false,
-            email_error: '',
-            invalid_email: '',
             global_email_frequency_options: ['Daily','Weekly', 'Monthly'],
             global_email_frequency: 'Daily',
             global_email_report_type: 'Last 7 days',
@@ -134,32 +134,6 @@ var vm = new Vue({
                 this.frequency_message = '';
             }
         },
-        onAddEmailRecipients() {
-            let at_count = this.$refs.global_email_recipients.value.split('@').length-1;
-            let comma_count = this.$refs.global_email_recipients.value.split(',').length-1;
-            this.email_error = '';
-            if(at_count - comma_count > 1 ) {
-                this.email_error += 'Please separate the email addresses with a comma.';
-            }
-            else{
-                this.email_error = '';
-            }
-        },
-        isValidEmail() {
-            if(this.$refs.global_email_recipients.value == '') {
-                this.invalid_email = 'Recipients field should not be empty';
-            }
-            else {
-                this.invalid_email = '';
-                const email_regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-                let emails = this.$refs.global_email_recipients.value.split(',');
-                if(emails.some((email) => !email_regex.test(email) )) {
-                    this.invalid_email = 'Please make sure you have entered valid email address(es)';
-                }else{
-                    this.invalid_email = '';
-                }
-            }
-        },
         onChangeEnableAdsTxt() {
             this.enable_ads_txt = !this.enable_ads_txt;
             this.$refs.ads_txt_tab.value = this.enable_ads_txt ? "1" : "0";
@@ -234,5 +208,6 @@ var vm = new Vue({
     components: {
         'component-content-ads': componentContentAds,
         'component-ab-tests': componentABTests,
+        'multiple-email-input':multipleEmailInput,
     }
 });
