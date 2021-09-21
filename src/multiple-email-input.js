@@ -6,7 +6,7 @@ var multipleEmailInput =  {
         <input v-show="hide" id="global_email_recipients_field" name="global_email_recipients_field" ref="global_email_recipients" class="form-control" ></input>
         <input type="text" class="form-control" id="email" @keyup="emailKeyUp($event)" @blur="printEmailList($event.target.value)">
         <div v-show="emailList.length > 0" id="show-emails"><ul style="styleListContainer">
-            <li  v-for="(value, index) in emailList" :key="index" v-bind:style="styleList">{{value}}<span class='float-right remove' @click="removeEmail" data-index="index">X</span></li>
+            <li  v-for="(value, index) in emailList" :key="index" v-bind:style="styleList">{{value}}<span class='float-right remove' @click="removeEmail" v-bind:data-index="index">X</span></li>
             </ul>
         </div>
     </div>
@@ -58,8 +58,9 @@ var multipleEmailInput =  {
             const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
             if (re.test(String(email).toLowerCase())){
-                this.emailList.push(email); 
+                this.emailList.push(email);
                 this.recipientList = this.uniqueEmails(this.emailList).toString();
+                this.emailList = this.uniqueEmails(this.emailList); 
                 this.$refs.global_email_recipients.value = this.uniqueEmails(this.emailList).toString();
                 j('#email').val('');
             }else{
@@ -94,9 +95,8 @@ var multipleEmailInput =  {
             }
             throw new Error('Bad Hex');
         },
-        removeEmail:function () {
-
-            let index = j(this).data("index");
+        removeEmail:function (e) {
+            let index = e.target.getAttribute("data-index");
             this.emailList.splice(index, 1);
             this.$refs.global_email_recipients.value = this.uniqueEmails(this.emailList).toString();
         }
@@ -108,8 +108,6 @@ var multipleEmailInput =  {
         List.forEach(function(email){
             if(email){
                 that.printEmailList(email);
-                console.log(email );
-
             }
 
         });
