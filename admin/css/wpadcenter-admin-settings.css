@@ -470,3 +470,7 @@ a:focus {
 .wpadcenter_save {
 	float: right;
 }
+
+.wpadcenter-email-frequency-message {
+	margin-top: 6px;
+}
