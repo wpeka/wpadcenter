@@ -38,27 +38,62 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
-	$(document).ready(
-		function () {
-			$(document).on(
-				'click',
-				'#wpadcenter_ad',
-				function () {
-					var ad_id = $(this).data('value');
-					var placement_id = $(this).attr('class');
-					var request = {
-						action: "set_clicks",
-						ad_id: ad_id,
-						placement_id: placement_id,
-						security: ajax_url.security,
-					};
-					$.post(ajax_url.url, request).always(
-						function (response) {
-							response = JSON.parse(response);
-						}
-					);
+	$(document).ready( function () {
+		//track clicks on ads rendered without iframe.
+		$(document).on(	'click', '#wpadcenter_ad', function(){
+			var boundAdClick = onAdClick.bind(this);
+			boundAdClick();
+		});
+
+		var onAdClick = function () {
+			var ad_id = $(this).data('value');
+			var placement_id = $(this).attr('class');
+			var request = {
+				action: "set_clicks",
+				ad_id: ad_id,
+				placement_id: placement_id,
+				security: ajax_url.security,
+				async: false,
+			};
+			$.ajax({
+				url: ajax_url.url,
+				dataType:'json',
+				type: 'POST',
+				data:request,
+				async: false,
+				success: function(response){ 
+					if (/(^|;)\s*wpadcenter_hide_ads=/.test(document.cookie)) {
+						$('.wpadcenter-ad-container').hide();
+						$('.wpadcenter-adgroup').hide();
+
+					}
+				},
+				error:function() {
+					return;
 				}
-			);
+			});
 		}
-	);
+		
+		//track clicks on ads rendered within iframe.
+		setTimeout(function(){ 
+			window.addEventListener('blur',function(){	
+				window.setTimeout(function () {	
+				if (document.activeElement instanceof HTMLIFrameElement) {
+					var ad = document.activeElement.closest("#wpadcenter_ad");
+					if ( ad ) {
+						var boundAdClick = onAdClick.bind( ad );
+						boundAdClick();
+						window.focus();
+					}
+				}
+				}, 0);
+			});
+
+		}, 1000);
+
+		});
 })(jQuery);
+
+
+
+
