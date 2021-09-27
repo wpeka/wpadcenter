@@ -178,8 +178,12 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 
 		$metaboxes_low_priority = $wp_meta_boxes['wpadcenter-ads']['normal']['low'];
 		$metaboxes_low_priority = array_keys( $metaboxes_low_priority );
-		$expected_metaboxes     = array( 'ad-details', 'ad-limits' );
+		$expected_metaboxes     = array( 'ad-limits' );
 		$this->assertFalse( boolval( array_diff( $expected_metaboxes, $metaboxes_low_priority ) ) );
+
+		$metaboxes_core_priority = $wp_meta_boxes['wpadcenter-ads']['normal']['core'];
+		$metaboxes_core_priority = array_keys( $metaboxes_core_priority );
+		$expected_metaboxes      = array( 'ad-details' );
 	}
 
 
