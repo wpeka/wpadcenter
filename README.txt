@@ -1,11 +1,11 @@
 === WP AdCenter - Ads Manager & Ad Inserter ===
 Contributors: WPEka Club
 Donate link: https://www.wpadcenter.com/
-Tags: ads, adsense, ad rotation, ad manager, wordpress ad inserter, wordpress ads, wordpress ads plugin, wordpress advertising plugin, wordpress ad rotator, banners, adverts, ads shortcode, amazon, wordpress ads manager plugin, dfp, ads manager, amp, ad blocking detection, header code, in-feed ads, sticky fixed widgets
+Tags: adsense, ad rotator, ad manager, ad inserter, ads, advertising, banners, banner ads, adverts, ads block, ads widget, ads shortcode, amazon, ads manager plugin, dfp, ads manager, amp, adblock, header code, in-feed ads, sticky fixed widgets, affiliate
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.8
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,7 +55,6 @@ WP AdCenter is a part of the premium quality plugins family by WPeka. Here are s
 
 - Over 10 years in the WordPress plugins and themes space
 - Trusted and actively used by more than 20,000+ customers
-- Featured on [AppSumo](https://appsumo.com/products/marketplace-wp-adcenter/)
 - Featured on [WPLift](https://wplift.com/wordpress-plugins/plugin-directory/wp-adcenter)
 - Featured on [WPMayor](https://wpmayor.com/ad-management-in-wordpress-comparing-four-top-plugins/)
 - Plugins with over 30,000+ active installs
@@ -146,7 +145,7 @@ WP AdCenter WordPress ads manager allows smooth and trouble-free integration wit
 
 == Signup Third-Party Advertisers ==
 
-Earn advertising income on auto-pilot by allowing third-party advertisers to sign up directly on your website and pay for advert space. You can choose whether to charge for ad impressions or to charge for the time for which the ads are displayed.
+Earn advertising income on auto-pilot by allowing third-party advertisers to sign up directly  with a front end Ad form and host their own Ads on your website. You can have them pay you per click, per impressions or per day.
 
 == Easy WooCommerce Payment Integration ==
 
@@ -158,11 +157,11 @@ WP AdCenter ad management plugin provides real-time and actionable data and repo
 
 == Adblock Detection ==
 
-WP AdCenter automatically detects visitors who have enabled an ad-blocker. It then sends a request to such users with a custom message (you can set it in your plugin settings) to disable their ad-blocker to support your site.
+WP AdCenter automatically detects visitors who have enabled an ad-blocker and prompts them with a custom message to disable their ad-blocker asking for support.
 
 == Rotating Ad Groups ==
 
-This ad inserter WordPress plugin lets you rotate the ad groups as per a predefined schedule to combat ad blindness. You get the option to display rotating ad groups using Gutenberg Blocks, Shortcodes, Elementor, or WordPress widgets.
+This ad inserter WordPress plugin lets you rotate the ads in an ad group  as per a predefined schedule to combat ad blindness. You get the option to display rotating ad groups using Gutenberg Blocks, Shortcodes, Elementor, or WordPress widgets.
 
 == Upbeat Customer Support ==
 
@@ -194,7 +193,8 @@ Installation is done in few easy steps mentioned below:
 == Frequently Asked Questions ==
 
 = Can I insert ads anywhere on my WordPress website? =
-Yes, you can easily insert ads anywhere on your website using widgets, shortcodes, or blocks. WP AdCenter also allows you to specify the Max Width of your ads and select the device type on which you want to show your ads. You get the complete flexibility to select the placement of your ad.
+Yes, you can easily insert ads anywhere on your website using widgets, shortcodes, or blocks.
+The ads can be placed on the page just like any other gutenberg block or can be used with any other popular page builders like Elementor. They can also be placed as widgets in the widget areas. You can have the ads scroll through a carousel or have it floating on the screen or even have pop up ads.
 
 = Which ad networks are supported? =
 WPAdCenter WordPress ads plugin works with all ad networks that support ads via Banner Images & Javascript code. It is compatible with popular ad networks like Google AdSense, Media.net, Amazon Advertising, BuySellAds, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more.
@@ -268,7 +268,7 @@ Yes, WP AdCenter has extensive developer and user documentation. Here is a link 
 No, the lightweight and high-performance plugin code ensures that your website performance does not degrade in any way after you install the plugin.
 
 = Can advertisers pay to run ads on my site? =
-Yes, Configure and sell ad packages based on views/impressions or display duration to 3rd Party Advertisers. WooCommerce Payment Integration allows you to collect money from advertisers easily.
+You need to have woocommerce installed for this feature. Create an AdCenter Package product in woocommerce and insert the front end Ad form block in your website.Third party advertisers can buy it from you by entering their details and choosing this product in the front end Ad form.You can have them pay you per click, per impressions or per day.
 
 = Can I use popular page builders along with the plugin? =
 All popular page builders are supported - Elementor, Beaver Builder, Visual Bakery, and more. The native Gutenberg block editor is also fully supported by this plugin.
@@ -279,14 +279,32 @@ No, we do not require any share from your ad revenue. WP AdCenter does not edit 
 = Are AMP Ads supported? =
 You can use the plugin to easily insert AMP ads in your AMP web pages. To create an AMP ad, you need to select AMP as the ‘Ad Type’ on the Create Ad page. Then you will need to select the ad size and the AMP ad parameters. Once the ad is created you can display it on the front end in the same manner as you would display other ads, just make sure that the amp ads are displayed only on amp pages.
 
-= Can I view reports and statistics of my ad campaigns? =
-WP AdCenter includes a built-in Reporting & Statistics section to help you analyze and optimize your ad performance. There are two tabs for the reports page, Dashboard, and Custom Reports. The custom reports tab is where you can generate custom reports and download them in CSV format for offline analysis.
+= Can I view statistics and reports of my Ads? =
+You can view detailed stats and reports under the reports tab of the WPAdCenter plugin in your dashboard.
+
+= What kind of stats and reports can I get for the Ads? =
+You can see the views, clicks and CTR tracked by AdCenter as an all time summary, and of top performing Ads classified by clicks, CTR and Ad group.
+
+= Can I generate custom reports? =
+You can generate custom reports and statistics under the custom reports tab of the reports section. You can generate reports with graphs for your chosen time period, Advertiser and Ad. You can also download the reports in CSV format.
 
 = Can I host third-party advertisers to advertise on my site for a fee? =
 Yes, it is possible to sign-up third-party advertisers/visitors to rent ad space on your website. All you need is to display a front-end form to sign-up third-party advertisers and specify custom packages for them to select. You can decide the price of the packages that you choose to offer on your website.
 
 = Does the plugin detect Ad Blockers? =
 The plugin supports ad-blocking detection. You cannot forcefully show your ads to visitors who have an ad blocker on, but you can display a pop-up message instead requesting the visitor to disable the ad-blocker to show your ads.
+
+= What are rotating Ads? =
+You can have multiple Ads appear one after another in the same spot on your website. You can rotate banner Ads and other types of Ads as well.
+
+= How does WP AdCenter rotate banner ads? =
+In the create Ad section, you can create an Ad group of banner Ads and insert it in your website anywhere using the Ad rotate widget.
+
+= How to use the rotating ad widget/block in WP AdCenter? =
+You can place the rotating Ad block anywhere on your page and specify which Ad group you want to use to rotate the ads. You can also specify what duration you want each Ad to appear for, the max width and which devices you want the Ad to appear on.
+
+= In what order will the Ads appear? =
+By default the rotating Ads appear in the order of the date they were published on, you can toggle the option to order it randomly while inserting the block on your page.
 
 = Does the plugin use any cookies? =
 No, we do not use any cookies to load into your code. This helps us keep the plugin lightweight and also respect the ePrivacy by not storing any of your personal information in any way.
@@ -302,8 +320,12 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 7. Adding Scripts
 
 == Changelog ==
+= 2.2.5 =
+* Update: Reports page graph view improved.
+* Update: Added compatibility for pro features.
+
 = 2.2.4 =
-* Fix: Ad count on the manage adgroups page.
+* Fix: Ad count on the manage ad groups page.
 * Update: PHP 8 compatibility.
 * Update: Users can select ad or ad groups in placements.
 
@@ -381,8 +403,12 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.2.5 =
+* Update: Reports page graph view improved.
+* Update: Added compatibility for pro features.
+
 = 2.2.4 =
-* Fix: Ad count on the manage adgroups page.
+* Fix: Ad count on the manage ad groups page.
 * Update: PHP 8 compatibility.
 * Update: Users can select ad or ad groups in placements.
 

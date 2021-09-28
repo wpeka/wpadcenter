@@ -1,6 +1,6 @@
 {
   "name": "wpadcenter",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "tested_up_to": "5.7",
   "dependencies": {
     "@babel/preset-env": "^7.15.0",
