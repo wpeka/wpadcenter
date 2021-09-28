@@ -69,7 +69,7 @@ var vm = new Vue({
             this.enable_scripts = this.$refs.enable_scripts.checked;
             this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
             this.enable_privacy = this.$refs.enable_privacy.checked;
-            this.enable_global_email = this.$refs.enable_global_email.checked;
+            this.enable_global_email = this.$refs.hasOwnProperty('enable_global_email') ? this.$refs.enable_global_email.checked : false;
             this.consent_method = this.$refs.consent_method.value;
             this.cookie_non_personalized = this.$refs.cookie_non_personalized.checked;
             this.adblock_detector = this.$refs.hasOwnProperty('adblock_detector') ? this.$refs.adblock_detector.checked : false;
@@ -89,8 +89,8 @@ var vm = new Vue({
             this.link_open_in_new_tab = this.$refs.link_open_in_new_tab_mount.value ? Boolean(this.$refs.link_open_in_new_tab_mount.value) : false;
             this.link_nofollow = this.$refs.link_nofollow_mount.value ? Boolean(this.$refs.link_nofollow_mount.value) : false;
             this.link_additional_rel_tags = this.$refs.link_additional_rel_tags_mount.value ? this.$refs.link_additional_rel_tags_mount.value.split(',') : [];
-            this.global_email_frequency = this.$refs.global_email_frequency_mount.value ? this.$refs.global_email_frequency_mount.value : '';
-            this.global_email_report_type = this.$refs.global_email_report_type_mount.value ? this.$refs.global_email_report_type_mount.value : '';
+            this.global_email_frequency = this.$refs.hasOwnProperty('global_email_frequency_mount') && this.$refs.global_email_frequency_mount.value ? this.$refs.global_email_frequency_mount.value : '';
+            this.global_email_report_type = this.$refs.hasOwnProperty('global_email_report_type_mount') && this.$refs.global_email_report_type_mount.value ? this.$refs.global_email_report_type_mount.value : '';
             let navLinks = j('.nav-link').map(function () {
                 return this.getAttribute('href');
             });

@@ -484,10 +484,15 @@ class Wpadcenter_Public {
 
 		if ( 'text_ad' !== $ad_type ) {
 
-			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" class= "' . $attributes['placement_id'] . '"';
+			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
 
-			// adding classes to link
+			// adding classes to link.
 			$single_ad_html .= 'class="wpadcenter-ad-inner__item';
+
+			if ( $attributes['placement_id'] ) {
+				$single_ad_html .= ' ' . $attributes['placement_id'];
+			}
+
 			if ( $global_additional_css_class_preference ) {
 				$single_ad_html .= $global_additional_css_classes ? ' ' . $global_additional_css_classes : '';
 			} elseif ( $additional_css_classes ) {
@@ -496,7 +501,7 @@ class Wpadcenter_Public {
 
 			$single_ad_html .= '" ';
 
-			// adding rel tags to link
+			// adding rel tags to link.
 			$rel_tags = '';
 			if ( 'global' === $nofollow && $global_nofollow ) {
 				$rel_tags .= 'nofollow';
