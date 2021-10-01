@@ -15,6 +15,7 @@
     "chart.js": "^2.9.4",
     "css-loader": "^5.2.0",
     "jest": "^27.0.6",
+    "jest-css-modules": "^2.1.0",
     "jquery": "^3.6.0",
     "moment-timezone": "^0.5.33",
     "react": "^17.0.2",
