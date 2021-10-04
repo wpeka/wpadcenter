@@ -9,6 +9,8 @@
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>analytics/</exclude-pattern>
+	<exclude-pattern>*.js</exclude-pattern>
+
 
 	<!-- Show progress, show the error codes for each message (source). -->
 	<arg value="ps" />
