@@ -235,6 +235,8 @@ class Wpadcenter {
 		$this->loader->add_action( 'admin_footer', $plugin_admin, 'wpadcenter_mascot_on_pages' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wpadcenter_admin_review_notice' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_review_already_done', 5 );
+		$this->loader->add_action( 'rest_endpoints', $plugin_admin, 'wpadcenter_rest_endpoints_args' );
+
 	}
 
 	/**

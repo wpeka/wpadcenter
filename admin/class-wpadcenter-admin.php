@@ -2349,13 +2349,14 @@ class Wpadcenter_Admin {
 		if ( 'selected_adgroup_reports' === $_POST['action'] ) {
 			$selected_ad_group = isset( $_POST['selected_ad_group'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_ad_group'] ) ) : '';
 			$args              = array(
-				'post_type' => 'wpadcenter-ads',
-				'tax_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				'post_type'      => 'wpadcenter-ads',
+				'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 					array(
 						'taxonomy' => 'wpadcenter-adgroups',
 						'terms'    => $selected_ad_group,
 					),
 				),
+				'posts_per_page' => -1,
 			);
 			$the_query         = new WP_Query( $args );
 			$return_array      = array();
@@ -2864,7 +2865,7 @@ class Wpadcenter_Admin {
 		$current_time = time();
 
 		$args = array(
-			'post_type'     => 'wpadcenter-ads',
+			'post_type'      => 'wpadcenter-ads',
 			'tax_query'      => array( //phpcs:ignore
 				array(
 					'taxonomy' => 'wpadcenter-adgroups',
@@ -2887,7 +2888,8 @@ class Wpadcenter_Admin {
 				),
 			),
 
-			'no_found_rows' => true,
+			'no_found_rows'  => true,
+			'posts_per_page' => -1,
 		);
 		$ad_ids = array();
 		$ads    = new WP_Query( $args );
@@ -3036,8 +3038,9 @@ class Wpadcenter_Admin {
 		}
 
 		$args = array(
-			'post_type'   => 'wpadcenter-ads',
-			'post_status' => 'publish',
+			'post_type'      => 'wpadcenter-ads',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
 		);
 
 		// The Query.
@@ -3594,5 +3597,20 @@ class Wpadcenter_Admin {
 		if ( '1' === $dnd ) {
 			update_option( 'wpadcenter_review_pending', '2', true );
 		}
+	}
+
+	/**
+	 * Filter rest api endpoint args to limit ad fetch count to 100.
+	 *
+	 * @param object $endpoints contains the endpoints details.
+	 *
+	 * @since 2.2.5
+	 */
+	public function wpadcenter_rest_endpoints_args( $endpoints ) {
+		if ( ! isset( $endpoints['/wp/v2/wpadcenter-ads'] ) ) {
+			return $endpoints;
+		}
+		$endpoints['/wp/v2/wpadcenter-ads'][0]['args']['per_page']['default'] = 100;
+		return $endpoints;
 	}
 }
