@@ -5,7 +5,7 @@ Tags: adsense, ad rotator, ad manager, ad inserter, ads, advertising, banners, b
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.8
-Stable tag: 2.2.5
+Stable tag: 2.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -320,6 +320,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 7. Adding Scripts
 
 == Changelog ==
+= 2.2.6 =
+* Fix: Fixed issue related to number of ads displayed in the gutenberg block selection.
+
 = 2.2.5 =
 * Update: Reports page graph view improved.
 * Update: Added compatibility for pro features.
@@ -403,6 +406,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.2.6 =
+* Fix: Fixed issue related to number of ads displayed in the gutenberg block selection.
+
 = 2.2.5 =
 * Update: Reports page graph view improved.
 * Update: Added compatibility for pro features.
