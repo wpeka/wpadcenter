@@ -106,6 +106,7 @@ module.exports = function( grunt ) {
                     '!.gitmodules',
                     '!composer.lock',
                     '!composer.json',
+                    '!jest-setup.js',
                     '!*.yml',
                     '!*.xml',
                     '!*.config.*'

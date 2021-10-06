@@ -1,7 +1,7 @@
 === WP AdCenter - Ads Manager & Ad Inserter ===
 Contributors: WPEka Club
 Donate link: https://www.wpadcenter.com/
-Tags: adsense, ad rotator, ad manager, ad inserter, ads, advertising, banners, banner ads, adverts, ads block, ads widget, ads shortcode, amazon, ads manager plugin, dfp, ads manager, amp, adblock, header code, in-feed ads, sticky fixed widgets, affiliate
+Tags: adsense, ad rotator, ad manager, ad inserter, ads, advertising, banners, banner ads, adverts, ads block, ads widget, ads shortcode, amazon, ads manager plugin, dfp, ads manager, amp, adblock, header code, in-feed ads, sticky fixed widgets, affiliate, pop-up ads
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.8
@@ -9,7 +9,7 @@ Stable tag: 2.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Manage AdSense, Amazon Ads, Media.net, banner ads, sticky widgets, AMP ads, DFP, tracking, header and footer code, location specific ads, random ads & rotating ads.
+Manage AdSense, Amazon Ads, Media.net, banner ads, sticky widgets, AMP ads, DFP, tracking, header and footer code, location-specific ads, random ads & rotating ads.
 
 == Description ==
 
@@ -22,7 +22,7 @@ From easy ad placements and ad network integrations to showing unlimited ads and
 Click on the download button to get the WP AdCenter plugin right now.
 
 ***See what Oli has to say about WP AdCenter:***
-> "WP AdCenter will take care of all aspects of advertising on your WordPress powered websites. Whether you want to run your own advertising in the form of affiliate banners, Google Adsense, or any other advertising network you can think of, or you would like to offer advertising spots for sale on your site – it's all possible with WP AdCenter."
+> "WP AdCenter will take care of all aspects of advertising on your WordPress-powered websites. Whether you want to run your own advertising in the form of affiliate banners, Google Adsense, or any other advertising network you can think of, or you would like to offer advertising spots for sale on your site – it's all possible with WP AdCenter."
 >
 > <cite>– Oli, Founder , Kooc Media</cite>
 
@@ -36,7 +36,7 @@ WP AdCenter WordPress ad management plugin is loaded with all the features you n
 - Create and display ads with <strong>custom alignments and styles.</strong>
 - Manage and <strong>display custom banner image ads</strong> anywhere you want on your site.
 - Connect and load ads directly from your Google AdSense account with seamless <strong>Google AdSense account integration.</strong>
-- <strong>Display ads from any ad network</strong> like Amazon Shopping Ads, Media.net, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and many more.
+- <strong>Display ads from any ad network</strong> like Amazon Shopping Ads, Media.net, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, GetYourGuide, The Moneytizer, and many more.
 - You can <strong>create unlimited ads</strong> that can be used to group ads together into custom groups.
 - Using the ad scheduler you can <strong>schedule ads</strong> as per specified timelines with start and end dates.
 - Get <strong>detailed reporting & statistics</strong> with custom reports for ads for analyzing and optimizing ad placements.
@@ -48,6 +48,8 @@ WP AdCenter WordPress ad management plugin is loaded with all the features you n
 - You can set instructions to <strong>display ads on specific devices</strong> to show ads to the users based upon the device they are using to access your website.
 - With this plugin, you can also show <strong>text ads</strong> on your website.
 - Use <strong>AMP ads</strong> on AMP pages to reduce the loading time and to improve ad performance.
+- You can also choose to display ads to users after taking their consent.
+- With AdCenter you can mark the ad links with do-follow, no-follow, or UGC, thereby giving you more control over your SEO.
 
 == Why WP AdCenter? ==
 
@@ -86,6 +88,9 @@ Here are the advanced features of the WP AdCenter WordPress advertising plugin t
 - The <strong>cloaked URL</strong> feature ensures that the visitors see the original domain name and not the destination URL. You can change the prefix that comes before the cloaked link's slug from the global settings in WP AdCenter.
 - The <strong>Google Analytics tracking integration</strong> feature enables you to effortlessly integrate with Google Analytics and see all the ads performance reports directly inside your GA Dashboard.
 - With <strong>ad block detection,</strong> WP AdCenter automatically detects a visitor who has enabled an ad-blocker and then requests the user to disable it with a custom message.
+- You can also display dynamic ads in different formats like <strong>carousel ads, pop-up ads, scroll bar ads</strong>, and much more.
+- You can also <strong>AB test</strong> different ad placements with the plugin.
+- With the <strong>click fraud protection</strong> feature, you can prevent malicious users from click bombing ads on your site. This feature is useful to protect your AdSense account.
 
 
 == What ad types are supported by WP AdCenter? ==
@@ -194,7 +199,7 @@ Installation is done in few easy steps mentioned below:
 
 = Can I insert ads anywhere on my WordPress website? =
 Yes, you can easily insert ads anywhere on your website using widgets, shortcodes, or blocks.
-The ads can be placed on the page just like any other gutenberg block or can be used with any other popular page builders like Elementor. They can also be placed as widgets in the widget areas. You can have the ads scroll through a carousel or have it floating on the screen or even have pop up ads.
+The ads can be placed on any page and/or post just like any other gutenberg block or can be used with any other popular page builders like Elementor. They can also be placed as widgets in the widget areas. You can have the ads scroll through a carousel or have it floating on the screen or even have pop up ads.
 
 = Which ad networks are supported? =
 WPAdCenter WordPress ads plugin works with all ad networks that support ads via Banner Images & Javascript code. It is compatible with popular ad networks like Google AdSense, Media.net, Amazon Advertising, BuySellAds, DoubleClick (DFP), Ezoic, InfoLinks, Tradedoubler, Awin, Getyourguide, The Moneytizer, and more.
@@ -204,6 +209,9 @@ Scheduling ads with WP AdCenter is easy, you can create your ads with a start da
 
 = Can I add Google Adsense Auto Ads using this plugin? =
 Yes, you can insert the Auto Ads script either across the site or on a specific page/post where you want the ads to appear. Auto ads use machine learning to select the best placement areas on your webpage to show ads. You only need to add one piece of code to all your pages using WP AdCenter.
+
+= How to insert ads in WordPress post with WP AdCenter? =
+With WP AdCenter Pro you can use the "placements" option to place ads anywhere inside your posts. You can also specify exactly where you want to place them. For example, before the second paragraph, after the headline, etc.
 
 = What banner sizes are supported by the WP AdCenter ad inserter plugin? =
 WP AdCenter supports these standard ad sizes -
@@ -251,6 +259,9 @@ Yes, WP AdCenter is GDPR and ePrivacy compliant. You can get explicit user conse
 
 = Can I show ads to targeted geo-locations? =
 Yes, the WP AdCenter ad plugin allows you to show ads based on the geolocation of your visitors. The plugin integrates with MaxMind to identify the geolocation of your visitors. Once you have integrated the MaxMind license key, you will be able to manage ads to be displayed according to the location. WPAdCenter > Create New Ad or WPAdCenter > Manage Ads > Edit ad.
+
+= How to make pop-up ads on WordPress with WP AdCenter? =
+With WP AdCenter Pro you can use the "dynamic ads" block in Gutenberg or Elementor to add pop-up ads anywhere on your website.
 
 = Can I embed ads using PHP shortcodes or code directly in my theme? =
 Yes, if you are an advanced user, and understand shortcodes and PHP code, you can place ads in your template or theme using shortcodes or PHP code. Template tags can be used to display ads dynamically on your website.
@@ -312,12 +323,12 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 == Screenshots ==
 
 1. Settings Menu.
-2. Manage Ads.
-3. Create A New Ad.
-4. Manage Ad Groups.
-5. Reports - Dashboard.
-6. Reports - Detailed Reports.
-7. Adding Scripts
+2. Integrations.
+3. Manage Ads.
+4. Create A New Ad.
+5. Manage Ad Groups.
+6. Reports - Dashboard.
+7. Reports - Custom Reports (graph view).
 
 == Changelog ==
 = 2.2.6 =
