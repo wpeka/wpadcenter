@@ -47,7 +47,7 @@
 
 		var onAdClick = function () {
 			var ad_id = $(this).data('value');
-			var placement_id = $(this).attr('class');
+			var placement_id = $(this).data('placement');
 			var request = {
 				action: "set_clicks",
 				ad_id: ad_id,
