@@ -484,14 +484,10 @@ class Wpadcenter_Public {
 
 		if ( 'text_ad' !== $ad_type ) {
 
-			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' href="' . $link_url . '" target="' . $link_target . '" ';
+			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' data-placement="' . $attributes['placement_id'] . '" href="' . $link_url . '" target="' . $link_target . '" ';
 
 			// adding classes to link.
 			$single_ad_html .= 'class="wpadcenter-ad-inner__item';
-
-			if ( $attributes['placement_id'] ) {
-				$single_ad_html .= ' ' . $attributes['placement_id'];
-			}
 
 			if ( $global_additional_css_class_preference ) {
 				$single_ad_html .= $global_additional_css_classes ? ' ' . $global_additional_css_classes : '';
@@ -748,7 +744,7 @@ class Wpadcenter_Public {
 					}
 					update_post_meta( $ad_id, 'wpadcenter_ads_stats', $meta );
 
-					do_action( 'wpadcenter_on_ad_click', $ad_id );				
+					do_action( 'wpadcenter_on_ad_click', $ad_id );
 				}
 			}
 		}
