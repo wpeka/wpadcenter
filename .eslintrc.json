@@ -1,0 +1,18 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+
+
+        "extends": [ "plugin:@wordpress/eslint-plugin/es5" ]
+    ,
+    "parserOptions": {
+        "ecmaVersion": 13,
+        "sourceType": "module"
+    },
+    "plugins": [
+    ],
+    "rules": {
+    }
+}
