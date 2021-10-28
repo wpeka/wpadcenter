@@ -3613,4 +3613,42 @@ class Wpadcenter_Admin {
 		$endpoints['/wp/v2/wpadcenter-ads'][0]['args']['per_page']['default'] = 100;
 		return $endpoints;
 	}
+
+	/**
+	 * Add upgrade to pro banner.
+	 *
+	 * @since 2.2.8
+	 */
+	public function wpadcenter_upgrade_to_pro() {
+		global $current_screen;
+		$wpadcenter_api_key = get_option( 'wc_am_client_wpadcenter_pro_activated' );
+
+		if ( class_exists( 'Wpadcenter_Pro' ) && get_option( 'wpadcenter_pro_active' ) && 'Activated' === $wpadcenter_api_key ) {
+			return;
+		}
+		$pages_for_upgrade_banner = array(
+			'edit',
+			'post',
+			'edit-tags',
+			'wpadcenter-ads_page_wpadcenter-reports',
+			'wpadcenter-ads_page_wpadcenter-settings',
+
+		);
+		$style = 'wpadcenter-ads_page_wpadcenter-settings' === $current_screen->base ? 'margin:20px' : 'margin:20px 20px 20px 0';
+
+		if ( 'wpadcenter-ads' === $current_screen->post_type && in_array( $current_screen->base, $pages_for_upgrade_banner, true ) ) {
+
+			?>
+			<div style="">
+				<div style="<?php echo esc_attr( $style ); ?>">
+					<a href="https://club.wpeka.com/product/wpadcenter/?utm_source=wprepo&utm_medium=banner&utm_campaign=wporg_sale&utm_content=coupon" target="_blank" style="box-shadow:none">
+						<img style="width:100%;height:auto" alt="Upgrade to Pro" src="<?php echo esc_attr( WPADCENTER_PLUGIN_URL ) . 'images/upgrade-to-pro-1.jpg'; ?>">
+					</a>
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+				<?php
+
+		}
+	}
 }
