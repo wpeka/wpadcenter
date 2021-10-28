@@ -1,229 +1,207 @@
+/* eslint-disable camelcase*/
+/* eslint-disable indent*/
+/*global wp*/
 import AsyncSelect from 'react-select/async';
 
-const {registerBlockType} = wp.blocks;
+const { registerBlockType } = wp.blocks;
 const apiFetch = wp.apiFetch;
 const { Placeholder } = wp.components;
-const { __, }       = wp.i18n;
+const { __ } = wp.i18n;
 
-
-
-
-import RandomAd from  './random-ad-component';
+import RandomAd from './random-ad-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
 import SelectDevice from '../select-device-component';
 
+registerBlockType( 'wpadcenter/random-ad', {
 
+	title: __( 'WPAdCenter Random Ad', 'wpadcenter' ),
+	description: __( 'Block to generate random WPAdCenter Ad from Adgroups', 'wpadcenter' ),
+	icon: 'flag',
+	category: 'wpadcenter',
 
+	attributes: {
 
+		adgroup_ids: {
+			type: 'array',
+			default: [],
+		},
+		adgroups: {
+			type: 'array',
+			default: [],
+		},
+		adgroup_alignment: {
+			type: 'text',
+		},
+		max_width_check: {
+			type: 'boolean',
+			default: false,
+		},
+		max_width_px: {
+			type: 'text',
+			default: 100,
+		},
+		devices: {
+			type: 'string',
+			default: '["mobile","tablet","desktop"]',
+		},
+		align: {
+			type: 'string',
+			default: 'wide',
+		},
+	},
 
-registerBlockType('wpadcenter/random-ad',{
+	edit( props ) {
+		const getOptions = ( value, callback )=>{
+			apiFetch( {
+				path: '/wp/v2/wpadcenter-adgroups/',
+			} )
+				.then( ( adgroups ) => {
+					adgroups = adgroups.map( ( adgroup ) => {
+						return {
+              value: adgroup.id,
+              label: adgroup.name,
+            };
+					} );
+					callback( adgroups );
+				} );
+		};
 
-     title:__('WPAdCenter Random Ad','wpadcenter'),
-     description: __('Block to generate random WPAdCenter Ad from Adgroups','wpadcenter'),
-     icon:'flag',
-     category:'wpadcenter',
+		const customStyles = {
+			control: ( base, state ) => ( {
+				...base,
 
-     attributes:{
-      
-       adgroup_ids: {
-       type: 'array',
-       default:[],
-     },
-     adgroups: {
-       type: 'array',
-       default:[],
-     },
-     adgroup_alignment: {
-       type: 'text',
-     },
-    max_width_check:{
-      type: 'boolean',
-    default:false, 
-    },
-    max_width_px:{
-      type: 'text',
-    default:100, 
-    },
-    devices : {
-      type:'string',
-      default:'["mobile","tablet","desktop"]',
-    },
-     align : {
-      type:'string',
-      default:'wide'
-    },
-     },
+				minWidth: '300px',
+				maxWidth: '400px',
 
-     edit(props) {
+				fontSize: '125%',
+				borderRadius: state.isFocused ? '3px 3px 0 0' : 3,
 
-const getOptions=(value,callback)=>{
+				boxShadow: state.isFocused ? null : null,
 
+			} ),
+			menu: base => ( {
+				...base,
 
-  apiFetch( {
-    path:'/wp/v2/wpadcenter-adgroups/',
-  } )
-  .then( ( adgroups ) => {
-    adgroups = adgroups.map( ( adgroup ) => {
-      return {
-  							value: adgroup.id,
-  							label: adgroup.name,
-  						};
-    } );
-    callback(adgroups);
-  } );
+				borderRadius: 0,
 
-}
+				marginTop: 0,
+				minWidth: '300px',
+			} ),
+			menuList: base => ( {
+				...base,
+				padding: 0,
+				maxWidth: '300px',
 
+			} ),
+		};
 
-const customStyles = {
-  control: (base, state) => ({
-    ...base,
+		const onMaxWidthControlChange = ( value )=>{
+			props.setAttributes( {
+				max_width_check: value,
 
-    minWidth: "300px",
-    maxWidth:"400px",
+			} );
+		};
+		const onMaxWidthChange = ( value )=>{
+			props.setAttributes( {
+				max_width_px: value,
 
+			} );
+		};
 
-    fontSize:"125%",
-    borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
+		const onAdSelection = ( selection ) => {
+			let current_adgroup_ids = [];
+			selection.forEach( ( adgroup )=>{
+				current_adgroup_ids.push( adgroup.value );
+			} );
+			props.setAttributes( {
+				adgroup_ids: current_adgroup_ids,
+				adgroups: selection,
 
-   boxShadow: state.isFocused ? null : null,
+			} );
+		};
+		const defaultValue = props.attributes.adgroups;
 
- }),
-  menu: base => ({
-    ...base,
+		const adAlignment = ( value )=>{
+			props.setAttributes( {
+				adgroup_alignment: value,
+			} );
+		};
+		const headingStyles = {
+			fontWeight: '300',
+			textAlign: 'center',
+			fontSize: 'medium',
+		};
 
-    borderRadius: 0,
+		const onDeviceListChange = ( value )=>{
+			let currentDevicesList = JSON.parse( props.attributes.devices );
+			var index = currentDevicesList.indexOf( value );
+			if ( index !== -1 ) {
+				currentDevicesList.splice( index, 1 );
+			} else {
+				currentDevicesList.push( value );
+			}
+			props.setAttributes( {
+				devices: JSON.stringify( currentDevicesList ),
+			} );
+		};
 
-    marginTop: 0,
-    minWidth: "300px",
-  }),
-  menuList: base => ({
-    ...base,
-    padding: 0,
-    maxWidth: "300px",
+		return <div className="Wpadcenter-gutenberg-container">
+			{ !! props.isSelected ? (
 
-  })
-};
+				<Placeholder label="WPAdCenter Random Ad" isColumnLayout="true">
 
-const onMaxWidthControlChange=(value)=>{
-  props.setAttributes( {
-    max_width_check   : value,
+					<h3 style={ headingStyles }>{ __( 'Select Ad Groups', 'wpadcenter' ) }</h3>
+					<div style={ { display: 'flex', justifyContent: 'center' } }>
 
-  } );
-}
-const onMaxWidthChange=(value)=>{
-  props.setAttributes( {
-    max_width_px   : value,
+						<AsyncSelect
+							styles={ customStyles }
+							className="wpadcenter-async-select"
+							defaultOptions
+							isMulti
+							loadOptions={ getOptions }
+							defaultValue={ defaultValue }
+							onChange={ onAdSelection }
 
-  } );
-}
+						/>
+					</div>
 
-const onAdSelection = ( selection ) => {
-      let current_adgroup_ids=[];
-      selection.forEach((adgroup)=>{
-        current_adgroup_ids.push(adgroup['value']);
-      })
-      props.setAttributes( {
-        adgroup_ids   : current_adgroup_ids,
-        adgroups: selection,
+					<AdAlignment
+						adAlignment={ adAlignment }
+						currentAdAlignment={ props.attributes.adgroup_alignment }
+					/>
 
-      } );
+					<MaxWidth
+						maxWidthCheck={ props.attributes.max_width_check }
+						maxWidthControlChange={ onMaxWidthControlChange }
+						maxWidthChange={ onMaxWidthChange }
+						maxWidth={ props.attributes.max_width_px }
+					/>
 
-    }
-    const defaultValue = props.attributes.adgroups;
+					<SelectDevice
+						devicesList={ JSON.parse( props.attributes.devices ) }
+						devicesListChange={ onDeviceListChange }
+						displayOnMobile={ JSON.parse( props.attributes.devices ).indexOf( 'mobile' ) !== -1 ? true : false }
+						displayOnTablet={ JSON.parse( props.attributes.devices ).indexOf( 'tablet' ) !== -1 ? true : false }
+						displayOnDesktop={ JSON.parse( props.attributes.devices ).indexOf( 'desktop' ) !== -1 ? true : false }
 
+					/>
 
+				</Placeholder> ) : (
+					<RandomAd
+						adGroupIds={ props.attributes.adgroup_ids }
+						adgroupAlignment={ props.attributes.adgroup_alignment }
+						max_width_check={ props.attributes.max_width_check }
+						max_width_px={ props.attributes.max_width_px }
+				/>
 
+			) }
 
-    const adAlignment=(value)=>{
-      props.setAttributes({
-        adgroup_alignment: value,
-      });
+		</div>;
+	},
 
-    }
-    const headingStyles={
-      fontWeight:"300",
-      textAlign:"center",
-      fontSize:"medium",
-    }
+	save() {
+		return null;
+	},
 
-    const onDeviceListChange=(value)=>{
-      let currentDevicesList = JSON.parse( props.attributes.devices );
-      var index = currentDevicesList.indexOf(value);
-      if (index !== -1) {
-        currentDevicesList.splice(index, 1);
-        }
-        else{
-          currentDevicesList.push(value);
-        }
-        props.setAttributes({
-          devices: JSON.stringify( currentDevicesList ),
-        });
-
-    }
-
-
-
-       return <div className="Wpadcenter-gutenberg-container">
-       { !! props.isSelected ? (
-
-       <Placeholder label="WPAdCenter Random Ad"  isColumnLayout="true">
-
-      <h3 style={headingStyles}>{__('Select Ad Groups','wpadcenter')}</h3>
-       <div style={{display:"flex",justifyContent:"center"}}>
-
-       <AsyncSelect
-       styles={customStyles}
-       className="wpadcenter-async-select"
-       defaultOptions
-       isMulti
-			 loadOptions={ getOptions }
-			 defaultValue={ defaultValue }
-			 onChange={ onAdSelection }
-
-
-      />
-      </div>
-
-      <AdAlignment
-      adAlignment={adAlignment}
-      currentAdAlignment={props.attributes.adgroup_alignment}
-      />
-
-    <MaxWidth
-      maxWidthCheck={props.attributes.max_width_check}
-      maxWidthControlChange={onMaxWidthControlChange}
-      maxWidthChange={onMaxWidthChange}
-      maxWidth={props.attributes.max_width_px}
-      />
-
-      <SelectDevice
-      devicesList={JSON.parse( props.attributes.devices )}
-      devicesListChange={onDeviceListChange}
-      displayOnMobile={JSON.parse( props.attributes.devices ).indexOf("mobile") !== -1 ? true : false}
-      displayOnTablet={JSON.parse( props.attributes.devices ).indexOf("tablet") !== -1 ? true : false}
-      displayOnDesktop={JSON.parse( props.attributes.devices ).indexOf("desktop") !== -1 ? true : false}
-
-      /> 
-
-
-      </Placeholder>):(
-        <RandomAd
-        adGroupIds={props.attributes.adgroup_ids}
-        adgroupAlignment={props.attributes.adgroup_alignment}
-        max_width_check={props.attributes.max_width_check}
-        max_width_px={props.attributes.max_width_px}
-        />
-
-      )}
-
-      </div>;
-
-     },
-
-     save(){
-       return null;
-     }
-
-});
+} );

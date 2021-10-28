@@ -1,107 +1,112 @@
+
+/* eslint-disable vars-on-top*/
+/* eslint-disable no-unused-vars*/
+/* eslint-disable no-unused-expressions*/
+/*global returnArray*/
 import Vue from 'vue';
 import LineChart from './LineChart';
 
 // chart data
 const chartData = {
-	datasets: []
-}
+	datasets: [],
+};
 
 // chart options
 const chartOptions = {
 	scales: {
-		xAxes: [{
+		xAxes: [ {
 			type: 'time',
 			time: {
 				unit: 'day',
 				parser: 'YYYY/MM/DD',
-				tooltipFormat: 'll'
+				tooltipFormat: 'll',
 			},
-		}],
-		yAxes: [{
+		} ],
+		yAxes: [ {
 			ticks: {
 				beginAtZero: true,
 			},
-		}]
+		} ],
 	},
 	responsive: true,
 	maintainAspectRatio: false,
-}
+};
 // calculate datasets from localized data
 let totalClicks = 0;
 let totalViews = 0;
 
-// initialize dataset 
+// initialize dataset
 let tempClicks = {
 	ID: returnArray[0].ad_id,
-	label: "Clicks",
+	label: 'Clicks',
 	fill: false,
 	data: [],
 	borderColor: '#4198D7',
-}
+};
 
 let tempViews = {
 	ID: returnArray[0].ad_id,
-	label: "Views",
+	label: 'Views',
 	fill: false,
 	data: [],
 	borderColor: '#6F4E7C',
-}
+};
 
 // get dates
-let dates = returnArray.splice(returnArray.length - 1, 1);
+let dates = returnArray.splice( returnArray.length - 1, 1 );
 dates = dates.flat();
 
 // loop to add datasets
-returnArray.forEach(function (item, index) {
-	dates = dates.filter((date) => {
+returnArray.forEach( function( item, index ) {
+	dates = dates.filter( ( date ) => {
 		return date !== item.ad_date;
-	});
+	} );
 	let temp1 = {
 		x: item.ad_date,
 		y: item.ad_clicks,
-	}
+	};
 	let temp2 = {
 		x: item.ad_date,
 		y: item.ad_impressions,
-	}
+	};
 	totalClicks += parseInt( item.ad_clicks );
 	totalViews += parseInt( item.ad_impressions ),
-	tempClicks.data.push(temp1);
-	tempViews.data.push(temp2);
-});
+	tempClicks.data.push( temp1 );
+	tempViews.data.push( temp2 );
+} );
 
 // loop to add dates having no data in database
-dates.forEach(function(item) {
+dates.forEach( function( item ) {
 	let temp1 = {
 		x: item,
 		y: 0,
-	}
+	};
 	let temp2 = {
 		x: item,
 		y: 0,
-	}
-	tempClicks.data.push(temp1);
-	tempViews.data.push(temp2);
-});
+	};
+	tempClicks.data.push( temp1 );
+	tempViews.data.push( temp2 );
+} );
 
 // sort the data by date
-tempViews.data.sort((a,b) => {
-	return new Date(b.x) - new Date(a.x);
-});
-tempClicks.data.sort((a,b) => {
-	return new Date(b.x) - new Date(a.x);
-});
+tempViews.data.sort( ( a, b ) => {
+	return new Date( b.x ) - new Date( a.x );
+} );
+tempClicks.data.sort( ( a, b ) => {
+	return new Date( b.x ) - new Date( a.x );
+} );
 
 // push data to datasets array of chartjs
-chartData.datasets.push(tempClicks, tempViews);
-let totalCTR = (totalClicks / totalViews) * 100;
-if( isNaN(totalCTR) ) {
+chartData.datasets.push( tempClicks, tempViews );
+let totalCTR = ( totalClicks / totalViews ) * 100;
+if ( isNaN( totalCTR ) ) {
 	totalCTR = 0.00;
 }
-totalCTR = totalCTR.toFixed(2) + "%";
+totalCTR = totalCTR.toFixed( 2 ) + '%';
 
 // Vue Component
-var weeklyStats = new Vue({
+var weeklyStats = new Vue( {
 	el: '#wpadcenter-weekly-stats',
 	data() {
 		return {
@@ -114,5 +119,5 @@ var weeklyStats = new Vue({
 	},
 	components: {
 		'line-chart': LineChart,
-	}
-});
+	},
+} );

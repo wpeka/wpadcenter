@@ -1,13 +1,12 @@
 /**
  * Javascript file for public section.
  *
- * @link  https://wpadcenter.com/
  * @since 1.0.0
  *
- * @package Wpadcenter
+ * @package
  */
 
-(function ($) {
+( function( $ ) {
 	'use strict';
 
 	/**
@@ -37,63 +36,63 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
-
-	$(document).ready( function () {
+	/* eslint-disable camelcase*/
+	/* eslint-disable vars-on-top*/
+	/* eslint-disable eqeqeq*/
+	/* eslint-disable no-shadow*/
+	/*eslint-disable no-alert*/
+	/*eslint-disable no-unused-vars*/
+	/*global jQuery, ajax_url*/
+	$( document ).ready( function() {
 		//track clicks on ads rendered without iframe.
-		$(document).on(	'click', '#wpadcenter_ad', function(){
-			var boundAdClick = onAdClick.bind(this);
+		$( document ).on(	'click', '#wpadcenter_ad', function() {
+			var boundAdClick = onAdClick.bind( this );
 			boundAdClick();
-		});
+		} );
 
-		var onAdClick = function () {
-			var ad_id = $(this).data('value');
-			var placement_id = $(this).data('placement');
+		var onAdClick = function() {
+			var ad_id = $( this ).data( 'value' );
+			var placement_id = $( this ).data( 'placement' );
 			var request = {
-				action: "set_clicks",
+				action: 'set_clicks',
 				ad_id: ad_id,
 				placement_id: placement_id,
 				security: ajax_url.security,
 				async: false,
 			};
-			$.ajax({
+			$.ajax( {
 				url: ajax_url.url,
-				dataType:'json',
+				dataType: 'json',
 				type: 'POST',
-				data:request,
+				data: request,
 				async: false,
-				success: function(response){ 
-					if (/(^|;)\s*wpadcenter_hide_ads=/.test(document.cookie)) {
-						$('.wpadcenter-ad-container').hide();
-						$('.wpadcenter-adgroup').hide();
-
+				success: function( response ) {
+					if ( /(^|;)\s*wpadcenter_hide_ads=/.test( document.cookie ) ) {
+						$( '.wpadcenter-ad-container' ).hide();
+						$( '.wpadcenter-adgroup' ).hide();
 					}
 				},
-				error:function() {
-					return;
-				}
-			});
-		}
-		
+				error: function() {
+
+				},
+			} );
+		};
+
 		//track clicks on ads rendered within iframe.
-		setTimeout(function(){ 
-			window.addEventListener('blur',function(){	
-				window.setTimeout(function () {	
-				if (document.activeElement instanceof HTMLIFrameElement) {
-					var ad = document.activeElement.closest("#wpadcenter_ad");
-					if ( ad ) {
-						var boundAdClick = onAdClick.bind( ad );
-						boundAdClick();
-						window.focus();
+		setTimeout( function() {
+			window.addEventListener( 'blur', function() {
+				window.setTimeout( function() {
+					if ( document.activeElement instanceof HTMLIFrameElement ) {
+						var ad = document.activeElement.closest( '#wpadcenter_ad' );
+						if ( ad ) {
+							var boundAdClick = onAdClick.bind( ad );
+							boundAdClick();
+							window.focus();
+						}
 					}
-				}
-				}, 0);
-			});
-
-		}, 1000);
-
-		});
-})(jQuery);
-
-
-
+				}, 0 );
+			} );
+		}, 1000 );
+	} );
+}( jQuery ) );
 

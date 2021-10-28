@@ -5,7 +5,7 @@
     },
 
 
-        "extends": [ "plugin:@wordpress/eslint-plugin/es5" ]
+        "extends": [ "plugin:@wordpress/eslint-plugin/react" ]
     ,
     "parserOptions": {
         "ecmaVersion": 13,

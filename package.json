@@ -14,7 +14,6 @@
     "babel-jest": "^27.0.6",
     "chart.js": "^2.9.4",
     "css-loader": "^5.2.0",
-    "eslint-config-wordpress": "^2.0.0",
     "jest": "^27.0.6",
     "jest-css-modules": "^2.1.0",
     "jquery": "^3.6.0",
@@ -34,7 +33,6 @@
     "@wordpress/eslint-plugin": "^9.2.0",
     "@wordpress/scripts": "^13.0.3",
     "eslint": "^8.1.0",
-    "eslint-plugin-vue": "^7.20.0",
     "grunt": "^1.1.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-compress": "^1.4.1",
@@ -61,6 +59,5 @@
     "jest": "jest",
     "wp:lint-js": "wp-scripts lint-js",
     "wp:lint-js-fix": "wp-scripts lint-js --fix"
-
   }
 }
