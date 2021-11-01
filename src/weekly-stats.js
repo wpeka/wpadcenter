@@ -1,7 +1,3 @@
-
-/* eslint-disable vars-on-top*/
-/* eslint-disable no-unused-vars*/
-/* eslint-disable no-unused-expressions*/
 /*global returnArray*/
 import Vue from 'vue';
 import LineChart from './LineChart';

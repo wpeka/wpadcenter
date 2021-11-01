@@ -36,12 +36,6 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
-	/* eslint-disable camelcase*/
-	/* eslint-disable vars-on-top*/
-	/* eslint-disable eqeqeq*/
-	/* eslint-disable no-shadow*/
-	/*eslint-disable no-alert*/
-	/*eslint-disable no-unused-vars*/
 	/*global jQuery, ajax_url*/
 	$( document ).ready( function() {
 		//track clicks on ads rendered without iframe.

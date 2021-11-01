@@ -36,11 +36,7 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
-	/* eslint-disable camelcase*/
-	/* eslint-disable vars-on-top*/
-	/* eslint-disable eqeqeq*/
-	/* eslint-disable no-shadow*/
-	/*eslint-disable no-alert*/
+
 	/*global jQuery, ajaxurl, AdsenseGAPI, wpadcenter_render_metaboxes, _, tinymce*/
 
 	$( document ).ready(

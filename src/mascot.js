@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions*/
-/* eslint-disable no-unused-vars*/
 /*global mascot*/
 import Vue from 'vue';
 import './css/mascot.css';

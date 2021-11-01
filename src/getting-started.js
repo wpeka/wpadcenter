@@ -1,6 +1,3 @@
-/* eslint-disable no-redeclare*/
-/* eslint-disable vars-on-top*/
-/* eslint-disable no-unused-vars*/
 /*global obj*/
 import Vue from 'vue';
 

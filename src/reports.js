@@ -1,10 +1,3 @@
-/* eslint-disable vars-on-top*/
-/* eslint-disable eqeqeq*/
-/* eslint-disable no-unused-vars*/
-/* eslint-disable camelcase*/
-/* eslint-disable no-shadow*/
-/* eslint-disable no-redeclare*/
-/* eslint-disable  no-bitwise*/
 /*global jQuery, reportsArray*/
 import Vue from 'vue';
 import CoreuiVue from '@coreui/vue';

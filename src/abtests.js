@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars*/
 /*global jQuery*/
 // jquery $ as j
 const j = jQuery.noConflict();

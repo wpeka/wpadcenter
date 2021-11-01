@@ -1,5 +1,3 @@
-/* eslint-disable camelcase*/
-/*eslint-disable no-unused-vars*/
 /*global wp, jQuery, wpadcenter_random_ad_verify*/
 const apiFetch = wp.apiFetch;
 const { Component } = wp.element;

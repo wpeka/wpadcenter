@@ -1,7 +1,3 @@
-/* eslint-disable vars-on-top*/
-/* eslint-disable eqeqeq*/
-/* eslint-disable no-unused-vars*/
-/* eslint-disable no-bitwise*/
 /*global jQuery*/
 const j = jQuery.noConflict();
 

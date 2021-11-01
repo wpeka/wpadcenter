@@ -1,6 +1,3 @@
-/* eslint-disable vars-on-top*/
-/* eslint-disable no-unused-vars*/
-/* eslint-disable camelcase*/
 /*global jQuery*/
 import Vue from 'vue';
 import CoreuiVue from '@coreui/vue';

@@ -1,4 +1,3 @@
-/* eslint-disable indent*/
 /*global wp*/
 import AsyncSelect from 'react-select/async';
 

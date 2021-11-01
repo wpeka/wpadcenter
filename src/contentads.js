@@ -1,4 +1,3 @@
-/* eslint-disable camelcase*/
 /*global jQuery, localized_data*/
 // jquery $ as j
 const j = jQuery.noConflict();

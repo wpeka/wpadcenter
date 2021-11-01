@@ -5,10 +5,6 @@
  *
  * @package
  */
-
-/* eslint-disable camelcase*/
-/* eslint-disable eqeqeq*/
-/* eslint-disable no-mixed-operators*/
 /*global jQuery, wpadcenter_ad_scheduler*/
 import moment from 'moment-timezone';
 ( function( $ ) {

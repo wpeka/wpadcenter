@@ -13,12 +13,6 @@
 	 * @package
 	 * @author     WPEka Club <support@wpeka.com>
 	 */
-	/* eslint-disable camelcase*/
-	/* eslint-disable vars-on-top*/
-	/* eslint-disable eqeqeq*/
-	/* eslint-disable no-shadow*/
-	/*eslint-disable no-alert*/
-	/*eslint-disable no-unused-vars*/
 	/*global jQuery, ajaxurl, AdsenseGAPI*/
 	$( document ).ready(
 		function() {
