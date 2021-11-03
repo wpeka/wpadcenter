@@ -130,7 +130,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Test for admin constructor()
 	 */
 	public function test_admin_constructor() {
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.2.7' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.2.8' );
 		$this->assertTrue( self::$wpadcenter_admin instanceof Wpadcenter_Admin );
 	}
 
