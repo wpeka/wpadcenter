@@ -130,7 +130,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Test for admin constructor()
 	 */
 	public function test_admin_constructor() {
-		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.2.5' );
+		self::$wpadcenter_admin = new Wpadcenter_Admin( 'wpadcenter', '2.2.8' );
 		$this->assertTrue( self::$wpadcenter_admin instanceof Wpadcenter_Admin );
 	}
 
@@ -1153,6 +1153,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 				'role' => 'administrator',
 			)
 		);
+		set_current_screen( 'edit.php ' );
 		wp_set_current_user( $user_id );
 		$wp_user_object = new WP_User( $user_id );
 		$wp_user_object->add_role( 'advertiser' );
@@ -1170,6 +1171,21 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$query_vars_array = $query->query_vars;
 		$this->assertArrayHasKey( 'meta_query', $query_vars_array, 'failed to add meta_query' );
 		$this->assertArrayHasKey( 'tax_query', $query_vars_array, 'failed to add tax_query' );
+	}
+
+	/**
+	 * Test for wpadcenter_upgrade_to_pro function
+	 */
+	public function test_wpadcenter_upgrade_to_pro() {
+		set_current_screen( 'edit.php ' );
+		global $current_screen;
+		$current_screen->post_type = 'wpadcenter-ads';
+		$current_screen->base      = 'wpadcenter-ads_page_wpadcenter-reports';
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_upgrade_to_pro();
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+
 	}
 }
 
