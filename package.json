@@ -30,7 +30,9 @@
     "webpack-cli": "^4.6.0"
   },
   "devDependencies": {
+    "@wordpress/eslint-plugin": "^9.2.0",
     "@wordpress/scripts": "^13.0.3",
+    "eslint": "^8.1.0",
     "grunt": "^1.1.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-compress": "^1.4.1",
@@ -54,6 +56,8 @@
     "build:gutenbergblocks": "wp-scripts build --config webpack.config.gutenbergscripts.js",
     "makepot": "wp i18n make-pot . languages/wpadcenter.pot --exclude=release,analytics,node_modules,vendor,src,bin,tests",
     "test": "jest --coverage",
-    "jest": "jest"
+    "jest": "jest",
+    "wp:lint-js": "wp-scripts lint-js",
+    "wp:lint-js-fix": "wp-scripts lint-js --fix"
   }
 }

@@ -1,8 +1,9 @@
+/*global jQuery, localized_data*/
 // jquery $ as j
 const j = jQuery.noConflict();
-const pro_ver_above_or_5_2_3 = localized_data.wpadcenter_pro_version.localeCompare('5.2.3', undefined, { numeric: true, sensitivity: 'base' }) >= 0 ;
+const pro_ver_above_or_5_2_3 = localized_data.wpadcenter_pro_version.localeCompare( '5.2.3', undefined, { numeric: true, sensitivity: 'base' } ) >= 0;
 const componentContentAds = {
-    template:
+	template:
         `<div class="contentAdsRules" v-if="active">
             <div class="rule" @click="onCollapseClick">
                 <div class="rule_label">
@@ -110,203 +111,188 @@ const componentContentAds = {
             </c-collapse>
         </div>`,
 
-    data() {
-        return {
-            PostOptions: ['Post', 'Page'],
-            contentAdsRulesShow: this.show,
-            positionOptions: [
-                { key: 'after', value: 'after' },
-                { key: 'before', value: 'before' }
-            ],
-            elementOptions: [
-                { key: 'Paragraph (<p>)', value: 'p' },
-                { key: 'Paragraph without image (<p>)', value: 'pw' },
-                { key: 'Headline 2 (<h2>)', value: 'h2' },
-                { key: 'Headline 3 (<h3>)', value: 'h3' },
-                { key: 'Headline 4 (<h4>)', value: 'h4' },
-                { key: 'Any headline (h1-h6)', value: 'any' },
-                { key: 'Image Tag (<img>)', value: 'img' },
-                { key: 'table tag (<table>)', value: 'table' },
-                { key: 'list item (<li>)', value: 'li' },
-                { key: 'quote (<blockquote>)', value: 'blockquote' },
-                { key: 'iframe (<iframe>)', value: 'iframe' },
-                { key: 'div (<div>)', value: 'div' },
-            ],
-            active: true,
-            adGroups: [],
-            ads: [],
-            position_: this.position,
-            placement_id_: this.placement_id,
-            placement_name_: this.placement_name,
-            alignment_: this.alignment,
-            select_from_: this.select_from,
-            ad_or_adgroup_: this.ad_or_adgroup,
-            adgroup_selected_: this.adgroup_selected,
-            ad_selected_: this.ad_selected,
-            blog_page: this.blog_page,
-            position_selected_: this.position_selected,
-            element_selected_: this.element_selected,
-            post_selected_: this.post_selected,
-            default_placement_name_: 'Placement-' + this.count,
-            count_: this.count,
-            adgroups_security_: this.adgroups_security,
-            number_: this.number,
-            in_feed_number_: this.in_feed_number,
-            position_reverse_: this.position_reverse,
-            post_: '-',
-            ad_ : '-',
-            adgroup_ : '-',
-            adorgroup_: '-',
-            pro_ver_above_or_5_2_3: pro_ver_above_or_5_2_3,
-        }
-    },
-    props: [
-        'placement_id',
-        'position',
-        'placement_name',
-        'alignment',
-        'select_from',
-        'ad_or_adgroup',
-        'adgroup_selected',
-        'ad_selected',
-        'position_selected',
-        'element_selected',
-        'post_selected',
-        'count',
-        'adgroups_security',
-        'number',
-        'in_feed_number',
-        'position_reverse',
-        'show'
-    ],
-    methods: {
-        getPlacementName: function (name) {
-            return 'placement[' + this.count + ']' + name;
-        },
-        onDeleteRule: function () {
-            this.active = false;
-        },
-        getPlacementId: function (id) {
-            return id + '-' + this.count;
-        },
-        onPostChange: function () {
-            this.post_ = this.post_selected_.join(',');
-            if (this.post_ === '') {
-                this.post_ = '-';
-            }
-        },
-        onAdgroupChange: function () {
-            if ( pro_ver_above_or_5_2_3 ) {
-                this.adorgroup_ = this.adgroup_selected_.name;
-            }
-            else{
-                this.adgroup_ = this.adgroup_selected_.name;
-            }
-            this.ad_selected_ = [];
-        },
-        onAdChange: function () {
-            if ( pro_ver_above_or_5_2_3 ) {
-                this.adorgroup_ = this.ad_selected_.post_title;
-            }
-            else{
-                this.ad_ = this.ad_selected_.post_title;
-            }
-            this.adgroup_selected_ = [];
-        },
-        onCollapseClick: function () {
-            this.contentAdsRulesShow = !this.contentAdsRulesShow;
-            if (!this.contentAdsRulesShow) {
-                if (this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
-                    this.$refs.wpadcenter_arrow.classList.remove('vs__close-indicator-wp');
-                }
-            }
-            else {
-                if (!this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
-                    this.$refs.wpadcenter_arrow.classList.add('vs__close-indicator-wp');
-                }
-            }
-        }
-    },
-    mounted() {
-        j.ajax({
-            type: "POST",
-            url: './admin-ajax.php',
-            data: {
-                action: 'get_adgroups',
-                security: this.adgroups_security,
-            }
-        }).done(data => {
-            this.adGroups = JSON.parse(data);
-            this.adGroups.forEach((item) => {
-                if (item.term_id === parseInt(this.adgroup_selected_)) {
-                    this.adgroup_selected_ = item;
-                    if ( pro_ver_above_or_5_2_3 ) {
-                        this.adorgroup_ = item.name;
-                    }
-                    else{
-                        this.ad_ = item.post_title;
-                    }
-                    return;
-                }
-            });
-        });
+	data() {
+		return {
+			PostOptions: [ 'Post', 'Page' ],
+			contentAdsRulesShow: this.show,
+			positionOptions: [
+				{ key: 'after', value: 'after' },
+				{ key: 'before', value: 'before' },
+			],
+			elementOptions: [
+				{ key: 'Paragraph (<p>)', value: 'p' },
+				{ key: 'Paragraph without image (<p>)', value: 'pw' },
+				{ key: 'Headline 2 (<h2>)', value: 'h2' },
+				{ key: 'Headline 3 (<h3>)', value: 'h3' },
+				{ key: 'Headline 4 (<h4>)', value: 'h4' },
+				{ key: 'Any headline (h1-h6)', value: 'any' },
+				{ key: 'Image Tag (<img>)', value: 'img' },
+				{ key: 'table tag (<table>)', value: 'table' },
+				{ key: 'list item (<li>)', value: 'li' },
+				{ key: 'quote (<blockquote>)', value: 'blockquote' },
+				{ key: 'iframe (<iframe>)', value: 'iframe' },
+				{ key: 'div (<div>)', value: 'div' },
+			],
+			active: true,
+			adGroups: [],
+			ads: [],
+			position_: this.position,
+			placement_id_: this.placement_id,
+			placement_name_: this.placement_name,
+			alignment_: this.alignment,
+			select_from_: this.select_from,
+			ad_or_adgroup_: this.ad_or_adgroup,
+			adgroup_selected_: this.adgroup_selected,
+			ad_selected_: this.ad_selected,
+			blog_page: this.blog_page,
+			position_selected_: this.position_selected,
+			element_selected_: this.element_selected,
+			post_selected_: this.post_selected,
+			default_placement_name_: 'Placement-' + this.count,
+			count_: this.count,
+			adgroups_security_: this.adgroups_security,
+			number_: this.number,
+			in_feed_number_: this.in_feed_number,
+			position_reverse_: this.position_reverse,
+			post_: '-',
+			ad_: '-',
+			adgroup_: '-',
+			adorgroup_: '-',
+			pro_ver_above_or_5_2_3: pro_ver_above_or_5_2_3,
+		};
+	},
+	props: [
+		'placement_id',
+		'position',
+		'placement_name',
+		'alignment',
+		'select_from',
+		'ad_or_adgroup',
+		'adgroup_selected',
+		'ad_selected',
+		'position_selected',
+		'element_selected',
+		'post_selected',
+		'count',
+		'adgroups_security',
+		'number',
+		'in_feed_number',
+		'position_reverse',
+		'show',
+	],
+	methods: {
+		getPlacementName: function( name ) {
+			return 'placement[' + this.count + ']' + name;
+		},
+		onDeleteRule: function() {
+			this.active = false;
+		},
+		getPlacementId: function( id ) {
+			return id + '-' + this.count;
+		},
+		onPostChange: function() {
+			this.post_ = this.post_selected_.join( ',' );
+			if ( this.post_ === '' ) {
+				this.post_ = '-';
+			}
+		},
+		onAdgroupChange: function() {
+			if ( pro_ver_above_or_5_2_3 ) {
+				this.adorgroup_ = this.adgroup_selected_.name;
+			} else {
+				this.adgroup_ = this.adgroup_selected_.name;
+			}
+			this.ad_selected_ = [];
+		},
+		onAdChange: function() {
+			if ( pro_ver_above_or_5_2_3 ) {
+				this.adorgroup_ = this.ad_selected_.post_title;
+			} else {
+				this.ad_ = this.ad_selected_.post_title;
+			}
+			this.adgroup_selected_ = [];
+		},
+		onCollapseClick: function() {
+			this.contentAdsRulesShow = ! this.contentAdsRulesShow;
+			if ( ! this.contentAdsRulesShow ) {
+				if ( this.$refs.wpadcenter_arrow.classList.contains( 'vs__close-indicator-wp' ) ) {
+					this.$refs.wpadcenter_arrow.classList.remove( 'vs__close-indicator-wp' );
+				}
+			} else if ( ! this.$refs.wpadcenter_arrow.classList.contains( 'vs__close-indicator-wp' ) ) {
+				this.$refs.wpadcenter_arrow.classList.add( 'vs__close-indicator-wp' );
+			}
+		},
+	},
+	mounted() {
+		j.ajax( {
+			type: 'POST',
+			url: './admin-ajax.php',
+			data: {
+				action: 'get_adgroups',
+				security: this.adgroups_security,
+			},
+		} ).done( data => {
+			this.adGroups = JSON.parse( data );
+			this.adGroups.forEach( ( item ) => {
+				if ( item.term_id === parseInt( this.adgroup_selected_ ) ) {
+					this.adgroup_selected_ = item;
+					if ( pro_ver_above_or_5_2_3 ) {
+						this.adorgroup_ = item.name;
+					} else {
+						this.ad_ = item.post_title;
+					}
+				}
+			} );
+		} );
 
+		j.ajax( {
+			type: 'POST',
+			url: './admin-ajax.php',
+			data: {
+				action: 'get_ads',
+				security: this.adgroups_security,
+			},
+		} ).done( data => {
+			this.ads = JSON.parse( data );
+			this.blog_page = this.ads.pop();
+			this.ads.forEach( ( item ) => {
+				if ( item.post_title === this.ad_selected_ ) {
+					this.ad_selected_ = item;
+					this.adorgroup_ = item.post_title;
+				}
+			} );
+		} );
 
-        j.ajax({
-            type: "POST",
-            url: './admin-ajax.php',
-            data: {
-                action: 'get_ads',
-                security: this.adgroups_security,
-            }
-        }).done(data => {
-            this.ads = JSON.parse(data);
-            this.blog_page = this.ads.pop();
-            this.ads.forEach((item) => {
-                if (item.post_title === this.ad_selected_) {
-                    this.ad_selected_ = item;
-                    this.adorgroup_ = item.post_title;
-                    return;
-                }
-            });
-        });
-
-        this.positionOptions.forEach((item) => {
-            if (item.key === this.position_selected_) {
-                this.position_selected_ = item;
-                return;
-            }
-        });
-        this.elementOptions.forEach((item) => {
-            if (item.value === this.element_selected_) {
-                this.element_selected_ = item;
-                return;
-            }
-        });
-        if (this.post_selected_ === '') {
-            this.post_selected_ = [];
-        }
-        else {
-            this.post_ = this.post_selected_;
-            this.post_selected_ = this.post_selected_.split(',');
-        }
-        if (this.show !== true) {
-            this.contentAdsRulesShow = false;
-        }
-        if (this.position_reverse_ === 'false') {
-            this.$refs.position_reverse.checked = false;
-        }
-        if (!this.contentAdsRulesShow) {
-            if (this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
-                this.$refs.wpadcenter_arrow.classList.remove('vs__close-indicator-wp');
-            }
-        }
-        else {
-            if (!this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
-                this.$refs.wpadcenter_arrow.classList.add('vs__close-indicator-wp');
-            }
-        }
-    }
+		this.positionOptions.forEach( ( item ) => {
+			if ( item.key === this.position_selected_ ) {
+				this.position_selected_ = item;
+			}
+		} );
+		this.elementOptions.forEach( ( item ) => {
+			if ( item.value === this.element_selected_ ) {
+				this.element_selected_ = item;
+			}
+		} );
+		if ( this.post_selected_ === '' ) {
+			this.post_selected_ = [];
+		} else {
+			this.post_ = this.post_selected_;
+			this.post_selected_ = this.post_selected_.split( ',' );
+		}
+		if ( this.show !== true ) {
+			this.contentAdsRulesShow = false;
+		}
+		if ( this.position_reverse_ === 'false' ) {
+			this.$refs.position_reverse.checked = false;
+		}
+		if ( ! this.contentAdsRulesShow ) {
+			if ( this.$refs.wpadcenter_arrow.classList.contains( 'vs__close-indicator-wp' ) ) {
+				this.$refs.wpadcenter_arrow.classList.remove( 'vs__close-indicator-wp' );
+			}
+		} else if ( ! this.$refs.wpadcenter_arrow.classList.contains( 'vs__close-indicator-wp' ) ) {
+			this.$refs.wpadcenter_arrow.classList.add( 'vs__close-indicator-wp' );
+		}
+	},
 };
 
 export default componentContentAds;
