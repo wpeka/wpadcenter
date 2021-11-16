@@ -3778,7 +3778,6 @@ class Wpadcenter_Admin {
 	 * Triggered on deleting ad.
 	 *
 	 * @param Int    $ad_id id of the ad deleted.
-	 *
 	 * @param Object $post WP post.
 	 *
 	 * @since 2.9.0
