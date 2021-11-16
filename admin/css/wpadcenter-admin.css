@@ -142,3 +142,46 @@
 	  max-height: 600px;
 	  overflow: auto;
   }
+
+  .wpadcenter-inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.wpadcenter-inputfile + label {
+    color: white;
+    background-color: green;
+    display: inline-block;
+	padding:5px;
+}
+
+.wpadcenter-inputfile:disabled + label{
+	background-color: black;
+
+}
+
+.wpadcenter-html5-top-container{
+	margin-bottom:10px;
+	display: flex;
+}
+.wpadcenter-delete-icon{
+	width: 15px;
+	cursor: pointer;
+}
+.wpadcenter-active-filename{
+	margin: 0 5px;
+	display:flex;
+	align-items:center;
+}
+.wpadcenter-delete-icon-container{
+	display: flex;
+	align-items: center;
+}
+.wpadcenter-html5-upload-error{
+	display: block;
+	color: red;
+	margin-top: 5px;
+}
