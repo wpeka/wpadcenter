@@ -3777,12 +3777,13 @@ class Wpadcenter_Admin {
 	/**
 	 * Triggered on deleting ad.
 	 *
-	 * @param Int    $ad_id id of the ad deleted.
-	 * @param Object $post WP post.
+	 * @param Int $ad_id id of the ad deleted.
 	 *
 	 * @since 2.9.0
 	 */
-	public function wpadcenter_on_delete_ad( $ad_id, $post ) {
+	public function wpadcenter_on_delete_ad( $ad_id ) {
+
+		$post = get_post( $ad_id );
 
 		if ( 'wpadcenter-ads' === $post->post_type ) {
 
