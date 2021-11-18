@@ -485,6 +485,56 @@
 		$('#globalAdditionalRelTagsPreference').change(additionalRelTagSetup);
 		$('#globalAdditionalCssClassPreference').change(additionalCssClassSetup);
 
+		$('#wpadcenter_upload_video').click(function(e){
+			e.preventDefault();
+			wpadcenter_video_upload($(this));
+		});
+		function wpadcenter_video_upload( $elem ) { 
+			var file_frame, attachment;
+	 
+			 // If an instance of file_frame already exists, then we can open it rather than creating a new instance
+			if ( file_frame ) {
+				file_frame.open();
+				return;
+			}; 
+	
+			 // Use the wp.media library to define the settings of the media uploader
+			file_frame = wp.media.frames.file_frame = wp.media({
+				frame: 'post',
+				state: 'insert',
+				multiple: false
+			});
+	 
+			 // Setup an event handler for what to do when a media has been selected
+			file_frame.on( 'insert', function() { 
+				// Read the JSON data returned from the media uploader
+				attachment = file_frame.state().get( 'selection' ).first().toJSON();
+				console.log(attachment);
+				// First, make sure that we have the URL of the media to display
+				if ( 0 > $.trim( attachment.url.length ) ) {
+					return;
+				};
+				//console.log('triggered');
+				$("#wpadcenter_video_ad_url").val(attachment.url);
+				$("#wpadcenter_video_ad_filename").val(attachment.filename);
+				$("#wpadcenter_video_filename").text(attachment.filename);
+				$('#wpadcenter_video_filename_container').css('display','block');
+			
+			});
+			// Now display the actual file_frame
+			file_frame.open(); 
+		};
+
+		$('#wpadcenter_video_autoplay').change(function(e){
+			e.preventDefault();
+			$('#wpadcenter_video_autoplay').prop("checked") ? $('#wpadcenter_video_autoplay').val(true) : $('#wpadcenter_video_autoplay').val(false);
+		});
+
+		$("#wpadcenter_video_filename_close").click(function(){
+			$('#wpadcenter_video_filename_container').css('display','none');
+			$("#wpadcenter_video_ad_url").val("");
+		});
+
 		}
 	);
 
