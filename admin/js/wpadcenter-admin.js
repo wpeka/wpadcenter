@@ -509,17 +509,14 @@
 			file_frame.on( 'insert', function() { 
 				// Read the JSON data returned from the media uploader
 				attachment = file_frame.state().get( 'selection' ).first().toJSON();
-				console.log(attachment);
 				// First, make sure that we have the URL of the media to display
 				if ( 0 > $.trim( attachment.url.length ) ) {
 					return;
 				};
-				//console.log('triggered');
 				$("#wpadcenter_video_ad_url").val(attachment.url);
 				$("#wpadcenter_video_ad_filename").val(attachment.filename);
 				$("#wpadcenter_video_filename").text(attachment.filename);
 				$('#wpadcenter_video_filename_container').css('display','block');
-			
 			});
 			// Now display the actual file_frame
 			file_frame.open(); 
