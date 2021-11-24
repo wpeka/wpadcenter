@@ -811,6 +811,16 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test for  wpadcenter_video_details_metabox function
+	 */
+	public function test_wpadcenter_video_details_metabox() {
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_video_details_metabox( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
+	}
+	
+	/**
 	 * Test for  wpadcenter_text_ad_metabox function
 	 */
 	public function test_wpadcenter_text_ad_metabox() {
