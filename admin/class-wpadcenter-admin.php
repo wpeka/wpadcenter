@@ -550,7 +550,8 @@ class Wpadcenter_Admin {
 			'global-additional-rel-tags-preference'  => array( 'wpadcenter_global_additional_rel_tags_preference', 'bool' ),
 			'global-additional-css-class-preference' => array( 'wpadcenter_global_additional_css_class_preference', 'bool' ),
 			'cloak-preference'                       => array( 'wpadcenter_cloak_preference', 'bool' ),
-
+			'html5-ad-url'                           => array( 'wpadcenter_html5_ad_url', 'url' ),
+			'html5-ad-filename'                      => array( 'wpadcenter_html5_ad_filename', 'string' ),
 		);
 
 		return apply_filters( 'wp_adcenter_get_default_metafields', $metafields );
@@ -603,6 +604,12 @@ class Wpadcenter_Admin {
 				'active_meta_box' => array(
 					'amp-attributes',
 					'ad-size',
+				),
+			),
+			'html5'               => array(
+				'active_meta_box' => array(
+					'ad-size',
+					'html5-ad-upload',
 				),
 			),
 
@@ -675,6 +682,7 @@ class Wpadcenter_Admin {
 			'ad_code'             => __( 'Ad Code', 'wpadcenter' ),
 			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),
 			'amp_ad'              => __( 'AMP', 'wpadcenter' ),
+			'html5'               => __( 'HTML 5', 'wpadcenter' ),
 		);
 
 		return apply_filters( 'wp_adcenter_get_default_ad_types', $ad_types );
@@ -1556,6 +1564,14 @@ class Wpadcenter_Admin {
 			'side',
 			'core'
 		);
+		add_meta_box(
+			'html5-ad-upload',
+			__( 'HTML 5 Ad Upload', 'wpadcenter' ),
+			array( $this, 'wpadcenter_html5_ad_upload' ),
+			'wpadcenter-ads',
+			'normal',
+			'core'
+		);
 		do_action( 'wp_adcenter_add_meta_boxes', $post );
 
 	}
@@ -1991,6 +2007,35 @@ class Wpadcenter_Admin {
 	}
 
 	/**
+	 * Render html 5 ad upload metabox.
+	 *
+	 * @param object $post post object.
+	 *
+	 * @return void
+	 */
+	public function wpadcenter_html5_ad_upload( $post ) {
+		$html5_url      = get_post_meta( $post->ID, 'wpadcenter_html5_ad_url', true );
+		$html5_filename = get_post_meta( $post->ID, 'wpadcenter_html5_ad_filename', true );
+		?>
+		<div>
+			<p>Upload your HTML 5 ads in .zip format</p>
+			<div class="wpadcenter-html5-top-container">
+				<input type="file" id="wpadcenter-html5-select" class="wpadcenter-inputfile" value="<?php echo esc_url( $html5_url ); ?>">
+				<label for="wpadcenter-html5-select">Select file</label>
+				<div id="wpadcenter_html5_filename" class="wpadcenter-active-filename" ><?php echo esc_html( $html5_filename ); ?></div>
+				<input id="wpadcenter-html5-db-filename" name="html5-ad-filename" type="hidden" value="<?php echo esc_html( $html5_filename ); ?>">
+				<div class="wpadcenter-delete-icon-container" ><img id="wpadcenter-file-delete" class="wpadcenter-delete-icon" src="<?php echo esc_url( WPADCENTER_PLUGIN_URL . '/images/delete-icon.png' ); ?>"/></div>
+			</div>
+			<input name="html5-ad-url" id="wpadcenter_html5_ad_url" type="hidden" value="<?php echo esc_url( $html5_url ); ?>">
+			<button class="button button-primary" id="wpdcenter-html5-upload" data-ad_id="<?php echo esc_attr( $post->ID ); ?>" disabled>
+				<?php esc_html_e( 'Upload Now', 'wpadcenter' ); ?>
+			</button>
+			<span id="wpadcenter-html5-upload-error" class="wpadcenter-html5-upload-error" style="display:none"></span>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Save ad meta data.
 	 *
 	 * @param integer $post_id post id of post being saved.
@@ -2089,6 +2134,8 @@ class Wpadcenter_Admin {
 		$current_ad_type = get_post_meta( $post->ID, 'wpadcenter_ad_type', true );
 		$current_ad_type = ! empty( $current_ad_type ) ? $current_ad_type : 'banner_image';
 
+		$html5_upload_nonce = wp_create_nonce( 'html5_upload_nonce' );
+
 		wp_enqueue_style(
 			$this->plugin_name . '-select2',
 			WPADCENTER_PLUGIN_URL . 'vendor/select2/select2/dist/css/select2.min.css',
@@ -2104,7 +2151,7 @@ class Wpadcenter_Admin {
 			false
 		);
 
-		wp_localize_script( $this->plugin_name, 'wpadcenter_render_metaboxes', array( $ad_meta_relation, $current_ad_type ) );
+		wp_localize_script( $this->plugin_name, 'wpadcenter_render_metaboxes', array( $ad_meta_relation, $current_ad_type, $html5_upload_nonce ) );
 		wp_enqueue_script( $this->plugin_name );
 
 	}
@@ -3651,4 +3698,110 @@ class Wpadcenter_Admin {
 
 		}
 	}
+
+	/**
+	 * Upload html5 ad.
+	 *
+	 * @since 2.9.0
+	 */
+	public function wpadcenter_upload_html5_file() {
+		// security check.
+		if ( ! isset( $_POST['nonce_security'] ) || ! wp_verify_nonce( sanitize_key( $_POST['nonce_security'] ), 'html5_upload_nonce' ) ) {
+			wp_send_json_error( 'Failed security check.' );
+			return;
+		}
+
+		// check for file fields.
+		if ( ! isset( $_FILES['html5_uploaded_file'] ) || ! isset( $_FILES['html5_uploaded_file']['tmp_name'] ) || ! isset( $_FILES['html5_uploaded_file']['type'] ) || ! isset( $_POST['ad_id'] ) ) {
+			wp_send_json_error( 'Missing required file information, try again.' );
+			return;
+		}
+
+		// zip file mime types.
+		$zip_mime_type = array(
+			'application/octet-stream',
+			'application/x-zip-compressed',
+			'application/zip',
+			'multipart/x-zip',
+		);
+		// check uploaded file type.
+		if ( ! in_array( $_FILES['html5_uploaded_file']['type'], $zip_mime_type, true ) ) {
+			wp_send_json_error( 'Unsupported file type.' );
+			return;
+		}
+
+		// Create a path for file upload.
+		global $wp_filesystem;
+		WP_Filesystem();
+
+		$ad_id                  = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
+		$uploads_folder         = wp_upload_dir();
+		$wpadcenter_uploads_dir = trailingslashit( $uploads_folder['basedir'] ) . 'wpadcenter_uploads/';
+		$ad_dir                 = trailingslashit( $wpadcenter_uploads_dir ) . $ad_id;
+
+		// Remove already existing zip file.
+		if ( is_dir( $ad_dir ) ) {
+			$wp_filesystem->rmdir( $ad_dir, true );
+		}
+
+		// Add the ad file in the ad's folder.
+		$file_uploaded = unzip_file( sanitize_text_field( wp_unslash( $_FILES['html5_uploaded_file']['tmp_name'] ) ), $ad_dir );
+
+		if ( ! $file_uploaded ) {
+			wp_send_json_error( 'Error occured while uploading, try again.' );
+			return;
+		}
+
+		// Verify and modify uploaded file structure if needed also check for root index.html .
+		$scanned    = scandir( $ad_dir );
+		$ad_url     = trailingslashit( trailingslashit( $uploads_folder['baseurl'] ) . 'wpadcenter_uploads/' . $ad_id );
+		$root_files = array_diff( $scanned, array( '.', '..' ) );
+
+		$root_files_count = count( $root_files );
+		while ( 1 === $root_files_count && ! in_array( 'index.html', $root_files, true ) && is_dir( $ad_path . trailingslashit( $root_files[0] ) ) ) {
+			// Update new path for ad directory and url.
+			$ad_dir .= trailingslashit( $root_files[0] );
+			$ad_url .= trailingslashit( $root_files[0] );
+			// update new path for root_files.
+			$root_files_count = count( scandir( $ad_path ) );
+		}
+		// Check if root file exists.
+		if ( ! in_array( 'index.html', $root_files, true ) ) {
+			wp_send_json_error( 'index.html file is missing.' );
+			return;
+		}
+
+		wp_send_json_success( array( 'ad_url' => $ad_url ) );
+	}
+
+	/**
+	 * Triggered on deleting ad.
+	 *
+	 * @param Int $ad_id id of the ad deleted.
+	 *
+	 * @since 2.9.0
+	 */
+	public function wpadcenter_on_delete_ad( $ad_id ) {
+
+		$post = get_post( $ad_id );
+
+		if ( 'wpadcenter-ads' === $post->post_type ) {
+
+			$ad_type = get_post_meta( $ad_id, 'wpadcenter_ad_type', true );
+			if ( 'html5' === $ad_type ) {
+				global $wp_filesystem;
+				WP_Filesystem();
+				$uploads_folder         = wp_upload_dir();
+				$wpadcenter_uploads_dir = trailingslashit( $uploads_folder['basedir'] ) . 'wpadcenter_uploads/';
+				$ad_dir                 = trailingslashit( $wpadcenter_uploads_dir ) . $ad_id;
+
+				// Remove zip file.
+				if ( is_dir( $ad_dir ) ) {
+					$wp_filesystem->rmdir( $ad_dir, true );
+				}
+			}
+		}
+	}
+
+
 }

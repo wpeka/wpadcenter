@@ -183,7 +183,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 
 		$metaboxes_core_priority = $wp_meta_boxes['wpadcenter-ads']['normal']['core'];
 		$metaboxes_core_priority = array_keys( $metaboxes_core_priority );
-		$expected_metaboxes      = array( 'ad-details' );
+		$expected_metaboxes      = array( 'ad-details', 'html5-ad-upload' );
 	}
 
 
@@ -1186,6 +1186,17 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 
+	}
+
+	/**
+	 * Tests for wpadcenter_html5_ad_upload
+	 */
+	public function test_wpadcenter_html5_ad_upload() {
+
+		ob_start();
+		self::$wpadcenter_admin->wpadcenter_html5_ad_upload( self::$first_dummy_post );
+		$output = ob_get_clean();
+		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
 }
 
