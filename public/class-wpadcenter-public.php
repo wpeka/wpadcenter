@@ -425,7 +425,7 @@ class Wpadcenter_Public {
 			$attributes['classes'] .= ' wpadcenter-' . $width . 'x' . $height;
 
 		}
-		$attributes['classes'] .= 'ad-placement';
+		$attributes['classes'] .= 'ad-placement ';
 
 		if ( 'text_ad' === $ad_type && $text_ad_align_center ) {
 			$attributes['classes'] .= ' wpadcenter-text-ad-align-center';
