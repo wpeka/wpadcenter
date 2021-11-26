@@ -552,6 +552,10 @@ class Wpadcenter_Admin {
 			'cloak-preference'                       => array( 'wpadcenter_cloak_preference', 'bool' ),
 			'html5-ad-url'                           => array( 'wpadcenter_html5_ad_url', 'url' ),
 			'html5-ad-filename'                      => array( 'wpadcenter_html5_ad_filename', 'string' ),
+			'video-ad-url'                           => array( 'wpadcenter_video_ad_url', 'url' ),
+			'video-autoplay'                         => array( 'wpadcenter_video_autoplay', 'bool' ),
+			'video-audio-on'                         => array( 'wpadcenter_video_audio_on', 'bool' ),
+			'video-ad-filename'                      => array( 'wpadcenter_video_ad_filename', 'string' ),
 		);
 
 		return apply_filters( 'wp_adcenter_get_default_metafields', $metafields );
@@ -610,6 +614,14 @@ class Wpadcenter_Admin {
 				'active_meta_box' => array(
 					'ad-size',
 					'html5-ad-upload',
+				)
+			),
+			'video_ad'              => array(
+				'active_meta_box' => array(
+					'ad-details',
+					'link-options',
+					'ad-size',
+					'video-details',
 				),
 			),
 
@@ -683,6 +695,7 @@ class Wpadcenter_Admin {
 			'import_from_adsense' => __( 'Import from Adsense', 'wpadcenter' ),
 			'amp_ad'              => __( 'AMP', 'wpadcenter' ),
 			'html5'               => __( 'HTML 5', 'wpadcenter' ),
+			'video_ad'            => __( 'Video Ad', 'wpadcenter' ),
 		);
 
 		return apply_filters( 'wp_adcenter_get_default_ad_types', $ad_types );
@@ -1572,6 +1585,15 @@ class Wpadcenter_Admin {
 			'normal',
 			'core'
 		);
+
+		add_meta_box(			
+			'video-details',
+			__( 'Video Details', 'wpadcenter' ),
+			array( $this, 'wpadcenter_video_details_metabox' ),
+			'wpadcenter-ads',
+			'normal',
+			'core'
+		);
 		do_action( 'wp_adcenter_add_meta_boxes', $post );
 
 	}
@@ -2032,6 +2054,40 @@ class Wpadcenter_Admin {
 			</button>
 			<span id="wpadcenter-html5-upload-error" class="wpadcenter-html5-upload-error" style="display:none"></span>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Video-detail meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_video_details_metabox( $post ) {
+		
+		$video_ad_url = get_post_meta( $post->ID, 'wpadcenter_video_ad_url', true );
+		$video_ad_filename = get_post_meta( $post->ID, 'wpadcenter_video_ad_filename', true );
+		$video_autoplay = get_post_meta( $post->ID, 'wpadcenter_video_autoplay', true );
+
+		if ( ! $video_autoplay ) {
+			$video_autoplay = false;
+		}
+		$file_display = $video_ad_url === '' ? 'display: none;' : 'display: block;';
+		?>
+			<br>
+			<div id="wpadcenter_video_upload_container">
+				<button id="wpadcenter_upload_video" class="button-primary">Upload Video</button> 
+				<input type="hidden" id="wpadcenter_video_ad_filename" name="video-ad-filename" value="<?php echo esc_attr( $video_ad_filename ); ?>"/>
+				<div id="wpadcenter_video_filename_container" style="<?php echo esc_attr( $file_display ); ?>"  >
+					<span id="wpadcenter_video_filename"><?php echo esc_attr( $video_ad_filename ); ?></span>
+					<span id="wpadcenter_video_filename_close"></span>
+				</div>
+			</div><br>
+			<span id="wpadcenter_video_supported_types">(Supported video types are MP4, WebM, and OGG.)</span>
+			<input type="hidden" id="wpadcenter_video_ad_url" name="video-ad-url" value="<?php echo esc_url( $video_ad_url ); ?>"/><br><br>
+			<input type="checkbox" id="wpadcenter_video_autoplay" name="video-autoplay" value="<?php echo esc_attr( $video_autoplay ); ?>" <?php echo $video_autoplay ? "checked" : "" ; ?> >
+			<label for="wpadcenter_video_autoplay">Autoplay on page load </label>
 		<?php
 	}
 

@@ -581,6 +581,23 @@ class Wpadcenter_Public {
 					<iframe src="' . $html5_url . '" height="' . $height . '" width="' . $width . '" frameborder="0" scrolling="no"></iframe>
 				</div>';
 				break;
+			case 'video_ad':
+				$video_ad_url = get_post_meta( $ad_id, 'wpadcenter_video_ad_url', true );
+				$video_autoplay = get_post_meta($ad_id, 'wpadcenter_video_autoplay', true );
+				
+				$autoplay = $video_autoplay ? 'autoplay' : '';
+				$muted = $video_autoplay ? 'muted = "muted"' : '';
+
+				if ( $video_ad_url !== '' ) {
+					$single_ad_html .= '<div>
+						<video id="wpadcenter_video"  height="' . $height . '" width="' . $width . '" controls ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
+							<source src="' . $video_ad_url . '" type="video/mp4" >
+						</video>
+					</div>';
+				}
+				break;
+			default:
+				return;
 		}
 
 		if ( 'text_ad' !== $ad_type ) {
