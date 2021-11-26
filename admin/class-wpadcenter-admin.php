@@ -3799,7 +3799,6 @@ class Wpadcenter_Admin {
 		if ( is_dir( $ad_dir ) ) {
 			$wp_filesystem->rmdir( $ad_dir, true );
 		}
-
 		// Add the ad file in the ad's folder.
 		$file_uploaded = unzip_file( sanitize_text_field( wp_unslash( $_FILES['html5_uploaded_file']['tmp_name'] ) ), $ad_dir );
 
@@ -3813,14 +3812,17 @@ class Wpadcenter_Admin {
 		$ad_url     = trailingslashit( trailingslashit( $uploads_folder['baseurl'] ) . 'wpadcenter_uploads/' . $ad_id );
 		$root_files = array_diff( $scanned, array( '.', '..' ) );
 
-		$root_files_count = count( $root_files );
-		while ( 1 === $root_files_count && ! in_array( 'index.html', $root_files, true ) && is_dir( $ad_path . trailingslashit( $root_files[0] ) ) ) {
-			// Update new path for ad directory and url.
-			$ad_dir .= trailingslashit( $root_files[0] );
-			$ad_url .= trailingslashit( $root_files[0] );
-			// update new path for root_files.
-			$root_files_count = count( scandir( $ad_path ) );
+		if ( is_array( $root_files ) ) {
+			$root_files_count = count( $root_files );
+			while ( 1 === $root_files_count && ! in_array( 'index.html', $root_files, true ) && is_dir( $ad_dir . trailingslashit( $root_files[2] ) ) ) {
+				// Update new path for ad directory and url.
+				$ad_dir .= trailingslashit( $root_files[2] );
+				$ad_url .= trailingslashit( $root_files[2] );
+				// update new path for root_files.
+				$root_files_count = count( scandir( $ad_dir ) );
+			}
 		}
+		
 		// Check if root file exists.
 		if ( ! in_array( 'index.html', $root_files, true ) ) {
 			wp_send_json_error( 'index.html file is missing.' );
