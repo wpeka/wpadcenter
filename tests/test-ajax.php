@@ -423,4 +423,26 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response );
 		$this->assertTrue( true );
 	}
+
+	/**
+	 * Test for wpadcenter_upload_html5_file.
+	 */
+	public function test_wpadcenter_upload_html5_file() {
+		// become administrator.
+		$this->_setRole( 'administrator' );
+
+		$_POST['action']         = 'upload_html5_file';
+		$_POST['nonce_security'] = wp_create_nonce( 'html5_upload_nonce' );
+
+		try {
+			$this->_handleAjax( 'upload_html5_file' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		}
+		$response = json_decode( $this->_last_response );
+
+		// Failure check if file is not added.
+		$this->assertFalse( $response->success );
+		$this->assertTrue( is_string( $response->data ) );
+	}
 }
