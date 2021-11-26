@@ -37,7 +37,7 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
-	/*global jQuery, ajaxurl, AdsenseGAPI, wpadcenter_render_metaboxes, _, tinymce*/
+	/*global jQuery, ajaxurl, AdsenseGAPI, wpadcenter_render_metaboxes, _, tinymce, wp*/
 
 	$( document ).ready(
 		function() {
@@ -427,132 +427,122 @@
 		additionalRelTagSetup();
 		additionalCssClassSetup();
 		//check on change in selection
-		$('#globalAdditionalRelTagsPreference').change(additionalRelTagSetup);
-		$('#globalAdditionalCssClassPreference').change(additionalCssClassSetup);
+		$( '#globalAdditionalRelTagsPreference' ).change( additionalRelTagSetup );
+		$( '#globalAdditionalCssClassPreference' ).change( additionalCssClassSetup );
 
-		
-	   //html5 ad upload
-	   $('#wpadcenter-html5-select').change( function(){
-		$('#wpadcenter-html5-select').prop('disabled',true);
-		$('#wpdcenter-html5-upload').prop('disabled',false);
-		$('.wpadcenter-active-filename, .wpadcenter-delete-icon-container').css('display','flex');
-		$('#wpadcenter_html5_filename').text($('#wpadcenter-html5-select').val().replace(/.*[\/\\]/, ''));
-		$('#wpadcenter-html5-db-filename').val($('#wpadcenter-html5-select').val().replace(/.*[\/\\]/, ''));
-
-
-	   } );
-	   if($('#wpadcenter-html5-db-filename').val() == ''){
-		   $('.wpadcenter-delete-icon-container').css('display','none');
-	   }
-	   else{
-			$('#wpadcenter-html5-select').prop('disabled',true);
-			$('#wpdcenter-html5-upload').text('Uploaded');
-
-	   }
-	   $('#wpadcenter-file-delete').click(function(e){
-		 $('#wpdcenter-html5-upload').prop('disabled',true);
-		 $('#wpdcenter-html5-upload').text('Upload Now');
-		 $('#wpadcenter_html5_ad_url, #wpadcenter-html5-select, #wpadcenter-html5-db-filename').val('');
-		 $('#wpadcenter_html5_filename').text('');
-		 $('.wpadcenter-active-filename, .wpadcenter-delete-icon-container').css('display','none');
-		 $('#wpadcenter-html5-select').prop('disabled',false);
-		 $('#wpadcenter-html5-upload-error').css('display','none');
-		 $('#wpadcenter-html5-upload-error').text('');
-		});
-	   $('#wpdcenter-html5-upload').click(function(e){
+		//html5 ad upload
+		$( '#wpadcenter-html5-select' ).change( function() {
+		$( '#wpadcenter-html5-select' ).prop( 'disabled', true );
+		$( '#wpdcenter-html5-upload' ).prop( 'disabled', false );
+		$( '.wpadcenter-active-filename, .wpadcenter-delete-icon-container' ).css( 'display', 'flex' );
+		$( '#wpadcenter_html5_filename' ).text( $( '#wpadcenter-html5-select' ).val().replace( /.*[\/\\]/, '' ) );
+		$( '#wpadcenter-html5-db-filename' ).val( $( '#wpadcenter-html5-select' ).val().replace( /.*[\/\\]/, '' ) );
+		} );
+		if ( $( '#wpadcenter-html5-db-filename' ).val() == '' ) {
+			$( '.wpadcenter-delete-icon-container' ).css( 'display', 'none' );
+		} else {
+			$( '#wpadcenter-html5-select' ).prop( 'disabled', true );
+			$( '#wpdcenter-html5-upload' ).text( 'Uploaded' );
+		}
+		$( '#wpadcenter-file-delete' ).click( function( e ) {
+			$( '#wpdcenter-html5-upload' ).prop( 'disabled', true );
+			$( '#wpdcenter-html5-upload' ).text( 'Upload Now' );
+			$( '#wpadcenter_html5_ad_url, #wpadcenter-html5-select, #wpadcenter-html5-db-filename' ).val( '' );
+			$( '#wpadcenter_html5_filename' ).text( '' );
+			$( '.wpadcenter-active-filename, .wpadcenter-delete-icon-container' ).css( 'display', 'none' );
+			$( '#wpadcenter-html5-select' ).prop( 'disabled', false );
+			$( '#wpadcenter-html5-upload-error' ).css( 'display', 'none' );
+			$( '#wpadcenter-html5-upload-error' ).text( '' );
+		} );
+		$( '#wpdcenter-html5-upload' ).click( function( e ) {
 			e.preventDefault();
-			$(this).text('Uploading..')
-			const adID = $(this).data('ad_id');
+			$( this ).text( 'Uploading..' );
+			const adID = $( this ).data( 'ad_id' );
 			var html5Nonce = wpadcenter_render_metaboxes[2];
 			const formData = new FormData();
 			formData.append( 'action', 'upload_html5_file' );
 			formData.append( 'nonce_security', html5Nonce );
 			formData.append( 'ad_id', adID );
 
-
 			var uploaded_files = document.getElementById( 'wpadcenter-html5-select' ).files;
-			
+
 			$.each( uploaded_files, function( key, file ) {
 				formData.append( 'html5_uploaded_file', file );
 			} );
 
-
 			$.ajax(
 				{
 					url: ajaxurl,
-					type:'POST',
-					data:formData,
-					processData : false,
-					contentType : false,
-					success:function(data){
-						if(data.success){
-							$('#wpadcenter_html5_ad_url').val(data.data.ad_url + 'index.html');
-							$('#wpdcenter-html5-upload').text('Uploaded');
-							$('#wpdcenter-html5-upload').prop('disabled',true);
-							$('#wpadcenter-html5-upload-error').css('display','none');
-							$('#wpadcenter-html5-upload-error').text('');
-						}
-						else{
-							$('#wpadcenter-html5-upload-error').text(data.data);
-							$('#wpadcenter-html5-upload-error').css('display','block');
-							$('#wpdcenter-html5-upload').text('Failed, try again');
-
+					type: 'POST',
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function( data ) {
+						if ( data.success ) {
+							$( '#wpadcenter_html5_ad_url' ).val( data.data.ad_url + 'index.html' );
+							$( '#wpdcenter-html5-upload' ).text( 'Uploaded' );
+							$( '#wpdcenter-html5-upload' ).prop( 'disabled', true );
+							$( '#wpadcenter-html5-upload-error' ).css( 'display', 'none' );
+							$( '#wpadcenter-html5-upload-error' ).text( '' );
+						} else {
+							$( '#wpadcenter-html5-upload-error' ).text( data.data );
+							$( '#wpadcenter-html5-upload-error' ).css( 'display', 'block' );
+							$( '#wpdcenter-html5-upload' ).text( 'Failed, try again' );
 						}
 					},
-					error:function(request, status, error){
-						$('#wpdcenter-html5-upload').text('Failed, try again');
-					}
+					error: function( request, status, error ) {
+						$( '#wpdcenter-html5-upload' ).text( 'Failed, try again' );
+					},
 
-				}
+				},
 			);
-	   	})	 
-		$('#wpadcenter_upload_video').click(function(e){
+		} );
+		$( '#wpadcenter_upload_video' ).click( function( e ) {
 			e.preventDefault();
-			wpadcenter_video_upload($(this));
-		});
-		function wpadcenter_video_upload( $elem ) { 
+			wpadcenter_video_upload( $( this ) );
+		} );
+		function wpadcenter_video_upload( $elem ) {
 			var file_frame, attachment;
-	 
-			 // If an instance of file_frame already exists, then we can open it rather than creating a new instance
+
+			// If an instance of file_frame already exists, then we can open it rather than creating a new instance
 			if ( file_frame ) {
 				file_frame.open();
 				return;
-			}; 
-	
-			 // Use the wp.media library to define the settings of the media uploader
-			file_frame = wp.media.frames.file_frame = wp.media({
+			}
+
+			// Use the wp.media library to define the settings of the media uploader
+			file_frame = wp.media.frames.file_frame = wp.media( {
 				frame: 'post',
 				state: 'insert',
-				multiple: false
-			});
-	 
-			 // Setup an event handler for what to do when a media has been selected
-			file_frame.on( 'insert', function() { 
+				multiple: false,
+			} );
+
+			// Setup an event handler for what to do when a media has been selected
+			file_frame.on( 'insert', function() {
 				// Read the JSON data returned from the media uploader
 				attachment = file_frame.state().get( 'selection' ).first().toJSON();
 				// First, make sure that we have the URL of the media to display
 				if ( 0 > $.trim( attachment.url.length ) ) {
 					return;
-				};
-				$("#wpadcenter_video_ad_url").val(attachment.url);
-				$("#wpadcenter_video_ad_filename").val(attachment.filename);
-				$("#wpadcenter_video_filename").text(attachment.filename);
-				$('#wpadcenter_video_filename_container').css('display','block');
-			});
+				}
+				$( '#wpadcenter_video_ad_url' ).val( attachment.url );
+				$( '#wpadcenter_video_ad_filename' ).val( attachment.filename );
+				$( '#wpadcenter_video_filename' ).text( attachment.filename );
+				$( '#wpadcenter_video_filename_container' ).css( 'display', 'block' );
+			} );
 			// Now display the actual file_frame
-			file_frame.open(); 
-		};
-
-		$('#wpadcenter_video_autoplay').change(function(e){
-			e.preventDefault();
-			$('#wpadcenter_video_autoplay').prop("checked") ? $('#wpadcenter_video_autoplay').val(true) : $('#wpadcenter_video_autoplay').val(false);
-		});
-
-		$("#wpadcenter_video_filename_close").click(function(){
-			$('#wpadcenter_video_filename_container').css('display','none');
-			$("#wpadcenter_video_ad_url").val("");
-		});
-
+			file_frame.open();
 		}
+
+		$( '#wpadcenter_video_autoplay' ).change( function( e ) {
+			e.preventDefault();
+			$( '#wpadcenter_video_autoplay' ).prop( 'checked' ) ? $( '#wpadcenter_video_autoplay' ).val( true ) : $( '#wpadcenter_video_autoplay' ).val( false );
+		} );
+
+		$( '#wpadcenter_video_filename_close' ).click( function() {
+			$( '#wpadcenter_video_filename_container' ).css( 'display', 'none' );
+			$( '#wpadcenter_video_ad_url' ).val( '' );
+		} );
+		},
 	);
 }( jQuery ) );
