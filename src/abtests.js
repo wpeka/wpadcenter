@@ -1,7 +1,8 @@
+/*global jQuery*/
 // jquery $ as j
 const j = jQuery.noConflict();
 const componentABTests = {
-    template:
+	template:
         `<div class="contentAdsRules" v-if="active_">
             <div class="rule" @click="onCollapseClick">
                 <div class="rule_label">
@@ -38,120 +39,114 @@ const componentABTests = {
             <label v-show="error_show_" class="error">You need to select at least 2 placements to be able to create A/B test</label>
             </c-collapse>
             </div>`,
-    data() {
-        return {
-            active_: this.active,
-            placements: [],
-            test_id_: this.test_id,
-            ab_testing_security_: this.ab_testing_security,
-            test_count_: this.test_count,
-            placements_selected_: this.placements_selected,
-            test_duration_: this.test_duration,
-            test_name_: this.test_name,
-            error_show_: this.error_show,
-            selected_placement_name_: this.selected_placement_name,
-            selections: '',
-            contentABTestsShow: false,
-            placement_label_: this.placement_label,
-            placements_names: '',
-            date_: this.date,
-            default_test_name_: 'Test - ' + this.test_count,
-        }
-    },
-    props: [
-        'active',
-        'ab_testing_security',
-        'test_count',
-        'placements_selected',
-        'test_duration',
-        'test_name',
-        'error_show',
-        'selected_placement_name',
-        'test_id',
-        'placement_label',
-        'date',
-    ],
-    methods: {
-        getTestName: function (name) {
-            return 'test[' + this.test_count_ + ']' + name;
-        },
-        onDeleteTest: function () {
-            this.active_ = false;
-        },
-        getTestId: function (id) {
-            return id + '-' + this.test_count_;
-        },
-        onPlacementSelection: function () {
-            this.getPlacementsIdsToString();
-            if (this.placements_selected_.length < 2) {
-                this.error_show_ = true;
-                return;
-            } else {
-                this.error_show_ = false;
-            }
+	data() {
+		return {
+			active_: this.active,
+			placements: [],
+			test_id_: this.test_id,
+			ab_testing_security_: this.ab_testing_security,
+			test_count_: this.test_count,
+			placements_selected_: this.placements_selected,
+			test_duration_: this.test_duration,
+			test_name_: this.test_name,
+			error_show_: this.error_show,
+			selected_placement_name_: this.selected_placement_name,
+			selections: '',
+			contentABTestsShow: false,
+			placement_label_: this.placement_label,
+			placements_names: '',
+			date_: this.date,
+			default_test_name_: 'Test - ' + this.test_count,
+		};
+	},
+	props: [
+		'active',
+		'ab_testing_security',
+		'test_count',
+		'placements_selected',
+		'test_duration',
+		'test_name',
+		'error_show',
+		'selected_placement_name',
+		'test_id',
+		'placement_label',
+		'date',
+	],
+	methods: {
+		getTestName: function( name ) {
+			return 'test[' + this.test_count_ + ']' + name;
+		},
+		onDeleteTest: function() {
+			this.active_ = false;
+		},
+		getTestId: function( id ) {
+			return id + '-' + this.test_count_;
+		},
+		onPlacementSelection: function() {
+			this.getPlacementsIdsToString();
+			if ( this.placements_selected_.length < 2 ) {
+				this.error_show_ = true;
+			} else {
+				this.error_show_ = false;
+			}
+		},
+		getPlacementsIdsToString: function() {
+			this.selections = [];
+			this.placement_label_ = '';
+			this.placements_selected_.forEach( ( entry ) => {
+				this.selections.push( entry.id );
+				this.placement_label_ += entry.name + ' ';
+			} );
+			this.selections = this.selections.toString();
+			this.placements_names = this.selections;
+		},
 
-        },
-        getPlacementsIdsToString: function () {
-            this.selections = [];
-            this.placement_label_ = ''
-            this.placements_selected_.forEach((entry) => {
-                this.selections.push(entry.id);
-                this.placement_label_ += entry.name + ' ';
-            });
-            this.selections = this.selections.toString()
-            this.placements_names = this.selections;
-        },
+		onCollapseClick: function() {
+			this.contentABTestsShow = ! this.contentABTestsShow;
+			if ( ! this.contentABTestsShow ) {
+				if ( this.$refs.wpadcenter_arrow.classList.contains( 'vs__close-indicator-wp' ) ) {
+					this.$refs.wpadcenter_arrow.classList.remove( 'vs__close-indicator-wp' );
+				}
+			} else if ( ! this.$refs.wpadcenter_arrow.classList.contains( 'vs__close-indicator-wp' ) ) {
+				this.$refs.wpadcenter_arrow.classList.add( 'vs__close-indicator-wp' );
+			}
+		},
+	},
+	mounted() {
+		j.ajax( {
+			type: 'POST',
+			url: './admin-ajax.php',
+			data: {
+				action: 'get_placements',
+				security: this.ab_testing_security,
+			},
+		} ).done( data => {
+			this.placements = JSON.parse( data );
+			let placement = [];
+			// If this.placements is object convert it into array
+			if ( typeof this.placements === 'object' ) {
+				for ( const [ key, value ] of Object.entries( this.placements ) ) {
+					placement.push( value );
+				}
+				this.placements = placement;
+			}
+			// Rendering already saved placements labels
+			if ( typeof this.placements_selected_ === 'string' ) {
+				let temp = this.placements_selected_.split( ',' );
+				this.placements_selected_ = [];
 
-        onCollapseClick: function () {
-            this.contentABTestsShow = !this.contentABTestsShow;
-            if (!this.contentABTestsShow) {
-                if (this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
-                    this.$refs.wpadcenter_arrow.classList.remove('vs__close-indicator-wp');
-                }
-            }
-            else {
-                if (!this.$refs.wpadcenter_arrow.classList.contains('vs__close-indicator-wp')) {
-                    this.$refs.wpadcenter_arrow.classList.add('vs__close-indicator-wp');
-                }
-            }
-        }
-    },
-    mounted() {
-        j.ajax({
-            type: "POST",
-            url: './admin-ajax.php',
-            data: {
-                action: 'get_placements',
-                security: this.ab_testing_security,
-            }
-        }).done(data => {
-            this.placements = JSON.parse(data);
-            let placement = [];
-            // If this.placements is object convert it into array
-            if (typeof this.placements === 'object') {
-                for (const [key, value] of Object.entries(this.placements)) {
-                    placement.push(value);
-                }
-                this.placements = placement;
-            }
-            // Rendering already saved placements labels
-            if (typeof this.placements_selected_ === 'string') {
-                let temp = this.placements_selected_.split(',');
-                this.placements_selected_ = [];
-
-                temp.forEach((entry) => {
-                    for (const [key, value] of Object.entries(this.placements)) {
-
-                        // Check for matching placements objects from placements array for selected placement label
-                        if (value.id === entry) {
-                            this.placements_selected_.push(value);
-                            this.getPlacementsIdsToString();
-                        }
-                    }
-                });
-            }
-        });
-    }
+				temp.forEach( ( entry ) => {
+					for ( const [ key, value ] of Object.entries( this.placements ) ) {
+						// Check for matching placements objects from placements array for selected placement label
+						if ( value.id === entry ) {
+							this.placements_selected_.push( value );
+							this.getPlacementsIdsToString();
+						}
+					}
+				} );
+			}
+		} );
+	},
 };
 
 export default componentABTests;

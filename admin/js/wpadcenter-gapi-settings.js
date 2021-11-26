@@ -1,55 +1,51 @@
 /**
  * AdSense Api integration.
  *
- * @link  https://club.wpeka.com
  * @since 1.1.0
  *
- * @package    Wpadcenter
- * @subpackage Wpadcenter/admin
+ * @package
  */
 
-(function($){
-
+( function( $ ) {
 	/**
 	 * Connect to google adsense
 	 *
-	 * @package    Wpadcenter
-	 * @subpackage Wpadcenter/admin
+	 * @package
 	 * @author     WPEka Club <support@wpeka.com>
 	 */
-
+	/*global jQuery, ajaxurl, AdsenseGAPI*/
 	$( document ).ready(
 		function() {
 			var AUTH_WINDOW = null;
 			$( '.init-gauthentication' ).click(
-				function(e){
+				function( e ) {
 					$( '#mapi-confim-code' ).removeAttr( 'disabled', false );
 					AUTH_WINDOW = window.open( AdsenseGAPI.oAuth2, 'advadsOAuth2' );
 					$( '#gadsense-modal' ).show();
-				}
+				},
 			);
 
-			$( '.remove-gauthentication' ).click(function(e) {
+			$( '.remove-gauthentication' ).click( function( e ) {
 				var spinner = $( '#gadsense_remove_authentication' ).parent().find( '.spinner' );
 				spinner.addClass( 'is-active' );
-				$.ajax({
+				$.ajax( {
 					url: ajaxurl,
 					type: 'POST',
 					data: {
 						action: 'adsense_remove_authentication',
 						nonce: AdsenseGAPI.nonce,
-					}
-				}).done(function(data) {
+					},
+				} ).done( function( data ) {
 					spinner.removeClass( 'is-active' );
 					location.reload();
-				});
-			});
+				} );
+			} );
 
 			// Confirm code for account connection.
 			$( '#mapi-confirm-code' ).click(
-				function(e){
+				function( e ) {
 					e.preventDefault();
-					
+
 					var spinner = $( '#mapi-confirm-code' ).parent().find( '.spinner' );
 					spinner.addClass( 'is-active' );
 					var code = $( '#mapi-code' ).val();
@@ -69,54 +65,52 @@
 							url: ajaxurl,
 							type: 'post',
 							data: data,
-							success:function(response, status, XHR){
+							success: function( response, status, XHR ) {
 								spinner.removeClass( 'is-active' );
 								if ( null !== AUTH_WINDOW ) {
 									AUTH_WINDOW.close();
 								}
 								$( '#mapi-code' ).val( '' );
-								if ( response.status && true === response.status) {
+								if ( response.status && true === response.status ) {
 									location.reload();
 								} else {
 									alert( response.body );
-
 								}
 							},
-							error:function(request, status, error){
+							error: function( request, status, error ) {
 								spinner.removeClass( 'is-active' );
 								alert( error );
 							},
-						}
+						},
 					);
-
-				}
+				},
 			);
 
-			$( document ).on('click', '.wpadcenter_copy_text',
-				function(e) {
+			$( document ).on( 'click', '.wpadcenter_copy_text',
+				function( e ) {
 					e.preventDefault();
 					var data = $( this ).attr( 'data-attr' );
 					document.addEventListener(
 						'copy',
-						function(e) {
+						function( e ) {
 							e.clipboardData.setData( 'text/plain', data );
 							e.preventDefault();
 						},
-						true
+						true,
 					);
 
 					document.execCommand( 'copy' );
-					if( data.includes('wpadcenter_display') ) 
+					if ( data.includes( 'wpadcenter_display' ) ) {
 						alert( 'Template tag copied to clipboard!' );
-					else
+					} else {
 						alert( 'Shortcode copied to clipboard!' );
-				}
+					}
+				},
 			);
 
-			$(function() {
-				$('#wpadcenter_scripts').addClass('closed');
-			});
-		}
+			$( function() {
+				$( '#wpadcenter_scripts' ).addClass( 'closed' );
+			} );
+		},
 	);
-
-})( window.jQuery );
+}( window.jQuery ) );
