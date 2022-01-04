@@ -99,6 +99,9 @@ class Wpadcenter_Adsense {
 	 */
 	public function confirm_code_and_generate_tokens() {
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( ! isset( $_POST['code'] ) || ! isset( $_POST['nonce'] ) ) {
 			wp_send_json(
 				array(
@@ -545,6 +548,9 @@ class Wpadcenter_Adsense {
 	 * Removes current authentication
 	 */
 	public function wpadcenter_remove_authentication() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		// check for nonce.
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'wpeka-google-adsense', 'nonce' );
