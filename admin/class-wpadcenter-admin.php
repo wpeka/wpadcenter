@@ -126,6 +126,9 @@ class Wpadcenter_Admin {
 	 * Fetch adcode from the api
 	 */
 	public function load_google_adsense_code() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		$nonce = isset( $_POST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ) : '';
 		if ( ! isset( $_POST['adunit'] ) || false === wp_verify_nonce( $nonce, 'wpeka-google-adsense' ) ) {
 			wp_send_json(
@@ -2445,6 +2448,9 @@ class Wpadcenter_Admin {
 	 * Ajax when ad group is selected in reports page.
 	 */
 	public function wpadcenter_ad_group_selected() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		// check nonce security.
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'adgroups_security', 'security' );
@@ -2530,6 +2536,9 @@ class Wpadcenter_Admin {
 		 * Ajax when test is selected in reports custom-reports page.
 		 */
 	public function wpadcenter_test_selected() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		// check nonce security.
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'ab_tests_security', 'security' );
@@ -3040,6 +3049,9 @@ class Wpadcenter_Admin {
 	 * Ajax when ad is selected in reports custom-reports page.
 	 */
 	public function wpadcenter_get_roles() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'roles_security', 'security' );
 		}
@@ -3061,6 +3073,9 @@ class Wpadcenter_Admin {
 	 * Ajax for getting ad groups from server. wpadcenter_get_ads
 	 */
 	public function wpadcenter_get_adgroups() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'adgroups_security', 'security' );
 		}
@@ -3073,6 +3088,9 @@ class Wpadcenter_Admin {
 	 * Ajax for getting ab tests from server.
 	 */
 	public function wpadcenter_get_tests() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'ab_tests_security', 'security' );
 		}
@@ -3113,6 +3131,9 @@ class Wpadcenter_Admin {
 		 * Ajax for getting placements from server.
 		 */
 	public function wpadcenter_get_placements() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'ab_testing_security', 'security' );
 		}
@@ -3136,6 +3157,10 @@ class Wpadcenter_Admin {
 	 * Ajax for getting ad groups from server.
 	 */
 	public function wpadcenter_get_ads() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'adgroups_security', 'security' );
 		}
@@ -3303,6 +3328,9 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_adgroup_gutenberg_preview() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( ! isset( $_POST['adgroup_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['adgroup_nonce'] ), 'adgroup_nonce' ) ) {
 			wp_die();
 		}
@@ -3356,6 +3384,9 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_singlead_gutenberg_preview() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( ! isset( $_POST['singlead_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['singlead_nonce'] ), 'singlead_nonce' ) ) {
 			wp_die();
 		}
@@ -3399,6 +3430,9 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_random_ad_gutenberg_preview() {
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( ! isset( $_POST['random_ad_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['random_ad_nonce'] ), 'random_ad_nonce' ) ) {
 			wp_die();
 		}
@@ -3631,6 +3665,9 @@ class Wpadcenter_Admin {
 	 * @since 4.0.0
 	 */
 	public function wpadcenter_pro_display_amp_warning() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		$amp_plugin_installed = function_exists( 'is_amp_endpoint' ) || function_exists( 'is_wp_amp' ) || function_exists( 'ampforwp_is_amp_endpoint' );
 
 		if ( ! $amp_plugin_installed ) {
@@ -3762,6 +3799,10 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_upload_html5_file() {
 		// security check.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+
 		if ( ! isset( $_POST['nonce_security'] ) || ! wp_verify_nonce( sanitize_key( $_POST['nonce_security'] ), 'html5_upload_nonce' ) ) {
 			wp_send_json_error( 'Failed security check.' );
 			return;
