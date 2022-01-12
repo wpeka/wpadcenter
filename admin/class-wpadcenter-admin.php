@@ -1373,7 +1373,7 @@ class Wpadcenter_Admin {
 			case 'stats-for-today':
 				$today = gmdate( 'Y-m-d' );
 				global $wpdb;
-				$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics where ad_date=%s AND ad_id=%d', array( $today, $ad_id ) ) ); //phpcs:ignore
+				$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics where ad_date=%s AND ad_id=%d', array( $today, $ad_id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 				if ( ! count( $results ) ) {
 					$return_value = '0 clicks / 0 views / 0.00% CTR';
 				} else {
@@ -1607,7 +1607,7 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_ad_statistics( $post ) {
 		global $wpdb;
-		$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date > now() - interval 7 day and ad_id = %d;', $post->ID ) );//phpcs:ignore
+		$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date > now() - interval 7 day and ad_id = %d;', $post->ID ) );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		if ( empty( $results ) ) {
 			$results = array();
 		}
@@ -2504,6 +2504,15 @@ class Wpadcenter_Admin {
 			$start_date = isset( $_POST['start_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['start_date'] ) ) : '';
 			$end_date   = isset( $_POST['end_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['end_date'] ) ) : '';
 			$ads        = isset( $_POST['selected_ad'] ) ? wp_unslash( $_POST['selected_ad'] ) : '';// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			foreach ( $ads as $k => $v ) {
+				foreach ( $v as $key => $val ) {
+					if ( gettype( $val ) === 'string' ) {
+						$ads[ $k ][ $key ] = sanitize_text_field( $val );
+					} else {
+						$ads[ $k ][ $key ] = intval( $val );
+					}
+				}
+			}
 			$ad_ids     = array();
 			if ( is_array( $ads ) ) {
 				foreach ( $ads as $ad ) {
@@ -3341,6 +3350,9 @@ class Wpadcenter_Admin {
 		$adgroup_ids = array();
 		if ( ! empty( $_POST['ad_groups'] ) ) {
 			$adgroup_ids = wp_unslash( $_POST['ad_groups'] );// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			foreach ( $adgroup_ids as $k => $v ) {
+				$adgroup_ids[ $k ] = intval( $v );
+			}
 		}
 		$adgroup_alignment = 'alignnone';
 		if ( ! empty( $_POST['alignment'] ) ) {
@@ -3433,7 +3445,6 @@ class Wpadcenter_Admin {
 				'html' => $string,
 			);
 			wp_send_json( wp_json_encode( $pass ) );
-			$single_ad = Wpadcenter_Public::display_single_ad( $ad_id, $singlead_attributes );
 			wp_die();
 	}
 
@@ -3453,6 +3464,9 @@ class Wpadcenter_Admin {
 		$adgroup_ids = array();
 		if ( ! empty( $_POST['ad_groups'] ) ) {
 			$adgroup_ids = wp_unslash( $_POST['ad_groups'] );// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			foreach ( $adgroup_ids as $k => $v ) {
+				$adgroup_ids[ $k ] = intval( $v );
+			}
 		}
 		$adgroup_alignment = 'alignnone';
 		if ( ! empty( $_POST['alignment'] ) ) {
