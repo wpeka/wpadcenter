@@ -2506,14 +2506,20 @@ class Wpadcenter_Admin {
 			$ads        = isset( $_POST['selected_ad'] ) ? wp_unslash( $_POST['selected_ad'] ) : '';// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			foreach ( $ads as $k => $v ) {
 				foreach ( $v as $key => $val ) {
-					if ( gettype( $val ) === 'string' ) {
-						$ads[ $k ][ $key ] = sanitize_text_field( $val );
-					} else {
-						$ads[ $k ][ $key ] = intval( $val );
+					switch ( $key ) {
+						case 'ad_id':
+							$ads[ $k ][ $key ] = intval( $val );
+							break;
+						case 'ad_title':
+							$ads[ $k ][ $key ] = sanitize_text_field( $val );
+							break;
+						default:
+							$ads[ $k ][ $key ] = sanitize_text_field( $val );
+							break;
 					}
 				}
 			}
-			$ad_ids     = array();
+			$ad_ids = array();
 			if ( is_array( $ads ) ) {
 				foreach ( $ads as $ad ) {
 					$ad_id = intval( $ad['ad_id'] );
