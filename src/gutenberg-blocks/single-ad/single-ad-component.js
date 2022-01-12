@@ -40,7 +40,7 @@ class SingleAd extends Component {
 		} ).done( singlead_html => {
 			this.setState( {
 				ad_html: {
-					__html: singlead_html,
+					__html: JSON.parse(singlead_html)['html'],
 				},
 			} );
 		} );

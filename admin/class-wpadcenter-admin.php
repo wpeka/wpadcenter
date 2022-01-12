@@ -617,9 +617,9 @@ class Wpadcenter_Admin {
 				'active_meta_box' => array(
 					'ad-size',
 					'html5-ad-upload',
-				)
+				),
 			),
-			'video_ad'              => array(
+			'video_ad'            => array(
 				'active_meta_box' => array(
 					'ad-details',
 					'link-options',
@@ -924,8 +924,8 @@ class Wpadcenter_Admin {
 			if ( '1' === $ads_txt_tab && isset( $the_options['enable_ads_txt'] ) ) {
 				// process ads.txt content.
 				$ads_txt_content = isset( $_POST['ads_txt_content_field'] ) ? esc_textarea(
-					$_POST['ads_txt_content_field']
-				) : ''; // phpcs:ignore input var ok, CSRF ok, sanitization ok.
+					sanitize_text_field( wp_unslash( $_POST['ads_txt_content_field'] ) )
+				) : '';
 				if ( isset( $ads_txt_content ) ) {
 					$ads_txt_content                = explode( "\n", $ads_txt_content );
 					$ads_txt_content                = array_filter( array_map( 'trim', $ads_txt_content ) );
@@ -1373,7 +1373,7 @@ class Wpadcenter_Admin {
 			case 'stats-for-today':
 				$today = gmdate( 'Y-m-d' );
 				global $wpdb;
-				$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics where ad_date=%s AND ad_id=%d', array( $today, $ad_id ) ) ); // phpcs:ignore
+				$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics where ad_date=%s AND ad_id=%d', array( $today, $ad_id ) ) ); //phpcs:ignore
 				if ( ! count( $results ) ) {
 					$return_value = '0 clicks / 0 views / 0.00% CTR';
 				} else {
@@ -1384,7 +1384,7 @@ class Wpadcenter_Admin {
 				break;
 		}
 		$return_value = apply_filters( 'wp_adcenter_manage_ads_column_values', $return_value, $column, $ad_id );
-		echo $return_value;//phpcs:ignore
+		echo $return_value;//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 
@@ -1589,7 +1589,7 @@ class Wpadcenter_Admin {
 			'core'
 		);
 
-		add_meta_box(			
+		add_meta_box(
 			'video-details',
 			__( 'Video Details', 'wpadcenter' ),
 			array( $this, 'wpadcenter_video_details_metabox' ),
@@ -2068,15 +2068,14 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_video_details_metabox( $post ) {
-		
-		$video_ad_url = get_post_meta( $post->ID, 'wpadcenter_video_ad_url', true );
+		$video_ad_url      = get_post_meta( $post->ID, 'wpadcenter_video_ad_url', true );
 		$video_ad_filename = get_post_meta( $post->ID, 'wpadcenter_video_ad_filename', true );
-		$video_autoplay = get_post_meta( $post->ID, 'wpadcenter_video_autoplay', true );
+		$video_autoplay    = get_post_meta( $post->ID, 'wpadcenter_video_autoplay', true );
 
 		if ( ! $video_autoplay ) {
 			$video_autoplay = false;
 		}
-		$file_display = $video_ad_url === '' ? 'display: none;' : 'display: block;';
+		$file_display = '' === $video_ad_url ? 'display: none;' : 'display: block;';
 		?>
 			<br>
 			<div id="wpadcenter_video_upload_container">
@@ -2089,7 +2088,7 @@ class Wpadcenter_Admin {
 			</div><br>
 			<span id="wpadcenter_video_supported_types">(Supported video types are MP4, WebM, and OGG.)</span>
 			<input type="hidden" id="wpadcenter_video_ad_url" name="video-ad-url" value="<?php echo esc_url( $video_ad_url ); ?>"/><br><br>
-			<input type="checkbox" id="wpadcenter_video_autoplay" name="video-autoplay" value="<?php echo esc_attr( $video_autoplay ); ?>" <?php echo $video_autoplay ? "checked" : "" ; ?> >
+			<input type="checkbox" id="wpadcenter_video_autoplay" name="video-autoplay" value="<?php echo esc_attr( $video_autoplay ); ?>" <?php echo $video_autoplay ? 'checked' : ''; ?> >
 			<label for="wpadcenter_video_autoplay">Autoplay on page load </label>
 		<?php
 	}
@@ -2359,7 +2358,9 @@ class Wpadcenter_Admin {
 	 * Add mascot links to pages.
 	 */
 	public function wpadcenter_mascot_on_pages() {
-		if ( empty( $_GET['post_type'] ) || 'wpadcenter-ads' !== $_GET['post_type'] ) {//phpcs:ignore
+		$current_screen = get_current_screen();
+
+		if ( empty( $current_screen->post_type ) || 'wpadcenter-ads' !== $current_screen->post_type ) {
 			return;
 		}
 
@@ -2502,7 +2503,7 @@ class Wpadcenter_Admin {
 		if ( 'selected_ad_reports' === $_POST['action'] ) {
 			$start_date = isset( $_POST['start_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['start_date'] ) ) : '';
 			$end_date   = isset( $_POST['end_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['end_date'] ) ) : '';
-			$ads = $_POST['selected_ad']; // phpcs:ignore
+			$ads        = isset( $_POST['selected_ad'] ) ? wp_unslash( $_POST['selected_ad'] ) : '';// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$ad_ids     = array();
 			if ( is_array( $ads ) ) {
 				foreach ( $ads as $ad ) {
@@ -2545,7 +2546,9 @@ class Wpadcenter_Admin {
 		}
 
 		if ( 'selected_test_report' === $_POST['action'] ) {
-			$test   = $_POST['selected_test']; // phpcs:ignore
+			if ( isset( $_POST['selected_test'] ) ) {
+				$test = wp_unslash( $_POST['selected_test'] );// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			}
 			$result = array();
 
 			if ( get_option( 'wpadcenter-pro-tests', true ) ) {
@@ -2978,14 +2981,14 @@ class Wpadcenter_Admin {
 
 		$args = array(
 			'post_type'      => 'wpadcenter-ads',
-			'tax_query'      => array( //phpcs:ignore
+			'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				array(
 					'taxonomy' => 'wpadcenter-adgroups',
 					'field'    => 'id',
 					'terms'    => $object['id'],
 				),
 			),
-			'meta_query'     => array( //phpcs:ignore
+			'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'     => 'wpadcenter_start_date',
 					'value'   => $current_time,
@@ -3276,6 +3279,7 @@ class Wpadcenter_Admin {
 		}
 
 		$disable_global_scripts = isset( $_POST['disable_global_scripts'] ) ? sanitize_text_field( wp_unslash( $_POST['disable_global_scripts'] ) ) : 'off';
+		// the below three phpcs comments is added after referring competitor wordpress.org plugins.
 		$header_scripts         = isset( $_POST['header_scripts'] ) ? wp_unslash( $_POST['header_scripts'] ) : ''; // phpcs:ignore
 		$body_scripts           = isset( $_POST['body_scripts'] ) ? wp_unslash( $_POST['body_scripts'] ) : ''; // phpcs:ignore
 		$footer_scripts         = isset( $_POST['footer_scripts'] ) ? wp_unslash( $_POST['footer_scripts'] ) : ''; // phpcs:ignore
@@ -3336,7 +3340,7 @@ class Wpadcenter_Admin {
 		}
 		$adgroup_ids = array();
 		if ( ! empty( $_POST['ad_groups'] ) ) {
-			$adgroup_ids = $_POST['ad_groups']; //phpcs:ignore
+			$adgroup_ids = wp_unslash( $_POST['ad_groups'] );// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
 		$adgroup_alignment = 'alignnone';
 		if ( ! empty( $_POST['alignment'] ) ) {
@@ -3374,7 +3378,11 @@ class Wpadcenter_Admin {
 				'max_width_px' => $max_width_px,
 
 			);
-			echo Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes ); //phpcs:ignore
+			$string = Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes );
+			$pass   = array(
+				'html' => $string,
+			);
+			wp_send_json( wp_json_encode( $pass ) );
 			wp_die();
 	}
 
@@ -3419,7 +3427,13 @@ class Wpadcenter_Admin {
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
 			);
-			echo Wpadcenter_Public::display_single_ad( $ad_id,$singlead_attributes ); //phpcs:ignore
+
+			$string = Wpadcenter_Public::display_single_ad( $ad_id, $singlead_attributes );
+			$pass   = array(
+				'html' => $string,
+			);
+			wp_send_json( wp_json_encode( $pass ) );
+			$single_ad = Wpadcenter_Public::display_single_ad( $ad_id, $singlead_attributes );
 			wp_die();
 	}
 
@@ -3438,7 +3452,7 @@ class Wpadcenter_Admin {
 		}
 		$adgroup_ids = array();
 		if ( ! empty( $_POST['ad_groups'] ) ) {
-			$adgroup_ids = $_POST['ad_groups']; //phpcs:ignore
+			$adgroup_ids = wp_unslash( $_POST['ad_groups'] );// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
 		$adgroup_alignment = 'alignnone';
 		if ( ! empty( $_POST['alignment'] ) ) {
@@ -3467,7 +3481,11 @@ class Wpadcenter_Admin {
 				'max_width_px' => $max_width_px,
 
 			);
-			echo Wpadcenter_Public::display_random_ad( $random_ad_attributes ); //phpcs:ignore
+			$string = Wpadcenter_Public::display_random_ad( $random_ad_attributes );
+			$pass   = array(
+				'html' => $string,
+			);
+			wp_send_json( wp_json_encode( $pass ) );
 			wp_die();
 	}
 
@@ -3506,7 +3524,13 @@ class Wpadcenter_Admin {
 			<select name="ADMIN_FILTER_FIELD_AD_TYPE">
 			<option value=""><?php esc_html_e( 'All ad types', 'wpadcenter' ); ?></option>
 			<?php
-				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ) : ''; //phpcs:ignore
+			if ( isset( $_GET['wpadcenter_add_custom_filter_nonce'] ) ) {
+				if ( wp_verify_nonce( sanitize_key( $_GET['wpadcenter_add_custom_filter_nonce'] ), 'wpadcenter_add_custom_filter' ) ) {
+					$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_TYPE'] ) ) : '';
+				}
+			} else {
+				$current_v = '';
+			}
 			foreach ( $ad_types as $value => $label ) {
 				printf(
 					'<option value="%s"%s>%s</option>',
@@ -3523,7 +3547,13 @@ class Wpadcenter_Admin {
 			<select name="ADMIN_FILTER_FIELD_AD_SIZE">
 			<option value=""><?php esc_html_e( 'All ad dimensions', 'wpadcenter' ); ?></option>
 			<?php
-				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ) : '';//phpcs:ignore
+			if ( isset( $_GET['wpadcenter_add_custom_filter_nonce'] ) ) {
+				if ( wp_verify_nonce( sanitize_key( $_GET['wpadcenter_add_custom_filter_nonce'] ), 'wpadcenter_add_custom_filter' ) ) {
+					$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_SIZE'] ) ) : '';
+				}
+			} else {
+				$current_v = '';
+			}
 			foreach ( $ad_sizes as $size => $data ) {
 				if ( 'none' === $size ) {
 					printf(
@@ -3554,7 +3584,13 @@ class Wpadcenter_Admin {
 			<select name="ADMIN_FILTER_FIELD_AD_GROUP">
 			<option value=""><?php esc_html_e( 'All ad groups', 'wpadcenter' ); ?></option>
 			<?php
-				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ) : '';//phpcs:ignore
+			if ( isset( $_GET['wpadcenter_add_custom_filter_nonce'] ) ) {
+				if ( wp_verify_nonce( sanitize_key( $_GET['wpadcenter_add_custom_filter_nonce'] ), 'wpadcenter_add_custom_filter' ) ) {
+					$current_v = isset( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_AD_GROUP'] ) ) : '';
+				}
+			} else {
+				$current_v = '';
+			}
 			foreach ( $terms as $term ) {
 				printf(
 					'<option value="%s"%s>%s</option>',
@@ -3578,7 +3614,13 @@ class Wpadcenter_Admin {
 			<select name="ADMIN_FILTER_FIELD_ADVERTISER">
 			<option value=""><?php esc_html_e( 'All advertisers', 'wpadcenter' ); ?></option>
 				<?php
-				$current_v = isset( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ) : '';//phpcs:ignore
+				if ( isset( $_GET['wpadcenter_add_custom_filter_nonce'] ) ) {
+					if ( wp_verify_nonce( sanitize_key( $_GET['wpadcenter_add_custom_filter_nonce'] ), 'wpadcenter_add_custom_filter' ) ) {
+						$current_v = isset( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ? sanitize_text_field( wp_unslash( $_GET['ADMIN_FILTER_FIELD_ADVERTISER'] ) ) : '';
+					}
+				} else {
+					$current_v = '';
+				}
 				foreach ( $advertisers as $advertiser ) {
 					printf(
 						'<option value="%s"%s>%s</option>',
@@ -3699,7 +3741,8 @@ class Wpadcenter_Admin {
 					echo '<style>.wpadcenter-review-notice.updated{padding-bottom:1%;display:flex;flex-direction:column}.wpadcenter-review-btns{background-color:#2271b1;padding:10px;max-width:150px;text-align:center;border-radius:2px}.wpadcenter-review-already-done-btn{margin-left:10px}.wpadcenter-review-btns-container{display:flex;flex-direction:row}.wpadcenter-review-btns:hover{background-color:#135e96}.wpadcenter-review-btns>a{color:#fff;text-decoration:none}.wpadcenter-review-already-done-btn>a>i,.wpadcenter-review-rate-us-btn>a>i{margin-left:5px;}.wpadcenter-review-notice-text-container{display:flex;flex-direction:row;justify-content:space-between;}.wpadcenter-review-dismiss-btn{display:flex;margin-top:10px;text-decoration:none}.wpadcenter-review-dismiss-btn>i{font-size:15px}.wpadcenter-review-dismiss-btn>.dashicons-dismiss:before{vertical-align:middle}@media (max-width:768px){.wpadcenter-review-notice.updated{padding-bottom:2%!important}}</style>';
 					echo sprintf(
 						'<div class="wpadcenter-review-notice updated">
-						<div class="wpadcenter-review-notice-text-container">		
+						<div class="wpadcenter-review-notice-text-container">
+						<input type="hidden" name="wpadcenter_review_nonce" value="' . sanitize_key( wp_create_nonce( 'wpadcenter_review' ) ) . '" />		
 						<p><span>%3$s<strong>WPAdCenter</strong>.%4$s</span></p>
 						<div><a class="wpadcenter-review-dismiss-btn" href="%2$s"><i class="dashicons dashicons-dismiss"></i>%5$s</a></div>
 						</div>
@@ -3730,12 +3773,15 @@ class Wpadcenter_Admin {
 	 * @return void
 	 */
 	public function wpadcenter_review_already_done() {
-		$dnd = '';
-		if ( isset( $_GET['already_done'] ) && ! empty( $_GET['already_done'] ) ) { //phpcs:ignore
-			$dnd = esc_attr( $_GET['already_done'] ); //phpcs:ignore
-		}
-		if ( '1' === $dnd ) {
-			update_option( 'wpadcenter_review_pending', '2', true );
+		$dnd   = '';
+		$nonce = isset( $_POST['wpadcenter_review_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['wpadcenter_review_nonce'] ) ) : '';
+		if ( wp_verify_nonce( $nonce, 'wpadcenter_review' ) ) {
+			if ( isset( $_GET['already_done'] ) && ! empty( $_GET['already_done'] ) ) {
+				$dnd = sanitize_text_field( wp_unslash( $_GET['already_done'] ) );
+			}
+			if ( '1' === $dnd ) {
+				update_option( 'wpadcenter_review_pending', '2', true );
+			}
 		}
 	}
 
@@ -3863,7 +3909,6 @@ class Wpadcenter_Admin {
 				$root_files_count = count( scandir( $ad_dir ) );
 			}
 		}
-		
 		// Check if root file exists.
 		if ( ! in_array( 'index.html', $root_files, true ) ) {
 			wp_send_json_error( 'index.html file is missing.' );
