@@ -41,7 +41,7 @@ class AdGroup extends Component {
 		} ).done( adgroup_html => {
 			this.setState( {
 				ad_html: {
-					__html: JSON.parse(adgroup_html)['html'],
+					__html: JSON.parse( adgroup_html ).html,
 				},
 			} );
 		} );

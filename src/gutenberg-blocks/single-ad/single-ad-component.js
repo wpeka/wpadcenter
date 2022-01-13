@@ -40,7 +40,7 @@ class SingleAd extends Component {
 		} ).done( singlead_html => {
 			this.setState( {
 				ad_html: {
-					__html: JSON.parse(singlead_html)['html'],
+					__html: JSON.parse( singlead_html ).html,
 				},
 			} );
 		} );
@@ -51,7 +51,6 @@ class SingleAd extends Component {
 			zIndex: '20',
 			position: 'relative',
 		};
-
 		return (
 
 			<div style={ adAlignment } dangerouslySetInnerHTML={ this.state.ad_html } ></div>
