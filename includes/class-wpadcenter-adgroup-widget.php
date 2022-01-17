@@ -68,10 +68,10 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 			$instance['devices'] = array( 'mobile', 'tablet', 'desktop' );
 		}
 
+		// the below phpcs comments are added after referring the core widget codes.
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo esc_html( $title );
 		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped		
 
 		$attributes = array(
@@ -84,9 +84,9 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 			'devices'      => $instance['devices'],
 
 		);
-		echo '<div class="wpadcenter-adgroup-widget-container">';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<div class="wpadcenter-adgroup-widget-container">';
 		echo Wpadcenter_Public::display_adgroup_ads( $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '</div>';// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</div>';
 		echo $after_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}

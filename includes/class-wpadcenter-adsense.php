@@ -181,7 +181,7 @@ class Wpadcenter_Adsense {
 
 			$adsense_id = $data['accounts'][0]['name'];
 			preg_match( '/pub-[0-9]+/', $adsense_id, $adsense_id );
-			$adsense_id = $adsense_id[0];
+			$adsense_id                = $adsense_id[0];
 			$data['accounts'][0]['id'] = $adsense_id;
 			self::save_token_from_data(
 				$token,
@@ -196,7 +196,6 @@ class Wpadcenter_Adsense {
 					'body'   => $adsense_id,
 				)
 			);
-
 		}
 		else {
 			wp_send_json(
@@ -542,7 +541,7 @@ class Wpadcenter_Adsense {
 
 		$options['accounts'][ $adsense_id ]['details'] = $details;
 		update_option( self::OPTNAME, $options );
-	}	
+	}
 
 	/**
 	 * Removes current authentication
