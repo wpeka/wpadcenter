@@ -196,8 +196,7 @@ class Wpadcenter_Adsense {
 					'body'   => $adsense_id,
 				)
 			);
-		}
-		else {
+		} else {
 			wp_send_json(
 				array(
 					'status' => false,
