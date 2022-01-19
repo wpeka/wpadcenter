@@ -60,10 +60,10 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 
 		$title = isset( $instance['title'] ) ? $instance['title'] : '';
 
+		// the below phpcs comments are added after referring the core widget codes.
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo esc_html( $title );
 		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( isset( $instance['max_width'] ) && 'on' === $instance['max_width'] ) {
 			$instance['max_width'] = true;
@@ -130,7 +130,7 @@ class Wpadcenter_Single_Ad_Widget extends \WP_Widget {
 			'post_type'   => 'wpadcenter-ads',
 			'post_status' => 'publish',
 			'numberposts' => -1,
-			'meta_query'  => array(// phpcs:ignore
+			'meta_query'  => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'     => 'wpadcenter_end_date',
 					'value'   => $current_time,

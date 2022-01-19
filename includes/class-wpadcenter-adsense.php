@@ -99,6 +99,9 @@ class Wpadcenter_Adsense {
 	 */
 	public function confirm_code_and_generate_tokens() {
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		if ( ! isset( $_POST['code'] ) || ! isset( $_POST['nonce'] ) ) {
 			wp_send_json(
 				array(
@@ -178,7 +181,7 @@ class Wpadcenter_Adsense {
 
 			$adsense_id = $data['accounts'][0]['name'];
 			preg_match( '/pub-[0-9]+/', $adsense_id, $adsense_id );
-			$adsense_id = $adsense_id[0];
+			$adsense_id                = $adsense_id[0];
 			$data['accounts'][0]['id'] = $adsense_id;
 			self::save_token_from_data(
 				$token,
@@ -193,7 +196,6 @@ class Wpadcenter_Adsense {
 					'body'   => $adsense_id,
 				)
 			);
-
 		}
 		else {
 			wp_send_json(
@@ -539,12 +541,15 @@ class Wpadcenter_Adsense {
 
 		$options['accounts'][ $adsense_id ]['details'] = $details;
 		update_option( self::OPTNAME, $options );
-	}	
+	}
 
 	/**
 	 * Removes current authentication
 	 */
 	public function wpadcenter_remove_authentication() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
 		// check for nonce.
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'wpeka-google-adsense', 'nonce' );
