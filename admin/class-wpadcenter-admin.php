@@ -3758,21 +3758,25 @@ class Wpadcenter_Admin {
 			case '1':
 				$check_for_review_transient = get_transient( 'wpadcenter_review_transient' );
 				if ( false === $check_for_review_transient ) {
-					$url = get_admin_url() . '?already_done=1';
-					echo '<style>.wpadcenter-review-notice.updated{padding-bottom:1%;display:flex;flex-direction:column}.wpadcenter-review-btns{background-color:#2271b1;padding:10px;max-width:150px;text-align:center;border-radius:2px}.wpadcenter-review-already-done-btn{margin-left:10px}.wpadcenter-review-btns-container{display:flex;flex-direction:row}.wpadcenter-review-btns:hover{background-color:#135e96}.wpadcenter-review-btns>a{color:#fff;text-decoration:none}.wpadcenter-review-already-done-btn>a>i,.wpadcenter-review-rate-us-btn>a>i{margin-left:5px;}.wpadcenter-review-notice-text-container{display:flex;flex-direction:row;justify-content:space-between;}.wpadcenter-review-dismiss-btn{display:flex;margin-top:10px;text-decoration:none}.wpadcenter-review-dismiss-btn>i{font-size:15px}.wpadcenter-review-dismiss-btn>.dashicons-dismiss:before{vertical-align:middle}@media (max-width:768px){.wpadcenter-review-notice.updated{padding-bottom:2%!important}}</style>';
+					echo '<style>.wpadcenter-review-notice.updated{padding-bottom:1%;display:flex;flex-direction:column}.wpadcenter-review-btns{background-color:#2271b1;padding:10px;max-width:150px;text-align:center;border-radius:2px;color:white;}.wpadcenter-review-already-done-btn{margin-left:10px}.wpadcenter-review-btns-container{display:flex;flex-direction:row}.wpadcenter-review-btns:hover{background-color:#135e96}.wpadcenter-review-btns>a{color:#fff;text-decoration:none}.wpadcenter-review-already-done-btn>a>i,.wpadcenter-review-rate-us-btn>a>i{margin-left:5px;}.wpadcenter-review-notice-text-container{display:flex;flex-direction:row;justify-content:space-between;}.wpadcenter-review-dismiss-btn{display:flex;margin-top:10px;text-decoration:none}.wpadcenter-review-dismiss-btn>i{font-size:15px}.wpadcenter-review-dismiss-btn>.dashicons-dismiss:before{vertical-align:middle}@media (max-width:768px){.wpadcenter-review-notice.updated{padding-bottom:2%!important}}</style>';
 					echo sprintf(
-						'<div class="wpadcenter-review-notice updated">
-						<div class="wpadcenter-review-notice-text-container">
-						<p><span>%3$s<strong>WPAdCenter</strong>.%4$s</span></p>
-						<div><a class="wpadcenter-review-dismiss-btn" href="%2$s"><i class="dashicons dashicons-dismiss"></i>%5$s</a></div>
+						'
+						<div class="wpadcenter-review-notice updated">
+						<form method="post" action="%2$s" id="review_form">
+							<div class="wpadcenter-review-notice-text-container">
+								<p><span>%3$s<strong>WPAdCenter</strong>.%4$s</span></p>
+								<button class="wpadcenter-review-dismiss-btn" style="border: none;padding:0;background: none;color: #2271b1;"href="%2$s"><i class="dashicons dashicons-dismiss"></i>%5$s</button>
+							</div>
+							<div class="wpadcenter-review-btns-container">
+								<button class="wpadcenter-review-btns wpadcenter-review-rate-us-btn"><a href="%1$s" target="_blank">%6$s<i class="dashicons dashicons-thumbs-up"></i></a></button>
+								<button class="wpadcenter-review-btns wpadcenter-review-already-done-btn" href="%2$s" >%7$s<i class="dashicons dashicons-smiley"></i></button>
+							</div>
+							<input type="hidden" id="wpadcenter_review_nonce" name="wpadcenter_review_nonce" value="' . esc_attr( wp_create_nonce( 'wpadcenter_review' ) ) . '" />
+						</form>
 						</div>
-						<div class="wpadcenter-review-btns-container">
-						<div class="wpadcenter-review-btns wpadcenter-review-rate-us-btn"><a href="%1$s" target="_blank">%6$s<i class="dashicons dashicons-thumbs-up"></i></a></div>
-						<div class="wpadcenter-review-btns wpadcenter-review-already-done-btn"><a href="%2$s">%7$s<i class="dashicons dashicons-smiley"></i></a></div>
-						</div>
-						</div>',
+						',
 						esc_url( 'https://wordpress.org/support/plugin/wpadcenter/reviews/' ),
-						esc_url( add_query_arg( 'wpadcenter_review_nonce', wp_create_nonce( 'wpadcenter_review' ), $url ) ),
+						esc_url( get_admin_url() . '?already_done=1' ),
 						esc_html__( 'Hey, we hope you are enjoying creating and displaying ads with ', 'wpadcenter' ),
 						esc_html__( ' Could you please write us a review and give it a 5- star rating on WordPress? Just to help us spread the word and boost our motivation.', 'wpadcenter' ),
 						esc_html__( 'Dismiss', 'wpadcenter' ),
@@ -3793,9 +3797,8 @@ class Wpadcenter_Admin {
 	 * @return void
 	 */
 	public function wpadcenter_review_already_done() {
-		$dnd   = '';
-		$nonce = isset( $_GET['wpadcenter_review_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['wpadcenter_review_nonce'] ) ) : '';
-		if ( wp_verify_nonce( $nonce, 'wpadcenter_review' ) ) {
+		$dnd = '';
+		if ( ! empty( $_POST ) && check_admin_referer( 'wpadcenter_review', 'wpadcenter_review_nonce' ) ) {
 			if ( isset( $_GET['already_done'] ) && ! empty( $_GET['already_done'] ) ) {
 				$dnd = sanitize_text_field( wp_unslash( $_GET['already_done'] ) );
 			}
