@@ -193,6 +193,13 @@ class Wpadcenter_Admin {
 			$this->version,
 			'all'
 		);
+		wp_register_style(
+			$this->plugin_name . 'review-notice',
+			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-review-notice' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
 	}
 
 
@@ -3758,7 +3765,7 @@ class Wpadcenter_Admin {
 			case '1':
 				$check_for_review_transient = get_transient( 'wpadcenter_review_transient' );
 				if ( false === $check_for_review_transient ) {
-					echo '<style>.wpadcenter-review-notice.updated{padding-bottom:1%;display:flex;flex-direction:column}.wpadcenter-review-btns{background-color:#2271b1;padding:10px;max-width:150px;text-align:center;border-radius:2px;color:white;}.wpadcenter-review-already-done-btn{margin-left:10px}.wpadcenter-review-btns-container{display:flex;flex-direction:row}.wpadcenter-review-btns:hover{background-color:#135e96}.wpadcenter-review-btns>a{color:#fff;text-decoration:none}.wpadcenter-review-already-done-btn>a>i,.wpadcenter-review-rate-us-btn>a>i{margin-left:5px;}.wpadcenter-review-notice-text-container{display:flex;flex-direction:row;justify-content:space-between;}.wpadcenter-review-dismiss-btn{display:flex;margin-top:10px;text-decoration:none}.wpadcenter-review-dismiss-btn>i{font-size:15px}.wpadcenter-review-dismiss-btn>.dashicons-dismiss:before{vertical-align:middle}@media (max-width:768px){.wpadcenter-review-notice.updated{padding-bottom:2%!important}}</style>';
+					wp_enqueue_style( $this->plugin_name . 'review-notice' );
 					echo sprintf(
 						'
 						<div class="wpadcenter-review-notice updated">
