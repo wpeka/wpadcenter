@@ -3805,7 +3805,7 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_review_already_done() {
 		$dnd = '';
-		if ( ! empty( $_POST ) && check_admin_referer( 'wpadcenter_review', 'wpadcenter_review_nonce' ) ) {
+		if ( isset( $_POST['wpadcenter_review_nonce'] ) && check_admin_referer( 'wpadcenter_review', 'wpadcenter_review_nonce' ) ) {
 			if ( isset( $_GET['already_done'] ) && ! empty( $_GET['already_done'] ) ) {
 				$dnd = sanitize_text_field( wp_unslash( $_GET['already_done'] ) );
 			}
