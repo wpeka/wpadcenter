@@ -152,7 +152,7 @@ class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 			'post_type'   => 'wpadcenter-ads',
 			'post_status' => 'publish',
 			'numberposts' => -1,
-			'meta_query'  => array(// phpcs:ignore
+			'meta_query'  => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'     => 'wpadcenter_end_date',
 					'value'   => $current_time,
