@@ -335,7 +335,7 @@ class Wpadcenter_Public {
 		wp_enqueue_style( 'wpadcenter-frontend' );
 
 		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
-		wp_enqueue_script( 'wpadcenter-frontend' );
+		wp_enqueue_script( 'wpadcenter-frontend', plugin_dir_url( __FILE__ ) . 'js/wpadcenter-public' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), self::$released_version, false );
 		wp_localize_script(
 			'wpadcenter-frontend',
 			'ajax_url',
