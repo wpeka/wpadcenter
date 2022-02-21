@@ -64,11 +64,10 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 		} else {
 			$instance['devices'] = array( 'mobile', 'tablet', 'desktop' );
 		}
-
+		// the below phpcs comments are added after referring the core widget codes.
 		echo $before_widget;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
 		echo $before_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo esc_html( $title );
 		echo $after_title;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped		
 
 		$attributes = array(
