@@ -39,7 +39,7 @@ class RandomAd extends Component {
 		} ).done( random_ad_html => {
 			this.setState( {
 				ad_html: {
-					__html: random_ad_html,
+					__html: JSON.parse( random_ad_html ).html,
 				},
 			} );
 		} );
