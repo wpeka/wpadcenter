@@ -2685,6 +2685,64 @@ class Wpadcenter_Admin {
 			);
 		}
 		wp_register_script(
+			'wpadcenter-gutenberg-ad-types',
+			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-adtypes.js',
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
+			$this->version,
+			false
+		);
+		wp_localize_script( 'wpadcenter-gutenberg-ad-types', 'wpadcenter_adtypes_verify', array( 'adtypes_nonce' => wp_create_nonce( 'adtypes_nonce' ) ) );
+		if ( function_exists( 'register_block_type' ) ) {
+			register_block_type(
+				'wpadcenter/ad-types',
+				array(
+					'editor_script'   => 'wpadcenter-gutenberg-ad-types',
+					'attributes'      => array(
+						'ad_type'         => array(
+							'type' => 'string',
+						),
+						'ad_id'           => array(
+							'type' => 'number',
+						),
+						'ad_alignment'    => array(
+							'type' => 'string',
+						),
+						'ad_ids'            => array(
+							'type' => 'array',
+						),
+						'adgroup_ids'       => array(
+							'type' => 'array',
+						),
+						'adroups'           => array(
+							'type' => 'array',
+						),
+						'adgroup_alignment' => array(
+							'type' => 'string',
+						),
+						'num_ads'           => array(
+							'type' => 'string',
+						),
+						'num_columns'       => array(
+							'type' => 'string',
+						),
+						'max_width_check' => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+						'max_width_px'    => array(
+							'type'    => 'string',
+							'default' => '100',
+						),
+						'devices'         => array(
+							'type'    => 'string',
+							'default' => '["mobile","tablet","desktop"]',
+						),
+					),
+					'render_callback' => array( $this, 'gutenberg_display_single_ad_cb' ),
+				),
+			);
+		}
+		wp_register_script(
 			'wpadcenter-gutenberg-adgroup',
 			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-adgroup.js',
 			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
@@ -3460,6 +3518,54 @@ class Wpadcenter_Admin {
 			wp_send_json( wp_json_encode( $pass ) );
 			wp_die();
 	}
+
+	public function wpadcenter_adtypes_gutenberg_preview() {
+		error_log("Hi there this is adtypes preview!!");
+		
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+		if ( ! isset( $_POST['adtypes_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['adtypes_nonce'] ), 'adtypes_nonce' ) ) {
+			wp_die();
+		}
+
+		$ad_id = 0;
+		if ( ! empty( $_POST['ad_id'] ) ) {
+			$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
+		}
+		$ad_alignment = 'alignnone';
+		if ( ! empty( $_POST['alignment'] ) ) {
+			$ad_alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ) );
+		}
+		$max_width_check = false;
+		if ( ! empty( $_POST['max_width_check'] ) ) {
+
+			$checked = sanitize_text_field( wp_unslash( $_POST['max_width_check'] ) );
+			if ( 'true' === $checked ) {
+				$max_width_check = true;
+			} else {
+				$max_width_check = false;
+			}
+		}
+		$max_width_px = '100';
+		if ( ! empty( $_POST['max_width_px'] ) ) {
+			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
+		}
+
+			$singlead_attributes = array(
+				'align'        => $ad_alignment,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+			);
+
+			$string = Wpadcenter_Public::display_single_ad( $ad_id, $singlead_attributes );
+			$pass   = array(
+				'html' => $string,
+			);
+			wp_send_json( wp_json_encode( $pass ) );
+			wp_die();
+	}
+
 
 	/**
 	 * Provides random ad html for gutenberg preview.
