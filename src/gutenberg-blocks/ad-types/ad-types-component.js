@@ -32,10 +32,16 @@ class AdTypes extends Component {
 			data: {
 				action: 'wpadcenter_adtypes_gutenberg_preview',
 				adtypes_nonce: wpadcenter_adtypes_verify.adtypes_nonce,
+				ad_type: this.props.ad_type,
 				ad_id: this.props.adId,
 				alignment: this.props.adAlignment,
 				max_width_check: this.props.max_width_check,
 				max_width_px: this.props.max_width_px,
+				ad_groups: this.props.adGroupIds,
+				alignment: this.props.adgroupAlignment,
+				num_ads: this.props.numAds,
+				num_columns: this.props.numColumns,
+
 			},
 		} ).done( adtypes_html => {
 			this.setState( {

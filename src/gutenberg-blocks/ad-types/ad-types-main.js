@@ -10,8 +10,6 @@ const apiFetch = wp.apiFetch;
 const { Placeholder } = wp.components;
 const { __ } = wp.i18n;
 
-
-
 registerBlockType( 'wpadcenter/ad-types', {
 
 	title: __( 'WPAdCenter Ad Block', 'wpadcenter' ),
@@ -22,7 +20,7 @@ registerBlockType( 'wpadcenter/ad-types', {
 	attributes: {
 		ad_type: {
 			type: 'string',
-			default: ''
+			default: '',
 		},
         ad_id: {
 			type: 'number',
@@ -71,8 +69,7 @@ registerBlockType( 'wpadcenter/ad-types', {
 		num_ads: {
 			type: 'text',
 			default: '1',
-		},
-		
+		},	
 	},
 
 	edit( props ) {
@@ -148,7 +145,18 @@ registerBlockType( 'wpadcenter/ad-types', {
 
 			} );
 		};
+		const setNumAds = ( event )=>{
+			props.setAttributes( {
+				num_ads: event.target.value,
 
+			} );
+		};
+		const setNumCol = ( event )=>{
+			props.setAttributes( {
+				num_columns: event.target.value,
+
+			} );
+		};
 		const onAdSelection = ( selection ) => {
 			props.setAttributes( {
 				ad_id: selection.value,
@@ -184,6 +192,11 @@ registerBlockType( 'wpadcenter/ad-types', {
 			value: props.attributes.ad_type,
 			label: props.attributes.ad_type,
 		};
+
+		const defaultValueSingleAd = {
+			value: props.attributes.ad_id,
+			label: props.attributes.ad_name,
+		}
 
 		const defaultValueAdgroup = props.attributes.adgroups;
 
@@ -229,7 +242,7 @@ registerBlockType( 'wpadcenter/ad-types', {
 					onChange={ onAdTypeSelection }
 				/>
 				</div>
-				
+				{ props.attributes.ad_type !== '' ? (
                    <div>
 					{ props.attributes.ad_type === 'Single Ad' ? (
 						<div>
@@ -237,22 +250,26 @@ registerBlockType( 'wpadcenter/ad-types', {
 							<div style={ { display: 'flex', justifyContent: 'center' } }>
 
 								<AsyncSelect
-									key = {props.attributes.ad_type}
+									key = { props.attributes.ad_type }
 									styles={ customStyles }
 									className="wpadcenter-async-select"
 									defaultOptions
 									loadOptions={ getOptions }
-									defaultValue={ defaultValue }
+									defaultValue={ defaultValueSingleAd }
 									onChange={ onAdSelection }
 								/>
 							</div>
+							<AdAlignment
+								adAlignment={ adAlignment }
+								currentAdAlignment={ props.attributes.ad_alignment }
+							/>
 						</div> ) : (
 							<div>
 								<h3 style={ headingStyles }>{ __( 'Select Ad Groups', 'wpadcenter' ) }</h3>
 								<div style={ { display: 'flex', justifyContent: 'center' } }>
 
 									<AsyncSelect
-										key = {props.attributes.ad_type}
+										key = { props.attributes.ad_type }
 										styles={ customStyles }
 										className="wpadcenter-async-select"
 										isMulti
@@ -260,15 +277,27 @@ registerBlockType( 'wpadcenter/ad-types', {
 										loadOptions={ getAdGroupOptions }
 										defaultValue={ defaultValueAdgroup }
 										onChange={ onAdGroupSelection }
-
 									/>
 								</div>
 							</div>
 						) }
-                   <AdAlignment
-                       adAlignment={ adAlignment }
-                       currentAdAlignment={ props.attributes.ad_alignment }
-                   />
+				   { props.attributes.ad_type === 'Adgroup' ? (
+					<div>
+						<AdAlignment
+							adAlignment={ adAlignment }
+							currentAdAlignment={ props.attributes.adgroup_alignment }
+						/>
+						<div style={ { display: 'flex', justifyContent: 'space-around' } }>
+								<div>
+									<h3 style={ headingStyles }>{ __( 'Number of Ads', 'wpadcenter' ) }</h3>
+									<input type="number" min="1" onChange={ setNumAds } value={ props.attributes.num_ads } />
+								</div>
+								<div>
+									<h3 style={ headingStyles }>{ __( 'Number of Columns', 'wpadcenter' ) }</h3>
+									<input type="number" min="1" onChange={ setNumCol } value={ props.attributes.num_columns } />
+								</div>
+						</div>
+					</div> ) : ( <p></p> ) }
                    <MaxWidth
                        maxWidthCheck={ props.attributes.max_width_check }
                        maxWidthControlChange={ onMaxWidthControlChange }
@@ -281,21 +310,21 @@ registerBlockType( 'wpadcenter/ad-types', {
                        displayOnMobile={ JSON.parse( props.attributes.devices ).indexOf( 'mobile' ) !== -1 ? true : false }
                        displayOnTablet={ JSON.parse( props.attributes.devices ).indexOf( 'tablet' ) !== -1 ? true : false }
                        displayOnDesktop={ JSON.parse( props.attributes.devices ).indexOf( 'desktop' ) !== -1 ? true : false }
-
                    />
-
-               </div>
+               </div> ) : (<p></p>) }
             </Placeholder> ) : (
-					<AdTypes
-						adId={ props.attributes.ad_id }
-						adAlignment={ props.attributes.ad_alignment }
-						max_width_check={ props.attributes.max_width_check }
-						max_width_px={ props.attributes.max_width_px }
+				<AdTypes
+					ad_type={ props.attributes.ad_type}
+					adId={ props.attributes.ad_id }
+					adAlignment={ props.attributes.ad_alignment }
+					max_width_check={ props.attributes.max_width_check }
+					max_width_px={ props.attributes.max_width_px }
+					numAds={ props.attributes.num_ads }
+					numColumns={ props.attributes.num_columns }
+					adGroupIds={ props.attributes.adgroup_ids }
+					adIds={ props.attributes.ad_ids }
 				/> )
 			}
-
-            
-
 		</div>;
 	},
 
