@@ -81,6 +81,16 @@
 #geo_cities .geo_cities {
 	width: 100% !important;
 }
+#lazy_load_offset {
+	margin-top: 10px;
+}
+.wpadcenter-lazy-load-offset {
+	font-weight: bold !important;
+	margin-top: 10px;
+}
+.wpadcenter-lazy-load-label {
+	margin-bottom: 0 !important;
+}
 .wpadcenter-amp-delete-attr-button{
 	height:30px;
 	cursor:pointer;
