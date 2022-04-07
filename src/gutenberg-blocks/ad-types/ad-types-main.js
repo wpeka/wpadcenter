@@ -4,6 +4,7 @@ import AdTypes from '../ad-types/ad-types-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
 import SelectDevice from '../select-device-component';
+import Sortable from '../sortable-component';
 
 const { registerBlockType } = wp.blocks;
 const apiFetch = wp.apiFetch;
@@ -86,6 +87,14 @@ registerBlockType( 'wpadcenter/ad-types', {
 		},
 		adgroup_id: {
 			type: 'number',
+		},
+		ads: {
+			type: 'array',
+			default: [],
+		},
+		display_type: {
+			type: 'string',
+			default: 'carousel',
 		},
 	},
 
@@ -230,6 +239,12 @@ registerBlockType( 'wpadcenter/ad-types', {
 			} );
 		};
 
+		const setDisplayType = ( event ) => {
+			props.setAttributes( {
+				display_type: event.target.value,
+			} );
+		};
+
 		const getAdOptions =  [
             {value:"Single Ad",label:'Single Ad'}, 
             {value:"Adgroup",label:'Adgroup'}, 
@@ -269,6 +284,43 @@ registerBlockType( 'wpadcenter/ad-types', {
 			fontSize: 'medium',
 		};
 
+		const displayTypeOptions = [
+			{
+				value: 'carousel',
+				name: __( 'Carousel', 'wpadcenter' ),
+			},
+			{
+				value: 'scrollbar-top',
+				name: __( 'Top Scroll Bar', 'wpadcenter' ),
+			},
+			{
+				value: 'scrollbar-bottom',
+				name: __( 'Bottom Scroll Bar', 'wpadcenter' ),
+			},
+			{
+				value: 'floating-top-right',
+				name: __( 'Floating Top Right', 'wpadcenter' ),
+			},
+			{
+				value: 'floating-top-left',
+				name: __( 'Floating Top Left', 'wpadcenter' ),
+			},
+			{
+				value: 'floating-bottom-right',
+				name: __( 'Floating Bottom Right', 'wpadcenter' ),
+			},
+			{
+				value: 'floating-bottom-left',
+				name: __( 'Floating Bottom Left', 'wpadcenter' ),
+			},
+			{
+				value: 'popup',
+				name: __( 'Pop Up', 'wpadcenter' ),
+			},
+		];
+
+		const defaultAnimatedAdValue = props.attributes.ads;
+
         const onAdTypeSelection = ( selection ) => {
 			props.setAttributes( {
 				ad_type: selection.label,
@@ -294,6 +346,68 @@ registerBlockType( 'wpadcenter/ad-types', {
 		const setTime = ( event ) => {
 			props.setAttributes( {
 				time: event.target.value,
+			} );
+		};
+
+		const onAnimatedAdSelection = ( selection ) => {
+			const current_ad_ids = props.attributes.ad_ids;
+
+			if ( ! current_ad_ids.includes( selection.value ) ) {
+				current_ad_ids.push( selection.value );
+
+				const current_ads = props.attributes.ads.slice( 0 );
+				current_ads.push( selection );
+				props.setAttributes( {
+					ads: current_ads,
+					ad_ids: current_ad_ids,
+				} );
+			}
+		};
+
+		const handleOnDragEnd = ( source, destination ) => {
+			const currentAds = props.attributes.ads;
+			const storeValue = currentAds[ source ];
+			currentAds[ source ] = currentAds[ destination ];
+			currentAds[ destination ] = storeValue;
+			props.setAttributes( {
+				ads: currentAds,
+			} );
+		};
+
+		const onMoveUp = ( index ) => {
+			const currentAds = props.attributes.ads;
+			const storeValue = currentAds[ index - 1 ];
+			currentAds[ index - 1 ] = currentAds[ index ];
+			currentAds[ index ] = storeValue;
+			props.setAttributes( {
+				ads: currentAds,
+			} );
+		};
+		const onMoveDown = ( index ) => {
+			const currentAds = props.attributes.ads;
+			const storeValue = currentAds[ index + 1 ];
+			currentAds[ index + 1 ] = currentAds[ index ];
+			currentAds[ index ] = storeValue;
+			props.setAttributes( {
+				ads: currentAds,
+			} );
+		};
+		const onClear = ( index ) => {
+			const currentAds = props.attributes.ads;
+
+			// Remove element from ad ids
+			const currentAdIds = props.attributes.ad_ids;
+			const indexOfAdId = currentAdIds.indexOf(
+				currentAds[ index ].value,
+			);
+			if ( indexOfAdId !== -1 ) {
+				currentAdIds.splice( indexOfAdId, 1 );
+			}
+			// Remove element from ads
+			currentAds.splice( index, 1 );
+			props.setAttributes( {
+				ads: currentAds,
+				ad_ids: currentAdIds,
 			} );
 		};
 		
@@ -333,8 +447,132 @@ registerBlockType( 'wpadcenter/ad-types', {
 								adAlignment={ adAlignment }
 								currentAdAlignment={ props.attributes.ad_alignment }
 							/>
-							<p>{props.attributes.ad_alignment}</p>
-						</div> ) : (
+							
+						</div> ) : props.attributes.ad_type === 'Animated Ads' ? (
+							<div>
+								<div style={ { textAlign: 'Center' } }>
+									<h3 style={ headingStyles }>
+										{ __(
+											'Select Display Animation Type',
+											'wpadcenter',
+										) }
+									</h3>
+
+									<select
+										value={ props.attributes.display_type }
+										onChange={ setDisplayType }
+									>
+										{ displayTypeOptions.map( ( type, index ) => {
+											return (
+												<option
+													key={ index }
+													value={ type.value }
+												>
+													{ type.name }
+												</option>
+											);
+										} ) }
+									</select>
+								</div>
+
+
+								<h3 style={ { fontWeight: '300', textAlign: 'center', fontSize: 'medium' } }>{ __( 'Select Ads', 'wpadcenter' ) }</h3>
+								<div style={ { display: 'flex', justifyContent: 'center' } }>
+
+									<AsyncSelect
+										key = { props.attributes.ad_type }
+										styles={ customStyles }
+										className="wpadcenter-async-select"
+										defaultOptions
+										loadOptions={ getOptions }
+										defaultValue={ defaultAnimatedAdValue }
+										onChange={ onAnimatedAdSelection }
+										value=""
+									/>
+								</div>
+									<Sortable
+										ads={ props.attributes.ads }
+										handleOnDragEnd={ handleOnDragEnd }
+										onMoveUp={ onMoveUp }
+										onMoveDown={ onMoveDown }
+										onClear={ onClear }
+									/>
+
+									<div
+										style={ {
+											display: 'flex',
+											justifyContent: 'center',
+										} }
+									>
+									{ 'scrollbar-top' !== props.attributes.display_type &&
+									'scrollbar-bottom' !== props.attributes.display_type ? (
+											<div>
+												<h3 style={ headingStyles }>
+													{ __(
+														'Number of Columns',
+														'wpadcenter',
+													) }
+												</h3>
+												<input
+													type="number"
+													min="1"
+													onChange={ setNumCol }
+													value={ props.attributes.num_columns }
+												/>
+											</div>
+										) : (
+											''
+										) }
+								</div>
+							</div>
+						) : props.attributes.ad_type === 'Ordered Ads' ? (
+							<div>
+								<h3 style={ { fontWeight: '300', textAlign: 'center', fontSize: 'medium' } }>{ __( 'Select Ads', 'wpadcenter' ) }</h3>
+								<div style={ { display: 'flex', justifyContent: 'center' } }>
+									<AsyncSelect
+										key = { props.attributes.ad_type }
+										styles={ customStyles }
+										className="wpadcenter-async-select"
+										defaultOptions
+										loadOptions={ getOptions }
+										defaultValue={ defaultAnimatedAdValue }
+										onChange={ onAnimatedAdSelection }
+										value=""
+									/>
+								</div>
+									<Sortable
+										ads={ props.attributes.ads }
+										handleOnDragEnd={ handleOnDragEnd }
+										onMoveUp={ onMoveUp }
+										onMoveDown={ onMoveDown }
+										onClear={ onClear }
+									/>
+									<AdAlignment
+										adAlignment={ adGroupAlignment }
+										currentAdAlignment={
+											props.attributes.adgroup_alignment
+										}
+									/>
+									<div
+										style={ {
+											display: 'flex',
+											justifyContent: 'center',
+										} }
+									>
+										<div>
+											<h3 style={ headingStyles }>
+												{ __( 'Number of Columns', 'wpadcenter' ) }
+											</h3>
+											<input
+												type="number"
+												min="1"
+												onChange={ setNumCol }
+												value={ props.attributes.num_columns }
+											/>
+										</div>
+									</div>
+							</div>
+						) : (
 							<div>
 								<h3 style={ headingStyles }>{ __( 'Select Ad Groups', 'wpadcenter' ) }</h3>
 								<div style={ { display: 'flex', justifyContent: 'center' } }>
@@ -474,6 +712,7 @@ registerBlockType( 'wpadcenter/ad-types', {
 					adIds={ props.attributes.ad_ids }
 					time={ props.attributes.time }
 					adOrder={ props.attributes.ad_order }
+					ads={ props.attributes.ads }
 				/> 
 				
 				</div>)

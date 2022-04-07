@@ -8,6 +8,7 @@ class AdTypes extends Component {
 		super( ...arguments );
 		this.state = {
 			ad_id: this.props.adId,
+			ad_type: this.props.ad_type,
 
 			ad_html: {
 				__html: '',
@@ -21,10 +22,28 @@ class AdTypes extends Component {
 				__html: `<h4 style="font-weight:300">${__( 'Loading Ad', 'wpadcenter' )}</h4>`,
 			},
 		} );
-		this.loadAds();
+
+		const animatedAds = [];
+		this.props.ads.forEach( ( ad ) => {
+			animatedAds.push( ad.value );
+		} );
+	
+		if(this.props.ad_type === 'Animated Ads') {
+			this.setState( {
+				ad_html: {
+					__html: `<div class="wpadcenter-gutenberg-preview-container"><strong>WPAdcenter Animated Ads</strong><p>${ __(
+						'Preview for animated ads is not availble in the editor, it can be seen on the preview or live page.',
+						'wpadcenter',
+					) }</p></div>`,
+				},
+			} );
+		}
+		if(this.props.ad_type !== 'Animated Ads') {
+			this.loadAds(animatedAds);
+		}
 	}
 
-	loadAds() {
+	loadAds( animatedAds ) {
 		var j = jQuery.noConflict();
 		j.ajax( {
 			type: 'POST',
@@ -44,6 +63,7 @@ class AdTypes extends Component {
 				time: this.props.time,
 				ad_order: this.props.adOrder,
 				adgroup_id: this.props.adGroupId,
+				ad_ids: animatedAds,
 			},
 		} ).done( adtypes_html => {
 			this.setState( {
