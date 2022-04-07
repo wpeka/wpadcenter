@@ -9,6 +9,8 @@ const { registerBlockType } = wp.blocks;
 const apiFetch = wp.apiFetch;
 const { Placeholder } = wp.components;
 const { __ } = wp.i18n;
+const { CheckboxControl, Tooltip } = wp.components;
+
 
 registerBlockType( 'wpadcenter/ad-types', {
 
@@ -21,6 +23,10 @@ registerBlockType( 'wpadcenter/ad-types', {
 		ad_type: {
 			type: 'string',
 			default: '',
+		},
+		is_pro:{
+			type: 'boolean',
+			default: wpadcenter_adtypes_verify.is_pro
 		},
         ad_id: {
 			type: 'number',
@@ -69,11 +75,22 @@ registerBlockType( 'wpadcenter/ad-types', {
 		num_ads: {
 			type: 'text',
 			default: '1',
-		},	
+		},
+		time: {
+			type: 'text',
+			default: '10',
+		},
+		ad_order: {
+			type: 'boolean',
+			default: false,
+		},
+		adgroup_id: {
+			type: 'number',
+		},
 	},
 
 	edit( props ) {
-
+		
         const getOptions = ( value, callback )=>{
 			apiFetch( {
 				path: '/wp/v2/wpadcenter-ads/',
@@ -82,9 +99,9 @@ registerBlockType( 'wpadcenter/ad-types', {
 					ads = ads.map( ( ad ) => {
 						let adLabel = ad.title.rendered + ' ( ' + ad.ad_type + ' - ' + ad.ad_size + ' )';
 						return {
-              value: ad.id,
-              label: adLabel,
-            };
+							value: ad.id,
+							label: adLabel,
+						};
 					} );
 					callback( ads );
 				} );
@@ -104,6 +121,20 @@ registerBlockType( 'wpadcenter/ad-types', {
 					callback( adgroups );
 				} );
 		};
+		const getRotatingAdGroupOptions = ( value, callback ) => {
+			apiFetch( {
+				path: '/wp/v2/wpadcenter-adgroups/',
+			} ).then( ( adgroups ) => {
+				adgroups = adgroups.map( ( adgroup ) => {
+					return {
+						value: adgroup.id,
+						label: adgroup.name,
+					};
+				} );
+				callback( adgroups );
+			} );
+		};
+		
 		
         const customStyles = {
 			control: ( base, state ) => ( {
@@ -169,6 +200,22 @@ registerBlockType( 'wpadcenter/ad-types', {
 				ad_alignment: value,
 			} );
 		};
+		const adGroupAlignment = ( value )=>{
+			props.setAttributes( {
+				adgroup_alignment: value,
+			} );
+		};
+		const onAdOrderChange = ( value ) => {
+			props.setAttributes( {
+				ad_order: value,
+			} );
+		};
+		const onRotatingAdSelection = ( selection ) => {
+			props.setAttributes( {
+				adgroup_id: selection.value,
+				ad_name: selection.label,
+			} );
+		};
 
 		const onDeviceListChange = ( value )=>{
 			let currentDevicesList = JSON.parse( props.attributes.devices );
@@ -183,11 +230,21 @@ registerBlockType( 'wpadcenter/ad-types', {
 			} );
 		};
 
-        const getAdOptions =  [
+		const getAdOptions =  [
+            {value:"Single Ad",label:'Single Ad'}, 
+            {value:"Adgroup",label:'Adgroup'}, 
+            {value:"Random Ads",label:'Random Ads'},
+		];
+
+        const getProAdOptions =  [
             {value:"Single Ad",label:'Single Ad'}, 
             {value:"Adgroup",label:'Adgroup'}, 
             {value:"Random Ads",label:'Random Ads'}, 
+			{value:"Rotating Ads",label:'Rotating Ads'},
+			{value:"Ordered Ads",label:'Ordered Ads'},
+			{value:"Animated Ads",label:'Animated Ads'},
         ]
+		
         const defaultValue = {
 			value: props.attributes.ad_type,
 			label: props.attributes.ad_type,
@@ -200,6 +257,12 @@ registerBlockType( 'wpadcenter/ad-types', {
 
 		const defaultValueAdgroup = props.attributes.adgroups;
 
+		const defaultValueRotatingAds = {
+			value: props.attributes.ad_id,
+			label: props.attributes.ad_name,
+		};
+
+		//const defaultValueRotatingAds = props.attributes.adgroup_id;
 		const headingStyles = {
 			fontWeight: '300',
 			textAlign: 'center',
@@ -227,6 +290,12 @@ registerBlockType( 'wpadcenter/ad-types', {
 
 			} );
 		};
+
+		const setTime = ( event ) => {
+			props.setAttributes( {
+				time: event.target.value,
+			} );
+		};
 		
 		return <div className="Wpadcenter-gutenberg-container">
 			{ !! props.isSelected ? (
@@ -237,7 +306,7 @@ registerBlockType( 'wpadcenter/ad-types', {
 				<AsyncSelect
 					styles={ customStyles }
 					className="wpadcenter-async-select"
-					defaultOptions = { getAdOptions }
+					defaultOptions = { props.attributes.is_pro !== '' ? getProAdOptions : getAdOptions  }
 					defaultValue={ defaultValue }
 					onChange={ onAdTypeSelection }
 				/>
@@ -260,14 +329,29 @@ registerBlockType( 'wpadcenter/ad-types', {
 								/>
 							</div>
 							<AdAlignment
+								key = { props.attributes.ad_type }
 								adAlignment={ adAlignment }
 								currentAdAlignment={ props.attributes.ad_alignment }
 							/>
+							<p>{props.attributes.ad_alignment}</p>
 						</div> ) : (
 							<div>
 								<h3 style={ headingStyles }>{ __( 'Select Ad Groups', 'wpadcenter' ) }</h3>
 								<div style={ { display: 'flex', justifyContent: 'center' } }>
-
+								{  props.attributes.ad_type === 'Rotating Ads' ? (
+									<div>
+									<AsyncSelect
+									key = { props.attributes.ad_type }
+									styles={ customStyles }
+									className="wpadcenter-async-select"
+									defaultOptions
+									loadOptions={ getRotatingAdGroupOptions  }
+									defaultValue={ defaultValueRotatingAds }
+									onChange={ onRotatingAdSelection  }
+								/>
+								</div>
+								) : (
+									<div>
 									<AsyncSelect
 										key = { props.attributes.ad_type }
 										styles={ customStyles }
@@ -278,13 +362,30 @@ registerBlockType( 'wpadcenter/ad-types', {
 										defaultValue={ defaultValueAdgroup }
 										onChange={ onAdGroupSelection }
 									/>
+									</div>
+								) }
 								</div>
 							</div>
 						) }
+
+					{  props.attributes.ad_type === 'Rotating Ads' ? (
+						<div style={ { textAlign: 'center' } }>
+							<h3 style={ headingStyles }>
+								{ __( 'Time (in seconds)', 'wpadcenter' ) }
+							</h3>
+							<input
+								type="number"
+								min="1"
+								onChange={ setTime }
+								value={ props.attributes.time }
+							/>
+						</div>
+					): (<p></p>)}
 				   { props.attributes.ad_type === 'Adgroup' ? (
 					<div>
 						<AdAlignment
-							adAlignment={ adAlignment }
+							key = { props.attributes.ad_type }
+							adAlignment={ adGroupAlignment }
 							currentAdAlignment={ props.attributes.adgroup_alignment }
 						/>
 						<div style={ { display: 'flex', justifyContent: 'space-around' } }>
@@ -297,13 +398,58 @@ registerBlockType( 'wpadcenter/ad-types', {
 									<input type="number" min="1" onChange={ setNumCol } value={ props.attributes.num_columns } />
 								</div>
 						</div>
-					</div> ) : ( <p></p> ) }
+					</div> ) : props.attributes.ad_type === 'Random Ads' ? (
+						<AdAlignment
+						key = { props.attributes.ad_type }
+						adAlignment={ adGroupAlignment }
+						currentAdAlignment={ props.attributes.adgroup_alignment }
+					/> ) : props.attributes.ad_type === 'Rotating Ads' ? (
+						<div>
+						<AdAlignment
+							key = { props.attributes.ad_type }
+							adAlignment={ adAlignment }
+							currentAdAlignment={ props.attributes.ad_alignment }
+						/>
+						</div>
+					) : ( <p></p> ) }
                    <MaxWidth
                        maxWidthCheck={ props.attributes.max_width_check }
                        maxWidthControlChange={ onMaxWidthControlChange }
                        maxWidthChange={ onMaxWidthChange }
                        maxWidth={ props.attributes.max_width_px }
                    />
+					{ props.attributes.ad_type === 'Rotating Ads' ? (
+					<div className="wpadcenter-order-container">
+						<CheckboxControl
+							onChange={ onAdOrderChange }
+							checked={ props.attributes.ad_order }
+							style={ {
+								fontSize: 'medium',
+								fontWeight: '300',
+							} }
+						/>
+						<h3
+							style={ {
+								fontWeight: '300',
+								textAlign: 'center',
+								marginTop: '20px',
+								fontSize: 'medium',
+								margin: '0',
+							} }
+						>
+							{ __( 'Order Randomly', 'wpadcenter' ) }
+						</h3>
+
+						<Tooltip
+							text={ __(
+								'If unchecked the ads are ordered by published date',
+								'wpadcenter',
+							) }
+						>
+							<span className="dashicons dashicons-lightbulb"></span>
+						</Tooltip>
+					</div> ) : ( <p></p> ) }
+						
                    <SelectDevice
                        devicesList={ JSON.parse( props.attributes.devices ) }
                        devicesListChange={ onDeviceListChange }
@@ -313,17 +459,24 @@ registerBlockType( 'wpadcenter/ad-types', {
                    />
                </div> ) : (<p></p>) }
             </Placeholder> ) : (
+				<div>
 				<AdTypes
 					ad_type={ props.attributes.ad_type}
 					adId={ props.attributes.ad_id }
 					adAlignment={ props.attributes.ad_alignment }
+					adgroupAlignment={ props.attributes.adgroup_alignment }
 					max_width_check={ props.attributes.max_width_check }
 					max_width_px={ props.attributes.max_width_px }
 					numAds={ props.attributes.num_ads }
 					numColumns={ props.attributes.num_columns }
 					adGroupIds={ props.attributes.adgroup_ids }
+					adGroupId={ props.attributes.adgroup_id }
 					adIds={ props.attributes.ad_ids }
-				/> )
+					time={ props.attributes.time }
+					adOrder={ props.attributes.ad_order }
+				/> 
+				
+				</div>)
 			}
 		</div>;
 	},

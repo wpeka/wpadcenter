@@ -38,10 +38,12 @@ class AdTypes extends Component {
 				max_width_check: this.props.max_width_check,
 				max_width_px: this.props.max_width_px,
 				ad_groups: this.props.adGroupIds,
-				alignment: this.props.adgroupAlignment,
+				adgroupAlignment: this.props.adgroupAlignment,
 				num_ads: this.props.numAds,
 				num_columns: this.props.numColumns,
-
+				time: this.props.time,
+				ad_order: this.props.adOrder,
+				adgroup_id: this.props.adGroupId,
 			},
 		} ).done( adtypes_html => {
 			this.setState( {
@@ -49,6 +51,43 @@ class AdTypes extends Component {
 					__html: JSON.parse( adtypes_html ).html,
 				},
 			} );
+
+			( function( $ ) {
+				'use strict';
+				const slideIndex = [];
+				const time = [];
+				const children = [];
+				$( '.wpadcenter_rotating_adgroup' ).each( function( index ) {
+					slideIndex[ index ] = 0;
+					time[ index ] = $( this )
+						.find( '#wpadcenter_rotating_time' )
+						.val();
+					children[ index ] = $( this ).find(
+						'.wpadcenter-ad-container',
+					);
+					function carousel( slideIndex, time, children ) {
+						for ( let i = 0; i < children.length; i++ ) {
+							$( children[ i ] ).hide();
+						}
+						slideIndex++;
+						if ( slideIndex > children.length ) {
+							slideIndex = 1;
+						}
+						$( children[ slideIndex - 1 ] ).css(
+							'display',
+							'block',
+						);
+						setTimeout( function() {
+							carousel( slideIndex, time, children );
+						}, parseInt( time * 1000 ) );
+					}
+					carousel(
+						slideIndex[ index ],
+						time[ index ],
+						children[ index ],
+					);
+				} );
+			}( jQuery ) );
 		} );
 	}
 

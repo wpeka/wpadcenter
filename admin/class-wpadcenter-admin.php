@@ -2691,13 +2691,18 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
-		wp_localize_script( 'wpadcenter-gutenberg-ad-types', 'wpadcenter_adtypes_verify', array( 'adtypes_nonce' => wp_create_nonce( 'adtypes_nonce' ) ) );
+		$is_pro = get_option( 'wpadcenter_pro_active' );
+		wp_localize_script( 'wpadcenter-gutenberg-ad-types', 'wpadcenter_adtypes_verify', array( 'adtypes_nonce' => wp_create_nonce( 'adtypes_nonce' ), 'is_pro' => $is_pro ) );
 		if ( function_exists( 'register_block_type' ) ) {
 			register_block_type(
 				'wpadcenter/ad-types',
 				array(
 					'editor_script'   => 'wpadcenter-gutenberg-ad-types',
 					'attributes'      => array(
+						'is_pro'         => array(
+							'type'    => 'boolean',
+							'default' => $is_pro,
+						),
 						'ad_type'         => array(
 							'type' => 'string',
 						),
@@ -2736,6 +2741,17 @@ class Wpadcenter_Admin {
 						'devices'         => array(
 							'type'    => 'string',
 							'default' => '["mobile","tablet","desktop"]',
+						),
+						'time'            => array(
+							'type'    => 'string',
+							'default' => '10',
+						),
+						'ad_order'        => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+						'adgroup_id' => array(
+							'type'    => 'number',
 						),
 					),
 					'render_callback' => array( $this, 'gutenberg_display_ads' ),
@@ -2890,8 +2906,8 @@ class Wpadcenter_Admin {
 	 */
 	public function gutenberg_display_ads( $attributes ) {
 
-		$ad_id = 0;
-
+		$ad_id   = 0;
+		$ad_type = '';
 		if ( array_key_exists( 'ad_type', $attributes ) ) {
 			$ad_type = $attributes['ad_type'];
 		}
@@ -2935,6 +2951,24 @@ class Wpadcenter_Admin {
 			$num_columns = $attributes['num_columns'];
 		}
 
+		$ad_order = 'off';
+		if ( array_key_exists( 'ad_order', $attributes ) ) {
+			$checked = $attributes['ad_order'];
+			if ( 'true' === $checked ) {
+				$ad_order = 'on';
+			} else {
+				$ad_order = 'off';
+			}
+		}
+		$time = '10';
+		if ( array_key_exists( 'time', $attributes ) ) {
+			$time = $attributes['time'];
+		}
+		$adgroup_id = 0;
+		if ( array_key_exists( 'adgroup_id', $attributes ) ) {
+			$adgroup_id = $attributes['adgroup_id'];
+		}
+
 		if ( 'Single Ad' === $ad_type ) {
 
 			$ad_attributes = array(
@@ -2970,6 +3004,20 @@ class Wpadcenter_Admin {
 
 			);
 			return Wpadcenter_Public::display_random_ad( $random_ad_attributes );
+		}  elseif ( 'Rotating Ads' === $ad_type ) {
+
+			$atts = array(
+				'time'         => $time,
+				'align'        => $ad_alignment,
+				'order'        => $ad_order,
+				'widget'       => false,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+	
+			);
+
+			return Wpadcenter_Pro_Public::display_rotating_adgroup( $adgroup_id, $atts );
 		}
 	}
 
@@ -3603,6 +3651,7 @@ class Wpadcenter_Admin {
 				'max_width_px' => $max_width_px,
 			);
 
+			error_log(print_r($singlead_attributes,true));
 			$string = Wpadcenter_Public::display_single_ad( $ad_id, $singlead_attributes );
 			$pass   = array(
 				'html' => $string,
@@ -3625,7 +3674,8 @@ class Wpadcenter_Admin {
 			wp_die();
 		}
 
-		$ad_id = 0;
+		$ad_id   = 0;
+		$ad_type = '';
 		if ( ! empty( $_POST['ad_type'] ) ) {
 			$ad_type = sanitize_text_field( wp_unslash( $_POST['ad_type'] ) );
 		}
@@ -3659,16 +3709,34 @@ class Wpadcenter_Admin {
 			}
 		}
 		$adgroup_alignment = 'alignnone';
-		if ( ! empty( $_POST['alignment'] ) ) {
-			$adgroup_alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ) );
+		if ( ! empty( $_POST['adgroupAlignment'] ) ) {
+			$adgroup_alignment = sanitize_text_field( wp_unslash( $_POST['adgroupAlignment'] ) );
 		}
-			$num_ads = '1';
+		$num_ads = '1';
 		if ( ! empty( $_POST['num_ads'] ) ) {
 			$num_ads = sanitize_text_field( wp_unslash( $_POST['num_ads'] ) );
 		}
-			$num_columns = '1';
+		$num_columns = '1';
 		if ( ! empty( $_POST['num_columns'] ) ) {
 			$num_columns = sanitize_text_field( wp_unslash( $_POST['num_columns'] ) );
+		}
+		$time = '10';
+		if ( ! empty( $_POST['time'] ) ) {
+			$time = sanitize_text_field( wp_unslash( $_POST['time'] ) );
+		}
+		$ad_order = 'off';
+		if ( ! empty( $_POST['ad_order'] ) ) {
+
+			$checked = sanitize_text_field( wp_unslash( $_POST['ad_order'] ) );
+			if ( 'true' === $checked ) {
+				$ad_order = 'on';
+			} else {
+				$ad_order = 'off';
+			}
+		}
+		$adgroup_id = 0;
+		if ( ! empty( $_POST['adgroup_id'] ) ) {
+			$adgroup_id = sanitize_text_field( wp_unslash( $_POST['adgroup_id'] ) );
 		}
 
 		if ( 'Single Ad' === $ad_type ) {
@@ -3679,6 +3747,9 @@ class Wpadcenter_Admin {
 				'max_width_px' => $max_width_px,
 			);
 
+			error_log(print_r($ad_id,true));
+			error_log(print_r($ad_alignment,true));
+			error_log(print_r($singlead_attributes,true));
 			$string = Wpadcenter_Public::display_single_ad( $ad_id, $singlead_attributes );
 		} elseif ( 'Adgroup' === $ad_type ) {
 
@@ -3690,6 +3761,8 @@ class Wpadcenter_Admin {
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
 			);
+			error_log(print_r($adgroup_ids,true));
+			error_log(print_r($adgroup_attributes,true));
 
 			$string = Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes );
 		} elseif ( 'Random Ads' === $ad_type ) {
@@ -3700,8 +3773,24 @@ class Wpadcenter_Admin {
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
 			);
+			error_log(print_r($adgroup_ids,true));
+			error_log(print_r($random_ad_attributes,true));
 
 			$string = Wpadcenter_Public::display_random_ad( $random_ad_attributes );
+		} elseif ( 'Rotating Ads' === $ad_type ) {
+
+			$rotating_ads_attributes = array(
+				'time'         => $time,
+				'align'        => $ad_alignment,
+				'order'        => $ad_order,
+				'widget'       => false,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+			);
+			error_log(print_r($adgroup_id,true));
+			error_log(print_r($rotating_ads_attributes,true));
+
+			$string = Wpadcenter_Pro_Public::display_rotating_adgroup( $adgroup_id, $rotating_ads_attributes );
 		}
 		$pass = array(
 			'html' => $string,
