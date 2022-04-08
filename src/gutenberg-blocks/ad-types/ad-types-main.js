@@ -95,6 +95,26 @@ registerBlockType( 'wpadcenter/ad-types', {
 			type: 'string',
 			default: 'carousel',
 		},
+		adgroup_ad_ids: {
+			type: 'array',
+			default: [],
+		},
+		animated_ads: {
+			type: 'array',
+			default: [],
+		},
+		animated_ad_ids: {
+			type: 'array',
+			default: [],
+		},
+		ordered_ads: {
+			type: 'array',
+			default: [],
+		},
+		ordered_ad_ids: {
+			type: 'array',
+			default: [],
+		},
 	},
 
 	edit( props ) {
@@ -139,6 +159,53 @@ registerBlockType( 'wpadcenter/ad-types', {
 					};
 				} );
 				callback( adgroups );
+			} );
+		};
+
+		const getAnimatedAdOptions = ( value, callback ) => {
+			apiFetch( {
+				path: '/wp/v2/wpadcenter-ads/',
+			} ).then( ( ads ) => {
+				ads = ads.filter( ( ad ) => {
+					if ( 'AMP' != ad.ad_type ) {
+						return ad;
+					}
+				} );
+				ads = ads.map( ( ad ) => {
+					const adLabel =
+						ad.title.rendered +
+						' ( ' +
+						ad.ad_type +
+						' - ' +
+						ad.ad_size +
+						' )';
+
+					return {
+						value: ad.id,
+						label: adLabel,
+					};
+				} );
+				callback( ads );
+			} );
+		};
+		const getOrderedAdOptions = ( value, callback ) => {
+			apiFetch( {
+				path: '/wp/v2/wpadcenter-ads/',
+			} ).then( ( ads ) => {
+				ads = ads.map( ( ad ) => {
+					const adLabel =
+						ad.title.rendered +
+						' ( ' +
+						ad.ad_type +
+						' - ' +
+						ad.ad_size +
+						' )';
+					return {
+						value: ad.id,
+						label: adLabel,
+					};
+				} );
+				callback( ads );
 			} );
 		};
         const customStyles = {
@@ -315,7 +382,9 @@ registerBlockType( 'wpadcenter/ad-types', {
 			},
 		];
 
-		const defaultAnimatedAdValue = props.attributes.ads;
+		const defaultAnimatedAdValue = props.attributes.animated_ads;
+
+		const defaultOrderedAdValue = props.attributes.ordered_ads;
 
         const onAdTypeSelection = ( selection ) => {
 			props.setAttributes( {
@@ -334,7 +403,7 @@ registerBlockType( 'wpadcenter/ad-types', {
 			props.setAttributes( {
 				adgroup_ids: current_adgroup_ids,
 				adgroups: selection,
-				ad_ids: current_ad_ids,
+				adgroup_ad_ids: current_ad_ids,
 
 			} );
 		};
@@ -346,53 +415,68 @@ registerBlockType( 'wpadcenter/ad-types', {
 		};
 
 		const onAnimatedAdSelection = ( selection ) => {
-			const current_ad_ids = props.attributes.ad_ids;
+			const current_ad_ids = props.attributes.animated_ad_ids;
 
 			if ( ! current_ad_ids.includes( selection.value ) ) {
 				current_ad_ids.push( selection.value );
 
-				const current_ads = props.attributes.ads.slice( 0 );
+				const current_ads = props.attributes.animated_ads.slice( 0 );
 				current_ads.push( selection );
 				props.setAttributes( {
-					ads: current_ads,
-					ad_ids: current_ad_ids,
+					animated_ads: current_ads,
+					animated_ad_ids: current_ad_ids,
+				} );
+			}
+		};
+
+		const onOrderedAdSelection = ( selection ) => {
+			const current_ad_ids = props.attributes.ordered_ad_ids;
+
+			if ( ! current_ad_ids.includes( selection.value ) ) {
+				current_ad_ids.push( selection.value );
+
+				const current_ads = props.attributes.ordered_ads.slice( 0 );
+				current_ads.push( selection );
+				props.setAttributes( {
+					ordered_ads: current_ads,
+					ordered_ad_ids: current_ad_ids,
 				} );
 			}
 		};
 
 		const handleOnDragEnd = ( source, destination ) => {
-			const currentAds = props.attributes.ads;
+			const currentAds = props.attributes.animated_ads;
 			const storeValue = currentAds[ source ];
 			currentAds[ source ] = currentAds[ destination ];
 			currentAds[ destination ] = storeValue;
 			props.setAttributes( {
-				ads: currentAds,
+				animated_ads: currentAds,
 			} );
 		};
 
 		const onMoveUp = ( index ) => {
-			const currentAds = props.attributes.ads;
+			const currentAds = props.attributes.animated_ads;
 			const storeValue = currentAds[ index - 1 ];
 			currentAds[ index - 1 ] = currentAds[ index ];
 			currentAds[ index ] = storeValue;
 			props.setAttributes( {
-				ads: currentAds,
+				animated_ads: currentAds,
 			} );
 		};
 		const onMoveDown = ( index ) => {
-			const currentAds = props.attributes.ads;
+			const currentAds = props.attributes.animated_ads;
 			const storeValue = currentAds[ index + 1 ];
 			currentAds[ index + 1 ] = currentAds[ index ];
 			currentAds[ index ] = storeValue;
 			props.setAttributes( {
-				ads: currentAds,
+				animated_ads: currentAds,
 			} );
 		};
 		const onClear = ( index ) => {
-			const currentAds = props.attributes.ads;
+			const currentAds = props.attributes.animated_ads;
 
 			// Remove element from ad ids
-			const currentAdIds = props.attributes.ad_ids;
+			const currentAdIds = props.attributes.animated_ad_ids;
 			const indexOfAdId = currentAdIds.indexOf(
 				currentAds[ index ].value,
 			);
@@ -402,8 +486,55 @@ registerBlockType( 'wpadcenter/ad-types', {
 			// Remove element from ads
 			currentAds.splice( index, 1 );
 			props.setAttributes( {
-				ads: currentAds,
-				ad_ids: currentAdIds,
+				animated_ads: currentAds,
+				animated_ad_ids: currentAdIds,
+			} );
+		};
+
+		const handleOnDragEndOrdered = ( source, destination ) => {
+			const currentAds = props.attributes.ordered_ads;
+			const storeValue = currentAds[ source ];
+			currentAds[ source ] = currentAds[ destination ];
+			currentAds[ destination ] = storeValue;
+			props.setAttributes( {
+				ordered_ads: currentAds,
+			} );
+		};
+
+		const onMoveUpOrdered = ( index ) => {
+			const currentAds = props.attributes.ordered_ads;
+			const storeValue = currentAds[ index - 1 ];
+			currentAds[ index - 1 ] = currentAds[ index ];
+			currentAds[ index ] = storeValue;
+			props.setAttributes( {
+				ordered_ads: currentAds,
+			} );
+		};
+		const onMoveDownOrdered = ( index ) => {
+			const currentAds = props.attributes.ordered_ads;
+			const storeValue = currentAds[ index + 1 ];
+			currentAds[ index + 1 ] = currentAds[ index ];
+			currentAds[ index ] = storeValue;
+			props.setAttributes( {
+				ordered_ads: currentAds,
+			} );
+		};
+		const onClearOrdered = ( index ) => {
+			const currentAds = props.attributes.ordered_ads;
+
+			// Remove element from ad ids
+			const currentAdIds = props.attributes.ordered_ad_ids;
+			const indexOfAdId = currentAdIds.indexOf(
+				currentAds[ index ].value,
+			);
+			if ( indexOfAdId !== -1 ) {
+				currentAdIds.splice( indexOfAdId, 1 );
+			}
+			// Remove element from ads
+			currentAds.splice( index, 1 );
+			props.setAttributes( {
+				ordered_ads: currentAds,
+				ordered_ad_ids: currentAdIds,
 			} );
 		};
 
@@ -478,20 +609,21 @@ registerBlockType( 'wpadcenter/ad-types', {
 												styles={ customStyles }
 												className="wpadcenter-async-select"
 												defaultOptions
-												loadOptions={ getOptions }
+												loadOptions={ getAnimatedAdOptions }
 												defaultValue={ defaultAnimatedAdValue }
 												onChange={ onAnimatedAdSelection }
 												value=""
 									/>
 										</div>
+
 										<Sortable
-											ads={ props.attributes.ads }
+											key={ props.attributes.ad_type }
+											ads={ props.attributes.animated_ads }
 											handleOnDragEnd={ handleOnDragEnd }
 											onMoveUp={ onMoveUp }
 											onMoveDown={ onMoveDown }
 											onClear={ onClear }
 								/>
-
 										<div
 											style={ {
 										display: 'flex',
@@ -528,18 +660,19 @@ registerBlockType( 'wpadcenter/ad-types', {
 										styles={ customStyles }
 										className="wpadcenter-async-select"
 										defaultOptions
-										loadOptions={ getOptions }
-										defaultValue={ defaultAnimatedAdValue }
-										onChange={ onAnimatedAdSelection }
+										loadOptions={ getOrderedAdOptions }
+										defaultValue={ defaultOrderedAdValue }
+										onChange={ onOrderedAdSelection }
 										value=""
 									/>
 								</div>
 								<Sortable
-									ads={ props.attributes.ads }
-									handleOnDragEnd={ handleOnDragEnd }
-									onMoveUp={ onMoveUp }
-									onMoveDown={ onMoveDown }
-									onClear={ onClear }
+									key={ props.attributes.ad_type }
+									ads={ props.attributes.ordered_ads }
+									handleOnDragEnd={ handleOnDragEndOrdered }
+									onMoveUp={ onMoveUpOrdered }
+									onMoveDown={ onMoveDownOrdered }
+									onClear={ onClearOrdered }
 									/>
 								<AdAlignment
 									adAlignment={ adGroupAlignment }
@@ -707,6 +840,11 @@ registerBlockType( 'wpadcenter/ad-types', {
 							time={ props.attributes.time }
 							adOrder={ props.attributes.ad_order }
 							ads={ props.attributes.ads }
+							adgroup_ad_ids={ props.attributes.adgroup_ad_ids }
+							animated_ads={ props.attributes.animated_ads }
+							animated_ad_ids={ props.attributes.animated_ad_ids }
+							ordered_ads={ props.attributes.ordered_ads }
+							ordered_ad_ids={ props.attributes.ordered_ad_ids }
 				/>
 
 					</div> )

@@ -24,10 +24,15 @@ class AdTypes extends Component {
 		} );
 
 		const animatedAds = [];
-		this.props.ads.forEach( ( ad ) => {
-			animatedAds.push( ad.value );
-		} );
-
+		if ( this.props.ad_type === 'Animated Ads' ) {
+			this.props.animated_ads.forEach( ( ad ) => {
+				animatedAds.push( ad.value );
+			} );
+		} else {
+			this.props.ordered_ads.forEach( ( ad ) => {
+				animatedAds.push( ad.value );
+			} );
+		}
 		if ( this.props.ad_type === 'Animated Ads' ) {
 			this.setState( {
 				ad_html: {
@@ -64,6 +69,8 @@ class AdTypes extends Component {
 				ad_order: this.props.adOrder,
 				adgroup_id: this.props.adGroupId,
 				ad_ids: animatedAds,
+				adgroup_ad_ids: this.props.adgroup_ad_ids,
+				ordered_ads: animatedAds,
 			},
 		} ).done( adtypes_html => {
 			this.setState( {

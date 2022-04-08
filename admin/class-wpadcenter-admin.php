@@ -2692,24 +2692,31 @@ class Wpadcenter_Admin {
 			false
 		);
 		$is_pro = get_option( 'wpadcenter_pro_active' );
-		wp_localize_script( 'wpadcenter-gutenberg-ad-types', 'wpadcenter_adtypes_verify', array( 'adtypes_nonce' => wp_create_nonce( 'adtypes_nonce' ), 'is_pro' => $is_pro ) );
+		wp_localize_script(
+			'wpadcenter-gutenberg-ad-types',
+			'wpadcenter_adtypes_verify',
+			array(
+				'adtypes_nonce' => wp_create_nonce( 'adtypes_nonce' ),
+				'is_pro'        => $is_pro,
+			)
+		);
 		if ( function_exists( 'register_block_type' ) ) {
 			register_block_type(
 				'wpadcenter/ad-types',
 				array(
 					'editor_script'   => 'wpadcenter-gutenberg-ad-types',
 					'attributes'      => array(
-						'is_pro'         => array(
+						'is_pro'            => array(
 							'type'    => 'boolean',
 							'default' => $is_pro,
 						),
-						'ad_type'         => array(
+						'ad_type'           => array(
 							'type' => 'string',
 						),
-						'ad_id'           => array(
+						'ad_id'             => array(
 							'type' => 'number',
 						),
-						'ad_alignment'    => array(
+						'ad_alignment'      => array(
 							'type' => 'string',
 						),
 						'ad_ids'            => array(
@@ -2730,30 +2737,39 @@ class Wpadcenter_Admin {
 						'num_columns'       => array(
 							'type' => 'string',
 						),
-						'max_width_check' => array(
+						'max_width_check'   => array(
 							'type'    => 'boolean',
 							'default' => false,
 						),
-						'max_width_px'    => array(
+						'max_width_px'      => array(
 							'type'    => 'string',
 							'default' => '100',
 						),
-						'devices'         => array(
+						'devices'           => array(
 							'type'    => 'string',
 							'default' => '["mobile","tablet","desktop"]',
 						),
-						'time'            => array(
+						'time'              => array(
 							'type'    => 'string',
 							'default' => '10',
 						),
-						'ad_order'        => array(
+						'ad_order'          => array(
 							'type'    => 'boolean',
 							'default' => false,
 						),
-						'adgroup_id' => array(
-							'type'    => 'number',
+						'adgroup_id'        => array(
+							'type' => 'number',
 						),
-						'ads'             => array(
+						'ads'               => array(
+							'type' => 'array',
+						),
+						'adgroup_ad_ids'    => array(
+							'type' => 'array',
+						),
+						'animated_ads'      => array(
+							'type' => 'array',
+						),
+						'ordered_ads'       => array(
 							'type' => 'array',
 						),
 					),
@@ -2977,6 +2993,19 @@ class Wpadcenter_Admin {
 				array_push( $ad_ids, $ad['value'] );
 			}
 		}
+		$animated_ads = array();
+		if ( array_key_exists( 'animated_ads', $attributes ) ) {
+			foreach ( $attributes['animated_ads'] as $ad ) {
+				array_push( $animated_ads, $ad['value'] );
+			}
+		}
+		$ordered_ads = array();
+		if ( array_key_exists( 'ordered_ads', $attributes ) ) {
+			foreach ( $attributes['ordered_ads'] as $ad ) {
+				array_push( $ordered_ads, $ad['value'] );
+			}
+		}
+
 		$display_type = 'carousel';
 		if ( array_key_exists( 'display_type', $attributes ) ) {
 			$display_type = $attributes['display_type'];
@@ -3033,18 +3062,19 @@ class Wpadcenter_Admin {
 		} elseif ( 'Animated Ads' === $ad_type ) {
 
 			$animated_ads_atts = array(
-				'ad_ids'       => $ad_ids,
+				'ad_ids'       => $animated_ads,
 				'num_columns'  => $num_columns,
 				'max_width'    => $max_width_check,
 				'max_width_px' => $max_width_px,
 				'devices'      => $devices,
 				'display_type' => $display_type,
 			);
+
 			return Wpadcenter_Pro_Public::display_animated_ads( $animated_ads_atts );
 		} elseif ( 'Ordered Ads' === $ad_type ) {
 
 			$ordered_ads_atts = array(
-				'ad_ids'       => $ad_ids,
+				'ad_ids'       => $ordered_ads,
 				'align'        => $adgroup_alignment,
 				'num_columns'  => $num_columns,
 				'max_width'    => $max_width_check,
@@ -3775,6 +3805,10 @@ class Wpadcenter_Admin {
 		if ( ! empty( $_POST['ad_ids'] ) ) {
 			$ad_ids = array_map( 'sanitize_text_field', wp_unslash( $_POST['ad_ids'] ) );
 		}
+		$ordered_ad_ids = array();
+		if ( ! empty( $_POST['ordered_ads'] ) ) {
+			$ordered_ads = array_map( 'sanitize_text_field', wp_unslash( $_POST['ordered_ads'] ) );
+		}
 		$display_type = 'carousel';
 		if ( ! empty( $_POST['display_type'] ) ) {
 			$display_type = sanitize_text_field( wp_unslash( $_POST['display_type'] ) );
@@ -3837,7 +3871,7 @@ class Wpadcenter_Admin {
 		} elseif ( 'Ordered Ads' === $ad_type ) {
 
 			$ordered_ads_atts = array(
-				'ad_ids'       => $ad_ids,
+				'ad_ids'       => $ordered_ads,
 				'align'        => $adgroup_alignment,
 				'num_columns'  => $num_columns,
 				'max_width'    => $max_width_check,
