@@ -81,7 +81,7 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_title',
 			array(
-				'label' => __( 'WPAdCenter Ads', 'wpadcenter' ),
+				'label' => __( 'WPAdCenter Ad Widget', 'wpadcenter' ),
 			)
 		);
 
