@@ -37,7 +37,8 @@
         "no-redeclare": "off",
         "no-unused-expressions": "off",
         "no-bitwise": "off",
-        "indent": "off"
+        "indent": "off",
+        "no-nested-ternary":"off"
     }
     
 }

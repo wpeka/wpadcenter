@@ -1,4 +1,4 @@
-/*global wp, jQuery, wpadcenter_singlead_verify*/
+/*global wp, jQuery, wpadcenter_adtypes_verify*/
 const apiFetch = wp.apiFetch;
 const { Component } = wp.element;
 const { __ } = wp.i18n;
@@ -27,8 +27,8 @@ class AdTypes extends Component {
 		this.props.ads.forEach( ( ad ) => {
 			animatedAds.push( ad.value );
 		} );
-	
-		if(this.props.ad_type === 'Animated Ads') {
+
+		if ( this.props.ad_type === 'Animated Ads' ) {
 			this.setState( {
 				ad_html: {
 					__html: `<div class="wpadcenter-gutenberg-preview-container"><strong>WPAdcenter Animated Ads</strong><p>${ __(
@@ -38,8 +38,8 @@ class AdTypes extends Component {
 				},
 			} );
 		}
-		if(this.props.ad_type !== 'Animated Ads') {
-			this.loadAds(animatedAds);
+		if ( this.props.ad_type !== 'Animated Ads' ) {
+			this.loadAds( animatedAds );
 		}
 	}
 
