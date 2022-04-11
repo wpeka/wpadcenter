@@ -40,7 +40,10 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 	 * Adds script to the list which elementor enqueues.
 	 */
 	public function get_script_depends() {
-		return array( 'wpadcenter-elementor' );
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+			return array( 'wpadcenter-elementor' );
+		}
+		return array();
 	}
 
 	/**
@@ -90,7 +93,6 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 		$adgroup_options      = $this->get_adgroup_options();
 		$display_type_options = array();
 		$display_type_options = apply_filters( 'wpadcenter_get_display_type_options', $display_type_options );
-
 		$this->add_control(
 			'ad_type',
 			array(
