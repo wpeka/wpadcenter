@@ -73,6 +73,12 @@
 .edit-post-meta-boxes-area {
   margin: 0 !important;
 }
+#target_ads_by {
+	margin-top: 10px;
+}
+#include_location .location-options {
+	width: 100% !important;
+}
 #geo_countries, #geo_cities {
 	margin-top: 10px;
 }
