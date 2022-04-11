@@ -16,7 +16,8 @@
  
          singlead:'./src/gutenberg-blocks/single-ad/main.js',
          adgroup:'./src/gutenberg-blocks/adgroup/adgroup-main.js',
-         randomad:'./src/gutenberg-blocks/random-ad/random-ad-main.js'
+         randomad:'./src/gutenberg-blocks/random-ad/random-ad-main.js',
+         adtypes:'./src/gutenberg-blocks/ad-types/ad-types-main.js'
 
 
  

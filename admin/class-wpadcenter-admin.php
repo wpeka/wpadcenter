@@ -2702,6 +2702,99 @@ class Wpadcenter_Admin {
 			);
 		}
 		wp_register_script(
+			'wpadcenter-gutenberg-ad-types',
+			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-adtypes.js',
+			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
+			$this->version,
+			false
+		);
+		$is_pro = get_option( 'wpadcenter_pro_active' );
+		wp_localize_script(
+			'wpadcenter-gutenberg-ad-types',
+			'wpadcenter_adtypes_verify',
+			array(
+				'adtypes_nonce' => wp_create_nonce( 'adtypes_nonce' ),
+				'is_pro'        => $is_pro,
+			)
+		);
+		if ( function_exists( 'register_block_type' ) ) {
+			register_block_type(
+				'wpadcenter/ad-types',
+				array(
+					'editor_script'   => 'wpadcenter-gutenberg-ad-types',
+					'attributes'      => array(
+						'is_pro'            => array(
+							'type'    => 'boolean',
+							'default' => $is_pro,
+						),
+						'ad_type'           => array(
+							'type' => 'string',
+						),
+						'ad_id'             => array(
+							'type' => 'number',
+						),
+						'ad_alignment'      => array(
+							'type' => 'string',
+						),
+						'ad_ids'            => array(
+							'type' => 'array',
+						),
+						'adgroup_ids'       => array(
+							'type' => 'array',
+						),
+						'adroups'           => array(
+							'type' => 'array',
+						),
+						'adgroup_alignment' => array(
+							'type' => 'string',
+						),
+						'num_ads'           => array(
+							'type' => 'string',
+						),
+						'num_columns'       => array(
+							'type' => 'string',
+						),
+						'max_width_check'   => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+						'max_width_px'      => array(
+							'type'    => 'string',
+							'default' => '100',
+						),
+						'devices'           => array(
+							'type'    => 'string',
+							'default' => '["mobile","tablet","desktop"]',
+						),
+						'time'              => array(
+							'type'    => 'string',
+							'default' => '10',
+						),
+						'ad_order'          => array(
+							'type'    => 'boolean',
+							'default' => false,
+						),
+						'adgroup_id'        => array(
+							'type' => 'number',
+						),
+						'ads'               => array(
+							'type' => 'array',
+						),
+						'adgroup_ad_ids'    => array(
+							'type' => 'array',
+						),
+						'animated_ads'      => array(
+							'type' => 'array',
+						),
+						'ordered_ads'       => array(
+							'type' => 'array',
+						),
+					),
+					'render_callback' => array( $this, 'gutenberg_display_ads' ),
+				),
+			);
+		}
+		wp_register_script(
 			'wpadcenter-gutenberg-adgroup',
 			plugin_dir_url( __DIR__ ) . 'admin/js/gutenberg-blocks/wpadcenter-gutenberg-adgroup.js',
 			array( 'wp-blocks', 'wp-api-fetch', 'wp-components', 'wp-i18n' ),
@@ -2838,6 +2931,175 @@ class Wpadcenter_Admin {
 		);
 
 		return Wpadcenter_Public::display_single_ad( $ad_id, $ad_attributes );
+	}
+
+	/**
+	 * Renders gutenberg ads on frontend.
+	 *
+	 * @param array $attributes contains attributes of the ads.
+	 *
+	 * @since 1.0.0
+	 */
+	public function gutenberg_display_ads( $attributes ) {
+
+		$ad_id   = 0;
+		$ad_type = '';
+		if ( array_key_exists( 'ad_type', $attributes ) ) {
+			$ad_type = $attributes['ad_type'];
+		}
+		if ( array_key_exists( 'ad_id', $attributes ) ) {
+			$ad_id = $attributes['ad_id'];
+		}
+
+		$ad_attributes = array();
+		$ad_alignment  = 'alignnone';
+		if ( array_key_exists( 'ad_alignment', $attributes ) ) {
+			$ad_alignment = $attributes['ad_alignment'];
+		}
+		$max_width_check = false;
+		if ( array_key_exists( 'max_width_check', $attributes ) ) {
+
+			$max_width_check = boolval( $attributes['max_width_check'] );
+		}
+		$max_width_px = '100';
+		if ( array_key_exists( 'max_width_px', $attributes ) ) {
+			$max_width_px = $attributes['max_width_px'];
+		}
+		$devices = array( 'mobile', 'tablet', 'desktop' );
+		if ( array_key_exists( 'devices', $attributes ) ) {
+			$devices = json_decode( $attributes['devices'] );
+		}
+
+		$adgroup_ids = array();
+		if ( array_key_exists( 'adgroup_ids', $attributes ) ) {
+			$adgroup_ids = $attributes['adgroup_ids'];
+		}
+		$adgroup_alignment = 'alignnone';
+		if ( array_key_exists( 'adgroup_alignment', $attributes ) ) {
+			$adgroup_alignment = $attributes['adgroup_alignment'];
+		}
+			$num_ads = '1';
+		if ( array_key_exists( 'num_ads', $attributes ) ) {
+			$num_ads = $attributes['num_ads'];
+		}
+			$num_columns = '1';
+		if ( array_key_exists( 'num_columns', $attributes ) ) {
+			$num_columns = $attributes['num_columns'];
+		}
+
+		$ad_order = 'off';
+		if ( array_key_exists( 'ad_order', $attributes ) ) {
+			$checked = $attributes['ad_order'];
+			if ( 'true' === $checked ) {
+				$ad_order = 'on';
+			} else {
+				$ad_order = 'off';
+			}
+		}
+		$time = '10';
+		if ( array_key_exists( 'time', $attributes ) ) {
+			$time = $attributes['time'];
+		}
+		$adgroup_id = 0;
+		if ( array_key_exists( 'adgroup_id', $attributes ) ) {
+			$adgroup_id = $attributes['adgroup_id'];
+		}
+		$ad_ids = array();
+		if ( array_key_exists( 'ads', $attributes ) ) {
+			foreach ( $attributes['ads'] as $ad ) {
+				array_push( $ad_ids, $ad['value'] );
+			}
+		}
+		$animated_ads = array();
+		if ( array_key_exists( 'animated_ads', $attributes ) ) {
+			foreach ( $attributes['animated_ads'] as $ad ) {
+				array_push( $animated_ads, $ad['value'] );
+			}
+		}
+		$ordered_ads = array();
+		if ( array_key_exists( 'ordered_ads', $attributes ) ) {
+			foreach ( $attributes['ordered_ads'] as $ad ) {
+				array_push( $ordered_ads, $ad['value'] );
+			}
+		}
+
+		$display_type = 'carousel';
+		if ( array_key_exists( 'display_type', $attributes ) ) {
+			$display_type = $attributes['display_type'];
+		}
+
+		if ( 'Single Ad' === $ad_type ) {
+
+			$ad_attributes = array(
+				'align'        => $ad_alignment,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+			);
+			return Wpadcenter_Public::display_single_ad( $ad_id, $ad_attributes );
+
+		} elseif ( 'Adgroup' === $ad_type ) {
+
+			$adgroup_attributes = array(
+				'adgroup_ids'  => $adgroup_ids,
+				'align'        => $adgroup_alignment,
+				'num_ads'      => $num_ads,
+				'num_columns'  => $num_columns,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+
+			);
+			return Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes );
+
+		} elseif ( 'Random Ads' === $ad_type ) {
+
+			$random_ad_attributes = array(
+				'adgroup_ids'  => $adgroup_ids,
+				'align'        => $adgroup_alignment,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+
+			);
+			return Wpadcenter_Public::display_random_ad( $random_ad_attributes );
+		} elseif ( 'Rotating Ads' === $ad_type ) {
+
+			$atts = array(
+				'time'         => $time,
+				'align'        => $ad_alignment,
+				'order'        => $ad_order,
+				'widget'       => false,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+			);
+
+			return Wpadcenter_Pro_Public::display_rotating_adgroup( $adgroup_id, $atts );
+		} elseif ( 'Animated Ads' === $ad_type ) {
+
+			$animated_ads_atts = array(
+				'ad_ids'       => $animated_ads,
+				'num_columns'  => $num_columns,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+				'display_type' => $display_type,
+			);
+
+			return Wpadcenter_Pro_Public::display_animated_ads( $animated_ads_atts );
+		} elseif ( 'Ordered Ads' === $ad_type ) {
+
+			$ordered_ads_atts = array(
+				'ad_ids'       => $ordered_ads,
+				'align'        => $adgroup_alignment,
+				'num_columns'  => $num_columns,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+				'devices'      => $devices,
+			);
+			return Wpadcenter_Pro_Public::display_ordered_ads( $ordered_ads_atts );
+		}
 	}
 
 	/**
@@ -3477,6 +3739,172 @@ class Wpadcenter_Admin {
 			wp_send_json( wp_json_encode( $pass ) );
 			wp_die();
 	}
+
+	/**
+	 * Provides the ad html for gutenberg preview.
+	 *
+	 * @since 1.0.0
+	 */
+	public function wpadcenter_adtypes_gutenberg_preview() {
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_attr__( 'You do not have sufficient permission to perform this operation', 'wpadcenter' ) );
+		}
+		if ( ! isset( $_POST['adtypes_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['adtypes_nonce'] ), 'adtypes_nonce' ) ) {
+			wp_die();
+		}
+
+		$ad_id   = 0;
+		$ad_type = '';
+		if ( ! empty( $_POST['ad_type'] ) ) {
+			$ad_type = sanitize_text_field( wp_unslash( $_POST['ad_type'] ) );
+		}
+		if ( ! empty( $_POST['ad_id'] ) ) {
+			$ad_id = sanitize_text_field( wp_unslash( $_POST['ad_id'] ) );
+		}
+		$ad_alignment = 'alignnone';
+		if ( ! empty( $_POST['alignment'] ) ) {
+			$ad_alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ) );
+		}
+		$max_width_check = false;
+		if ( ! empty( $_POST['max_width_check'] ) ) {
+
+			$checked = sanitize_text_field( wp_unslash( $_POST['max_width_check'] ) );
+			if ( 'true' === $checked ) {
+				$max_width_check = true;
+			} else {
+				$max_width_check = false;
+			}
+		}
+		$max_width_px = '100';
+		if ( ! empty( $_POST['max_width_px'] ) ) {
+			$max_width_px = sanitize_text_field( wp_unslash( $_POST['max_width_px'] ) );
+		}
+
+		$adgroup_ids = array();
+		if ( ! empty( $_POST['ad_groups'] ) ) {
+			$adgroup_ids = wp_unslash( $_POST['ad_groups'] );// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			foreach ( $adgroup_ids as $k => $v ) {
+				$adgroup_ids[ $k ] = intval( $v );
+			}
+		}
+		$adgroup_alignment = 'alignnone';
+		if ( ! empty( $_POST['adgroupAlignment'] ) ) {
+			$adgroup_alignment = sanitize_text_field( wp_unslash( $_POST['adgroupAlignment'] ) );
+		}
+		$num_ads = '1';
+		if ( ! empty( $_POST['num_ads'] ) ) {
+			$num_ads = sanitize_text_field( wp_unslash( $_POST['num_ads'] ) );
+		}
+		$num_columns = '1';
+		if ( ! empty( $_POST['num_columns'] ) ) {
+			$num_columns = sanitize_text_field( wp_unslash( $_POST['num_columns'] ) );
+		}
+		$time = '10';
+		if ( ! empty( $_POST['time'] ) ) {
+			$time = sanitize_text_field( wp_unslash( $_POST['time'] ) );
+		}
+		$ad_order = 'off';
+		if ( ! empty( $_POST['ad_order'] ) ) {
+
+			$checked = sanitize_text_field( wp_unslash( $_POST['ad_order'] ) );
+			if ( 'true' === $checked ) {
+				$ad_order = 'on';
+			} else {
+				$ad_order = 'off';
+			}
+		}
+		$adgroup_id = 0;
+		if ( ! empty( $_POST['adgroup_id'] ) ) {
+			$adgroup_id = sanitize_text_field( wp_unslash( $_POST['adgroup_id'] ) );
+		}
+		$ad_ids = array();
+		if ( ! empty( $_POST['ad_ids'] ) ) {
+			$ad_ids = array_map( 'sanitize_text_field', wp_unslash( $_POST['ad_ids'] ) );
+		}
+		$ordered_ad_ids = array();
+		if ( ! empty( $_POST['ordered_ads'] ) ) {
+			$ordered_ads = array_map( 'sanitize_text_field', wp_unslash( $_POST['ordered_ads'] ) );
+		}
+		$display_type = 'carousel';
+		if ( ! empty( $_POST['display_type'] ) ) {
+			$display_type = sanitize_text_field( wp_unslash( $_POST['display_type'] ) );
+		}
+
+		if ( 'Single Ad' === $ad_type ) {
+
+			$singlead_attributes = array(
+				'align'        => $ad_alignment,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+			);
+
+			$string = Wpadcenter_Public::display_single_ad( $ad_id, $singlead_attributes );
+		} elseif ( 'Adgroup' === $ad_type ) {
+
+			$adgroup_attributes = array(
+				'adgroup_ids'  => $adgroup_ids,
+				'align'        => $adgroup_alignment,
+				'num_ads'      => $num_ads,
+				'num_columns'  => $num_columns,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+			);
+
+			$string = Wpadcenter_Public::display_adgroup_ads( $adgroup_attributes );
+		} elseif ( 'Random Ads' === $ad_type ) {
+
+			$random_ad_attributes = array(
+				'adgroup_ids'  => $adgroup_ids,
+				'align'        => $adgroup_alignment,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+			);
+
+			$string = Wpadcenter_Public::display_random_ad( $random_ad_attributes );
+		} elseif ( 'Rotating Ads' === $ad_type ) {
+
+			$rotating_ads_attributes = array(
+				'time'         => $time,
+				'align'        => $ad_alignment,
+				'order'        => $ad_order,
+				'widget'       => false,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+			);
+
+			$string = Wpadcenter_Pro_Public::display_rotating_adgroup( $adgroup_id, $rotating_ads_attributes );
+		} elseif ( 'Animated Ads' === $ad_type ) {
+
+			$animated_ads_atts = array(
+				'ad_ids'       => $ad_ids,
+				'num_columns'  => $num_columns,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+				'display_type' => $display_type,
+			);
+
+			$string = Wpadcenter_Pro_Public::display_animated_ads( $animated_ads_atts );
+		} elseif ( 'Ordered Ads' === $ad_type ) {
+
+			$ordered_ads_atts = array(
+				'ad_ids'       => $ordered_ads,
+				'align'        => $adgroup_alignment,
+				'num_columns'  => $num_columns,
+				'max_width'    => $max_width_check,
+				'max_width_px' => $max_width_px,
+			);
+
+			$string = Wpadcenter_Pro_Public::display_ordered_ads( $ordered_ads_atts );
+		}
+
+		$pass = array(
+			'html' => $string,
+		);
+		wp_send_json( wp_json_encode( $pass ) );
+		wp_die();
+	}
+
 
 	/**
 	 * Provides random ad html for gutenberg preview.
