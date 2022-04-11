@@ -57,7 +57,7 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 	/**
 	 * Register controls for the widget
 	 */
-	protected function _register_controls() { // phpcs:ignore
+	protected function register_controls() { // phpcs:ignore
 
 		$this->start_controls_section(
 			'section_title',
