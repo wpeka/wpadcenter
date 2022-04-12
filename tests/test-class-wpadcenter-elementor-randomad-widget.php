@@ -73,7 +73,7 @@ class Wpadcenter_Elementor_RandomAd_Widget_Test  extends WP_UnitTestCase {
 	 */
 	public function test_get_title() {
 		$value = self::$wpadcenter_elementor_randomad_widget->get_title();
-		$this->assertEquals( 'WPAdCenter Random Ad', $value );
+		$this->assertEquals( 'WPAdCenter Random Ads', $value );
 	}
 
 	/**

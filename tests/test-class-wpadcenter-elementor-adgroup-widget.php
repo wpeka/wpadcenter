@@ -73,7 +73,7 @@ class Wpadcenter_Elementor_Adgroup_Widget_Test  extends WP_UnitTestCase {
 	 */
 	public function test_get_title() {
 		$value = self::$wpadcenter_elementor_adgroup_widget->get_title();
-		$this->assertEquals( 'WPAdCenter Adgroup', $value );
+		$this->assertEquals( 'WPAdCenter Group Ads', $value );
 	}
 
 	/**
