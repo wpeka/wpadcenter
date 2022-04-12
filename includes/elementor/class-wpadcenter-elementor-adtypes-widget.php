@@ -40,7 +40,10 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 	 * Adds script to the list which elementor enqueues.
 	 */
 	public function get_script_depends() {
-		return array( 'wpadcenter-elementor' );
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+			return array( 'wpadcenter-elementor' );
+		}
+		return array();
 	}
 
 	/**
@@ -145,7 +148,6 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 				'label'     => __( 'Select Adgroup', 'wpadcenter' ),
 				'type'      => \Elementor\Controls_Manager::SELECT,
 				'options'   => $adgroup_options,
-				'default'   => array_keys( $adgroup_options )[0],
 				'condition' => array(
 					'ad_type' => array( 'rotatingad' ),
 				),

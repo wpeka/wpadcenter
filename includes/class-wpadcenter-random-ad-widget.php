@@ -25,7 +25,7 @@ class Wpadcenter_Random_Ad_Widget extends \WP_Widget {
 	 */
 	public function __construct() {
 		$id_base        = 'Wpadcenter_Random_Ad_Widget';
-		$name           = 'WPAdCenter Random Ad';
+		$name           = 'WPAdCenter Random Ads';
 		$widget_options = array( 'description' => __( 'Display Random Ad from Adgroups', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
 
