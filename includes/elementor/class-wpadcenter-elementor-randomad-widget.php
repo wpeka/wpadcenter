@@ -37,7 +37,7 @@ class Wpadcenter_Elementor_RandomAd_Widget extends \Elementor\Widget_Base {
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Random Ad';
+		return 'WPAdCenter Random Ads';
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Wpadcenter_Elementor_RandomAd_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_title',
 			array(
-				'label' => __( 'WPAdCenter Random Ad', 'wpadcenter' ),
+				'label' => __( 'WPAdCenter Random Ads', 'wpadcenter' ),
 			)
 		);
 

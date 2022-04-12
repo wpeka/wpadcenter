@@ -37,7 +37,7 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Adgroup';
+		return 'WPAdCenter Group Ads';
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_title',
 			array(
-				'label' => __( 'WPAdCenter Adgroup', 'wpadcenter' ),
+				'label' => __( 'WPAdCenter Group Ads', 'wpadcenter' ),
 			)
 		);
 
