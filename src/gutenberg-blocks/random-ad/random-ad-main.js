@@ -13,7 +13,7 @@ import SelectDevice from '../select-device-component';
 
 registerBlockType( 'wpadcenter/random-ad', {
 
-	title: __( 'WPAdCenter Random Ad', 'wpadcenter' ),
+	title: __( 'WPAdCenter Random Ads', 'wpadcenter' ),
 	description: __( 'Block to generate random WPAdCenter Ad from Adgroups', 'wpadcenter' ),
 	icon: 'flag',
 	category: 'wpadcenter',
@@ -147,7 +147,7 @@ registerBlockType( 'wpadcenter/random-ad', {
 		return <div className="Wpadcenter-gutenberg-container">
 			{ !! props.isSelected ? (
 
-				<Placeholder label="WPAdCenter Random Ad" isColumnLayout="true">
+				<Placeholder label="WPAdCenter Random Ads" isColumnLayout="true">
 
 					<h3 style={ headingStyles }>{ __( 'Select Ad Groups', 'wpadcenter' ) }</h3>
 					<div style={ { display: 'flex', justifyContent: 'center' } }>
