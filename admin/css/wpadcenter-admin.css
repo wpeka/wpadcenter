@@ -73,6 +73,12 @@
 .edit-post-meta-boxes-area {
   margin: 0 !important;
 }
+#target_ads_by {
+	margin-top: 10px;
+}
+#include_location .location-options {
+	width: 100% !important;
+}
 #geo_countries, #geo_cities {
 	margin-top: 10px;
 }
@@ -80,6 +86,16 @@
 #geo_countries .select2-container,
 #geo_cities .geo_cities {
 	width: 100% !important;
+}
+#lazy_load_offset {
+	margin-top: 10px;
+}
+.wpadcenter-lazy-load-offset {
+	font-weight: bold !important;
+	margin-top: 10px;
+}
+.wpadcenter-lazy-load-label {
+	margin-bottom: 0 !important;
 }
 .wpadcenter-amp-delete-attr-button{
 	height:30px;
@@ -208,4 +224,19 @@
 }
 #wpadcenter_video_autoplay{
 	margin-top:2px;
+}
+#wpadcenter-blocks-widgets-deprecation-warning{
+	display: inline-block !important;
+	line-height: 1.4;
+	padding: 11px 15px;
+	font-size: 14px;
+	margin: 25px 20px 0 2px;
+	background: #fff;
+    border: 1px solid #c3c4c7;
+    border-left-width: 4px;
+	border-left-color: #d0342c;
+}
+#wpadcenter-blocks-widgets-deprecation-warning>p {
+	margin: 0px;
+	font-weight: bold;
 }

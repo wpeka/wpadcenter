@@ -288,6 +288,21 @@ class Wpadcenter_Admin {
 		);
 	}
 
+	public function wpadcenter_blocks_widgets_deprecation_notice() {
+		$current_screen = get_current_screen();
+		if ( 'edit-wpadcenter-ads' === $current_screen->id || 'wpadcenter-ads' === $current_screen->id || 'edit-wpadcenter-adgroups' === $current_screen->id ) {
+			?>
+			<div id="wpadcenter-blocks-widgets-deprecation-warning">
+				<p>
+					<?php
+					printf( 'We have added consolidated single Ad blocks in Gutenberg (WPAdCenter Ad block), and Elementor (WPAdCenter Ad Widget) for better user experience.  Kindly replace your existing blocks/widgets with the new one, as the old ones will get deprecated soon.' );
+					?>
+				</p>
+			</div>
+			<?php
+		}
+	}
+
 	/**
 	 * Monthly schedule cron for clean stats..
 	 *
@@ -489,6 +504,7 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_register_taxonomy() {
+		wp_enqueue_style( $this->plugin_name );
 		$labels = array(
 			'name'              => _x( 'Manage Ad Groups', 'taxonomy general name', 'wpadcenter' ),
 			'singular_name'     => _x( 'Manage Ad Group', 'taxonomy singular name', 'wpadcenter' ),
@@ -768,6 +784,7 @@ class Wpadcenter_Admin {
 		if ( 'wpadcenter-ads' !== $current_screen->post_type ) {
 			return;
 		}
+		wp_enqueue_style( $this->plugin_name );
 		$columns = array(
 			'cb'              => '<input type="checkbox" />',
 			'title'           => __( 'Ad Title', 'wpadcenter' ),

@@ -73,7 +73,7 @@ class Wpadcenter_Elementor_Adgroup_Widget_Test  extends WP_UnitTestCase {
 	 */
 	public function test_get_title() {
 		$value = self::$wpadcenter_elementor_adgroup_widget->get_title();
-		$this->assertEquals( 'WPAdCenter Adgroup', $value );
+		$this->assertEquals( 'WPAdCenter Group Ads', $value );
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Wpadcenter_Elementor_Adgroup_Widget_Test  extends WP_UnitTestCase {
 	 */
 	public function test_register_controls() {
 
-		$method = self::getMethod( '_register_controls' );
+		$method = self::getMethod( 'register_controls' );
 		$obj    = self::$wpadcenter_elementor_adgroup_widget;
 		$method->invoke( $obj );
 		$all_controls = $obj->get_controls();
