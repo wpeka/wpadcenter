@@ -437,7 +437,7 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 				'max_width_px' => $settings['max_width_px'],
 				'devices'      => $settings['devices'],
 			);
-			echo Wpadcenter_Pro_Public::display_ordered_ads( $ordered_ads_atts );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo apply_filters( 'wpadcenter_display_elementor_ads', $ad_type, $ordered_ads_atts );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} elseif ( 'animatedad' === $ad_type ) {
 			$ad_ids = array();
 			foreach ( $settings['list'] as $ad ) {
@@ -452,7 +452,7 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 				'display_type' => $settings['display_type'],
 			);
 
-			echo Wpadcenter_Pro_Public::display_animated_ads( $animated_ads_atts );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo apply_filters( 'wpadcenter_display_elementor_ads', $ad_type, $animated_ads_atts );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		} elseif ( 'rotatingad' === $ad_type ) {
 			$adgroup_id = $settings['adgroup_id'];
@@ -464,7 +464,7 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 				'max_width_px' => $settings['max_width_px'],
 				'devices'      => $settings['devices'],
 			);
-			echo Wpadcenter_Pro_Public::display_rotating_adgroup( $adgroup_id, $attributes );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo apply_filters( 'wpadcenter_display_elementor_ads', $ad_type, $attributes, $adgroup_id );// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		}
 	}
