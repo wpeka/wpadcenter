@@ -3075,7 +3075,7 @@ class Wpadcenter_Admin {
 				'devices'      => $devices,
 			);
 
-			return Wpadcenter_Pro_Public::display_rotating_adgroup( $adgroup_id, $atts );
+			return apply_filters( 'display_rotating_ads', $adgroup_id, $atts );
 		} elseif ( 'Animated Ads' === $ad_type ) {
 
 			$animated_ads_atts = array(
@@ -3087,7 +3087,7 @@ class Wpadcenter_Admin {
 				'display_type' => $display_type,
 			);
 
-			return Wpadcenter_Pro_Public::display_animated_ads( $animated_ads_atts );
+			return apply_filters( 'display_animated_ads', $animated_ads_atts );
 		} elseif ( 'Ordered Ads' === $ad_type ) {
 
 			$ordered_ads_atts = array(
@@ -3098,7 +3098,7 @@ class Wpadcenter_Admin {
 				'max_width_px' => $max_width_px,
 				'devices'      => $devices,
 			);
-			return Wpadcenter_Pro_Public::display_ordered_ads( $ordered_ads_atts );
+			return apply_filters( 'display_ordered_ads', $ordered_ads_atts );
 		}
 	}
 
@@ -3873,7 +3873,7 @@ class Wpadcenter_Admin {
 				'max_width_px' => $max_width_px,
 			);
 
-			$string = Wpadcenter_Pro_Public::display_rotating_adgroup( $adgroup_id, $rotating_ads_attributes );
+			$string = html_entity_decode( apply_filters( 'display_rotating_ads', $adgroup_id, $rotating_ads_attributes ) );
 		} elseif ( 'Animated Ads' === $ad_type ) {
 
 			$animated_ads_atts = array(
@@ -3884,7 +3884,7 @@ class Wpadcenter_Admin {
 				'display_type' => $display_type,
 			);
 
-			$string = Wpadcenter_Pro_Public::display_animated_ads( $animated_ads_atts );
+			$string = html_entity_decode( apply_filters( 'display_animated_ads', $animated_ads_atts ) );
 		} elseif ( 'Ordered Ads' === $ad_type ) {
 
 			$ordered_ads_atts = array(
@@ -3895,7 +3895,7 @@ class Wpadcenter_Admin {
 				'max_width_px' => $max_width_px,
 			);
 
-			$string = Wpadcenter_Pro_Public::display_ordered_ads( $ordered_ads_atts );
+			$string = html_entity_decode( apply_filters( 'display_ordered_ads', $ordered_ads_atts ) );
 		}
 
 		$pass = array(
