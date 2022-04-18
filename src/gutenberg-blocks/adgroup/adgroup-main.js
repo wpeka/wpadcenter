@@ -14,7 +14,7 @@ import SelectDevice from '../select-device-component';
 
 registerBlockType( 'wpadcenter/adgroup', {
 
-	title: __( 'WPAdCenter Group Ads', 'wpadcenter' ),
+	title: __( 'WPAdCenter Grouped Ads', 'wpadcenter' ),
 	description: __( 'Block to generate WPAdCenter Ads from Adgroups', 'wpadcenter' ),
 	icon: 'flag',
 	category: 'wpadcenter',
@@ -174,7 +174,7 @@ registerBlockType( 'wpadcenter/adgroup', {
 		return <div className="Wpadcenter-gutenberg-container">
 			{ !! props.isSelected ? (
 
-				<Placeholder label="WPAdCenter Group Ads" isColumnLayout="true">
+				<Placeholder label="WPAdCenter Grouped Ads" isColumnLayout="true">
 
 					<h3 style={ headingStyles }>{ __( 'Select Ad Groups', 'wpadcenter' ) }</h3>
 					<div style={ { display: 'flex', justifyContent: 'center' } }>
