@@ -93,7 +93,6 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 		$adgroup_options      = $this->get_adgroup_options();
 		$display_type_options = array();
 		$display_type_options = apply_filters( 'wpadcenter_get_display_type_options', $display_type_options );
-
 		$this->add_control(
 			'ad_type',
 			array(
