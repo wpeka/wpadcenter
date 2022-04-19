@@ -288,6 +288,11 @@ class Wpadcenter_Admin {
 		);
 	}
 
+	/**
+	 * Shows the deprecation notice for old Elementor widgets and Gutenberg blocks.
+	 *
+	 * @since 5.4.0
+	 */
 	public function wpadcenter_blocks_widgets_deprecation_notice() {
 		$current_screen = get_current_screen();
 		if ( 'edit-wpadcenter-ads' === $current_screen->id || 'wpadcenter-ads' === $current_screen->id || 'edit-wpadcenter-adgroups' === $current_screen->id ) {
@@ -2791,7 +2796,7 @@ class Wpadcenter_Admin {
 						),
 					),
 					'render_callback' => array( $this, 'gutenberg_display_ads' ),
-				),
+				)
 			);
 		}
 		wp_register_script(
