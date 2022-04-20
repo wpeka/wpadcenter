@@ -335,7 +335,7 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 
 == Changelog ==
 
-= 2.3.3 - 2021-10-29 =
+= 2.3.3 - 2022-04-20 =
 * Update: Added consolidated Elementor Widget.
 * Update: Added consolidated Gutenberg Block.
 * Fix: Elementor related deprecation issues.
