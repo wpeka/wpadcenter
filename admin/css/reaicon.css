@@ -1,0 +1,28 @@
+@font-face {
+	font-family: "reaicon";
+	src: url("../fonts/reaicon.eot?yq1ljt");
+	src: url("../fonts/reaicon.eot?yq1ljt#iefix") format("embedded-opentype"),
+		url("../fonts/reaicon.ttf?yq1ljt") format("truetype"),
+		url("../fonts/reaicon.woff?yq1ljt") format("woff"),
+		url("../fonts/reaicon.svg?yq1ljt#reaicon") format("svg");
+	font-weight: normal;
+	font-style: normal;
+	font-display: block;
+}
+
+[class^="reaicon-"],
+[class*=" reaicon-"] {
+	font-family: "reaicon" !important;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	speak: none;
+}
+
+.reaicon-content-switcher:before {
+	content: "\e900";
+}

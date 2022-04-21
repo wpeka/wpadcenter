@@ -88,7 +88,22 @@ class Wpadcenter {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 
+	}
+
+	/**
+	 * To enqueue scripts for elementor custom icon.
+	 */
+	public function enqueue_admin_styles() {
+		wp_register_style(
+			'rea-icons',
+			plugin_dir_url( __DIR__ ) . '/admin/css/reaicon' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_enqueue_style( 'rea-icons' );
 	}
 
 	/**
