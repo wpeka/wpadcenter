@@ -241,6 +241,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'wp_ajax_upload_html5_file', $plugin_admin, 'wpadcenter_upload_html5_file' );
 		$this->loader->add_action( 'before_delete_post', $plugin_admin, 'wpadcenter_on_delete_ad' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wpadcenter_blocks_widgets_deprecation_notice' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_deprecation_already_done', 5 );
 	}
 
 	/**
