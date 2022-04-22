@@ -226,7 +226,8 @@
 	margin-top:2px;
 }
 #wpadcenter-blocks-widgets-deprecation-warning{
-	display: inline-block !important;
+	display: flex;
+	justify-content: space-between;
 	line-height: 1.4;
 	padding: 11px 15px;
 	font-size: 14px;
