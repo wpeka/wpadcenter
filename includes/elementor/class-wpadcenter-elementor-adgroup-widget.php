@@ -37,14 +37,14 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Grouped Ads';
+		return 'WPAdCenter Grouped Ads (Deprecated)';
 	}
 
 	/**
 	 * Register icon for widget
 	 */
 	public function get_icon() {
-		return 'fas fa-sign';
+		return 'reaicon-content-switcher';
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_title',
 			array(
-				'label' => __( 'WPAdCenter Grouped Ads', 'wpadcenter' ),
+				'label' => __( 'WPAdCenter Grouped Ads (Deprecated)', 'wpadcenter' ),
 			)
 		);
 
@@ -179,6 +179,13 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 			$adgroup_options[ $term->term_id ] = $term->name;
 		}
 		return $adgroup_options;
+	}
+
+	/**
+	 * Renders Help Link
+	 */
+	public function get_custom_help_url() {
+		return 'https://docs.wpeka.com/wp-adcenter/placing-ads/placing-ad-using-consolidated-block-elementor-widget';
 	}
 
 	/**

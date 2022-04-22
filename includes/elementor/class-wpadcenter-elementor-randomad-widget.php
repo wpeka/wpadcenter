@@ -37,14 +37,14 @@ class Wpadcenter_Elementor_RandomAd_Widget extends \Elementor\Widget_Base {
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Random Ads';
+		return 'WPAdCenter Random Ads (Deprecated)';
 	}
 
 	/**
 	 * Register icon for widget
 	 */
 	public function get_icon() {
-		return 'fas fa-sign';
+		return 'reaicon-content-switcher';
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Wpadcenter_Elementor_RandomAd_Widget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_title',
 			array(
-				'label' => __( 'WPAdCenter Random Ads', 'wpadcenter' ),
+				'label' => __( 'WPAdCenter Random Ads (Deprecated)', 'wpadcenter' ),
 			)
 		);
 
@@ -139,6 +139,13 @@ class Wpadcenter_Elementor_RandomAd_Widget extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Renders Help Link
+	 */
+	public function get_custom_help_url() {
+		return 'https://docs.wpeka.com/wp-adcenter/placing-ads/placing-ad-using-consolidated-block-elementor-widget';
 	}
 
 	/**
