@@ -11,12 +11,13 @@ import AdGroup from './adgroup-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
 import SelectDevice from '../select-device-component';
+import icons from '../icons';
 
 registerBlockType( 'wpadcenter/adgroup', {
 
-	title: __( 'WPAdCenter Grouped Ads', 'wpadcenter' ),
+	title: __( 'WPAdCenter Grouped Ads (Deprecated)', 'wpadcenter' ),
 	description: __( 'Block to generate WPAdCenter Ads from Adgroups', 'wpadcenter' ),
-	icon: 'flag',
+	icon: icons.icon,
 	category: 'wpadcenter',
 
 	attributes: {

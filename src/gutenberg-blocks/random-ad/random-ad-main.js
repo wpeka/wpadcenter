@@ -10,12 +10,13 @@ import RandomAd from './random-ad-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
 import SelectDevice from '../select-device-component';
+import icons from '../icons';
 
 registerBlockType( 'wpadcenter/random-ad', {
 
-	title: __( 'WPAdCenter Random Ads', 'wpadcenter' ),
+	title: __( 'WPAdCenter Random Ads (Deprecated)', 'wpadcenter' ),
 	description: __( 'Block to generate random WPAdCenter Ad from Adgroups', 'wpadcenter' ),
-	icon: 'flag',
+	icon: icons.icon,
 	category: 'wpadcenter',
 
 	attributes: {

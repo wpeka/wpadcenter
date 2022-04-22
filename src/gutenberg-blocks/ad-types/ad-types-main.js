@@ -11,12 +11,13 @@ const apiFetch = wp.apiFetch;
 const { Placeholder } = wp.components;
 const { __ } = wp.i18n;
 const { CheckboxControl, Tooltip } = wp.components;
+import icons from '../icons';
 
 registerBlockType( 'wpadcenter/ad-types', {
 
 	title: __( 'WPAdCenter Ad Block', 'wpadcenter' ),
 	description: __( 'Choose from different blocks', 'wpadcenter' ),
-	icon: 'flag',
+	icon: icons.icon,
 	category: 'wpadcenter',
 
 	attributes: {
