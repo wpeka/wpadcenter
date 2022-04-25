@@ -37,7 +37,7 @@ class Wpadcenter_Elementor_Adgroup_Widget extends \Elementor\Widget_Base {
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Grouped Ads (Deprecated)';
+		return 'Grouped Ads (Deprecated)';
 	}
 
 	/**

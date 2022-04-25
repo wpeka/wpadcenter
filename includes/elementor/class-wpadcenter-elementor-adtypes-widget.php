@@ -57,7 +57,7 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Ad Widget';
+		return 'Ad Widget';
 	}
 
 	/**
