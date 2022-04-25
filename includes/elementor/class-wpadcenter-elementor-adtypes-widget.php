@@ -57,14 +57,14 @@ class Wpadcenter_Elementor_AdTypes_Widget extends \Elementor\Widget_Base {
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Ad Widget';
+		return 'Ad Widget';
 	}
 
 	/**
 	 * Register icon for widget
 	 */
 	public function get_icon() {
-		return 'reaicon-content-switcher';
+		return 'icon-adcenter';
 	}
 
 	/**

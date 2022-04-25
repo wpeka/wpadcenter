@@ -36,14 +36,14 @@ class Wpadcenter_Elementor_SingleAd_Widget extends \Elementor\Widget_Base {
 	 * Title for widget
 	 */
 	public function get_title() {
-		return 'WPAdCenter Single Ad (Deprecated)';
+		return 'Single Ad (Deprecated)';
 	}
 
 	/**
 	 * Register icon for widget
 	 */
 	public function get_icon() {
-		return 'reaicon-content-switcher';
+		return 'icon-adcenter';
 	}
 
 	/**

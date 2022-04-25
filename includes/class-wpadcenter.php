@@ -97,13 +97,13 @@ class Wpadcenter {
 	 */
 	public function enqueue_admin_styles() {
 		wp_register_style(
-			'rea-icons',
-			plugin_dir_url( __DIR__ ) . '/admin/css/reaicon' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			'adcenter-icon',
+			plugin_dir_url( __DIR__ ) . '/admin/css/adcentericon' . WPADCENTER_SCRIPT_SUFFIX . '.css',
 			array(),
 			$this->version,
 			'all'
 		);
-		wp_enqueue_style( 'rea-icons' );
+		wp_enqueue_style( 'adcenter-icon' );
 	}
 
 	/**
