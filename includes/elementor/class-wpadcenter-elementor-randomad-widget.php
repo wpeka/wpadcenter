@@ -44,7 +44,7 @@ class Wpadcenter_Elementor_RandomAd_Widget extends \Elementor\Widget_Base {
 	 * Register icon for widget
 	 */
 	public function get_icon() {
-		return 'reaicon-content-switcher';
+		return 'icon-adcenter';
 	}
 
 	/**
