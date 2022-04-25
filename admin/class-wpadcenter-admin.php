@@ -307,7 +307,7 @@ class Wpadcenter_Admin {
 							printf( 'Please replace your existing ad widgets/blocks with the new one - WPAdCenter Ad Block (Gutenberg) & WPAdCenter Ad Widget (Elementor), as the old ones will be deprecated soon. <a href="' . esc_url( 'https://docs.wpeka.com/wp-adcenter/placing-ads/placing-ad-using-consolidated-block-elementor-widget' ) . '" target="_blank" rel="noopener noreferrer"> Learn more</a>.' );
 							?>
 						</p>
-						<button class="vvv" style="border: none;padding:0;background: none;color: #2271b1;"><i class="dashicons dashicons-dismiss"></i></button>
+						<button class="vvv wpadcenter-deprecation-notice"><i class="dashicons dashicons-dismiss"></i></button>
 						<input type="hidden" id="wpadcenter_deprecation_nonce" name="wpadcenter_deprecation_nonce" value="<?php echo esc_attr( wp_create_nonce( 'wpadcenter_deprecation' ) ); ?>" />
 					</div>
 				</form>

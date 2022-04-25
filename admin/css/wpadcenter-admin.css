@@ -136,14 +136,14 @@
 	text-align: center;
 	padding: 5px 5px;
 	border-radius: 6px;
-   
+
 	/* Position the tooltip text */
 	position: absolute;
 	z-index: 1001;
 	top: -5px;
 	right: 105%;
   }
-  
+
   /* Show the tooltip text when you mouse over the tooltip container */
   .wpadcenter-tooltip:hover .wpadcenter-tooltiptext {
 	visibility: visible;
@@ -168,9 +168,9 @@
 	z-index: -1;
 }
 .wpadcenter-inputfile + label {
-    color: white;
-    background-color: green;
-    display: inline-block;
+	color: white;
+	background-color: green;
+	display: inline-block;
 	padding:5px;
 }
 
@@ -203,11 +203,11 @@
 }
 
 #wpadcenter_video_filename_close::before {
-    content: '\274C';
-    color: #000;
-    font-size: 12px;
-    margin-left: -3px;
-    margin-right: 7px;
+	content: '\274C';
+	color: #000;
+	font-size: 12px;
+	margin-left: -3px;
+	margin-right: 7px;
 }
 
 #wpadcenter_video_upload_container{
@@ -217,7 +217,7 @@
 
 #wpadcenter_video_filename_container{
 	padding-top: 6px;
-    padding-left: 6px;
+	padding-left: 6px;
 }
 #wpadcenter_video_filename{
 	padding-right:4px;
@@ -233,11 +233,32 @@
 	font-size: 14px;
 	margin: 25px 20px 0 2px;
 	background: #fff;
-    border: 1px solid #c3c4c7;
-    border-left-width: 4px;
+	border: 1px solid #c3c4c7;
+	border-left-width: 4px;
 	border-left-color: #d0342c;
 }
 #wpadcenter-blocks-widgets-deprecation-warning>p {
 	margin: 0px;
 	font-weight: bold;
+}
+
+.wpadcenter-deprecation-notice {
+	background: 0 0;
+	color: #787c82;
+	display: block;
+	font: normal 16px/20px dashicons;
+	height: 20px;
+	text-align: center;
+	width: 20px;
+	border: none;
+}
+
+.wpadcenter-deprecation-notice .dashicons{
+	font-size: 15px;
+	height: 15px;
+	width: 15px;
+}
+
+.wpadcenter-deprecation-notice:hover {
+	color: #d63638;
 }
