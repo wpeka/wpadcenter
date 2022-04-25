@@ -10,12 +10,13 @@ import SingleAd from './single-ad-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
 import SelectDevice from '../select-device-component';
+import icons from '../icons';
 
 registerBlockType( 'wpadcenter/single-ad', {
 
-	title: __( 'WPAdCenter Single Ad', 'wpadcenter' ),
+	title: __( 'WPAdCenter Single Ad (Deprecated)', 'wpadcenter' ),
 	description: __( 'Block to generate WPAdCenter single ad', 'wpadcenter' ),
-	icon: 'flag',
+	icon: icons.icon,
 	category: 'wpadcenter',
 
 	attributes: {
