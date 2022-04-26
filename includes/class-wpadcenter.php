@@ -80,7 +80,7 @@ class Wpadcenter {
 		if ( defined( 'WPADCENTER_VERSION' ) ) {
 			$this->version = WPADCENTER_VERSION;
 		} else {
-			$this->version = '2.2.8';
+			$this->version = '2.3.2';
 		}
 		$this->plugin_name = 'wpadcenter';
 
@@ -599,6 +599,8 @@ class Wpadcenter {
 	 * Set impressions.
 	 *
 	 * @param int $ad_id Advertisement ID.
+	 *
+	 * @param int $placement_id Placement ID.
 	 */
 	public static function wpadcenter_set_impressions( $ad_id, $placement_id = '' ) {
 		global $wpdb;
