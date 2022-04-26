@@ -261,4 +261,5 @@
 
 .wpadcenter-deprecation-notice:hover {
 	color: #d63638;
+	cursor: pointer;
 }
