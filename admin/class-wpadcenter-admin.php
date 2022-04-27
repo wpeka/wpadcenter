@@ -181,7 +181,7 @@ class Wpadcenter_Admin {
 		);
 		wp_register_style(
 			$this->plugin_name . 'jquery-ui',
-			'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css',
+			plugin_dir_url( __FILE__ ) . 'css/jquery-ui' . WPADCENTER_SCRIPT_SUFFIX . '.css',
 			array(),
 			$this->version,
 			'all'

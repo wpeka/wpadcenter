@@ -4,8 +4,8 @@ Donate link: https://www.wpadcenter.com/
 Tags: adsense, ad rotator, ad manager, ad inserter, ads, advertising, banners, banner ads, adverts, ads block, ads widget, ads shortcode, amazon, ads manager plugin, dfp, ads manager, amp, adblock, header code, in-feed ads, sticky fixed widgets, affiliate, pop-up ads
 Requires at least: 5.0+
 Requires PHP: 5.6
-Tested up to: 5.8
-Stable tag: 2.3.3
+Tested up to: 5.9.3
+Stable tag: 2.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -335,6 +335,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 
 == Changelog ==
 
+= 2.3.4 =
+* Fix: Fixed plugin code as per WP standards and PHPCS.
+
 = 2.3.3 =
 * Update: Removed analytics library
 
@@ -440,6 +443,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+
+= 2.3.4 =
+* Fix: Fixed plugin code as per WP standards and PHPCS.
 
 = 2.3.3 =
 * Update: Removed analytics library
