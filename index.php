@@ -2,7 +2,7 @@
 /**
  * Silence is golden
  *
- * @package    Wpadcenter
+ * @package Wpadcenter
  */
 
 ?>

@@ -1029,8 +1029,10 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 	 * Test for wpadcenter_mascot_on_pages function
 	 */
 	public function test_wpadcenter_mascot_on_pages() {
-		$_GET['post_type'] = 'wpadcenter-ads';
+		set_current_screen( 'edit.php' );
 		global $wp_scripts;
+		global $current_screen;
+		$current_screen->post_type = 'wpadcenter-ads';
 		ob_start();
 		self::$wpadcenter_admin->wpadcenter_mascot_on_pages();
 		$output = ob_get_clean();
