@@ -1631,9 +1631,6 @@ class Wpadcenter_Admin {
 			<div id="wpadcenter-weekly-stats">
 				<h4><?php esc_html_e( 'Stats Summary for past 7 days', 'wpadcenter' ); ?></h4>
 				<p>{{ totalClicks }} <?php esc_html_e( 'Total Clicks', 'wpadcenter' ); ?> | {{ totalViews }} <?php esc_html_e( 'Total Views', 'wpadcenter' ); ?> | {{ totalCTR }} <?php esc_html_e( 'Total CTR', 'wpadcenter' ); ?> </p>
-				<div class="chart-container">
-					<line-chart :chart-data="chartData" :options="chartOptions"></line-chart>
-				</div>
 			</div>
 		<?php
 	}

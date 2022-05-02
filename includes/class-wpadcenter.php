@@ -599,7 +599,6 @@ class Wpadcenter {
 	 * Set impressions.
 	 *
 	 * @param int $ad_id Advertisement ID.
-	 *
 	 * @param int $placement_id Placement ID.
 	 */
 	public static function wpadcenter_set_impressions( $ad_id, $placement_id = '' ) {
