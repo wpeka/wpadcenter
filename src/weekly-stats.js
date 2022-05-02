@@ -1,6 +1,5 @@
 /*global returnArray*/
 import Vue from 'vue';
-import LineChart from './LineChart';
 
 // chart data
 const chartData = {
@@ -112,8 +111,5 @@ var weeklyStats = new Vue( {
 			totalViews,
 			totalCTR,
 		};
-	},
-	components: {
-		'line-chart': LineChart,
 	},
 } );

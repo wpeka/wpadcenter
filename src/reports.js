@@ -5,7 +5,6 @@ import '@coreui/coreui/dist/css/coreui.min.css';
 import 'vue-select/dist/vue-select.css';
 import VCalendar from 'v-calendar';
 import vSelect from 'vue-select';
-import LineChart from './LineChart';
 
 Vue.component( 'v-select', vSelect );
 Vue.use( CoreuiVue );
@@ -647,9 +646,6 @@ var reports = new Vue( {
 				this.select_ad = data;
 			} );
 		},
-	},
-	components: {
-		'line-chart': LineChart,
 	},
 	watch: {
 		// watch startdate and enddate and fire when value changes for validations.

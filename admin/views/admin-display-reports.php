@@ -331,9 +331,6 @@
 				</c-card-header>
 				<c-card-body>
 					<c-data-table :fields="detailedReportsField" :items="detailedReportsOptions" sorter :items-per-page="5" pagination></c-data-table>
-					<div class="chart-container">
-						<line-chart :chart-data="chartData" :options="chartOptions"></line-chart>
-					</div>
 					<?php do_action( 'wpadcenter_pro_custom_report_ga_charts', 'wpadcenter' ); ?>
 				</c-card-body>
 			</c-card>
