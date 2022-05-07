@@ -200,6 +200,27 @@ class Wpadcenter_Admin {
 			$this->version,
 			'all'
 		);
+		wp_register_style(
+			$this->plugin_name . '-mascot-style',
+			plugin_dir_url( __FILE__ ) . 'css/mascot' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_register_style(
+			$this->plugin_name . '-coreui',
+			plugin_dir_url( __FILE__ ) . 'css/coreui' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_register_style(
+			$this->plugin_name . '-vue-select',
+			plugin_dir_url( __FILE__ ) . 'css/vue-select' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
 	}
 
 
@@ -229,13 +250,6 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
-		wp_register_script(
-			$this->plugin_name . '-main',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-main.js',
-			array( 'jquery' ),
-			$this->version,
-			false
-		);
 		wp_enqueue_script(
 			$this->plugin_name . '-gapi-settings',
 			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-gapi-settings' . WPADCENTER_SCRIPT_SUFFIX . '.js',
@@ -252,36 +266,85 @@ class Wpadcenter_Admin {
 		);
 
 		wp_register_script(
+			$this->plugin_name . '-moment',
+			plugin_dir_url( __FILE__ ) . 'js/vue/moment.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-moment-timezone',
+			plugin_dir_url( __FILE__ ) . 'js/vue/moment-timezone.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
 			$this->plugin_name . 'adscheduler',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-adscheduler.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/adscheduler.js',
 			array( 'jquery' ),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-gettingstarted',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-gettingstarted.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/getting-started.js',
 			array( 'jquery' ),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-reports',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-reports.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/reports.js',
 			array(),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-weekly-stats',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-weeklyStats.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/weekly-stats.js',
 			array(),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-mascot',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-mascot.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/mascot.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-vue',
+			plugin_dir_url( __FILE__ ) . 'js/vue/vue.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-vue-settings',
+			plugin_dir_url( __FILE__ ) . 'js/vue/settings.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-coreui',
+			plugin_dir_url( __FILE__ ) . 'js/vue/coreui.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-vue-select',
+			plugin_dir_url( __FILE__ ) . 'js/vue/vue-select.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-v-calendar',
+			plugin_dir_url( __FILE__ ) . 'js/vue/v-calendar.js',
 			array(),
 			$this->version,
 			false
@@ -808,7 +871,14 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_reports() {
+		wp_enqueue_script( $this->plugin_name . '-vue' );
+		wp_enqueue_script( $this->plugin_name . '-coreui' );
+		wp_enqueue_script( $this->plugin_name . '-vue-select' );
+		wp_enqueue_script( $this->plugin_name . '-v-calendar' );
 		wp_enqueue_script( $this->plugin_name . '-reports' );
+		wp_enqueue_style( $this->plugin_name . '-coreui' );
+		wp_enqueue_style( $this->plugin_name . '-vue-select' );
+
 		// reports data..
 		$args         = array(
 			'post_type'      => 'wpadcenter-ads',
@@ -1625,6 +1695,7 @@ class Wpadcenter_Admin {
 			array_push( $dates, gmdate( 'Y-m-d', strtotime( '-' . $i . ' day', $today ) ) );
 		}
 		array_push( $results, $dates );
+		wp_enqueue_script( $this->plugin_name . '-vue' );
 		wp_enqueue_script( $this->plugin_name . '-weekly-stats' );
 		wp_localize_script( $this->plugin_name . '-weekly-stats', 'returnArray', $results );
 		?>
@@ -2249,7 +2320,8 @@ class Wpadcenter_Admin {
 
 			wp_enqueue_style( $this->plugin_name . 'jquery-ui' );
 			wp_enqueue_script( 'jquery-ui-datepicker' );
-
+			wp_enqueue_script( $this->plugin_name . '-moment' );
+			wp_enqueue_script( $this->plugin_name . '-moment-timezone' );
 			wp_enqueue_script( $this->plugin_name . 'adscheduler' );
 
 			$start_date = get_post_meta( $post->ID, 'wpadcenter_start_date', true );
@@ -2389,7 +2461,9 @@ class Wpadcenter_Admin {
 			'is_pro'           => $is_pro,
 			'quick_links_text' => __( 'See Quick Links', 'wpadcenter' ),
 		);
-		wp_enqueue_script( 'wpadcenter-mascot' );
+		wp_enqueue_style( $this->plugin_name . '-mascot-style' );
+		wp_enqueue_script( $this->plugin_name . '-vue' );
+		wp_enqueue_script( $this->plugin_name . '-mascot' );
 		wp_localize_script( 'wpadcenter-mascot', 'mascot', $return_array );
 
 		?>
@@ -2413,6 +2487,7 @@ class Wpadcenter_Admin {
 		} else {
 			$support_url = 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=forums';
 		}
+		wp_enqueue_script( $this->plugin_name . '-vue' );
 		wp_enqueue_style( $this->plugin_name . '-gettingstarted-css' );
 		wp_enqueue_script( $this->plugin_name . '-gettingstarted' );
 		wp_localize_script(
