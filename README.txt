@@ -5,7 +5,7 @@ Tags: adsense, ad rotator, ad manager, ad inserter, ads, advertising, banners, b
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.9.3
-Stable tag: 2.3.6
+Stable tag: 2.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -334,6 +334,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 7. Reports - Custom Reports (graph view).
 
 == Changelog ==
+= 2.3.7 =
+* Fix - Deleted unused bundled files
+
 = 2.3.6 =
 * Fix - Used independent libraries instead of bundling js libraries to single file
 
@@ -448,6 +451,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+= 2.3.7 =
+* Fix - Deleted unused bundled files
+
 = 2.3.6 =
 * Fix - Used independent libraries instead of bundling js libraries to single file
 
