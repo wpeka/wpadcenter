@@ -16,7 +16,6 @@ var vm = new Vue( {
 			auto_refresh: null,
 			adblock_detector: null,
 			geo_targeting: null,
-			enable_scripts: null,
 			hide_ads_logged: null,
 			enable_ads_txt: null,
 			value: 1,
@@ -24,7 +23,6 @@ var vm = new Vue( {
 			roles_security: null,
 			roles: [],
 			roles_selected: [],
-			scriptInfo: '<script type="text/javascript">console.log( "hello world" );</script>',
 			enable_advertisers: null,
 			enable_notifications: null,
 			roles_selected_visibility: [],
@@ -56,7 +54,6 @@ var vm = new Vue( {
 	},
 	methods: {
 		setValues: function() {
-			this.enable_scripts = this.$refs.enable_scripts.checked;
 			this.enable_ads_txt = this.$refs.enable_ads_txt.checked;
 			this.enable_privacy = this.$refs.enable_privacy.checked;
 			this.enable_global_email = this.$refs.hasOwnProperty( 'enable_global_email' ) ? this.$refs.enable_global_email.checked : false;
