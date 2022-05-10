@@ -335,7 +335,7 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 
 == Changelog ==
 = 2.3.8 =
-* Fix: Removed Script functionality and Fixed plugin code as per WP standards and PHPCS
+* Fix - Deleted script insertion feature
 
 = 2.3.7 =
 * Fix - Deleted unused bundled files
@@ -455,7 +455,7 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 
 == Upgrade Notice ==
 = 2.3.8 =
-* Fix: Removed Script functionality and Fixed plugin code as per WP standards and PHPCS
+* Fix - Deleted Script insertion feature
 
 = 2.3.7 =
 * Fix - Deleted unused bundled files
