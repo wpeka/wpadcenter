@@ -2511,7 +2511,6 @@ class Wpadcenter_Admin {
 						'wpadcenter_settings_items',
 						array(
 							__( 'Disable tracking for Admin and other user roles.', 'wpadcenter' ),
-							__( 'Scripts', 'wpadcenter' ),
 							__( 'ads.txt', 'wpadcenter' ),
 							__( 'Integrate AdSense Account', 'wpadcenter' ),
 						)
@@ -2582,22 +2581,13 @@ class Wpadcenter_Admin {
 		if ( 'selected_ad_reports' === $_POST['action'] ) {
 			$start_date = isset( $_POST['start_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['start_date'] ) ) : '';
 			$end_date   = isset( $_POST['end_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['end_date'] ) ) : '';
-			$ads        = isset( $_POST['selected_ad'] ) ? wp_unslash( $_POST['selected_ad'] ) : '';// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			foreach ( $ads as $k => $v ) {
-				foreach ( $v as $key => $val ) {
-					switch ( $key ) {
-						case 'ad_id':
-							$ads[ $k ][ $key ] = intval( $val );
-							break;
-						case 'ad_title':
-							$ads[ $k ][ $key ] = sanitize_text_field( $val );
-							break;
-						default:
-							$ads[ $k ][ $key ] = sanitize_text_field( $val );
-							break;
-					}
-				}
+
+			$no_of_ads = isset( $_POST['selected_ad'] ) ? count( $_POST['selected_ad'] ) : '';
+			for ( $i = 0; $i < $no_of_ads; $i++ ) {
+				$new_ads[ $i ]['ad_id']    = isset( $_POST['selected_ad'][ $i ]['ad_id'] ) ? intval( $_POST['selected_ad'][ $i ]['ad_id'] ) : '';
+				$new_ads[ $i ]['ad_title'] = isset( $_POST['selected_ad'][ $i ]['ad_title'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_ad'][ $i ]['ad_title'] ) ) : '';
 			}
+			$ads    = $new_ads;
 			$ad_ids = array();
 			if ( is_array( $ads ) ) {
 				foreach ( $ads as $ad ) {
@@ -3297,94 +3287,6 @@ class Wpadcenter_Admin {
 		);
 		echo wp_json_encode( $array );
 		wp_die();
-	}
-
-	/**
-	 * Header, body and footer scripts meta boxes on pages and/or posts.
-	 */
-	public function wpadcenter_page_posts_scripts() {
-		$screens = array( 'post', 'page' );
-
-		foreach ( $screens as $screen ) {
-
-			add_meta_box(
-				'wpadcenter_scripts',
-				__( 'WPAdCenter Scripts', 'wpadcenter' ),
-				array( $this, 'wpadcenter_page_posts_metabox_render' ),
-				$screen,
-				'normal',
-				'high'
-			);
-		}
-	}
-
-	/**
-	 * Header, body and footer scripts meta boxes render on pages and/or posts.
-	 *
-	 * @param Object $post Post object.
-	 */
-	public function wpadcenter_page_posts_metabox_render( $post ) {
-		$array = get_post_meta( $post->ID, 'scripts', true );
-		wp_enqueue_style( $this->plugin_name );
-		wp_nonce_field( 'action', 'nonce' );
-		?>
-			<table class="wpadcenter-table">
-				<tr>
-					<td class="wpadcenter-left-cell"><label for="disable_global_scripts"><?php esc_html_e( 'Disable Global Scripts', 'wpadcenter' ); ?></label></td>
-					<td class="wpadcenter-right-cell"><input type="checkbox" id="disable_global_scripts" name="disable_global_scripts" <?php checked( isset( $array['disable_global_scripts'] ) ? $array['disable_global_scripts'] : false, 'on' ); ?>></td>
-				</tr>
-				<tr class="wpadcenter-table-tr">
-					<td class="wpadcenter-left-cell"><label for="header_scripts"><?php esc_html_e( 'Header Scripts', 'wpadcenter' ); ?></label></td>
-					<td class="wpadcenter-right-cell">
-						<textarea name="header_scripts" id="header_scripts" rows="6"><?php echo( isset( $array['header_scripts'] ) ? esc_attr( $array['header_scripts'] ) : '' ); ?></textarea>
-						<small><?php esc_html_e( 'These scripts will be printed in head section.', 'wpadcenter' ); ?></small>
-					</td>
-				</tr>
-				<tr class="wpadcenter-table-tr">
-					<td class="wpadcenter-left-cell"><label for="body_scripts"><?php esc_html_e( 'Body Scripts', 'wpadcenter' ); ?></label></td>
-					<td class="wpadcenter-right-cell">
-						<textarea name="body_scripts" id="body_scripts" rows="6"><?php echo( isset( $array['body_scripts'] ) ? esc_attr( $array['body_scripts'] ) : '' ); ?></textarea>
-						<small><?php esc_html_e( 'These scripts will be printed in body section.', 'wpadcenter' ); ?></small>
-					</td>
-				</tr>
-				<tr class="wpadcenter-table-tr">
-					<td class="wpadcenter-left-cell"><label for="footer_scripts"><?php esc_html_e( 'Footer Scripts', 'wpadcenter' ); ?></label></td>
-					<td class="wpadcenter-right-cell">
-						<textarea name="footer_scripts" id="footer_scripts" rows="6"><?php echo( isset( $array['footer_scripts'] ) ? esc_attr( $array['footer_scripts'] ) : '' ); ?></textarea>
-						<small><?php esc_html_e( 'These scripts will be printed in footer section.', 'wpadcenter' ); ?></small>
-					</td>
-				</tr>
-			</table>
-		<?php
-	}
-	/**
-	 * Save scripts.
-	 *
-	 * @param int $post_id post id of the post getting saved.
-	 */
-	public function wpadcenter_save_scripts( $post_id ) {
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			return;
-		}
-
-		$nonce_checker = empty( $_REQUEST['nonce'] ) ? '' : sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) );
-		if ( ! wp_verify_nonce( $nonce_checker, 'action' ) ) {
-			return;
-		}
-
-		$disable_global_scripts = isset( $_POST['disable_global_scripts'] ) ? sanitize_text_field( wp_unslash( $_POST['disable_global_scripts'] ) ) : 'off';
-		// the below three phpcs comments is added after referring competitor wordpress.org plugins.
-		$header_scripts         = isset( $_POST['header_scripts'] ) ? wp_unslash( $_POST['header_scripts'] ) : ''; // phpcs:ignore
-		$body_scripts           = isset( $_POST['body_scripts'] ) ? wp_unslash( $_POST['body_scripts'] ) : ''; // phpcs:ignore
-		$footer_scripts         = isset( $_POST['footer_scripts'] ) ? wp_unslash( $_POST['footer_scripts'] ) : ''; // phpcs:ignore
-
-		$array = array(
-			'disable_global_scripts' => $disable_global_scripts,
-			'header_scripts'         => $header_scripts,
-			'body_scripts'           => $body_scripts,
-			'footer_scripts'         => $footer_scripts,
-		);
-		update_post_meta( $post_id, 'scripts', $array );
 	}
 
 	/**

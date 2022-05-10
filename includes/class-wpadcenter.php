@@ -221,8 +221,6 @@ class Wpadcenter {
 		$this->loader->add_action( 'init', $plugin_admin, 'wpadcenter_register_gutenberg_blocks' );
 		$this->loader->add_filter( 'block_categories_all', $plugin_admin, 'wpadcenter_gutenberg_block_categories', 10, 1 );
 		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'wpadcenter_register_rest_fields' );
-		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'wpadcenter_page_posts_scripts' );
-		$this->loader->add_action( 'save_post', $plugin_admin, 'wpadcenter_save_scripts' );
 		$this->loader->add_action( 'admin_head', $plugin_admin, 'wpadcenter_remove_permalink' );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_adgroup_gutenberg_preview', $plugin_admin, 'wpadcenter_adgroup_gutenberg_preview' );
 		$this->loader->add_action( 'wp_ajax_save_settings', $plugin_admin, 'wpadcenter_settings' );
@@ -255,7 +253,6 @@ class Wpadcenter {
 			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 			$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 			$this->loader->add_action( 'init', $plugin_public, 'wpadcenter_init' );
-			$this->loader->add_action( 'template_redirect', $plugin_public, 'wpadcenter_template_redirect' );
 		}
 		$this->loader->add_action( 'wp_ajax_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
 		$this->loader->add_action( 'wp_ajax_nopriv_set_clicks', $plugin_public, 'wpadcenter_set_clicks' );
