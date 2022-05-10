@@ -400,7 +400,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 
 		$all_registered_scripts = $wp_scripts->registered;
 		$this->assertArrayHasKey( 'wpadcenter-settings', $all_registered_scripts, 'Failed to register script: wpadcenter-settings' );
-		$this->assertArrayHasKey( 'wpadcenter-main', $all_registered_scripts, 'Failed to register script: wpadcenter-main' );
 		$this->assertArrayHasKey( 'wpadcenter', $all_registered_scripts, 'Failed to register script: wpadcenter' );
 		$this->assertArrayHasKey( 'wpadcenteradscheduler', $all_registered_scripts, 'Failed to register script: wpadcenteradscheduler' );
 		$this->assertArrayHasKey( 'wpadcenter-gettingstarted', $all_registered_scripts, 'Failed to register script: wpadcenter-gettingstarted' );
@@ -719,27 +718,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		self::$wpadcenter_admin->wpadcenter_getting_started();
 	}
 
-	/**
-	 * Test for wpadcenter_page_posts_scripts function
-	 */
-	public function test_wpadcenter_page_posts_scripts() {
-		global $wp_meta_boxes;
-		$this->assertFalse( isset( $wp_meta_boxes['post'] ) );
-		$this->assertFalse( isset( $wp_meta_boxes['page'] ) );
-		self::$wpadcenter_admin->wpadcenter_page_posts_scripts();
-		$this->assertTrue( isset( $wp_meta_boxes['post'] ) );
-		$this->assertTrue( isset( $wp_meta_boxes['page'] ) );
-	}
-
-	/**
-	 * Test for wpadcenter_page_posts_metabox_render function
-	 */
-	public function test_wpadcenter_page_posts_metabox_render() {
-		ob_start();
-		self::$wpadcenter_admin->wpadcenter_page_posts_metabox_render( self::$first_dummy_post );
-		$output = ob_get_clean();
-		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
-	}
 
 	/**
 	 * Test for wpadcenter_remove_permalink function
@@ -819,7 +797,7 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 		$output = ob_get_clean();
 		$this->assertTrue( is_string( $output ) && ( wp_strip_all_tags( $output ) !== $output ) );
 	}
-	
+
 	/**
 	 * Test for  wpadcenter_text_ad_metabox function
 	 */
@@ -986,27 +964,6 @@ class Wpadcenter_Admin_Test extends WP_UnitTestCase {
 			)
 		);
 		$this->assertTrue( empty( $value ) );
-	}
-
-	/**
-	 * Test for wpadcenter_save_scripts function
-	 */
-	public function test_wpadcenter_save_scripts() {
-		$user_id = self::factory()->user->create(
-			array(
-				'role' => 'editor',
-			)
-		);
-			wp_set_current_user( $user_id );
-			$_REQUEST['nonce'] = wp_create_nonce( 'action' );
-
-			$_POST['body_scripts'] = '<h1>Heading for unit test.</h1>';
-
-			self::$wpadcenter_admin->wpadcenter_save_scripts( self::$default_post );
-
-			$scripts = get_post_meta( self::$default_post, 'scripts', true );
-
-			$this->assertEquals( $scripts['body_scripts'], '<h1>Heading for unit test.</h1>' );
 	}
 
 	/**
