@@ -26,7 +26,7 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 	<div class="adc-nav-inner">
 		<div class="adc-logo"></div>
 	</div></div>
-	<c-tabs ref="active_tab" id="wpadcenter_tabs">
+	<c-tabs variant="pills" ref="active_tab" id="wpadcenter_tabs">
 		<?php do_action( 'wp_adcenter_before_general_tab' ); ?>
 		<c-tab title="<?php esc_attr_e( 'General', 'wpadcenter' ); ?>" active href="#general">
 		<?php do_action( 'wp_adcenter_before_general_settings' ); ?>

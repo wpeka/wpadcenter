@@ -474,3 +474,11 @@ a:focus {
 .wpadcenter-email-frequency-message {
 	margin-top: 6px;
 }
+
+#wpadcenter_tabs .nav-item {
+	margin: 0 !important;
+}
+
+#wpadcenter_tabs .nav-pills .nav-link.active {
+	background: #39f !important;
+}
