@@ -74,7 +74,7 @@ class Wpadcenter_Elementor_SingleAd_Widget_Test  extends WP_UnitTestCase {
 	 */
 	public function test_get_title() {
 		$value = self::$wpadcenter_elementor_singlead_widget->get_title();
-		$this->assertEquals( 'WPAdCenter Single Ad', $value );
+		$this->assertEquals( 'Single Ad (Deprecated)', $value );
 	}
 
 	/**
@@ -82,7 +82,7 @@ class Wpadcenter_Elementor_SingleAd_Widget_Test  extends WP_UnitTestCase {
 	 */
 	public function test_get_icon() {
 		$value = self::$wpadcenter_elementor_singlead_widget->get_icon();
-		$this->assertEquals( 'fas fa-sign', $value );
+		$this->assertEquals( 'icon-adcenter', $value );
 	}
 
 	/**
