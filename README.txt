@@ -352,9 +352,6 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 = 2.3.3 =
 * Update: Removed analytics library
 
-= 2.3.3 =
-* Update: Removed analytics library
-
 = 2.3.2 =
 * Fix: Fixed compatibility with pro version.
 
