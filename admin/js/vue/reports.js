@@ -1,14 +1,7 @@
 /*global jQuery, reportsArray*/
-import Vue from 'vue';
-import CoreuiVue from '@coreui/vue';
-import '@coreui/coreui/dist/css/coreui.min.css';
-import 'vue-select/dist/vue-select.css';
-import VCalendar from 'v-calendar';
-import vSelect from 'vue-select';
 
-Vue.component( 'v-select', vSelect );
-Vue.use( CoreuiVue );
-Vue.use( VCalendar );
+Vue.component( 'v-select', VueSelect.default );
+
 // jquery $ as j
 const j = jQuery.noConflict();
 
@@ -224,8 +217,12 @@ var reports = new Vue( {
 			selectedAdsString: '',
 			// All A/B Tests
 			tests: [],
+			inputValue:['',''],
+			togglePopover:''
 		};
 	},
+	component:[
+	],
 	mounted: function() {
 		// get necessary data from DOM
 		this.ajax_url = this.$refs.adgroups_ajaxurl.value;

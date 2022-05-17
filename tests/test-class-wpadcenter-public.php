@@ -80,14 +80,7 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$tag      = array( self::$ad_group );
 		$taxonomy = 'wpadcenter-adgroups';
 		wp_set_post_terms( $post_id, $tag, $taxonomy );
-		// This is ok
-		self::$scripts = array(
-			'header_scripts' => '<script type="text/javascript">console.log("hello world in head");</script>',
-			'body_scripts'   => '<script type="text/javascript">console.log("hello world in body");</script>',
-			'footer_scripts' => '<script type="text/javascript">console.log("hello world in footer");</script>',
-		);
-
-		update_post_meta( self::$ad_ids[0], 'scripts', self::$scripts );
+		// This is ok.
 	}
 
 	/**
@@ -257,39 +250,6 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test for wpadcenter_output_header_post function
-	 */
-	public function test_wpadcenter_output_header_post() {
-		$url = get_permalink( self::$ad_ids[0] );
-		$this->go_to( $url );
-		$expected = "\r\n" . self::$scripts['header_scripts'] . "\r\n";
-		$this->expectOutputString( $expected );
-		self::$wpadcenter_public->wpadcenter_output_header_post();
-	}
-
-	/**
-	 * Test for wpadcenter_output_body_post function
-	 */
-	public function test_wpadcenter_output_body_post() {
-		$url = get_permalink( self::$ad_ids[0] );
-		$this->go_to( $url );
-		$expected = "\r\n" . self::$scripts['body_scripts'] . "\r\n";
-		$this->expectOutputString( $expected );
-		self::$wpadcenter_public->wpadcenter_output_body_post();
-	}
-
-	/**
-	 * Test for wpadcenter_output_footer_post function
-	 */
-	public function test_wpadcenter_output_footer_post() {
-		$url = get_permalink( self::$ad_ids[0] );
-		$this->go_to( $url );
-		$expected = "\r\n" . self::$scripts['footer_scripts'] . "\r\n";
-		$this->expectOutputString( $expected );
-		self::$wpadcenter_public->wpadcenter_output_footer_post();
-	}
-
-	/**
 	 * Test for wpadcenter_verify_device function
 	 */
 	public function test_wpadcenter_verify_device() {
@@ -310,20 +270,6 @@ class Wpadcenter_Public_Test extends WP_UnitTestCase {
 		$this->assertFalse( $value );
 		$value = self::$wpadcenter_public->wpadcenter_get_root_domain_info( 'http://two.one.com/three/four/five' );
 		$this->assertTrue( $value );
-	}
-
-	/**
-	 * Test for wpadcenter_template_redirect function
-	 */
-	public function test_wpadcenter_template_redirect() {
-		$url = get_permalink( self::$ad_ids[0] );
-		$this->go_to( $url );
-		self::$wpadcenter_public->wpadcenter_template_redirect();
-		$disable_global_scripts = get_post_meta( self::$ad_ids[0], 'scripts', true );
-
-		$this->assertEquals( '<script type="text/javascript">console.log("hello world in head");</script>', $disable_global_scripts['header_scripts'] );
-		$this->assertEquals( '<script type="text/javascript">console.log("hello world in body");</script>', $disable_global_scripts['body_scripts'] );
-		$this->assertEquals( '<script type="text/javascript">console.log("hello world in footer");</script>', $disable_global_scripts['footer_scripts'] );
 	}
 
 }
