@@ -15,7 +15,7 @@
  * Plugin Name:       WPAdCenter
  * Plugin URI:        https://wpadcenter.com
  * Description:       Advertising management plugin for WordPress.
- * Version:           2.3.3
+ * Version:           2.3.8
  * Author:            WPEka Club
  * Author URI:        https://club.wpeka.com/
  * License:           GPL-2.0+
@@ -48,42 +48,8 @@ define( 'WPADCENTER_SETTINGS_FIELD', 'WPAdCenter-Settings' );
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WPADCENTER_VERSION', '2.3.3' );
 
-if ( ! function_exists( 'adc_fs' ) ) {
-	/**
-	 * Helper function to access SDK.
-	 *
-	 * @return Analytics
-	 */
-	function adc_fs() {
-		global $adc_fs;
-
-		if ( ! isset( $adc_fs ) ) {
-			// Include Analytics SDK.
-			require_once dirname( __FILE__ ) . '/analytics/start.php';
-
-			$adc_fs = ras_dynamic_init(
-				array(
-					'id'              => '10',
-					'slug'            => 'wpadcenter',
-					'product_name'    => 'WPAdCenter',
-					'module_type'     => 'plugin',
-					'version'         => WPADCENTER_VERSION,
-					'plugin_basename' => 'wpadcenter/wpadcenter.php',
-					'plugin_url'      => WPADCENTER_PLUGIN_URL,
-				)
-			);
-		}
-
-		return $adc_fs;
-	}
-
-	// Init Analytics.
-	adc_fs();
-	// SDK initiated.
-	do_action( 'adc_fs_loaded' );
-}
+define( 'WPADCENTER_VERSION', '2.3.8' );
 
 if ( ! defined( 'WPADCENTER_PLUGIN_FILENAME' ) ) {
 	define( 'WPADCENTER_PLUGIN_FILENAME', __FILE__ );

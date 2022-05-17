@@ -146,28 +146,6 @@ $auth_url    = \Wpeka\Adcenter\Wpadcenter_Google_Api::get_auth_url();
 			<?php do_action( 'wp_adcenter_after_general_settings' ); ?>
 		</c-tab>
 		<?php do_action( 'wp_adcenter_before_scripts_tab' ); ?>
-		<c-tab title="<?php esc_attr_e( 'Scripts', 'wpadcenter' ); ?>" href="#scripts">
-		<?php do_action( 'wp_adcenter_before_scripts_settings' ); ?>
-			<c-card>
-				<c-card-header><?php esc_html_e( 'Scripts Settings', 'wpadcenter' ); ?></c-card-header>
-				<c-card-body>
-					<div class="ad-toggle">
-						<label for="inline-form-enable_scripts"><?php esc_html_e( 'Enable Scripts', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'Enable scripts on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-						<input type="hidden" name="enable_scripts_field" v-model="enable_scripts">
-					</div>
-					<c-switch ref="enable_scripts" v-model="enable_scripts" id="inline-form-enable_scripts" variant="3d" size="sm" color="dark" <?php checked( $the_options['enable_scripts'] ); ?> v-on:update:checked="enable_scripts = !enable_scripts"></c-switch>
-					<div class="enable_scripts_enabled" v-show="enable_scripts">
-						<label for="header_scripts_field" class="form-label header-scripts"><?php esc_html_e( 'Header Scripts', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the head section on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-						<textarea id="header_scripts_field" :placeholder="scriptInfo" name="header_scripts_field" class="form-control" rows="6"><?php echo esc_html( stripslashes( $the_options['header_scripts'] ) ); ?></textarea>
-						<label for="body_scripts_field" class="form-label"><?php esc_html_e( 'Body Scripts', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the body section on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-						<textarea id="body_scripts_field" :placeholder="scriptInfo" name="body_scripts_field" class="form-control" rows="6"><?php echo esc_html( stripslashes( $the_options['body_scripts'] ) ); ?></textarea>
-						<label for="footer_scripts_field" class="form-label"><?php esc_html_e( 'Footer Scripts', 'wpadcenter' ); ?></label><c-icon  v-c-tooltip="'<?php esc_html_e( 'These scripts will be printed in the footer section on all pages and/or posts.', 'wpadcenter' ); ?>'" color="primary" name="cib-google-keep"></c-icon>
-						<textarea id="footer_scripts_field" :placeholder="scriptInfo" name="footer_scripts_field" class="form-control" rows="6"><?php echo esc_html( stripslashes( $the_options['footer_scripts'] ) ); ?></textarea>
-					</div>
-				</c-card-body>
-			</c-card>
-			<?php do_action( 'wp_adcenter_after_scripts_settings' ); ?>
-		</c-tab>
 		<?php do_action( 'wp_adcenter_before_integrations_tab' ); ?>
 		<c-tab title="<?php esc_attr_e( 'Integrations', 'wpadcenter' ); ?>" href="#adsense">
 		<?php do_action( 'wp_adcenter_before_integrations_settings' ); ?>

@@ -90,46 +90,6 @@ class SettingsTest extends WP_Ajax_UnitTestCase {
 			$this->assertTrue( in_array( $meta_value, $response ) );
 		}
 	}
-	/**
-	 * Test for scripts settings on save
-	 */
-	public function test_wpadcenter_scripts_settings() {
-		// become administrator.
-		$this->_setRole( 'administrator' );
-		$header_scripts                           = '<script type="text/javascript">console.log("hello world in head");</script>';
-		$body_scripts                             = '<script type="text/javascript">console.log("hello world in body");</script>';
-		$footer_scripts                           = '<script type="text/javascript">console.log("hello world in footer");</script>';
-		$_POST['wpadcenter_settings_ajax_update'] = 'update_admin_settings_form';
-		$_POST['_wpnonce']                        = wp_create_nonce( 'wpadcenter-update-' . WPADCENTER_SETTINGS_FIELD );
-		$_POST['header_scripts_field']            = $header_scripts;
-		$_POST['body_scripts_field']              = $body_scripts;
-		$_POST['footer_scripts_field']            = $footer_scripts;
-		$_POST['action']                          = 'save_settings';
-
-		$echoed = '';
-
-		try {
-			$this->_handleAjax( 'save_settings' );
-		} catch ( WPAjaxDieContinueException $e ) {
-			unset( $e );
-		}
-
-		// Test for public class wpadcenter_output_header_global function
-		$expected = "\r\n" . $header_scripts . "\r\n";
-		$this->wpadcenter_public->wpadcenter_output_header_global();
-		$this->assertTrue( true );
-
-		// Test for public class wpadcenter_output_body_global function
-		$expected .= "\r\n" . $body_scripts . "\r\n";
-		$this->wpadcenter_public->wpadcenter_output_body_global();
-		$this->assertTrue( true );
-
-		// Test for public class wpadcenter_output_footer_global function
-		$expected .= "\r\n" . $footer_scripts . "\r\n";
-		$this->expectOutputString( $expected );
-		$this->wpadcenter_public->wpadcenter_output_footer_global();
-		$this->assertTrue( true );
-	}
 
 	/**
 	 * Test for ads txt content settings on save
