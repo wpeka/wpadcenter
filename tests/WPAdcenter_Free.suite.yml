@@ -1,0 +1,10 @@
+actor: WPAdcenter_FreeTester
+modules:
+    enabled:
+      - WebDriver:
+          url: 'http://localhost/wordpress7'
+          browser: chrome # 'chrome' or 'firefox'
+          restart: true
+      - \Helper\WPAdcenter_Free
+      - \Codeception\Module\Asserts
+      - \Codeception\Module\WebDriver

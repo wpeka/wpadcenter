@@ -50,41 +50,6 @@ define( 'WPADCENTER_SETTINGS_FIELD', 'WPAdCenter-Settings' );
  */
 define( 'WPADCENTER_VERSION', '2.3.3' );
 
-if ( ! function_exists( 'adc_fs' ) ) {
-	/**
-	 * Helper function to access SDK.
-	 *
-	 * @return Analytics
-	 */
-	function adc_fs() {
-		global $adc_fs;
-
-		if ( ! isset( $adc_fs ) ) {
-			// Include Analytics SDK.
-			require_once dirname( __FILE__ ) . '/analytics/start.php';
-
-			$adc_fs = ras_dynamic_init(
-				array(
-					'id'              => '10',
-					'slug'            => 'wpadcenter',
-					'product_name'    => 'WPAdCenter',
-					'module_type'     => 'plugin',
-					'version'         => WPADCENTER_VERSION,
-					'plugin_basename' => 'wpadcenter/wpadcenter.php',
-					'plugin_url'      => WPADCENTER_PLUGIN_URL,
-				)
-			);
-		}
-
-		return $adc_fs;
-	}
-
-	// Init Analytics.
-	adc_fs();
-	// SDK initiated.
-	do_action( 'adc_fs_loaded' );
-}
-
 if ( ! defined( 'WPADCENTER_PLUGIN_FILENAME' ) ) {
 	define( 'WPADCENTER_PLUGIN_FILENAME', __FILE__ );
 }
