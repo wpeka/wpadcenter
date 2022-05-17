@@ -349,6 +349,13 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
+		wp_register_script(
+			$this->plugin_name . '-multiple-email-input',
+			plugin_dir_url( __FILE__ ) . 'js/vue/multiple-email-input.js',
+			array(),
+			$this->version,
+			false
+		);
 	}
 
 	/**
