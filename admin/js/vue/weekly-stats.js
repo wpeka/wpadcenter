@@ -1,5 +1,4 @@
 /*global returnArray*/
-import Vue from 'vue';
 
 // chart data
 const chartData = {

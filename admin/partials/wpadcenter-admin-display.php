@@ -37,8 +37,15 @@
 				$localized_data         = array(
 					'wpadcenter_pro_version' => $wpadcenter_pro_version,
 				);
-				wp_localize_script( $this->plugin_name . '-main', 'localized_data', $localized_data );
-				wp_enqueue_script( $this->plugin_name . '-main' );
+				wp_localize_script( $this->plugin_name . '-vue-settings', 'localized_data', $localized_data );
+				wp_enqueue_script( $this->plugin_name . '-vue' );
+				wp_enqueue_script( $this->plugin_name . '-coreui' );
+				wp_enqueue_script( $this->plugin_name . '-vue-select' );
+				wp_enqueue_script( $this->plugin_name . '-multiple-email-input' );
+				wp_enqueue_script( $this->plugin_name . '-vue-settings' );
+				wp_enqueue_style( $this->plugin_name . '-coreui' );
+				wp_enqueue_style( $this->plugin_name . '-vue-select' );
+
 				require_once plugin_dir_path( WPADCENTER_PLUGIN_FILENAME ) . 'admin/views/admin-display.php';
 				do_action( 'wp_adcenter_settings_form' );
 				?>

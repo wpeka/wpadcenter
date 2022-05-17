@@ -181,7 +181,7 @@ class Wpadcenter_Admin {
 		);
 		wp_register_style(
 			$this->plugin_name . 'jquery-ui',
-			'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css',
+			plugin_dir_url( __FILE__ ) . 'css/jquery-ui' . WPADCENTER_SCRIPT_SUFFIX . '.css',
 			array(),
 			$this->version,
 			'all'
@@ -196,6 +196,27 @@ class Wpadcenter_Admin {
 		wp_register_style(
 			$this->plugin_name . 'review-notice',
 			plugin_dir_url( __FILE__ ) . 'css/wpadcenter-review-notice' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_register_style(
+			$this->plugin_name . '-mascot-style',
+			plugin_dir_url( __FILE__ ) . 'css/mascot' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_register_style(
+			$this->plugin_name . '-coreui',
+			plugin_dir_url( __FILE__ ) . 'css/coreui' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_register_style(
+			$this->plugin_name . '-vue-select',
+			plugin_dir_url( __FILE__ ) . 'css/vue-select' . WPADCENTER_SCRIPT_SUFFIX . '.css',
 			array(),
 			$this->version,
 			'all'
@@ -229,13 +250,6 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
-		wp_register_script(
-			$this->plugin_name . '-main',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-main.js',
-			array( 'jquery' ),
-			$this->version,
-			false
-		);
 		wp_enqueue_script(
 			$this->plugin_name . '-gapi-settings',
 			plugin_dir_url( __FILE__ ) . 'js/wpadcenter-gapi-settings' . WPADCENTER_SCRIPT_SUFFIX . '.js',
@@ -252,36 +266,92 @@ class Wpadcenter_Admin {
 		);
 
 		wp_register_script(
+			$this->plugin_name . '-moment',
+			plugin_dir_url( __FILE__ ) . 'js/vue/moment.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-moment-timezone',
+			plugin_dir_url( __FILE__ ) . 'js/vue/moment-timezone.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
 			$this->plugin_name . 'adscheduler',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-adscheduler.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/adscheduler.js',
 			array( 'jquery' ),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-gettingstarted',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-gettingstarted.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/getting-started.js',
 			array( 'jquery' ),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-reports',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-reports.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/reports.js',
 			array(),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-weekly-stats',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-weeklyStats.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/weekly-stats.js',
 			array(),
 			$this->version,
 			false
 		);
 		wp_register_script(
 			$this->plugin_name . '-mascot',
-			plugin_dir_url( __FILE__ ) . 'js/vue/wpadcenter-admin-mascot.js',
+			plugin_dir_url( __FILE__ ) . 'js/vue/mascot.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-vue',
+			plugin_dir_url( __FILE__ ) . 'js/vue/vue.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-vue-settings',
+			plugin_dir_url( __FILE__ ) . 'js/vue/settings.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-coreui',
+			plugin_dir_url( __FILE__ ) . 'js/vue/coreui.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-vue-select',
+			plugin_dir_url( __FILE__ ) . 'js/vue/vue-select.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-v-calendar',
+			plugin_dir_url( __FILE__ ) . 'js/vue/v-calendar.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-multiple-email-input',
+			plugin_dir_url( __FILE__ ) . 'js/vue/multiple-email-input.js',
 			array(),
 			$this->version,
 			false
@@ -853,7 +923,14 @@ class Wpadcenter_Admin {
 	 * @since 1.0.0
 	 */
 	public function wpadcenter_reports() {
+		wp_enqueue_script( $this->plugin_name . '-vue' );
+		wp_enqueue_script( $this->plugin_name . '-coreui' );
+		wp_enqueue_script( $this->plugin_name . '-vue-select' );
+		wp_enqueue_script( $this->plugin_name . '-v-calendar' );
 		wp_enqueue_script( $this->plugin_name . '-reports' );
+		wp_enqueue_style( $this->plugin_name . '-coreui' );
+		wp_enqueue_style( $this->plugin_name . '-vue-select' );
+
 		// reports data..
 		$args         = array(
 			'post_type'      => 'wpadcenter-ads',
@@ -1670,15 +1747,13 @@ class Wpadcenter_Admin {
 			array_push( $dates, gmdate( 'Y-m-d', strtotime( '-' . $i . ' day', $today ) ) );
 		}
 		array_push( $results, $dates );
+		wp_enqueue_script( $this->plugin_name . '-vue' );
 		wp_enqueue_script( $this->plugin_name . '-weekly-stats' );
 		wp_localize_script( $this->plugin_name . '-weekly-stats', 'returnArray', $results );
 		?>
 			<div id="wpadcenter-weekly-stats">
 				<h4><?php esc_html_e( 'Stats Summary for past 7 days', 'wpadcenter' ); ?></h4>
 				<p>{{ totalClicks }} <?php esc_html_e( 'Total Clicks', 'wpadcenter' ); ?> | {{ totalViews }} <?php esc_html_e( 'Total Views', 'wpadcenter' ); ?> | {{ totalCTR }} <?php esc_html_e( 'Total CTR', 'wpadcenter' ); ?> </p>
-				<div class="chart-container">
-					<line-chart :chart-data="chartData" :options="chartOptions"></line-chart>
-				</div>
 			</div>
 		<?php
 	}
@@ -2297,7 +2372,8 @@ class Wpadcenter_Admin {
 
 			wp_enqueue_style( $this->plugin_name . 'jquery-ui' );
 			wp_enqueue_script( 'jquery-ui-datepicker' );
-
+			wp_enqueue_script( $this->plugin_name . '-moment' );
+			wp_enqueue_script( $this->plugin_name . '-moment-timezone' );
 			wp_enqueue_script( $this->plugin_name . 'adscheduler' );
 
 			$start_date = get_post_meta( $post->ID, 'wpadcenter_start_date', true );
@@ -2437,7 +2513,9 @@ class Wpadcenter_Admin {
 			'is_pro'           => $is_pro,
 			'quick_links_text' => __( 'See Quick Links', 'wpadcenter' ),
 		);
-		wp_enqueue_script( 'wpadcenter-mascot' );
+		wp_enqueue_style( $this->plugin_name . '-mascot-style' );
+		wp_enqueue_script( $this->plugin_name . '-vue' );
+		wp_enqueue_script( $this->plugin_name . '-mascot' );
 		wp_localize_script( 'wpadcenter-mascot', 'mascot', $return_array );
 
 		?>
@@ -2461,6 +2539,7 @@ class Wpadcenter_Admin {
 		} else {
 			$support_url = 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=forums';
 		}
+		wp_enqueue_script( $this->plugin_name . '-vue' );
 		wp_enqueue_style( $this->plugin_name . '-gettingstarted-css' );
 		wp_enqueue_script( $this->plugin_name . '-gettingstarted' );
 		wp_localize_script(
@@ -2484,7 +2563,6 @@ class Wpadcenter_Admin {
 						'wpadcenter_settings_items',
 						array(
 							__( 'Disable tracking for Admin and other user roles.', 'wpadcenter' ),
-							__( 'Scripts', 'wpadcenter' ),
 							__( 'ads.txt', 'wpadcenter' ),
 							__( 'Integrate AdSense Account', 'wpadcenter' ),
 						)
@@ -2555,22 +2633,13 @@ class Wpadcenter_Admin {
 		if ( 'selected_ad_reports' === $_POST['action'] ) {
 			$start_date = isset( $_POST['start_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['start_date'] ) ) : '';
 			$end_date   = isset( $_POST['end_date'] ) ? gmdate( 'Y-m-d', intval( $_POST['end_date'] ) ) : '';
-			$ads        = isset( $_POST['selected_ad'] ) ? wp_unslash( $_POST['selected_ad'] ) : '';// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			foreach ( $ads as $k => $v ) {
-				foreach ( $v as $key => $val ) {
-					switch ( $key ) {
-						case 'ad_id':
-							$ads[ $k ][ $key ] = intval( $val );
-							break;
-						case 'ad_title':
-							$ads[ $k ][ $key ] = sanitize_text_field( $val );
-							break;
-						default:
-							$ads[ $k ][ $key ] = sanitize_text_field( $val );
-							break;
-					}
-				}
+
+			$no_of_ads = isset( $_POST['selected_ad'] ) ? count( $_POST['selected_ad'] ) : '';
+			for ( $i = 0; $i < $no_of_ads; $i++ ) {
+				$new_ads[ $i ]['ad_id']    = isset( $_POST['selected_ad'][ $i ]['ad_id'] ) ? intval( $_POST['selected_ad'][ $i ]['ad_id'] ) : '';
+				$new_ads[ $i ]['ad_title'] = isset( $_POST['selected_ad'][ $i ]['ad_title'] ) ? sanitize_text_field( wp_unslash( $_POST['selected_ad'][ $i ]['ad_title'] ) ) : '';
 			}
+			$ads    = $new_ads;
 			$ad_ids = array();
 			if ( is_array( $ads ) ) {
 				foreach ( $ads as $ad ) {
@@ -3532,94 +3601,6 @@ class Wpadcenter_Admin {
 		);
 		echo wp_json_encode( $array );
 		wp_die();
-	}
-
-	/**
-	 * Header, body and footer scripts meta boxes on pages and/or posts.
-	 */
-	public function wpadcenter_page_posts_scripts() {
-		$screens = array( 'post', 'page' );
-
-		foreach ( $screens as $screen ) {
-
-			add_meta_box(
-				'wpadcenter_scripts',
-				__( 'WPAdCenter Scripts', 'wpadcenter' ),
-				array( $this, 'wpadcenter_page_posts_metabox_render' ),
-				$screen,
-				'normal',
-				'high'
-			);
-		}
-	}
-
-	/**
-	 * Header, body and footer scripts meta boxes render on pages and/or posts.
-	 *
-	 * @param Object $post Post object.
-	 */
-	public function wpadcenter_page_posts_metabox_render( $post ) {
-		$array = get_post_meta( $post->ID, 'scripts', true );
-		wp_enqueue_style( $this->plugin_name );
-		wp_nonce_field( 'action', 'nonce' );
-		?>
-			<table class="wpadcenter-table">
-				<tr>
-					<td class="wpadcenter-left-cell"><label for="disable_global_scripts"><?php esc_html_e( 'Disable Global Scripts', 'wpadcenter' ); ?></label></td>
-					<td class="wpadcenter-right-cell"><input type="checkbox" id="disable_global_scripts" name="disable_global_scripts" <?php checked( isset( $array['disable_global_scripts'] ) ? $array['disable_global_scripts'] : false, 'on' ); ?>></td>
-				</tr>
-				<tr class="wpadcenter-table-tr">
-					<td class="wpadcenter-left-cell"><label for="header_scripts"><?php esc_html_e( 'Header Scripts', 'wpadcenter' ); ?></label></td>
-					<td class="wpadcenter-right-cell">
-						<textarea name="header_scripts" id="header_scripts" rows="6"><?php echo( isset( $array['header_scripts'] ) ? esc_attr( $array['header_scripts'] ) : '' ); ?></textarea>
-						<small><?php esc_html_e( 'These scripts will be printed in head section.', 'wpadcenter' ); ?></small>
-					</td>
-				</tr>
-				<tr class="wpadcenter-table-tr">
-					<td class="wpadcenter-left-cell"><label for="body_scripts"><?php esc_html_e( 'Body Scripts', 'wpadcenter' ); ?></label></td>
-					<td class="wpadcenter-right-cell">
-						<textarea name="body_scripts" id="body_scripts" rows="6"><?php echo( isset( $array['body_scripts'] ) ? esc_attr( $array['body_scripts'] ) : '' ); ?></textarea>
-						<small><?php esc_html_e( 'These scripts will be printed in body section.', 'wpadcenter' ); ?></small>
-					</td>
-				</tr>
-				<tr class="wpadcenter-table-tr">
-					<td class="wpadcenter-left-cell"><label for="footer_scripts"><?php esc_html_e( 'Footer Scripts', 'wpadcenter' ); ?></label></td>
-					<td class="wpadcenter-right-cell">
-						<textarea name="footer_scripts" id="footer_scripts" rows="6"><?php echo( isset( $array['footer_scripts'] ) ? esc_attr( $array['footer_scripts'] ) : '' ); ?></textarea>
-						<small><?php esc_html_e( 'These scripts will be printed in footer section.', 'wpadcenter' ); ?></small>
-					</td>
-				</tr>
-			</table>
-		<?php
-	}
-	/**
-	 * Save scripts.
-	 *
-	 * @param int $post_id post id of the post getting saved.
-	 */
-	public function wpadcenter_save_scripts( $post_id ) {
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			return;
-		}
-
-		$nonce_checker = empty( $_REQUEST['nonce'] ) ? '' : sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) );
-		if ( ! wp_verify_nonce( $nonce_checker, 'action' ) ) {
-			return;
-		}
-
-		$disable_global_scripts = isset( $_POST['disable_global_scripts'] ) ? sanitize_text_field( wp_unslash( $_POST['disable_global_scripts'] ) ) : 'off';
-		// the below three phpcs comments is added after referring competitor wordpress.org plugins.
-		$header_scripts         = isset( $_POST['header_scripts'] ) ? wp_unslash( $_POST['header_scripts'] ) : ''; // phpcs:ignore
-		$body_scripts           = isset( $_POST['body_scripts'] ) ? wp_unslash( $_POST['body_scripts'] ) : ''; // phpcs:ignore
-		$footer_scripts         = isset( $_POST['footer_scripts'] ) ? wp_unslash( $_POST['footer_scripts'] ) : ''; // phpcs:ignore
-
-		$array = array(
-			'disable_global_scripts' => $disable_global_scripts,
-			'header_scripts'         => $header_scripts,
-			'body_scripts'           => $body_scripts,
-			'footer_scripts'         => $footer_scripts,
-		);
-		update_post_meta( $post_id, 'scripts', $array );
 	}
 
 	/**
