@@ -128,6 +128,7 @@ label {
 	margin-bottom: 1.5rem;
 	border-top: 1px solid #d5e2ed;
 	border-bottom: 1px solid #d5e2ed;
+	padding: 16px 0;
 	
 }
 
@@ -154,9 +155,6 @@ label {
 	padding-top: 17px;
 	padding-bottom: 15px;
 }
-.nav-item {
-	margin-right: 25px;
-}
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
 	border: none;
@@ -172,7 +170,6 @@ label {
 
 .nav-link:hover {
 	border: none;
-	border-bottom: 2px solid #39f !important;
 	color: #39f;
 	text-decoration: none !important;
 }
@@ -473,4 +470,12 @@ a:focus {
 
 .wpadcenter-email-frequency-message {
 	margin-top: 6px;
+}
+
+#wpadcenter_tabs .nav-item {
+	margin: 0;
+}
+
+#wpadcenter_tabs .nav-pills .nav-link.active {
+	background: #39f;
 }

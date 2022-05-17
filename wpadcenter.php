@@ -48,7 +48,6 @@ define( 'WPADCENTER_SETTINGS_FIELD', 'WPAdCenter-Settings' );
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-
 define( 'WPADCENTER_VERSION', '2.3.8' );
 
 if ( ! defined( 'WPADCENTER_PLUGIN_FILENAME' ) ) {

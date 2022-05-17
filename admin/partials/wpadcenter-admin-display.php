@@ -41,6 +41,7 @@
 				wp_enqueue_script( $this->plugin_name . '-vue' );
 				wp_enqueue_script( $this->plugin_name . '-coreui' );
 				wp_enqueue_script( $this->plugin_name . '-vue-select' );
+				wp_enqueue_script( $this->plugin_name . '-multiple-email-input' );
 				wp_enqueue_script( $this->plugin_name . '-vue-settings' );
 				wp_enqueue_style( $this->plugin_name . '-coreui' );
 				wp_enqueue_style( $this->plugin_name . '-vue-select' );

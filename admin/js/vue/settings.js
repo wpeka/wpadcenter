@@ -201,6 +201,6 @@ var vm = new Vue( {
 	components: {
 		// 'component-content-ads': componentContentAds,
 		// 'component-ab-tests': componentABTests,
-		// 'multiple-email-input': multipleEmailInput,
+		'multiple-email-input': multipleEmailInput,
 	},
 } );
