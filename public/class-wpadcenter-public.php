@@ -334,6 +334,8 @@ class Wpadcenter_Public {
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
 
+		$lazy_load_enabled = apply_filters( 'wpadcenter_lazy_load_enabled', $ad_id );
+		$is_frontend       = WPAdcenter::is_request( 'frontend' );
 		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend', plugin_dir_url( __FILE__ ) . 'js/wpadcenter-public' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), self::$released_version, false );
 		wp_localize_script(
@@ -519,12 +521,21 @@ class Wpadcenter_Public {
 
 		switch ( $ad_type ) {
 			case 'banner_image':
-				$banner_img          = get_the_post_thumbnail( $ad_id );
+				if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
+					$banner_img      = get_the_post_thumbnail_url( $ad_id );
+					$single_ad_html .= '<img class="wpadcenter-lazy-load-ad" width="' . $width . '" height="' . $height . '" data-src="' . esc_url( $banner_img ) . '"/>';
+				} else {
+					$banner_img      = get_the_post_thumbnail( $ad_id );
 					$single_ad_html .= $banner_img;
+				}
 				break;
 			case 'external_image_link':
-				$external_img_link   = get_post_meta( $ad_id, 'wpadcenter_external_image_link', true );
+				$external_img_link = get_post_meta( $ad_id, 'wpadcenter_external_image_link', true );
+				if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
+					$single_ad_html .= '<img class="wpadcenter-lazy-load-ad" width="' . $width . '" height="' . $height . '" data-src="' . esc_url( $external_img_link ) . '"/>';
+				} else {
 					$single_ad_html .= '<img width="' . $width . '" height="' . $height . '" src="' . esc_url( $external_img_link ) . '"/>';
+				}
 				break;
 			case 'text_ad':
 				$text_ad_code = get_post_meta( $ad_id, 'wpadcenter_text_ad_code', true );
@@ -575,9 +586,13 @@ class Wpadcenter_Public {
 				break;
 			case 'html5':
 				$html5_url       = get_post_meta( $ad_id, 'wpadcenter_html5_ad_url', true );
-				$single_ad_html .= '<div>
-					<iframe src="' . $html5_url . '" height="' . $height . '" width="' . $width . '" frameborder="0" scrolling="no"></iframe>
-				</div>';
+				$single_ad_html .= '<div>';
+				if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
+					$single_ad_html .= '<iframe class="wpadcenter-lazy-load-ad" data-src="' . $html5_url . '" height="' . $height . '" width="' . $width . '" frameborder="0" scrolling="no"></iframe>';
+				} else {
+					$single_ad_html .= '<iframe src="' . $html5_url . '" height="' . $height . '" width="' . $width . '" frameborder="0" scrolling="no"></iframe>';
+				}
+				$single_ad_html .= '</div>';
 				break;
 			case 'video_ad':
 				$video_ad_url   = get_post_meta( $ad_id, 'wpadcenter_video_ad_url', true );
@@ -586,11 +601,18 @@ class Wpadcenter_Public {
 				$muted          = $video_autoplay ? 'muted = "muted"' : '';
 
 				if ( '' !== $video_ad_url ) {
-					$single_ad_html .= '<div>
-						<video id="wpadcenter_video"  height="' . $height . '" width="' . $width . '" controls ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
-							<source src="' . $video_ad_url . '" type="video/mp4" >
-						</video>
-					</div>';
+					$single_ad_html .= '<div>';
+					if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
+						$single_ad_html .= '<video id="wpadcenter_video" class="wpadcenter-lazy-video" preload="none" height="' . $height . '" width="' . $width . '" controls ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
+						<source  data-src="' . $video_ad_url . '" type="video/mp4" >
+					</video>';
+					} else {
+						$single_ad_html .= '<video id="wpadcenter_video"  height="' . $height . '" width="' . $width . '" controls ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
+						<source src="' . $video_ad_url . '" type="video/mp4" >
+					</video>';
+
+					}
+					$single_ad_html .= '</div>';
 				}
 				break;
 			default:
@@ -604,6 +626,9 @@ class Wpadcenter_Public {
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
+		if ( 'text_ad' !== $ad_type && 'import_from_adsense' !== $ad_type && 'amp_ad' !== $ad_type && 'ad_code' !== $ad_type && ! $is_frontend && 'yes' === $lazy_load_enabled ) {
+			$single_ad_html .= '<p>The preview is not lazy loaded</p>';
+		}
 
 		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			Wpadcenter::wpadcenter_set_impressions( $ad_id, $attributes ['placement_id'] );

@@ -25,7 +25,7 @@ class Wpadcenter_Adgroup_Widget extends \WP_Widget {
 	 */
 	public function __construct() {
 		$id_base        = 'Wpadcenter_Adgroup_Widget';
-		$name           = 'WPAdCenter Ad Group';
+		$name           = 'WPAdCenter Grouped Ads';
 		$widget_options = array( 'description' => __( 'Display Ads from Adgroup', 'wpadcenter' ) );
 		parent::__construct( $id_base, $name, $widget_options );
 
