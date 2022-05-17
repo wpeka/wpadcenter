@@ -11,12 +11,13 @@ import AdGroup from './adgroup-component';
 import AdAlignment from '../ad-alignment-component';
 import MaxWidth from '../maxwidth-component';
 import SelectDevice from '../select-device-component';
+import icons from '../icons';
 
 registerBlockType( 'wpadcenter/adgroup', {
 
-	title: __( 'WPAdCenter Ad Group', 'wpadcenter' ),
+	title: __( 'WPAdCenter Grouped Ads (Deprecated)', 'wpadcenter' ),
 	description: __( 'Block to generate WPAdCenter Ads from Adgroups', 'wpadcenter' ),
-	icon: 'flag',
+	icon: icons.icon,
 	category: 'wpadcenter',
 
 	attributes: {
@@ -174,7 +175,7 @@ registerBlockType( 'wpadcenter/adgroup', {
 		return <div className="Wpadcenter-gutenberg-container">
 			{ !! props.isSelected ? (
 
-				<Placeholder label="WPAdCenter Ad Group" isColumnLayout="true">
+				<Placeholder label="WPAdCenter Grouped Ads" isColumnLayout="true">
 
 					<h3 style={ headingStyles }>{ __( 'Select Ad Groups', 'wpadcenter' ) }</h3>
 					<div style={ { display: 'flex', justifyContent: 'center' } }>

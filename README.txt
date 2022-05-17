@@ -352,6 +352,11 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 = 2.3.3 =
 * Update: Removed analytics library
 
+= 2.3.3 - 2022-04-20 =
+* Update: Added consolidated Elementor Widget.
+* Update: Added consolidated Gutenberg Block.
+* Fix: Elementor related deprecation issues.
+
 = 2.3.2 =
 * Fix: Fixed compatibility with pro version.
 
@@ -471,6 +476,11 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 
 = 2.3.3 =
 * Update: Removed analytics library
+
+= 2.3.3 =
+* Update: Added consolidated Elementor Widget.
+* Update: Added consolidated Gutenberg Block.
+* Fix: Elementor related deprecation issues.
 
 = 2.3.2 =
 * Fix: Fixed compatibility with pro version.
