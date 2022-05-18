@@ -38,10 +38,13 @@
 					'wpadcenter_pro_version' => $wpadcenter_pro_version,
 				);
 				wp_localize_script( $this->plugin_name . '-vue-settings', 'localized_data', $localized_data );
+				wp_localize_script( $this->plugin_name . '-content-ads', 'localized_data', $localized_data );
 				wp_enqueue_script( $this->plugin_name . '-vue' );
 				wp_enqueue_script( $this->plugin_name . '-coreui' );
 				wp_enqueue_script( $this->plugin_name . '-vue-select' );
 				wp_enqueue_script( $this->plugin_name . '-multiple-email-input' );
+				wp_enqueue_script( $this->plugin_name . '-content-ads' );
+				wp_enqueue_script( $this->plugin_name . '-abtests' );
 				wp_enqueue_script( $this->plugin_name . '-vue-settings' );
 				wp_enqueue_style( $this->plugin_name . '-coreui' );
 				wp_enqueue_style( $this->plugin_name . '-vue-select' );
