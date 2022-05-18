@@ -334,8 +334,12 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 7. Reports - Custom Reports (graph view).
 
 == Changelog ==
+
 = 2.4.0 =
-* Fix - Fixed console errors while enabling content ads and creating A/B tests.
+* Update: Added consolidated Elementor Widget.
+* Update: Added consolidated Gutenberg Block.
+* Fix: Elementor related deprecation issues.
+* Fix: Fixed console errors while enabling content ads and creating A/B tests.
 
 = 2.3.8 =
 * Fix - Deleted script insertion feature
@@ -458,7 +462,10 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 
 == Upgrade Notice ==
 = 2.4.0 =
-* Fix - Fixed console errors while enabling content ads and creating A/B tests.
+* Update: Added consolidated Elementor Widget.
+* Update: Added consolidated Gutenberg Block.
+* Fix: Elementor related deprecation issues.
+* Fix: Fixed console errors while enabling content ads and creating A/B tests.
 
 = 2.3.8 =
 * Fix - Deleted Script insertion feature
