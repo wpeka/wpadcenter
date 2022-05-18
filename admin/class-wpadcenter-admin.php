@@ -356,6 +356,20 @@ class Wpadcenter_Admin {
 			$this->version,
 			false
 		);
+		wp_register_script(
+			$this->plugin_name . '-content-ads',
+			plugin_dir_url( __FILE__ ) . 'js/vue/contentads.js',
+			array(),
+			$this->version,
+			false
+		);
+		wp_register_script(
+			$this->plugin_name . '-abtests',
+			plugin_dir_url( __FILE__ ) . 'js/vue/abtests.js',
+			array(),
+			$this->version,
+			false
+		);
 	}
 
 	/**
