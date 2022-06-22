@@ -1487,7 +1487,7 @@ class Wpadcenter_Admin {
 			case 'start-date':
 				$current_start_date = get_post_meta( $ad_id, 'wpadcenter_start_date', true );
 				if ( $current_start_date ) {
-					$return_value = esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_start_date ) );// get format from WordPress settings.
+					$return_value = esc_html( get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $current_start_date ), get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ) );// show date according to timezone.
 				}
 				break;
 			case 'end-date':
@@ -1496,7 +1496,7 @@ class Wpadcenter_Admin {
 				if ( $current_end_date && $current_end_date === $expire_limit ) {
 					$return_value = esc_html__( 'Forever', 'wpadcenter' );
 				} elseif ( $current_end_date ) {
-					$return_value = esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $current_end_date ) );// get format from WordPress settings.
+					$return_value = esc_html( get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $current_end_date ), get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ) );// show date according to local timezone.
 				}
 				break;
 			case 'ad-group':
