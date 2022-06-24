@@ -41,6 +41,17 @@
 
 	$( document ).ready(
 		function() {
+			$('#size').change(
+				function() {
+					var input_size = $('#size :selected').parent().attr('label');
+					if( 'Button' === input_size ) {
+						$('#wpadcenter_video_autoplay').attr('checked' ,true);
+						$('#wpadcenter_video_autoplay').attr('disabled' ,true);
+					} else {
+						$('#wpadcenter_video_autoplay').removeAttr('disabled');
+					}
+				}
+			)
 			//google adsense ad selection
 			$( '#adsense-adunits button' ).click(
 				function( e ) {
