@@ -28,7 +28,7 @@
 				let date;
 
 				if ( wpadcenter_ad_scheduler.timezone_string ) {
-					date = moment( timestamp * 1000 ).tz( wpadcenter_ad_scheduler.timezone_string );
+					date = moment( timestamp * 1000 );
 				} else {
 					const offset = Number.parseInt( wpadcenter_ad_scheduler.gmt_offset );
 					date = moment( timestamp * 1000 ).utcOffset( offset );
@@ -84,11 +84,11 @@
 				if ( ! wpadcenter_ad_scheduler.timezone_string ) {
 					const time = moment( `${ year }-${ month }-${ day } ${ hour }:${ minute }Z` );
 
-					timestamp = Number.parseInt( time.format( 'X' ) ) + ( wpadcenter_ad_scheduler.gmt_offset * 3600 );
+					timestamp = Number.parseInt( time.format( 'X' ) ) - ( wpadcenter_ad_scheduler.gmt_offset * 3600 );
 				} else {
 					const time = moment.tz( `${ year }-${ month }-${ day } ${ hour }:${ minute }`, wpadcenter_ad_scheduler.timezone_string );
 
-					timestamp = time.format( 'X' );
+					timestamp = time.format( 'X' ) - ( wpadcenter_ad_scheduler.gmt_offset * 3600 );
 				}
 
 				$( `#${ type }_date` ).val( timestamp );
