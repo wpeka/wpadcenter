@@ -2510,7 +2510,7 @@ class Wpadcenter_Admin {
 		if ( $is_pro ) {
 			$support_url = 'https://club.wpeka.com/my-account/orders/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=help-mascot&utm_content=support';
 		} else {
-			$support_url = 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=forums';
+			$support_url = 'https://wordpress.org/support/plugin/wpadcenter';
 		}
 
 		$return_array = array(
@@ -2566,7 +2566,7 @@ class Wpadcenter_Admin {
 				'disabled'            => $disabled,
 				'welcome_text'        => __( 'Welcome to WP AdCenter!', 'wpadcenter' ),
 				'welcome_subtext'     => __( 'Complete Ad Management Plugin.', 'wpadcenter' ),
-				'welcome_description' => __( 'Thank you for choosing WP AdCenter plugin - the powerful WordPress ads plugin.', 'wpadcenter' ),
+				'welcome_description' => __( 'Thank you for choosing WPAdCenter - The Complete Ads Management Plugin.', 'wpadcenter' ),
 				'welcome_sub_desc'    => __( 'You can control every aspect of ads on your website. Place ads or Ad scripts anywhere on your website. Compatible with Gutenberg & Popular Page Builders.', 'wpadcenter' ),
 				'separator_text'      => __( '--- OR ---', 'wpadcenter' ),
 				'configure'           => array(
@@ -2582,6 +2582,61 @@ class Wpadcenter_Admin {
 						)
 					),
 				),
+				'video_url'           => 'https://www.youtube-nocookie.com/embed/okMdp_qFVaQ',
+				'help_section'        => array(
+					'help_center'  => array(
+						'title'       => __( 'Help Center', 'wpadcenter' ),
+						'image_src'   => WPADCENTER_PLUGIN_URL . 'admin/js/vue/images/',
+						'description' => __( 'Read the documentation to find answers to your questions.', 'wpadcenter' ),
+						'link'        => 'https://docs.wpeka.com/wp-adcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=getting-started&utm_term=help-resources',
+						'link_title'  => 'Learn more >>',
+					),
+					'video_guides' => array(
+						'title'       => __( 'Video Guides', 'wpadcenter' ),
+						'image_src'   => WPADCENTER_PLUGIN_URL . 'admin/js/vue/images/',
+						'description' => __( 'Browse through these video tutorials to learn more about our plugin.', 'wpadcenter' ),
+						'link'        => 'https://youtube.com/playlist?list=PLb2uZyVYHgAWcfWyzycjG9vJw1UjAgH_j',
+						'link_title'  => 'Watch now >>',
+
+					),
+					'support'      => array(
+						'title'       => __( 'Request Support', 'wpadcenter' ),
+						'image_src'   => WPADCENTER_PLUGIN_URL . 'admin/js/vue/images/',
+						'description' => __( 'Raise a support ticket if you need help in using the plugin..', 'wpadcenter' ),
+						'link'        => $is_pro ? 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=getting-started&utm_content=forums' : 'https://wordpress.org/support/plugin/wpadcenter',
+						'link_title'  => 'Request Support >>',
+
+					),
+				),
+				'next_steps_title'    => __( 'Next Steps', 'wpadcenter' ),
+				'configure_settings'  => array(
+					'text' => __( 'Configure WP Adcenter', 'wpadcenter' ),
+					'url'  => admin_url( 'edit.php?post_type=wpadcenter-ads&page=wpadcenter-settings' ),
+				),
+				'create_ad'           => array(
+					'text' => __( 'Create Ad', 'wpadcenter' ),
+					'url'  => admin_url( 'post-new.php?post_type=wpadcenter-ads' ),
+				),
+				'tutorial'            => array(
+					'text' => __( 'Watch Tutorial', 'wpadcenter' ),
+					'url'  => 'https://youtu.be/vLPCQ5_fDNw',
+				),
+				'features'            => array(
+					__( 'Insert Ads anywhere on your website', 'wpadcenter' ),
+					__( 'Display ads from any network', 'wpadcenter' ),
+					__( 'Compatible with popular page builders', 'wpadcenter' ),
+					__( 'View Reports And Statistics', 'wpadcenter' ),
+					__( 'Sell Ad Spaces (Pro)', 'wpadcenter' ),
+					__( 'Use Rotating Ads (Pro)', 'wpadcenter' ),
+					__( 'Integrate AdSense Account (Pro)', 'wpadcenter' ),
+					__( 'Detect Ad Blocks(Pro)', 'wpadcenter' ),
+				),
+				'features_title'      => __( 'WP AdCenter Features', 'wpadcenter' ),
+				'upgrade_button'      => array(
+					'text' => __( 'Upgrade Now', 'wpadcenter' ),
+					'url'  => 'https://club.wpeka.com/product/wpadcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=getting-started&utm_content=upgrade-now',
+				),
+				'coupon_text'         => __( 'Limited Offer- Use Coupon HAPPY15 to get 15% off on upgrade', 'wpadcenter' ),
 			)
 		);
 		?>
