@@ -599,15 +599,20 @@ class Wpadcenter_Public {
 				$video_autoplay = get_post_meta( $ad_id, 'wpadcenter_video_autoplay', true );
 				$autoplay       = $video_autoplay ? 'autoplay' : '';
 				$muted          = $video_autoplay ? 'muted = "muted"' : '';
-
+				$controls       = 'controls';
+				if ( ( ( '60' === $height || '90' === $height ) && '120' === $width ) || ( '125' === $height && '125' === $width ) ) {
+					$controls = '';
+					$autoplay = 'autoplay';
+					$muted    = 'muted = "muted"';
+				}
 				if ( '' !== $video_ad_url ) {
 					$single_ad_html .= '<div>';
 					if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
-						$single_ad_html .= '<video id="wpadcenter_video" class="wpadcenter-lazy-video" preload="none" height="' . $height . '" width="' . $width . '" controls ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
+						$single_ad_html .= '<video id="wpadcenter_video" class="wpadcenter-lazy-video" preload="none" height="' . $height . '" width="' . $width . '" ' . $controls . ' ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
 						<source  data-src="' . $video_ad_url . '" type="video/mp4" >
 					</video>';
 					} else {
-						$single_ad_html .= '<video id="wpadcenter_video"  height="' . $height . '" width="' . $width . '" controls ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
+						$single_ad_html .= '<video id="wpadcenter_video"  height="' . $height . '" width="' . $width . '" ' . $controls . ' ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
 						<source src="' . $video_ad_url . '" type="video/mp4" >
 					</video>';
 
