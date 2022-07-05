@@ -880,7 +880,7 @@ class Wpadcenter_Admin {
 				'Go Pro',
 				__( 'Go Pro', 'wpadcenter' ),
 				'manage_options',
-				'https://club.wpeka.com/product/wpadcenter/'
+				'https://club.wpeka.com/product/wpadcenter?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=menu-go-pro&utm_content=go-pro'
 			);
 		}
 	}
@@ -2508,7 +2508,7 @@ class Wpadcenter_Admin {
 
 		$is_pro = get_option( 'wpadcenter_pro_active' );
 		if ( $is_pro ) {
-			$support_url = 'https://club.wpeka.com/my-account/orders/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=support';
+			$support_url = 'https://club.wpeka.com/my-account/orders/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=help-mascot&utm_content=support';
 		} else {
 			$support_url = 'https://wordpress.org/support/plugin/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=forums';
 		}
@@ -2518,11 +2518,11 @@ class Wpadcenter_Admin {
 				'support_text'       => __( 'Support', 'wpadcenter' ),
 				'support_url'        => $support_url,
 				'documentation_text' => __( 'Documentation', 'wpadcenter' ),
-				'documentation_url'  => 'https://docs.wpeka.com/wp-adcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=documentation',
+				'documentation_url'  => 'https://docs.wpeka.com/wp-adcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=help-mascot&utm_content=documentation',
 				'faq_text'           => __( 'FAQ', 'wpadcenter' ),
-				'faq_url'            => 'https://docs.wpeka.com/wp-adcenter/faq/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=faq',
+				'faq_url'            => 'https://docs.wpeka.com/wp-adcenter/faq/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=help-mascot&utm_content=faq',
 				'upgrade_text'       => __( 'Upgrade to Pro &raquo;', 'wpadcenter' ),
-				'upgrade_url'        => 'https://club.wpeka.com/product/wpadcenter/?utm_source=wpadcenter&utm_medium=help-mascot&utm_campaign=link&utm_content=upgrade-to-pro',
+				'upgrade_url'        => 'https://club.wpeka.com/product/wpadcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=help-mascot&utm_content=upgrade',
 			),
 			'is_pro'           => $is_pro,
 			'quick_links_text' => __( 'See Quick Links', 'wpadcenter' ),
@@ -4321,11 +4321,28 @@ class Wpadcenter_Admin {
 		$style = 'wpadcenter-ads_page_wpadcenter-settings' === $current_screen->base ? 'margin:20px' : 'margin:20px 20px 20px 0';
 
 		if ( 'wpadcenter-ads' === $current_screen->post_type && in_array( $current_screen->base, $pages_for_upgrade_banner, true ) ) {
-
+			$banner_image_url = '';
+			switch ( $current_screen->base ) {
+				case 'edit':
+					$banner_image_url = 'https://club.wpeka.com/product/wpadcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=manage-ads&utm_content=banner';
+					break;
+				case 'post':
+					$banner_image_url = 'https://club.wpeka.com/product/wpadcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=create-ads&utm_content=banner';
+					break;
+				case 'edit-tags':
+					$banner_image_url = 'https://club.wpeka.com/product/wpadcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=manage-ad-groups&utm_content=banner';
+					break;
+				case 'wpadcenter-ads_page_wpadcenter-reports':
+					$banner_image_url = 'https://club.wpeka.com/product/wpadcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=reports&utm_content=banner';
+					break;
+				case 'wpadcenter-ads_page_wpadcenter-settings':
+					$banner_image_url = 'https://club.wpeka.com/product/wpadcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=settings&utm_content=banner';
+					break;
+			}
 			?>
 			<div style="">
 				<div style="<?php echo esc_attr( $style ); ?>">
-					<a href="https://club.wpeka.com/product/wpadcenter/?utm_source=wprepo&utm_medium=banner&utm_campaign=wporg_sale&utm_content=coupon" target="_blank" style="box-shadow:none">
+					<a href="<?php echo esc_attr( $banner_image_url ); ?>" target="_blank" style="box-shadow:none">
 						<img style="width:100%;height:auto" alt="Upgrade to Pro" src="<?php echo esc_attr( WPADCENTER_PLUGIN_URL ) . 'images/upgrade-to-pro-1.jpg'; ?>">
 					</a>
 				</div>
