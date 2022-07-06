@@ -2636,7 +2636,11 @@ class Wpadcenter_Admin {
 					'text' => __( 'Upgrade Now', 'wpadcenter' ),
 					'url'  => 'https://club.wpeka.com/product/wpadcenter/?utm_source=plugin&utm_medium=wpadcenter&utm_campaign=getting-started&utm_content=upgrade-now',
 				),
-				'coupon_text'         => __( 'Limited Offer- Use Coupon HAPPY15 to get 15% off on upgrade', 'wpadcenter' ),
+				'coupon_text'         => array(
+					'limited_offer_text' => __( 'Limited Offer- Use Coupon ', 'wpadcenter' ),
+					'coupon_code'        => __( 'HAPPY15 ', 'wpadcenter' ),
+					'discount_text'      => __( 'to get 15% off on upgrade', 'wpadcenter' ),
+				),
 			)
 		);
 		?>
