@@ -656,6 +656,7 @@ class Wpadcenter_Admin {
 		$metafields = array(
 			'ad-type'                                => array( 'wpadcenter_ad_type', 'string' ),
 			'ad-size'                                => array( 'wpadcenter_ad_size', 'string' ),
+			'ad-caption'                             => array( 'wpadcenter_ad_caption', 'string' ),
 			'open-in-new-tab'                        => array( 'wpadcenter_open_in_new_tab', 'string' ),
 			'nofollow-on-link'                       => array( 'wpadcenter_nofollow_on_link', 'string' ),
 			'link-url'                               => array( 'wpadcenter_link_url', 'url' ),
@@ -1632,6 +1633,14 @@ class Wpadcenter_Admin {
 			'high'
 		);
 		add_meta_box(
+			'ad-caption',
+			__( 'Ad Caption', 'wpadcenter' ),
+			array( $this, 'wpadcenter_ad_caption_metabox' ),
+			'wpadcenter-ads',
+			'normal',
+			'high'
+		);
+		add_meta_box(
 			'postimagediv',
 			__( 'Ad Image', 'wpadcenter' ),
 			'post_thumbnail_meta_box',
@@ -1804,6 +1813,20 @@ class Wpadcenter_Admin {
 		<?php
 	}
 
+	/**
+	 * Ad-caption meta box.
+	 *
+	 * @param WP_POST $post post object.
+	 */
+	public function wpadcenter_ad_caption_metabox( $post ) {
+		$caption = get_post_meta( $post->ID, 'wpadcenter_ad_caption', true );
+		echo '
+		<div style="margin-top:10px">
+		<label for="ad-caption"><strong>' . esc_html__( 'Ad Caption', 'wpadcenter' ) . '</strong></label>
+		<input type="text" name="ad-caption" value="' . esc_attr( $caption ) . '" id="ad-caption" style="width:100%;margin-top:7px;" >
+		</div>
+		';
+	}
 
 	/**
 	 * Ad-size meta box.
