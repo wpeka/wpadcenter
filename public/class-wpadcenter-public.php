@@ -415,8 +415,9 @@ class Wpadcenter_Public {
 		} elseif ( 'yes' === $open_in_new_tab ) {
 			$link_target = '_blank';
 		}
-		$width  = '';
-		$height = '';
+		$caption = get_post_meta( $ad_id, 'wpadcenter_ad_caption', true );
+		$width   = '';
+		$height  = '';
 		if ( 'none' !== $ad_size ) {
 			$ad_size                = explode( 'x', $ad_size );
 			$width                  = $ad_size[0];
@@ -627,10 +628,11 @@ class Wpadcenter_Public {
 		if ( 'text_ad' !== $ad_type ) {
 			$single_ad_html .= '</a>';
 		}
-
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
-		$single_ad_html .= '</div>';
+		if ( $caption ) {
+			$single_ad_html .= '<span>' . $caption . '</span>';
+		}
 		if ( 'text_ad' !== $ad_type && 'import_from_adsense' !== $ad_type && 'amp_ad' !== $ad_type && 'ad_code' !== $ad_type && ! $is_frontend && 'yes' === $lazy_load_enabled ) {
 			$single_ad_html .= '<p>The preview is not lazy loaded</p>';
 		}

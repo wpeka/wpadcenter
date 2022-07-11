@@ -155,25 +155,6 @@ Vue.component('FeatureSection', {
             return createElement('ul', {
                 staticClass: 'adc-feature-section-card-list'
             }, [featureCards]);
-        },
-        createFeatures(createElement) {
-            var features_list = []
-            for(var i=0; i<obj.features.length;i++) {
-                var feature = [
-                    createElement('li', {
-                        staticClass: 'adc-feature-section-list-item',
-                        domProps: {
-                            textContent: obj.features[i]
-                        }
-                    })
-                ]
-                features_list.push(feature)
-            }
-            return createElement('ul', {
-                staticClass: 'adc-feature-section-list'
-            }, [
-                features_list
-            ])
         }
     },
     render(createElement) {
@@ -203,10 +184,20 @@ Vue.component('FeatureSection', {
                 }),
                 createElement('p', {
                     staticClass: 'adc-feature-section-coupon',
+                }, [createElement('span', {
                     domProps: {
-                        textContent: obj.coupon_text
+                        textContent: obj.coupon_text.limited_offer_text
                     }
-                })
+                }), createElement('span', {
+                    staticClass: 'adc-feature-section-coupon-code',
+                    domProps: {
+                        textContent: obj.coupon_text.coupon_code
+                    }
+                }), createElement('span', {
+                    domProps: {
+                        textContent: obj.coupon_text.discount_text
+                    }
+                })])
             ])
         }
     }
