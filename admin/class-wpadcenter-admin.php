@@ -499,7 +499,7 @@ class Wpadcenter_Admin {
 	/**
 	 * Function to display notice when ad is first published.
 	 */
-	public function wpadcenter_ad_created_popup() {
+	public function wpadcenter_ad_created_admin_notice() {
 		$current_screen = get_current_screen();
 		// $_GET['message'] value 6 tells that the post was just published.
 		$ad_just_created = isset( $_GET['message'] ) && 6 === $_GET['message'] ? true : false; // phpcs:ignore WordPress.Security.NonceVerification
@@ -560,7 +560,7 @@ class Wpadcenter_Admin {
 	/**
 	 * Function to close popup.
 	 */
-	public function wpadcenter_ad_created_popup_close() {
+	public function wpadcenter_ad_created_admin_notice_close() {
 		if ( isset( $_POST['wpadcenter_close_popup_nonce'] ) && check_admin_referer( 'wpadcenter_close_nonce', 'wpadcenter_close_popup_nonce' ) && isset( $_POST['wpadcenter_close_popup'] ) && 'close' === $_POST['wpadcenter_close_popup'] ) {
 			$check_for_close_popup_transient = get_transient( 'wpadcenter_close_popup_transient' );
 			if ( false === $check_for_close_popup_transient ) {
