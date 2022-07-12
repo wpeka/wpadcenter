@@ -497,6 +497,79 @@ class Wpadcenter_Admin {
 	}
 
 	/**
+	 * Function to display notice when ad is first published.
+	 */
+	public function wpadcenter_ad_created_admin_notice() {
+		$current_screen = get_current_screen();
+		// $_GET['message'] value 6 tells that the post was just published.
+		$ad_just_created = isset( $_GET['message'] ) && 6 === $_GET['message'] ? true : false; // phpcs:ignore WordPress.Security.NonceVerification
+
+		$check_for_close_popup_transient = get_transient( 'wpadcenter_close_popup_transient' );
+		if ( ! $check_for_close_popup_transient ) {
+			if ( 'wpadcenter-ads' === $current_screen->id && $ad_just_created && isset( $_GET['action'] ) && 'edit' === $_GET['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+				$shortcode = isset( $_GET['post'] ) ? "[wpadcenter_ad id='" . sanitize_text_field( wp_unslash( $_GET['post'] ) ) . "' align='none']" : ''; // phpcs:ignore WordPress.Security.NonceVerification
+				?>
+					<div id="wpadcenter-created-ad-overlay">
+						<form method="post" action="">
+							<div id="wpadcenter-created-ad-popup">
+								<div class="wpadcenter-created-ad-popup-heading">
+									<span><?php echo esc_html__( 'Two Simple Ways To Display Your Ad', 'wpadcenter' ); ?></span>
+								</div>
+								<div class="wpadcenter-created-ad-popup-methods">
+									<div class="wpadcenter-created-ad-popup-method">
+										<div class="wpadcenter-created-ad-popup-method-number">
+											<span><?php echo esc_html__( 'Method 1', 'wpadcenter' ); ?></span>
+										</div>
+										<div class="wpadcenter-created-ad-popup-method-details">
+											<p><?php echo esc_html__( 'Click to launch a new page or post and add using elementor widgets or Gutenberg blocks', 'wpadcenter' ); ?></p>
+											<div>
+												<a href="<?php echo esc_attr( get_admin_url() . 'post-new.php?post_type=page' ); ?>"><?php echo esc_html__( 'New Page', 'wpadcenter' ); ?></a>
+												<span class="wpadcenter-created-ad-popup-new"><?php echo esc_html__( 'or', 'wpadcenter' ); ?></span>
+												<a href="<?php echo esc_attr( get_admin_url() . 'post-new.php' ); ?>"><?php echo esc_html__( 'New Post', 'wpadcenter' ); ?></a>
+											</div>
+										</div>
+									</div>
+									<div class="wpadcenter-created-ad-popup-method">
+										<div class="wpadcenter-created-ad-popup-method-number">
+											<span><?php echo esc_html__( 'Method 2', 'wpadcenter' ); ?></span>
+										</div>
+										<div class="wpadcenter-created-ad-popup-method-details">
+											<p><?php echo esc_html__( 'Copy and paste this shortcode on your post or page', 'wpadcenter' ); ?></p>
+											<div class="wpadcenter-created-ad-popup-shortcode">
+												<span><?php echo esc_textarea( $shortcode ); ?></span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wpadcenter-created-ad-popup-form">
+									<div>
+										<input type="checkbox" id="wpadcenter_close_popup" name="wpadcenter_close_popup" value="close">
+										<label for="wpadcenter_close_popup"><?php echo esc_html__( 'Do not show this notification again', 'wpadcenter' ); ?></label><br>
+									</div>
+									<button class="wpadcenter-created-ad-popup-close-button"><?php echo esc_html__( 'Close', 'wpadcenter' ); ?></button>
+								</div>
+								<input type="hidden" id="wpadcenter_close_popup_nonce" name="wpadcenter_close_popup_nonce" value="<?php echo esc_attr( wp_create_nonce( 'wpadcenter_close_nonce' ) ); ?>" />
+							</div>
+						</form>
+					</div>
+				<?php
+			}
+		}
+	}
+
+	/**
+	 * Function to close popup.
+	 */
+	public function wpadcenter_ad_created_admin_notice_close() {
+		if ( isset( $_POST['wpadcenter_close_popup_nonce'] ) && check_admin_referer( 'wpadcenter_close_nonce', 'wpadcenter_close_popup_nonce' ) && isset( $_POST['wpadcenter_close_popup'] ) && 'close' === $_POST['wpadcenter_close_popup'] ) {
+			$check_for_close_popup_transient = get_transient( 'wpadcenter_close_popup_transient' );
+			if ( false === $check_for_close_popup_transient ) {
+				set_transient( 'wpadcenter_close_popup_transient', 'Close Pending', 86400 );
+			}
+		}
+	}
+
+	/**
 	 * Admin init.
 	 *
 	 * @since 1.0.0
