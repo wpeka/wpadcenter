@@ -255,6 +255,8 @@ class Wpadcenter {
 		$this->loader->add_action( 'before_delete_post', $plugin_admin, 'wpadcenter_on_delete_ad' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wpadcenter_blocks_widgets_deprecation_notice' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_deprecation_already_done', 5 );
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wpadcenter_ad_created_admin_notice' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_ad_created_admin_notice_close', 5 );
 	}
 
 	/**
