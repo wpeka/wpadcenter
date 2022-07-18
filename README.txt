@@ -5,7 +5,7 @@ Tags: adsense, ad rotator, ad manager, ad inserter, ads, advertising, banners, b
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 5.9.3
-Stable tag: 2.4.0
+Stable tag: 2.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -335,6 +335,14 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 
 == Changelog ==
 
+= 2.5.0 =
+* Feature: Added caption feature for Ads.
+* Update: Added a help popup on creating Ad.
+* Update: Improved Getting Started Page.
+* Update: Updated UTM Parameters for links.
+* Fix: Fixed Video Ad not clickable for button size.
+* Fix: Fixed created Ad timezone to be same as the user's timezone.
+
 = 2.4.0 =
 * Update: Added consolidated Elementor Widget.
 * Update: Added consolidated Gutenberg Block.
@@ -461,6 +469,15 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 * Feature: Initial version.
 
 == Upgrade Notice ==
+
+= 2.5.0 =
+* Feature: Added caption feature for Ads.
+* Update: Added a help popup on creating Ad.
+* Update: Improved Getting Started Page.
+* Update: Updated UTM Parameters for links.
+* Fix: Fixed Video Ad not clickable for button size.
+* Fix: Fixed created Ad timezone to be same as the user's timezone.
+
 = 2.4.0 =
 * Update: Added consolidated Elementor Widget.
 * Update: Added consolidated Gutenberg Block.
