@@ -630,9 +630,6 @@ class Wpadcenter_Public {
 		}
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
-		if ( $caption ) {
-			$single_ad_html .= '<span>' . $caption . '</span>';
-		}
 		if ( 'text_ad' !== $ad_type && 'import_from_adsense' !== $ad_type && 'amp_ad' !== $ad_type && 'ad_code' !== $ad_type && ! $is_frontend && 'yes' === $lazy_load_enabled ) {
 			$single_ad_html .= '<p>The preview is not lazy loaded</p>';
 		}
@@ -642,6 +639,11 @@ class Wpadcenter_Public {
 		}
 
 		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
+		if ( $caption ) {
+			$single_ad_html .= '<div class="wpadcenter-caption">';
+			$single_ad_html .= '<span class="wpadcenter-caption-' . $attributes['align'] . '">' . $caption . '</span>';
+			$single_ad_html .= '</div>';
+		}
 		return $single_ad_html;
 	}
 
