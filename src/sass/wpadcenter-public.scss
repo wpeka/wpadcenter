@@ -361,3 +361,25 @@
 .wpadcenter-specific-devices__label{
 	margin-top:25px;
 }
+.wpadcenter-caption {
+	max-width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0 !important;
+}
+.wpadcenter-caption-alignnone {
+	margin-left: 10px;
+}
+.wpadcenter-caption-alignright {
+	display: block;
+	float: right;
+	margin-right: 10px;
+}
+.wpadcenter-caption-alignleft {
+	display: block;
+	margin-left: 10px;
+}
+.wpadcenter-caption-aligncenter {
+	display: block;
+	text-align: center;
+}
