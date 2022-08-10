@@ -89,7 +89,7 @@ class Wpadcenter_Test extends WP_UnitTestCase {
 	 */
 	public function test_get_version() {
 		$value = self::$wpadcenter->get_version();
-		$this->assertEquals( '2.4.0', $value );
+		$this->assertEquals( '2.5.0', $value );
 	}
 
 	/**
