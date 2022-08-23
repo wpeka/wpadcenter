@@ -2150,7 +2150,7 @@ class Wpadcenter_Admin {
 		echo '<br><hr><label class="wpadcenter-text-ad-label" ><strong>' . esc_html__( 'Select Background Color', 'wpadcenter' ) . '</strong></label><input type="color" id="wpadcenter_text_ad_bg_color" name="text-ad-background-color" value="' . esc_attr( $saved_background_color ) . '"/>';
 		echo '<br><hr><label class="wpadcenter-text-ad-label" ><strong>' . esc_html__( 'Select Border Color', 'wpadcenter' ) . '</strong></label><input type="color" id="wpadcenter_text_ad_border_color" name="text-ad-border-color" value="' . esc_attr( $saved_border_color ) . '"/>';
 		echo '<br><hr><label class="wpadcenter-text-ad-label" ><strong>' . esc_html__( 'Select Border Width', 'wpadcenter' ) . '</strong></label><input type="number" id="wpadcenter_text_ad_border_width" name="text-ad-border-width" min="0" max="999" value="' . esc_attr( $saved_border_width ) . '" />';
-		echo '<br><hr><label style="margin-right:20px;"><strong>' . esc_html__( 'Center Align Vertically', 'wpadcenter' ) . '</strong></label><input name="text-ad-align-vertically" type="checkbox" value="1" id="text_ad_align_vartically" ' . checked( '1', $saved_center_align, false ) . '> 
+		echo '<br><hr><label style="margin-right:20px;"><strong>' . esc_html__( 'Center Align Vertically', 'wpadcenter' ) . '</strong></label><input name="text-ad-align-vertically" type="checkbox" value="1" id="text_ad_align_vartically" ' . checked( '1', $saved_center_align, false ) . '>
 		<br><br><span style="color:grey;">( ' . esc_html__( 'Vertical alignment setting will take effect on front-end.', 'wpadcenter' ) . ' )</span>';
 
 	}
@@ -2233,7 +2233,7 @@ class Wpadcenter_Admin {
 					<span class="wpadcenter-tooltiptext">Adds rel attribute tags to link. Uncheck to disable global setting and enable ad level setting.</span>
 				</span>
 	</p>
-				<div>						
+				<div>
 				<?php /* translators: %s: Global rel attributes */ ?>
 					<label for="globalAdditionalRelTagsPreference"><input name="global-additional-rel-tags-preference" type="checkbox" value="1" id="globalAdditionalRelTagsPreference" <?php checked( '1', $global_additional_rel_tags_preference, true ); ?> ><?php echo sprintf( esc_html__( 'Global ( %s )', 'wpadcenter' ), esc_html( $global_additional_rel_tags ) ); ?></label>
 				</div>
@@ -2316,7 +2316,7 @@ class Wpadcenter_Admin {
 		?>
 			<br>
 			<div id="wpadcenter_video_upload_container">
-				<button id="wpadcenter_upload_video" class="button-primary">Upload Video</button> 
+				<button id="wpadcenter_upload_video" class="button-primary">Upload Video</button>
 				<input type="hidden" id="wpadcenter_video_ad_filename" name="video-ad-filename" value="<?php echo esc_attr( $video_ad_filename ); ?>"/>
 				<div id="wpadcenter_video_filename_container" style="<?php echo esc_attr( $file_display ); ?>"  >
 					<span id="wpadcenter_video_filename"><?php echo esc_attr( $video_ad_filename ); ?></span>
@@ -4617,5 +4617,15 @@ class Wpadcenter_Admin {
 		}
 	}
 
+	/**
+	 * Setting the Adgroups limit.
+	 *
+	 */
+	public function wpadcenter_rest_posts_per_page( $args, $request ) {
+		$max = max( (int)$request->get_param( 'per_page' ), 100 );
+		$args['posts_per_page'] = $max;
+		$args['number'] = 100; // by default the number is set to 10
+		return $args;
+	}
 
 }
