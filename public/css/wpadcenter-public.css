@@ -116,6 +116,10 @@
 .wpadcenter-alignright {
   float: right;
   margin-left: 10px;
+<<<<<<< HEAD
+=======
+  clear: both;
+>>>>>>> fa81629e4f4e2efa943e5532e8750b4b8a1f27ac
 }
 
 .wpadcenter-alignleft {
@@ -352,12 +356,20 @@
 .wpadcenter-caption-alignright {
   display: block;
   float: right;
+<<<<<<< HEAD
+=======
+  clear: both;
+>>>>>>> fa81629e4f4e2efa943e5532e8750b4b8a1f27ac
   margin-right: 10px;
 }
 
 .wpadcenter-caption-alignleft {
   display: block;
   margin-left: 10px;
+<<<<<<< HEAD
+=======
+  clear: both;
+>>>>>>> fa81629e4f4e2efa943e5532e8750b4b8a1f27ac
 }
 
 .wpadcenter-caption-aligncenter {
