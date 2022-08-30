@@ -522,7 +522,7 @@ class Wpadcenter_Admin {
 										</div>
 										<div class="wpadcenter-created-ad-popup-method-details">
 											<p><?php echo esc_html__( 'Click to launch a new page or post and add using elementor widgets or Gutenberg blocks', 'wpadcenter' ); ?></p>
-											<div>
+											<div style="display: flex;">
 												<a href="<?php echo esc_attr( get_admin_url() . 'post-new.php?post_type=page' ); ?>"><?php echo esc_html__( 'New Page', 'wpadcenter' ); ?></a>
 												<span class="wpadcenter-created-ad-popup-new"><?php echo esc_html__( 'or', 'wpadcenter' ); ?></span>
 												<a href="<?php echo esc_attr( get_admin_url() . 'post-new.php' ); ?>"><?php echo esc_html__( 'New Post', 'wpadcenter' ); ?></a>
