@@ -642,9 +642,8 @@ class Wpadcenter_Public {
 
 		// Condition to remove adCaption for animated ads.
 
-		if( isset( Wpadcenter_Pro_Public::$animated_ads_flag) && Wpadcenter_Pro_Public::$animated_ads_flag == true ) {
+		if ( isset ( Wpadcenter_Pro_Public::$animated_ads_flag ) && Wpadcenter_Pro_Public::$animated_ads_flag == true ) {
 
-			Wpadcenter_Pro_Public::$animated_ads_flag = false;
 			return $single_ad_html;
 
 		}
