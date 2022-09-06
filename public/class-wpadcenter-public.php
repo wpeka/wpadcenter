@@ -639,6 +639,16 @@ class Wpadcenter_Public {
 		}
 
 		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
+
+		// Condition to remove adCaption for animated ads.
+
+		if( isset( Wpadcenter_Pro_Public::$animated_ads_flag) && Wpadcenter_Pro_Public::$animated_ads_flag == true ) {
+
+			Wpadcenter_Pro_Public::$animated_ads_flag = false;
+			return $single_ad_html;
+
+		}
+
 		if ( $caption ) {
 			$single_ad_html .= '<div class="wpadcenter-caption">';
 			$single_ad_html .= '<span class="wpadcenter-caption-' . $attributes['align'] . '">' . $caption . '</span>';
