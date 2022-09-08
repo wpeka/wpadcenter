@@ -641,8 +641,9 @@ class Wpadcenter_Public {
 		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
 
 		// Condition to remove adCaption for animated ads.
+		$flag = apply_filters('wp_adcenter_animated_ad_flag',$single_ad_html);
 
-		if ( isset ( Wpadcenter_Pro_Public::$animated_ads_flag ) && Wpadcenter_Pro_Public::$animated_ads_flag == true ) {
+		if ( $flag === true ) {
 
 			return $single_ad_html;
 
