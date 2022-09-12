@@ -641,9 +641,9 @@ class Wpadcenter_Public {
 		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
 
 		// Flag will be set to true for animated ads.
-		$flag = apply_filters('wp_adcenter_animated_ad_flag',false );
+		$animated_ads_flag = apply_filters('wp_adcenter_animated_ad_flag',false );
 
-		if ( $caption && $flag === false) {
+		if ( $caption && !$animated_ads_flag) {
 			$single_ad_html .= '<div class="wpadcenter-caption">';
 			$single_ad_html .= '<span class="wpadcenter-caption-' . $attributes['align'] . '">' . $caption . '</span>';
 			$single_ad_html .= '</div>';
