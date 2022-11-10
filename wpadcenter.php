@@ -70,6 +70,7 @@ if ( ! defined( 'WPADCENTER_SCRIPT_SUFFIX' ) ) {
  */
 function activate_wpadcenter() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpadcenter-activator.php';
+	add_option('wpadcenter_do_activation_redirect', true);
 	Wpadcenter_Activator::activate();
 }
 

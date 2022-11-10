@@ -2734,8 +2734,8 @@ class Wpadcenter_Admin {
 				),
 				'coupon_text'         => array(
 					'limited_offer_text' => __( 'Limited Offer- Use Coupon ', 'wpadcenter' ),
-					'coupon_code'        => __( 'HAPPY15 ', 'wpadcenter' ),
-					'discount_text'      => __( 'to get 15% off on upgrade', 'wpadcenter' ),
+					'coupon_code'        => __( 'ADCENTER20 ', 'wpadcenter' ),
+					'discount_text'      => __( 'to get 20% off on upgrade', 'wpadcenter' ),
 				),
 			)
 		);
@@ -4628,4 +4628,16 @@ class Wpadcenter_Admin {
 		return $args;
 	}
 
+	/**
+	 * Redirect to Getting Started Page after plugin activation.
+	 *
+	 * @return void
+	 */
+	public function wpadcenter_redirect_after_activate() {
+		if ( get_option( 'wpadcenter_do_activation_redirect', false ) ) {
+			delete_option( 'wpadcenter_do_activation_redirect' );
+			 wp_redirect( "edit.php?post_type=wpadcenter-ads&page=wpadcenter-getting-started" );
+			 exit;
+		}
+	}
 }

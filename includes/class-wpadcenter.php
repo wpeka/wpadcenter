@@ -258,6 +258,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wpadcenter_ad_created_admin_notice' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_ad_created_admin_notice_close', 5 );
 		$this->loader->add_filter( 'rest_wpadcenter-adgroups_query', $plugin_admin, 'wpadcenter_rest_posts_per_page', 10, 2 );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_redirect_after_activate' );
 	}
 
 	/**
