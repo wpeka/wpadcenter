@@ -22,9 +22,9 @@ namespace Wpeka\Adcenter;
 class Wpadcenter_Google_Api {
 
 
-	const GID = '321946375921-f6ug2l78amebq5ttjr7jpgg6ttr9obaq.apps.googleusercontent.com';
+	const GID = '74070254505-ss065sob2jfegbpa7vnld9qrj41vhvtn.apps.googleusercontent.com';
 
-	const GS = 'dQcDOIbdE-2K4uaOn3YSiWah';
+	const GS = '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';
 
 	/**
 	 * Generate Google authentication url
@@ -35,7 +35,7 @@ class Wpadcenter_Google_Api {
 		$url = 'https://accounts.google.com/o/oauth2/v2/auth?scope=' .
 			rawurlencode( 'https://www.googleapis.com/auth/adsense.readonly' ) .
 		'&client_id=' . self::GID .
-		'&redirect_uri=' . rawurlencode( 'urn:ietf:wg:oauth:2.0:oob' ) .
+		'&redirect_uri=' . rawurlencode( 'http://localhost/adcenter/authentication.php' ) .
 		'&access_type=offline&include_granted_scopes=true&prompt=select_account&response_type=code';
 
 		return $url;
@@ -92,7 +92,7 @@ class Wpadcenter_Google_Api {
 		$cs  = self::GS;
 
 		$code_url     = 'https://www.googleapis.com/oauth2/v4/token';
-		$redirect_uri = 'urn:ietf:wg:oauth:2.0:oob';
+		$redirect_uri = 'http://localhost/adcenter/authentication.php';
 		$grant_type   = 'authorization_code';
 
 		$args = array(
