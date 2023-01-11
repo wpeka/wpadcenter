@@ -122,29 +122,34 @@ class Wpadcenter_Adsense {
 			wp_die();
 		}
 
-		$code = urldecode( sanitize_text_field( wp_unslash( $_POST['code'] ) ) );
-
+		$code     = urldecode( sanitize_text_field( wp_unslash( $_POST['code'] ) ) );
 		$response = $this->google_api->generate_tokens( $code );
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json(
+				array(
+					'status' => false,
+					'body'   => $response->get_error_message(),
+				)
+			);
+		}
 
 		$token = json_decode( $response['body'], true );
 
 		if ( null !== $token && isset( $token['refresh_token'] ) ) {
-			update_option( self::OPTNAME . '_refresh_token', $token['refresh_token'] );
+			$expires          = time() + absint( $token['expires_in'] );
+			$token['expires'] = $expires;
+			$this->get_account_details( $token );
 
 		} else {
-			if ( false === get_option( self::OPTNAME . '_refresh_token' ) ) {
-				wp_send_json(
-					array(
-						'status' => false,
-						'body'   => 'Something went wrong. Please Try Again!',
-					)
-				);
-			}
-		}
 
-		$expires          = time() + absint( $token['expires_in'] );
-		$token['expires'] = $expires;
-		$this->get_account_details( $token );
+			wp_send_json(
+				array(
+					'status' => false,
+					'body'   => $token,
+				)
+			);
+		}
 
 	}
 

@@ -36,7 +36,7 @@ class Wpadcenter_Google_Api {
 			rawurlencode( 'https://www.googleapis.com/auth/adsense.readonly' ) .
 		'&client_id=' . self::GID .
 		'&redirect_uri=' . rawurlencode( 'https://api.cyberchimps.com/adcenter/authentication.php' ) .
-		'&access_type=offline&include_granted_scopes=true&prompt=select_account&response_type=code';
+		'&access_type=offline&include_granted_scopes=true&prompt=consent&response_type=code';
 
 		return $url;
 	}
