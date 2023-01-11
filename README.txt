@@ -5,7 +5,7 @@ Tags: adsense, ad rotator, ad manager, ad inserter, ads, advertising, banners, b
 Requires at least: 5.0+
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -334,6 +334,9 @@ No, we do not use any cookies to load into your code. This helps us keep the plu
 7. Reports - Custom Reports (graph view).
 
 == Changelog ==
+
+= 2.5.1 =
+* Update: Updated the plugin's code to match Google's new Adsense Policy.
 
 = 2.5.0 =
 * Update: Compatibility with WordPress 6.1
