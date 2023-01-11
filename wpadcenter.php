@@ -15,7 +15,7 @@
  * Plugin Name:       WPAdCenter
  * Plugin URI:        https://wpadcenter.com
  * Description:       Advertising management plugin for WordPress.
- * Version:           2.5.0
+ * Version:           2.5.1
  * Author:            WPEka Club
  * Author URI:        https://club.wpeka.com/
  * License:           GPL-2.0+
@@ -48,7 +48,7 @@ define( 'WPADCENTER_SETTINGS_FIELD', 'WPAdCenter-Settings' );
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WPADCENTER_VERSION', '2.5.0' );
+define( 'WPADCENTER_VERSION', '2.5.1' );
 
 if ( ! defined( 'WPADCENTER_PLUGIN_FILENAME' ) ) {
 	define( 'WPADCENTER_PLUGIN_FILENAME', __FILE__ );
