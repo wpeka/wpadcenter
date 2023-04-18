@@ -373,49 +373,6 @@ class Wpadcenter_Admin {
 	}
 
 	/**
-	 * Shows the deprecation notice for old Elementor widgets and Gutenberg blocks.
-	 *
-	 * @since 5.4.0
-	 */
-	public function wpadcenter_blocks_widgets_deprecation_notice() {
-		$current_screen                  = get_current_screen();
-		$check_for_deprecation_transient = get_transient( 'wpadcenter_deprecation_transient' );
-
-		if ( ! $check_for_deprecation_transient ) {
-			if ( 'edit-wpadcenter-ads' === $current_screen->id || 'wpadcenter-ads' === $current_screen->id || 'edit-wpadcenter-adgroups' === $current_screen->id ) {
-				?>
-				<form method="post">
-					<div id="wpadcenter-blocks-widgets-deprecation-warning">
-						<p>
-							<?php
-							printf( 'Please replace your existing ad widgets/blocks with the new one - WPAdCenter Ad Block (Gutenberg) & WPAdCenter Ad Widget (Elementor), as the old ones will be deprecated soon. <a href="' . esc_url( 'https://docs.wpeka.com/wp-adcenter/placing-ads/placing-ad-using-consolidated-block-elementor-widget' ) . '" target="_blank" rel="noopener noreferrer"> Learn more</a>.' );
-							?>
-						</p>
-						<button class="vvv wpadcenter-deprecation-notice"><i class="dashicons dashicons-dismiss"></i></button>
-						<input type="hidden" id="wpadcenter_deprecation_nonce" name="wpadcenter_deprecation_nonce" value="<?php echo esc_attr( wp_create_nonce( 'wpadcenter_deprecation' ) ); ?>" />
-					</div>
-				</form>
-				<?php
-			}
-		}
-	}
-
-	/**
-	 * Set transient for deprecation notice.
-	 *
-	 * @since 5.4.0
-	 */
-	public function wpadcenter_deprecation_already_done() {
-		$dnd = '';
-		if ( isset( $_POST['wpadcenter_deprecation_nonce'] ) && check_admin_referer( 'wpadcenter_deprecation', 'wpadcenter_deprecation_nonce' ) ) {
-			$check_for_deprecation_transient = get_transient( 'wpadcenter_deprecation_transient' );
-			if ( false === $check_for_deprecation_transient ) {
-				set_transient( 'wpadcenter_deprecation_transient', 'Deprecation Pending', 86400 );
-			}
-		}
-	}
-
-	/**
 	 * Monthly schedule cron for clean stats..
 	 *
 	 * @since 1.0.0
