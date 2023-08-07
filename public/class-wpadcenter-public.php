@@ -968,6 +968,7 @@ class Wpadcenter_Public {
 					'placement_id'    => $attributes['placement_id'],
 				);
 				$adgroup_html        .= self::display_single_ad( $ad_id, $single_ad_attributes );
+				$adgroup_html .= '</div>';
 				$ad_count++;
 				$col_count++;
 				if ( intval( $attributes['num_ads'] ) === $ad_count || intval( $attributes['num_columns'] ) === $col_count ) {
