@@ -334,6 +334,8 @@ class Wpadcenter_Public {
 
 		wp_enqueue_style( 'wpadcenter-frontend' );
 
+		$lazy_load_enabled = apply_filters( 'wpadcenter_lazy_load_enabled', $ad_id );
+		$is_frontend       = WPAdcenter::is_request( 'frontend' );
 		apply_filters( 'wpadcenter_add_custom_ad_sizes_css', 'wpadcenter-frontend' );
 		wp_enqueue_script( 'wpadcenter-frontend', plugin_dir_url( __FILE__ ) . 'js/wpadcenter-public' . WPADCENTER_SCRIPT_SUFFIX . '.js', array( 'jquery' ), self::$released_version, false );
 		wp_localize_script(
@@ -413,8 +415,9 @@ class Wpadcenter_Public {
 		} elseif ( 'yes' === $open_in_new_tab ) {
 			$link_target = '_blank';
 		}
-		$width  = '';
-		$height = '';
+		$caption = get_post_meta( $ad_id, 'wpadcenter_ad_caption', true );
+		$width   = '';
+		$height  = '';
 		if ( 'none' !== $ad_size ) {
 			$ad_size                = explode( 'x', $ad_size );
 			$width                  = $ad_size[0];
@@ -454,7 +457,7 @@ class Wpadcenter_Public {
 		$single_ad_html .= '<div class="wpadcenter-ad-container" ';
 
 		if ( 'text_ad' === $ad_type ) {
-			$single_ad_html .= 'style="overflow:visible" ';
+			$single_ad_html .= '';
 		}
 
 		$single_ad_html .= '>';
@@ -519,12 +522,21 @@ class Wpadcenter_Public {
 
 		switch ( $ad_type ) {
 			case 'banner_image':
-				$banner_img          = get_the_post_thumbnail( $ad_id );
+				if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
+					$banner_img      = get_the_post_thumbnail_url( $ad_id );
+					$single_ad_html .= '<img class="wpadcenter-lazy-load-ad" width="' . $width . '" height="' . $height . '" data-src="' . esc_url( $banner_img ) . '"/>';
+				} else {
+					$banner_img      = get_the_post_thumbnail( $ad_id );
 					$single_ad_html .= $banner_img;
+				}
 				break;
 			case 'external_image_link':
-				$external_img_link   = get_post_meta( $ad_id, 'wpadcenter_external_image_link', true );
+				$external_img_link = get_post_meta( $ad_id, 'wpadcenter_external_image_link', true );
+				if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
+					$single_ad_html .= '<img class="wpadcenter-lazy-load-ad" width="' . $width . '" height="' . $height . '" data-src="' . esc_url( $external_img_link ) . '"/>';
+				} else {
 					$single_ad_html .= '<img width="' . $width . '" height="' . $height . '" src="' . esc_url( $external_img_link ) . '"/>';
+				}
 				break;
 			case 'text_ad':
 				$text_ad_code = get_post_meta( $ad_id, 'wpadcenter_text_ad_code', true );
@@ -575,22 +587,38 @@ class Wpadcenter_Public {
 				break;
 			case 'html5':
 				$html5_url       = get_post_meta( $ad_id, 'wpadcenter_html5_ad_url', true );
-				$single_ad_html .= '<div>
-					<iframe src="' . $html5_url . '" height="' . $height . '" width="' . $width . '" frameborder="0" scrolling="no"></iframe>
-				</div>';
+				$single_ad_html .= '<div>';
+				if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
+					$single_ad_html .= '<iframe class="wpadcenter-lazy-load-ad" data-src="' . $html5_url . '" height="' . $height . '" width="' . $width . '" frameborder="0" scrolling="no"></iframe>';
+				} else {
+					$single_ad_html .= '<iframe src="' . $html5_url . '" height="' . $height . '" width="' . $width . '" frameborder="0" scrolling="no"></iframe>';
+				}
+				$single_ad_html .= '</div>';
 				break;
 			case 'video_ad':
 				$video_ad_url   = get_post_meta( $ad_id, 'wpadcenter_video_ad_url', true );
 				$video_autoplay = get_post_meta( $ad_id, 'wpadcenter_video_autoplay', true );
 				$autoplay       = $video_autoplay ? 'autoplay' : '';
 				$muted          = $video_autoplay ? 'muted = "muted"' : '';
-
+				$controls       = 'controls';
+				if ( ( ( '60' === $height || '90' === $height ) && '120' === $width ) || ( '125' === $height && '125' === $width ) ) {
+					$controls = '';
+					$autoplay = 'autoplay';
+					$muted    = 'muted = "muted"';
+				}
 				if ( '' !== $video_ad_url ) {
-					$single_ad_html .= '<div>
-						<video id="wpadcenter_video"  height="' . $height . '" width="' . $width . '" controls ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
-							<source src="' . $video_ad_url . '" type="video/mp4" >
-						</video>
-					</div>';
+					$single_ad_html .= '<div>';
+					if ( $is_frontend && 'yes' === $lazy_load_enabled ) {
+						$single_ad_html .= '<video id="wpadcenter_video" class="wpadcenter-lazy-video" preload="none" height="' . $height . '" width="' . $width . '" ' . $controls . ' ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
+						<source  data-src="' . $video_ad_url . '" type="video/mp4" >
+					</video>';
+					} else {
+						$single_ad_html .= '<video id="wpadcenter_video"  height="' . $height . '" width="' . $width . '" ' . $controls . ' ' . $autoplay . ' ' . $muted . ' disablepictureinpicture controlslist="nodownload nofullscreen noplaybackrate">
+						<source src="' . $video_ad_url . '" type="video/mp4" >
+					</video>';
+
+					}
+					$single_ad_html .= '</div>';
 				}
 				break;
 			default:
@@ -600,16 +628,26 @@ class Wpadcenter_Public {
 		if ( 'text_ad' !== $ad_type ) {
 			$single_ad_html .= '</a>';
 		}
-
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
-		$single_ad_html .= '</div>';
+		if ( 'text_ad' !== $ad_type && 'import_from_adsense' !== $ad_type && 'amp_ad' !== $ad_type && 'ad_code' !== $ad_type && ! $is_frontend && 'yes' === $lazy_load_enabled ) {
+			$single_ad_html .= '<p>The preview is not lazy loaded</p>';
+		}
 
 		if ( self::wpadcenter_check_exclude_roles() && Wpadcenter::is_request( 'frontend' ) ) {
 			Wpadcenter::wpadcenter_set_impressions( $ad_id, $attributes ['placement_id'] );
 		}
 
 		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
+
+		// Flag will be set to true for animated ads.
+		$animated_ads_flag = apply_filters( 'wp_adcenter_animated_ad_flag', false );
+
+		if ( $caption && ! $animated_ads_flag ) {
+			$single_ad_html .= '<div class="wpadcenter-caption">';
+			$single_ad_html .= '<span class="wpadcenter-caption-' . $attributes['align'] . '">' . $caption . '</span>';
+			$single_ad_html .= '</div>';
+		}
 		return $single_ad_html;
 	}
 
@@ -930,6 +968,7 @@ class Wpadcenter_Public {
 					'placement_id'    => $attributes['placement_id'],
 				);
 				$adgroup_html        .= self::display_single_ad( $ad_id, $single_ad_attributes );
+				$adgroup_html .= '</div>';
 				$ad_count++;
 				$col_count++;
 				if ( intval( $attributes['num_ads'] ) === $ad_count || intval( $attributes['num_columns'] ) === $col_count ) {

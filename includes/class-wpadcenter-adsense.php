@@ -162,6 +162,15 @@ class Wpadcenter_Adsense {
 
 		$data = $this->google_api->get_account_list( $token['access_token'] );
 
+		if ( isset( $data['status'] ) && false === $data['status'] ) {
+			wp_send_json(
+				array(
+					'status' => false,
+					'body'   => __( 'No accounts found!!!', 'wpadcenter' ),
+				)
+			);
+		}
+
 		if ( isset( $data['status'] ) && 'FAILED_PRECONDITION' === $data['status'] ) {
 
 			wp_send_json(

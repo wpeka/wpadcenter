@@ -17,40 +17,40 @@
   .wpadcenter-ad-container {
 	  overflow:hidden;
   }
-  
+
   .wpadcenter-activebutton {
 	border: 1px solid;
 	border-radius: 3px;
 	padding: 18px 9px;
   }
-  
+
   .wpadcenter-align-container .dashicon {
 	padding-left: 3px;
   }
-  
+
   .wpadcenter-async-select input[type=text]:focus {
 	box-shadow: none;
   }
-  
+
   .Wpadcenter-gutenberg-container .components-placeholder {
 	background-color: #F3F6FF;
   }
-  
+
   .Wpadcenter-gutenberg-container {
 	z-index: 20;
 	display: block;
 	clear: both;
   }
-  
+
   .wpadcenter-aligncenter.wpadcenter-adgroup__row {
 	  display:flex;
 	justify-content: center;
   }
-  
+
   .wpadcenter-alignright.wpadcenter-adgroup__row  {
 	justify-content:flex-end;
   }
-  
+
   .wpadcenter-alignleft.wpadcenter-adgroup__row {
 	  justify-content:flex-start;
   }
@@ -60,11 +60,11 @@
 		  justify-content:center;
 	  }
   }
-  
+
   #wpadcenter_ad {
 	display: block;
   }
-  
+
   .wpadcenter-adgroup-widget-container {
 	overflow: hidden;
   }
@@ -93,7 +93,7 @@
 	justify-content: center;
 	margin-top: 20px;
 }
-  
+
 
   .wpadcenter-{
 	&200x200,
@@ -135,25 +135,26 @@
 		&ad-inner{
 			width:100%;
 		}
-		
+
 
 }
-  
+
   .wpadcenter-alignright {
 	float: right;
 	margin-left: 10px;
+	clear: both;
   }
-  
+
   .wpadcenter-alignleft {
 	float: left;
 	margin-right: 10px;
   }
-  
+
   .wpadcenter-aligncenter {
 	display: block;
 	margin: 10px auto;
   }
-  
+
   .wpadcenter-{
 	  &200x200{
 		  &:not(.wpadcenter-maxwidth) {
@@ -360,4 +361,28 @@
 }
 .wpadcenter-specific-devices__label{
 	margin-top:25px;
+}
+.wpadcenter-caption {
+	max-width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0 !important;
+}
+.wpadcenter-caption-alignnone {
+	margin-left: 10px;
+}
+.wpadcenter-caption-alignright {
+	display: block;
+	float: right;
+	clear: both;
+	margin-right: 10px;
+}
+.wpadcenter-caption-alignleft {
+	display: block;
+	margin-left: 10px;
+	clear: both;
+}
+.wpadcenter-caption-aligncenter {
+	display: block;
+	text-align: center;
 }

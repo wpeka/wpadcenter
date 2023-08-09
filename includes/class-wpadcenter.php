@@ -80,7 +80,7 @@ class Wpadcenter {
 		if ( defined( 'WPADCENTER_VERSION' ) ) {
 			$this->version = WPADCENTER_VERSION;
 		} else {
-			$this->version = '2.3.8';
+			$this->version = '2.5.4';
 		}
 		$this->plugin_name = 'wpadcenter';
 
@@ -88,7 +88,22 @@ class Wpadcenter {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 
+	}
+
+	/**
+	 * To enqueue scripts for elementor custom icon.
+	 */
+	public function enqueue_admin_styles() {
+		wp_register_style(
+			'adcenter-icon',
+			plugin_dir_url( __DIR__ ) . '/admin/css/adcentericon' . WPADCENTER_SCRIPT_SUFFIX . '.css',
+			array(),
+			$this->version,
+			'all'
+		);
+		wp_enqueue_style( 'adcenter-icon' );
 	}
 
 	/**
@@ -225,6 +240,7 @@ class Wpadcenter {
 		$this->loader->add_action( 'wp_ajax_wpadcenter_adgroup_gutenberg_preview', $plugin_admin, 'wpadcenter_adgroup_gutenberg_preview' );
 		$this->loader->add_action( 'wp_ajax_save_settings', $plugin_admin, 'wpadcenter_settings' );
 		$this->loader->add_action( 'wp_ajax_wpadcenter_singlead_gutenberg_preview', $plugin_admin, 'wpadcenter_singlead_gutenberg_preview' );
+		$this->loader->add_action( 'wp_ajax_wpadcenter_adtypes_gutenberg_preview', $plugin_admin, 'wpadcenter_adtypes_gutenberg_preview' );
 		$this->loader->add_filter( 'post_row_actions', $plugin_admin, 'wpadcenter_remove_post_row_actions', 10, 1 );
 		$this->loader->add_action( 'restrict_manage_posts', $plugin_admin, 'wpadcenter_add_custom_filters' );
 		$this->loader->add_filter( 'parse_query', $plugin_admin, 'wpadcenter_custom_filters_query', 10, 1 );
@@ -237,6 +253,10 @@ class Wpadcenter {
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wpadcenter_upgrade_to_pro' );
 		$this->loader->add_action( 'wp_ajax_upload_html5_file', $plugin_admin, 'wpadcenter_upload_html5_file' );
 		$this->loader->add_action( 'before_delete_post', $plugin_admin, 'wpadcenter_on_delete_ad' );
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'wpadcenter_ad_created_admin_notice' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_ad_created_admin_notice_close', 5 );
+		$this->loader->add_filter( 'rest_wpadcenter-adgroups_query', $plugin_admin, 'wpadcenter_rest_posts_per_page', 10, 2 );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'wpadcenter_redirect_after_activate' );
 	}
 
 	/**

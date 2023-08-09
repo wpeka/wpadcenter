@@ -256,4 +256,107 @@ body {
 .adc-container .adc-container-basic .adc-basic-section .adc-section-content .adc-feature .adc-feature-content .adc-feature-text {
 	font-size: 14px;
 }
-
+.adc-container .adc-container-main .adc-video-section {
+	padding: 1px !important;
+	height: 350px;
+}
+.adc-help-section{
+	display:flex;
+	justify-content: space-between;
+}
+.adc-help-card{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 180px;
+	padding: 10px 10px 30px 10px;
+    background-color: #FFFFFF;
+    border-radius: 9px;
+    box-shadow: 0 3px 12px rgb(0 0 0 / 15%);
+}
+.adc-help-card-icon{
+	width:180px;
+	background-color: #FFFFFF;
+}
+.adc-help-card-icon .adc-help-img{
+	width: 80px;
+}
+.adc-help-card-description{
+	width: 180px;
+}
+.adc-help-card-description .adc-help-card-heading{
+	margin:0;
+}
+.adc-help-card-description .adc-help-card-summary{
+	font-size: 0.9rem;
+	margin: 10px 0;
+}
+.adc-help-card-link a:active, a:focus {
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	-moz-outline-style: none;
+}
+.adc-container .adc-container-basic .adc-next-steps-sectiong {
+	display: flex;
+	align-items: center;
+}
+.adc-container .adc-container-main p.adc-next-steps-title-heading,
+.adc-container .adc-container-basic p.adc-next-steps-title-heading {
+	font-size: 26px;
+	font-weight: 600;
+}
+.adc-container .adc-container-main .adc-button {
+	border: 1px solid;
+	border-radius: 4px;
+	color: #fff;
+	cursor: pointer;
+	display: block;
+	font-weight: 600;
+	text-decoration: none;
+	background-color: #2862b1;
+	font-size: inherit;
+	line-height: inherit;
+	padding: 15px 4px;
+	margin: 0 auto;
+	margin-top: 25px;
+	text-transform: uppercase;
+	width: 40%;
+}
+.adc-container .adc-container-main .adc-next-steps-section .adc-button-small {
+	width: 20%;
+	margin-bottom: 25px;
+}
+.adc-container .adc-container-main .adc-button:hover {
+	background-color: #18488a;
+}
+.adc-next-steps-section-link a:active, a:focus {
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	-moz-outline-style: none;
+}
+.adc-container .adc-container-main .adc-feature-section .adc-feature-section-content {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	text-align: left;
+	gap: 5%;
+	margin: 40px auto;
+}
+.adc-container .adc-container-main .adc-feature-section-content .adc-feature-section-card-list {
+	list-style: none;
+}
+.adc-container .adc-container-main .adc-feature-section-content .adc-feature-section-card-list .adc-feature-section-card-list-item::before {
+	content: "\2022";
+	color: black;
+	font-weight: bold;
+	display: inline-block;
+	width: 1.5rem;
+}
+.adc-container .adc-container-main .adc-feature-section-coupon {
+	margin-top: 40px;
+}
+.adc-container .adc-container-main .adc-feature-section-coupon .adc-feature-section-coupon-code {
+	font-weight: 700;
+}

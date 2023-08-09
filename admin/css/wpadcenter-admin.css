@@ -73,6 +73,12 @@
 .edit-post-meta-boxes-area {
   margin: 0 !important;
 }
+#target_ads_by {
+	margin-top: 10px;
+}
+#include_location .location-options {
+	width: 100% !important;
+}
 #geo_countries, #geo_cities {
 	margin-top: 10px;
 }
@@ -80,6 +86,16 @@
 #geo_countries .select2-container,
 #geo_cities .geo_cities {
 	width: 100% !important;
+}
+#lazy_load_offset {
+	margin-top: 10px;
+}
+.wpadcenter-lazy-load-offset {
+	font-weight: bold !important;
+	margin-top: 10px;
+}
+.wpadcenter-lazy-load-label {
+	margin-bottom: 0 !important;
 }
 .wpadcenter-amp-delete-attr-button{
 	height:30px;
@@ -120,14 +136,14 @@
 	text-align: center;
 	padding: 5px 5px;
 	border-radius: 6px;
-   
+
 	/* Position the tooltip text */
 	position: absolute;
 	z-index: 1001;
 	top: -5px;
 	right: 105%;
   }
-  
+
   /* Show the tooltip text when you mouse over the tooltip container */
   .wpadcenter-tooltip:hover .wpadcenter-tooltiptext {
 	visibility: visible;
@@ -152,9 +168,9 @@
 	z-index: -1;
 }
 .wpadcenter-inputfile + label {
-    color: white;
-    background-color: green;
-    display: inline-block;
+	color: white;
+	background-color: green;
+	display: inline-block;
 	padding:5px;
 }
 
@@ -187,11 +203,11 @@
 }
 
 #wpadcenter_video_filename_close::before {
-    content: '\274C';
-    color: #000;
-    font-size: 12px;
-    margin-left: -3px;
-    margin-right: 7px;
+	content: '\274C';
+	color: #000;
+	font-size: 12px;
+	margin-left: -3px;
+	margin-right: 7px;
 }
 
 #wpadcenter_video_upload_container{
@@ -201,11 +217,140 @@
 
 #wpadcenter_video_filename_container{
 	padding-top: 6px;
-    padding-left: 6px;
+	padding-left: 6px;
 }
 #wpadcenter_video_filename{
 	padding-right:4px;
 }
 #wpadcenter_video_autoplay{
 	margin-top:2px;
+}
+#wpadcenter-blocks-widgets-deprecation-warning{
+	display: flex;
+	justify-content: space-between;
+	line-height: 1.4;
+	padding: 11px 15px;
+	font-size: 14px;
+	margin: 25px 20px 0 2px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-left-width: 4px;
+	border-left-color: #d0342c;
+}
+#wpadcenter-blocks-widgets-deprecation-warning>p {
+	margin: 0px;
+	font-weight: bold;
+}
+
+.wpadcenter-deprecation-notice {
+	background: 0 0;
+	color: #787c82;
+	display: block;
+	font: normal 16px/20px dashicons;
+	height: 20px;
+	text-align: center;
+	width: 20px;
+	border: none;
+}
+
+.wpadcenter-deprecation-notice .dashicons{
+	font-size: 15px;
+	height: 15px;
+	width: 15px;
+}
+
+.wpadcenter-deprecation-notice:hover {
+	color: #d63638;
+	cursor: pointer;
+}
+#wpadcenter-created-ad-overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 2;
+}
+#wpadcenter-created-ad-popup {
+	padding: 0px;
+	border-radius: 4px 4px;
+	width: 46%;
+	height: auto;
+	top: 15%;
+	position: fixed;
+	left: 27%;
+	z-index: 200;
+	background-color: #f2f2f2;
+}
+.wpadcenter-created-ad-popup-heading{
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	padding: 20px 15px;
+	border-bottom: 1px solid #d3d3d3;
+	font-size: 1.5rem;
+	font-weight: 600;
+	text-align: center;
+}
+.wpadcenter-created-ad-popup-methods {
+	margin: 25px 10px;
+	padding: 10px 20px;
+}
+.wpadcenter-created-ad-popup-method {
+	border: 1px solid #d3d3d3;
+	padding: 15px;
+}
+.wpadcenter-created-ad-popup-method-number {
+	font-weight: 700;
+	color: #333;
+	font-size: 1.2rem;
+}
+.wpadcenter-created-ad-popup-method-details {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.wpadcenter-created-ad-popup-method-details>p {
+	max-width: 60%;
+}
+.wpadcenter-created-ad-popup-method-details>div>a {
+	padding: 5px 10px;
+	border: 1px solid #2271b1;
+	border-radius: 2px;
+	text-decoration: none;
+	background-color: #2271b1;
+	color: white;
+}
+.wpadcenter-created-ad-popup-shortcode {
+	border: 1px solid lightyellow;
+	border-radius: 5px;
+	background-color: lightyellow;
+	padding: 10px;
+	text-align: center;
+	margin-left: 20%;
+}
+.wpadcenter-created-ad-popup-new {
+	margin: 5px;
+}
+.wpadcenter-created-ad-popup-form {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 25px 10px;
+	margin-top: 0px;
+	padding: 0px 20px;
+}
+.wpadcenter-created-ad-popup-close-button {
+	cursor: pointer;
+	padding: 5px 15px;
+	border: 1px solid #2271b1;
+	border-radius: 2px;
+	text-decoration: none;
+	background-color: #2271b1;
+	color: white;
+}
+.wpadcenter-created-ad-popup-form>div>label {
+	vertical-align: top;
 }

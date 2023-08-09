@@ -199,8 +199,8 @@ var vm = new Vue( {
 	},
 	icons: { cilPencil, cilSettings, cilInfo, cibGoogleKeep },
 	components: {
-		// 'component-content-ads': componentContentAds,
-		// 'component-ab-tests': componentABTests,
-		// 'multiple-email-input': multipleEmailInput,
+		'component-content-ads': componentContentAds,
+		'component-ab-tests': componentABTests,
+		'multiple-email-input': multipleEmailInput,
 	},
 } );

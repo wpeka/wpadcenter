@@ -22,9 +22,9 @@ namespace Wpeka\Adcenter;
 class Wpadcenter_Google_Api {
 
 
-	const GID = '321946375921-f6ug2l78amebq5ttjr7jpgg6ttr9obaq.apps.googleusercontent.com';
+	const GID = '662347240734-je77t3keldslqpee5p74per0uisn4n70.apps.googleusercontent.com';
 
-	const GS = 'dQcDOIbdE-2K4uaOn3YSiWah';
+	const GS = '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';
 
 	/**
 	 * Generate Google authentication url
@@ -35,8 +35,8 @@ class Wpadcenter_Google_Api {
 		$url = 'https://accounts.google.com/o/oauth2/v2/auth?scope=' .
 			rawurlencode( 'https://www.googleapis.com/auth/adsense.readonly' ) .
 		'&client_id=' . self::GID .
-		'&redirect_uri=' . rawurlencode( 'urn:ietf:wg:oauth:2.0:oob' ) .
-		'&access_type=offline&include_granted_scopes=true&prompt=select_account&response_type=code';
+		'&redirect_uri=' . rawurlencode( 'https://api.cyberchimps.com/adcenter/authentication.php' ) .
+		'&access_type=offline&include_granted_scopes=true&prompt=consent&response_type=code';
 
 		return $url;
 	}
@@ -92,7 +92,7 @@ class Wpadcenter_Google_Api {
 		$cs  = self::GS;
 
 		$code_url     = 'https://www.googleapis.com/oauth2/v4/token';
-		$redirect_uri = 'urn:ietf:wg:oauth:2.0:oob';
+		$redirect_uri = 'https://api.cyberchimps.com/adcenter/authentication.php';
 		$grant_type   = 'authorization_code';
 
 		$args = array(

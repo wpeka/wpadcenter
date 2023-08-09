@@ -25,11 +25,6 @@ Vue.component( 'WelcomeSection', {
 			domProps: {
 				textContent: obj.welcome_text,
 			},
-		} ), createElement( 'p', {
-			staticClass: 'adc-title-subheading',
-			domProps: {
-				textContent: obj.welcome_subtext,
-			},
 		} ) ] ),
 		createElement( 'div', {
 			staticClass: 'adc-section-content',
@@ -37,65 +32,177 @@ Vue.component( 'WelcomeSection', {
 			domProps: {
 				innerHTML: obj.welcome_description,
 			},
-		} ), createElement( 'p', {
-			domProps: {
-				innerHTML: obj.welcome_sub_desc,
-			},
 		} ) ] ) ] );
 	},
 } );
 
-Vue.component( 'SettingsSection', {
+Vue.component('VideoSection', {
+    render(createElement) {
+        return createElement('div', {
+            staticClass: 'adc-video-section'
+        }, [createElement('iframe', {
+            attrs: {
+                width: '746',
+                height: '350',
+                src: obj.video_url
+            },
+        })]);
+    }
+});
+
+Vue.component( 'HelpSection', {
 	methods: {
-		createSettingsItems: function( createElement, items ) {
-			var html = [];
-			items.forEach( ( value, index ) => {
-				if ( index < 2 ) {
-					var el = createElement( 'li', {
-						domProps: {
-							innerHTML: value,
-						},
-					} );
-				} else if ( this.$parent.is_pro ) {
-					var el = createElement( 'li', {
-						domProps: {
-							innerHTML: value,
-						},
-					} );
-				} else {
-					var el = createElement( 'li', {
-						domProps: {
-							innerHTML: value + ' <sup>Pro</sup>',
-						},
-					} );
-				}
-				html.push( el );
-			} );
-			return html;
-		},
-	},
-	render( createElement ) {
-		var self = this;
-		return createElement( 'div', {
-			staticClass: 'adc-settings-section',
-		}, [ createElement( 'div', {
-			staticClass: 'adc-section-content',
-		}, [ createElement( 'p', {
-			domProps: {
-				textContent: obj.configure.text,
-			},
-		} ), createElement( 'ul', {
-			staticClass: 'adc-settings-items',
-		}, [ self.createSettingsItems( createElement, obj.configure.settings_items ) ] ), createElement( 'a', {
-			staticClass: 'adc-button',
-			domProps: {
-				textContent: obj.configure.button_text,
-				href: obj.configure.url,
-				target: '_blank',
-			},
-		} ) ] ) ] );
-	},
+        createHelpCards: function(createElement) {
+            var helpCards = [];
+            for (const [key, value] of Object.entries(obj.help_section)){
+
+                var helpCard = [createElement('div', {
+                    staticClass: 'adc-help-card'
+                },[createElement('div', {
+                    staticClass: 'adc-help-card-top',
+                    },[createElement('div', {
+                    staticClass: 'adc-help-card-icon',
+                    domProps: {
+                        innerHTML: '<img class="adc-help-img" src='+ value.image_src + key + '.png >'
+                    }
+                }),
+                createElement('div', {
+                    staticClass: 'adc-help-card-description'
+                },
+                [createElement('h3', {
+                    staticClass: 'adc-help-card-heading',
+                    domProps: {
+                        innerHTML: value.title
+                    }
+                }),
+                createElement('p', {
+                    staticClass: 'adc-help-card-summary',
+                    domProps: {
+                        innerHTML: value.description
+                    }
+                }),])]),
+                createElement('p', {
+                    staticClass: 'adc-help-card-link',
+                    domProps: {
+                        innerHTML: '<a  target="_blank" href=' + value.link +' >' + value.link_title + '</a>'
+                    }
+                })])];
+                helpCards.push(helpCard);
+            };
+            return helpCards;
+
+        }
+    },
+    render(createElement) {
+        var self = this;
+        return createElement('div', {
+            staticClass: 'adc-help-section',
+            attrs:{
+                display: 'flex',
+                justifyContent:'space-between',
+            }
+        }, [self.createHelpCards(createElement)]);
+    }
 } );
+
+Vue.component('NextStepsSection', {
+    render(createElement) {
+        return createElement('div', {
+            staticClass: 'adc-next-steps-section'
+        }, [
+            createElement('p', {
+                staticClass: 'adc-next-steps-title-heading',
+                domProps: {
+                    textContent: obj.next_steps_title
+                }
+            }),createElement('a', {
+                staticClass: 'adc-button',
+                domProps: {
+                    textContent: obj.configure_settings.text,
+                    href: obj.configure_settings.url
+                }
+            }), createElement('a', {
+                staticClass: 'adc-button adc-button-small',
+                domProps: {
+                    textContent: obj.create_ad.text,
+                    href: obj.create_ad.url
+                }
+            }), createElement( 'p', {
+                staticClass: 'adc-next-steps-section-link',
+                domProps: {
+                    innerHTML: '<a  target="_blank" href=' + obj.tutorial.url +' >' + obj.tutorial.text + '</a>'
+                }
+            } )
+        ]);
+    }
+});
+
+Vue.component('FeatureSection', {
+    methods: {
+        createFeatureCards(createElement, start, end) {
+            var featureCards = []
+            for(var i=start; i<end; i++) {
+                var featureCard = [
+                    createElement('li', {
+                        staticClass: 'adc-feature-section-card-list-item',
+                        domProps: {
+                            textContent: obj.features[i]
+                        }
+                    })
+                ];
+                featureCards.push(featureCard);
+            }
+            return createElement('ul', {
+                staticClass: 'adc-feature-section-card-list'
+            }, [featureCards]);
+        }
+    },
+    render(createElement) {
+        var self = this;
+        if( !obj.is_pro ) {
+            return createElement('div', {
+                staticClass: 'adc-feature-section',
+            }, [
+                createElement('p', {
+                    staticClass: 'adc-title-heading',
+                    domProps: {
+                        textContent: obj.features_title
+                    }
+                }),
+                createElement('div', {
+                    staticClass: 'adc-feature-section-content'
+                }, [
+                    self.createFeatureCards( createElement, 0, 4 ),
+                    self.createFeatureCards( createElement, 4, 8 )
+                ]),
+                createElement('a', {
+                    staticClass: 'adc-button',
+                    domProps: {
+                        textContent: obj.upgrade_button.text,
+                        href: obj.upgrade_button.url
+                    }
+                }),
+                createElement('p', {
+                    staticClass: 'adc-feature-section-coupon',
+                }, [createElement('span', {
+                    domProps: {
+                        textContent: obj.coupon_text.limited_offer_text
+                    }
+                }), createElement('span', {
+                    staticClass: 'adc-feature-section-coupon-code',
+                    domProps: {
+                        textContent: obj.coupon_text.coupon_code
+                    }
+                }), createElement('span', {
+                    domProps: {
+                        textContent: obj.coupon_text.discount_text
+                    }
+                })])
+            ])
+        }
+    }
+})
+
 
 var adcapp = new Vue( {
 	el: '#adc-gettingstarted-app',
@@ -109,8 +216,7 @@ var adcapp = new Vue( {
 		}, [ createElement( 'header-section' ),
 			createElement( 'div', {
 				staticClass: 'adc-container-main',
-			}, [ createElement( 'welcome-section' ), createElement( 'settings-section' ) ] ),
-
+			}, [ createElement( 'welcome-section' ), createElement( 'video-section' ), createElement( 'help-section' ), createElement( 'next-steps-section' ), createElement( 'feature-section' ) ] ),
 			createElement( 'div', {
 				staticClass: 'adc-container-basic',
 			}, [] ) ] );
