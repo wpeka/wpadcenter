@@ -637,6 +637,8 @@ class Wpadcenter_Public {
 			$single_ad_html .= '<div class="wpadcenter-caption">';
 			$single_ad_html .= '<span class="wpadcenter-caption-' . $attributes['align'] . '">' . $caption . '</span>';
 			$single_ad_html .= '</div>';
+		}else{
+			$single_ad_html .= '</div>';
 		}
 		if ( 'text_ad' !== $ad_type && 'import_from_adsense' !== $ad_type && 'amp_ad' !== $ad_type && 'ad_code' !== $ad_type && ! $is_frontend && 'yes' === $lazy_load_enabled ) {
 			$single_ad_html .= '<p>The preview is not lazy loaded</p>';
