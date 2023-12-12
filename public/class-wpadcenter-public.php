@@ -630,6 +630,16 @@ class Wpadcenter_Public {
 		}
 		$single_ad_html .= '</div>';
 		$single_ad_html .= '</div>';
+		// Flag will be set to true for animated ads.
+		$animated_ads_flag = apply_filters( 'wp_adcenter_animated_ad_flag', false );
+
+		if ( $caption && ! $animated_ads_flag ) {
+			$single_ad_html .= '<div class="wpadcenter-caption">';
+			$single_ad_html .= '<span class="wpadcenter-caption-' . $attributes['align'] . '">' . $caption . '</span>';
+			$single_ad_html .= '</div>';
+		}else{
+			$single_ad_html .= '</div>';
+		}
 		if ( 'text_ad' !== $ad_type && 'import_from_adsense' !== $ad_type && 'amp_ad' !== $ad_type && 'ad_code' !== $ad_type && ! $is_frontend && 'yes' === $lazy_load_enabled ) {
 			$single_ad_html .= '<p>The preview is not lazy loaded</p>';
 		}
@@ -640,14 +650,6 @@ class Wpadcenter_Public {
 
 		$single_ad_html = apply_filters( 'before_returning_single_ad', $single_ad_html, $ad_id );
 
-		// Flag will be set to true for animated ads.
-		$animated_ads_flag = apply_filters( 'wp_adcenter_animated_ad_flag', false );
-
-		if ( $caption && ! $animated_ads_flag ) {
-			$single_ad_html .= '<div class="wpadcenter-caption">';
-			$single_ad_html .= '<span class="wpadcenter-caption-' . $attributes['align'] . '">' . $caption . '</span>';
-			$single_ad_html .= '</div>';
-		}
 		return $single_ad_html;
 	}
 
@@ -968,7 +970,6 @@ class Wpadcenter_Public {
 					'placement_id'    => $attributes['placement_id'],
 				);
 				$adgroup_html        .= self::display_single_ad( $ad_id, $single_ad_attributes );
-				$adgroup_html .= '</div>';
 				$ad_count++;
 				$col_count++;
 				if ( intval( $attributes['num_ads'] ) === $ad_count || intval( $attributes['num_columns'] ) === $col_count ) {
