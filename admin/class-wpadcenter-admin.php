@@ -3082,8 +3082,8 @@ class Wpadcenter_Admin {
 
 		$ad_order = 'off';
 		if ( array_key_exists( 'ad_order', $attributes ) ) {
-			$checked = $attributes['ad_order'];
-			if ( 'true' === $checked ) {
+			$checked = filter_var($attributes['ad_order'], FILTER_VALIDATE_BOOLEAN);
+			if ( true === $checked ) {
 				$ad_order = 'on';
 			} else {
 				$ad_order = 'off';
