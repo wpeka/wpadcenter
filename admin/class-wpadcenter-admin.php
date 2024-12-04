@@ -533,13 +533,14 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_monthly_schedule_clean_stats() {
 		global $wpdb;
+		$table_ads_statistics = esc_sql( $wpdb->prefix . 'ads_statistics' ); 
 		if ( class_exists( 'Wpadcenter' ) ) {
 			$the_options = Wpadcenter::wpadcenter_get_settings();
 			$trim_point  = $the_options['trim_stats'];
 			if ( isset( $trim_point ) && $trim_point > 0 ) {
-				$stat_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ad_id FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date < DATE_ADD( NOW() , INTERVAL -%d MONTH )', array( $trim_point ) ) ); // db call ok; no-cache ok.
+				$stat_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ad_id FROM  `$table_ads_statistics` WHERE ad_date < DATE_ADD( NOW() , INTERVAL -%d MONTH )', array( $trim_point ) ) ); // db call ok; no-cache ok.
 				if ( is_array( $stat_ids ) && ! empty( $stat_ids ) ) {
-					$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date < DATE_ADD( NOW() , INTERVAL -%d MONTH )', array( $trim_point ) ) ); // db call ok; no-cache ok.
+					$wpdb->query( $wpdb->prepare( 'DELETE FROM `$table_ads_statistics` WHERE ad_date < DATE_ADD( NOW() , INTERVAL -%d MONTH )', array( $trim_point ) ) ); // db call ok; no-cache ok.
 				}
 			}
 		}
@@ -1547,7 +1548,9 @@ class Wpadcenter_Admin {
 			case 'stats-for-today':
 				$today = gmdate( 'Y-m-d' );
 				global $wpdb;
-				$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics where ad_date=%s AND ad_id=%d', array( $today, $ad_id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$table_ads_statistics = esc_sql( $wpdb->prefix . 'ads_statistics' ); 
+
+				$results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table_ads_statistics} WHERE ad_date = %s AND ad_id = %d", $today, $ad_id) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 				if ( ! count( $results ) ) {
 					$return_value = '0 clicks / 0 views / 0.00% CTR';
 				} else {
@@ -1789,7 +1792,8 @@ class Wpadcenter_Admin {
 	 */
 	public function wpadcenter_ad_statistics( $post ) {
 		global $wpdb;
-		$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date > now() - interval 7 day and ad_id = %d;', $post->ID ) );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$table_ads_statistics = esc_sql( $wpdb->prefix . 'ads_statistics' ); 
+ 		$results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table_ads_statistics} WHERE ad_date > now() - interval 7 day and ad_id = %d;", $post->ID ) );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		if ( empty( $results ) ) {
 			$results = array();
 		}
@@ -2785,7 +2789,12 @@ class Wpadcenter_Admin {
 				return;
 			}
 			global $wpdb;
-			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'ads_statistics WHERE ad_date BETWEEN %s AND %s AND ad_id IN (' . implode( ',', $ad_ids ) . ')', array( $start_date, $end_date ) ) ); // phpcs:ignore
+			$table_ads_statistics = esc_sql( $wpdb->prefix . 'ads_statistics' ); 
+			$placeholders = implode( ',', array_fill( 0, count( $ad_ids ), '%d' ) );
+			$records = $wpdb->get_results( $wpdb->prepare(
+				"SELECT * FROM `$table_ads_statistics` WHERE ad_date BETWEEN %s AND %s AND ad_id IN ($placeholders)",
+				array_merge( array( $start_date, $end_date ), $ad_ids ))
+			);
 			if ( is_array( $records ) ) {
 				foreach ( $records as $record ) {
 					$record->ad_title = ! empty( get_the_title( intval( $record->ad_id ) ) ) ? get_the_title( intval( $record->ad_id ) ) : __( '(no title)', 'wpadcenter' );
@@ -2816,10 +2825,11 @@ class Wpadcenter_Admin {
 			if ( get_option( 'wpadcenter-pro-tests', true ) ) {
 				$placement_ids = explode( ',', $test['placements'] );
 				global $wpdb;
+				$table_placements_statistics = esc_sql( $wpdb->prefix .'placements_statistics');
 				if ( is_array( $placement_ids ) ) {
 					foreach ( $placement_ids as $placement_id ) {
 
-						$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'placements_statistics WHERE placement_id = %s', array( $placement_id ) ) ); // db call ok; db cache ok.
+						$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM `$table_placements_statistics` WHERE placement_id = %s', array( $placement_id ) ) ); // db call ok; db cache ok.
 						array_push( $result, ...$records );
 					}
 				}
@@ -3500,7 +3510,7 @@ class Wpadcenter_Admin {
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'adgroups_security', 'security' );
 		}
-		$array = get_terms( 'wpadcenter-adgroups', array( 'hide_empty' => false ) );
+		$array = get_terms( array('taxonomy' => 'wpadcenter-adgroups'));
 		echo wp_json_encode( $array );
 		wp_die();
 	}
@@ -3739,7 +3749,7 @@ class Wpadcenter_Admin {
 		$ad_alignment = 'alignnone';
 		$alignment = '';
 		if ( ! empty( $_POST['alignment'] ) ) {
-			$alignment = $_POST['alignment'];
+			$alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ));
 			$ad_alignment = $this->get_alignment_position($alignment);
 		}
 		$max_width_check = false;
@@ -3796,7 +3806,7 @@ class Wpadcenter_Admin {
 		$ad_alignment = 'alignnone';
 		$alignment = '';
 		if ( ! empty( $_POST['alignment'] ) ) {
-			$alignment = $_POST['alignment'];
+			$alignment = sanitize_text_field( wp_unslash( $_POST['alignment'] ));
 			$ad_alignment = $this->get_alignment_position($alignment);
 		}
 		$max_width_check = false;

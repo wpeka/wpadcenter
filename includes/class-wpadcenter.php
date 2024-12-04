@@ -80,7 +80,7 @@ class Wpadcenter {
 		if ( defined( 'WPADCENTER_VERSION' ) ) {
 			$this->version = WPADCENTER_VERSION;
 		} else {
-			$this->version = '2.5.7';
+			$this->version = '2.5.9';
 		}
 		$this->plugin_name = 'wpadcenter';
 
@@ -621,6 +621,7 @@ class Wpadcenter {
 	public static function wpadcenter_set_impressions( $ad_id, $placement_id = '' ) {
 		global $wpdb;
 		$meta           = get_post_meta( $ad_id, 'wpadcenter_ads_stats', true );
+		$table_placements_statistics = esc_sql( $wpdb->prefix .'placements_statistics');
 		$today          = gmdate( 'Y-m-d' );
 		$placement_name = '';
 
@@ -632,13 +633,13 @@ class Wpadcenter {
 				}
 			}
 
-			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'placements_statistics WHERE placement_date = %s and placement_id = %s', array( $today, $placement_id ) ) ); // db call ok; no-cache ok.
+			$records = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM  `$table_placements_statistics` WHERE placement_date = %s and placement_id = %s', array( $today, $placement_id ) ) ); // db call ok; no-cache ok.
 			if ( count( $records ) ) {
 				$record      = $records[0];
 				$impressions = $record->placement_impressions + 1;
-				$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'placements_statistics SET placement_impressions = %d WHERE placement_date = %s and placement_id = %d', array( $impressions, $today, $placement_id ) ) ); // db call ok; no-cache ok.
+				$wpdb->query( $wpdb->prepare( 'UPDATE `$table_placements_statistics` SET placement_impressions = %d WHERE placement_date = %s and placement_id = %d', array( $impressions, $today, $placement_id ) ) ); // db call ok; no-cache ok.
 			} else {
-				$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `' . $wpdb->prefix . 'placements_statistics` (`placement_impressions`, `placement_date`, `placement_name`, `placement_id`) VALUES (%d,%s,%s,%s)', array( 1, $today, $placement_name, $placement_id ) ) ); // db call ok; no-cache ok.
+				$wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO `$table_placements_statistics` (`placement_impressions`, `placement_date`, `placement_name`, `placement_id`) VALUES (%d,%s,%s,%s)', array( 1, $today, $placement_name, $placement_id ) ) ); // db call ok; no-cache ok.
 			}
 		}
 

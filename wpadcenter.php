@@ -15,7 +15,7 @@
  * Plugin Name:       WPAdCenter
  * Plugin URI:        https://wpadcenter.com
  * Description:       Advertising management plugin for WordPress.
- * Version:           2.5.7
+ * Version:           2.5.9
  * Author:            WPEka Club
  * Author URI:        https://club.wpeka.com/
  * License:           GPL-2.0+
@@ -116,10 +116,52 @@ run_wpadcenter();
  *
  * @return void echos html to render on frontend
  */
+
 function wpadcenter_display_ad( $atts ) {
-	$shortcode = '[wpadcenter_ad id=' . $atts['id'] . ' align=' . $atts['align'] . ']';
-	echo do_shortcode( $shortcode );
+    // Default allowed HTML tags and attributes
+    $allowed_html = [
+        'div' => [
+            'id' => true,
+            'class' => true,
+            'style' => true,
+        ],
+        'span' => [
+            'class' => true,
+        ],
+    ];
+
+    // Sanitize the attributes
+    $id = isset( $atts['id'] ) ? intval( $atts['id'] ) : 0; // Ensure ID is an integer
+    $align = isset( $atts['align'] ) ? sanitize_text_field( $atts['align'] ) : 'left'; // Sanitize text input
+
+    // Whitelist valid align values
+    $allowed_alignments = [ 'left', 'center', 'right' ];
+    if ( ! in_array( $align, $allowed_alignments, true ) ) {
+        $align = 'left'; // Default to 'left' if invalid value is provided
+    }
+
+    // Prepare shortcode attributes
+    $shortcode_attributes = [
+        'id' => $id,
+        'align' => $align,
+    ];
+
+    // Sanitize the attributes using wp_kses
+    foreach ( $shortcode_attributes as $key => $value ) {
+        $shortcode_attributes[ $key ] = wp_kses( $value, $allowed_html );
+    }
+
+    // Construct the sanitized shortcode
+    $shortcode = sprintf(
+        '[wpadcenter_ad id="%s" align="%s"]',
+        esc_attr( $shortcode_attributes['id'] ),
+        esc_attr( $shortcode_attributes['align'] )
+    );
+
+    // Output the sanitized shortcode
+    echo do_shortcode( $shortcode );
 }
+
 
 /**
  * Wpadcenter display ad group.

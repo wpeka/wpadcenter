@@ -32,6 +32,8 @@ class Wpadcenter_Deactivator {
 		wp_clear_scheduled_hook( 'wpadcenter_monthly_cron' );
 		delete_option( 'wpadcenter_update_placements_5.2.3' );
 		delete_option( 'wpadcenter_placement_db' );
+		delete_transient( 'wpadcenter_review_transient' );
+    	delete_option( 'wpadcenter_review_pending' );
 
 	}
 

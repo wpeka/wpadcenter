@@ -268,27 +268,28 @@ class Wpadcenter_Public {
 				'placement_id'    => '',
 			),
 			$atts
-		);
+		);	
 		if ( 'on' === $atts['max_width'] ) {
 			$atts['max_width'] = true;
 		} else {
 			$atts['max_width'] = false;
 		}
-
-		$ad_id = $atts['id'];
-
+	
 		$atts['devices'] = ! $atts['devices'] ? array( 'mobile', 'tablet', 'desktop' ) : explode( ',', $atts['devices'] );
-
+	
 		$attributes = array(
-			'align'        => 'align' . $atts['align'],
-			'max_width'    => $atts['max_width'],
-			'max_width_px' => $atts['max_width_value'],
+			'align'        => 'align' . esc_attr( $atts['align'] ), 
+			'max_width'    => $atts['max_width'], 
+			'max_width_px' => esc_attr( $atts['max_width_value'] ),
 			'devices'      => $atts['devices'],
-			'placement_id' => $atts['placement_id'],
+			'placement_id' => esc_attr( $atts['placement_id'] ),
 		);
-		return self::display_single_ad( $atts['id'], $attributes );
-
-	}
+	
+		return self::display_single_ad(
+			(int) $atts['id'], 
+			$attributes
+		);
+	}	
 
 	/**
 	 * Get single ad html.
