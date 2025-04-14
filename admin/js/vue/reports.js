@@ -244,9 +244,11 @@ var reports = new Vue( {
 				security: this.adgroups_security,
 			},
 		} ).done( data => {
-			data = JSON.parse( data );
-			this.select_adgroup = data;
-		} );
+			const parsed = JSON.parse(data);
+            // Convert object with numeric keys to array
+            const groupsArray = Object.values(parsed);
+            this.select_adgroup = groupsArray;
+        } );
 
 		if ( this.ab_tests_security !== '' ) {
 			// get A/B Test from server
