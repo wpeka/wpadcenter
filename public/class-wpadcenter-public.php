@@ -635,7 +635,7 @@ class Wpadcenter_Public {
 
 		if ( $caption && ! $animated_ads_flag ) {
 			$single_ad_html .= '<div class="wpadcenter-caption">';
-			$single_ad_html .= '<span class="wpadcenter-caption-' . $attributes['align'] . '">' . $caption . '</span>';
+			$single_ad_html .= '<span class="wpadcenter-caption-' . esc_attr($attributes['align']) . '">' . $caption . '</span>';
 			$single_ad_html .= '</div>';
 		}else{
 			$single_ad_html .= '</div>';
@@ -959,7 +959,7 @@ class Wpadcenter_Public {
 				$ads->the_post();
 
 				if ( 0 === $col_count || intval( $attributes['num_columns'] ) === $col_count ) {
-					$adgroup_html .= '<div class="wpadcenter-adgroup__row wpadcenter-' . $attributes['align'] . '">';
+					$adgroup_html .= '<div class="wpadcenter-adgroup__row wpadcenter-' . esc_attr($attributes['align']) . '">';
 				}
 
 				$ad_id                = get_the_ID();
