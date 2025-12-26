@@ -487,7 +487,7 @@ class Wpadcenter_Public {
 
 		if ( 'text_ad' !== $ad_type ) {
 
-			$single_ad_html .= '<a id="wpadcenter_ad" data-value=' . $ad_id . ' data-placement="' . $attributes['placement_id'] . '" href="' . $link_url . '" target="' . $link_target . '" ';
+			$single_ad_html .= '<a id="wpadcenter_ad" data-value="' . $ad_id . '" data-placement="' . $attributes['placement_id'] . '" href="' . $link_url . '" target="' . $link_target . '" ';
 
 			// adding classes to link.
 			$single_ad_html .= 'class="wpadcenter-ad-inner__item';
